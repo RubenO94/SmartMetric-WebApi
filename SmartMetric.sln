@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMetric.WebAPI", "SmartMetric.WebAPI\SmartMetric.WebAPI.csproj", "{1BF33B1B-D840-4286-B1FB-FAD550526B41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SmartMetric.Core", "SmartMetric.Core\SmartMetric.Core.csproj", "{FBF1E465-4032-4BD6-A5E1-CD0F040192BA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BF33B1B-D840-4286-B1FB-FAD550526B41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BF33B1B-D840-4286-B1FB-FAD550526B41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BF33B1B-D840-4286-B1FB-FAD550526B41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BF33B1B-D840-4286-B1FB-FAD550526B41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FBF1E465-4032-4BD6-A5E1-CD0F040192BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FBF1E465-4032-4BD6-A5E1-CD0F040192BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FBF1E465-4032-4BD6-A5E1-CD0F040192BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FBF1E465-4032-4BD6-A5E1-CD0F040192BA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCF0701C-9669-4731-8767-EBC9D4E4DFEF}
+	EndGlobalSection
+EndGlobal
