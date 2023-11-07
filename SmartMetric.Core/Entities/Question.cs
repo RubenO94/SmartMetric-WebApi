@@ -1,20 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SmartMetric.Core.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartMetric.Core.Entities
 {
     public class Question
     {
-        public Guid Id { get; set; }
+        [Key]
+        public Guid QuestionId { get; set; }
         public Guid FormTemplateId { get; set; }
-        public Guid? ScaleModelId { get; set; } // Referência ao modelo de escala se for uma pergunta de classificação
-        public Guid? SingleChoiceModelId { get; set; }
+        public Guid? RatingTemplateId { get; set; }
+        public Guid? SingleChoiceTemplateId { get; set; }
         public ICollection<QuestionTranslation>? Translations { get; set; }
-        public bool IsRequired { get; set; } // Indica se a pergunta é obrigatória
-        public ResponseType ResponseType { get; set; } // Tipo de resposta (Texto, Classificação, Resposta Única)
-        public
+        public bool IsRequired { get; set; }
+        public ResponseType ResponseType { get; set; } 
+
+
+        [ForeignKey(nameof(FormTemplateId))]
+        public FormTemplate? FormTemplate { get; set; }
+
+        [ForeignKey(nameof(RatingTemplateId))]
+        public RatingTemplate? RatingTemplate { get; set; }
+
+        [ForeignKey(nameof(SingleChoiceTemplateId))]
+        public SingleChoiceTemplate? SingleChoiceTemplate { get; set; }
     }
 }

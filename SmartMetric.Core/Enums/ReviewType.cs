@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartMetric.Core.Entities
+namespace SmartMetric.Core.Enums
 {
-    public class PerformanceReview
+    public enum ReviewType
     {
+        TopToBottom,
+        BottomToTop
     }
 }

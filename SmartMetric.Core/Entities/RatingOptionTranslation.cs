@@ -3,15 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartMetric.Core.Entities
 {
-    public class QuestionTranslation
+    public class RatingOptionTranslation
     {
-        public Guid QuestionTranslationId { get; set; }
-        public Guid QuestionId { get; set; }
+        public Guid RatingOptionTranslationId { get; set; }
+        public Guid RatingTemplateId { get; set; }
         public string? Language { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
 
-        [ForeignKey(nameof(QuestionId))]
-        public Question? Question { get; set; }
+        [ForeignKey(nameof(RatingTemplateId))]
+        public RatingTemplate? RatingTemplate { get; set; }
     }
 }

@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace SmartMetric.Core.Entities
 {
     public class RatingTemplate
     {
-        public Guid Id { get; set; }
-        public ICollection<ScaleOption> ScaleOptions { get; set; }
+        [Key]
+        public Guid RatingTemplateId { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+        public int CreatedByUserId { get; set; }
+        public ICollection<RatingTemplateTranslation>? Translations { get; set; }
+        public ICollection<RatingOption>? RatingOptions { get; set; }
     }
 }

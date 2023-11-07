@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SmartMetric.Core.Enums;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartMetric.Core.Entities
 {
     public class FormTemplateTranslation
     {
-        public Guid Id { get; set; }
-
-        // Idioma da tradução (por exemplo, "pt" para português, "en" para inglês, etc.)
+        [Key]
+        public Guid FormTemplateTranslationId { get; set; }
+        public Guid FormTemplateId { get; set; }
         public string? Language { get; set; }
-
         public string? Title { get; set; }
         public string? Description { get; set; }
 
-        // Chave estrangeira para o modelo de formulário
-        public Guid FormTemplateId { get; set; }
+        [ForeignKey(nameof(FormTemplateId))]
         public FormTemplate? FormTemplate { get; set; }
     }
 }

@@ -1,0 +1,51 @@
+[
+  {
+    "QuestionId": "3c255b49-1f56-495a-8fb7-8d703f3cf9c2",
+    "FormTemplateId": "8c57f6d6-2a90-4f84-b32c-5c57d86e5c20",
+    "RatingTemplateId": null,
+    "SingleChoiceTemplateId": null,
+    "IsRequired": true,
+    "ResponseType": 0,
+    "Translations": [
+      {
+        "QuestionTranslationId": "a1e456e7-88a5-4e47-8215-3e6e16d87f4a",
+        "QuestionId": "3c255b49-1f56-495a-8fb7-8d703f3cf9c2",
+        "Language": 2,
+        "Title": "Título da Pergunta 1",
+        "Description": "Descrição da Pergunta 1"
+      },
+      {
+        "QuestionTranslationId": "92c54209-d88c-44b6-97d1-bb7d3c5b51bf",
+        "QuestionId": "3c255b49-1f56-495a-8fb7-8d703f3cf9c2",
+        "Language": 1,
+        "Title": "Question Title 1 (English)",
+        "Description": "Question Description 1 (English)"
+      }
+    ]
+  },
+
+  {
+    "QuestionId": "27dfbc67-4c4c-48f1-8ef7-02d002c83cd0",
+    "FormTemplateId": "e4ea5e10-9b3e-4a45-8b3f-7cf7417e556f",
+    "RatingTemplateId": null,
+    "SingleChoiceTemplateId": null,
+    "IsRequired": true,
+    "ResponseType": 0,
+    "Translations": [
+      {
+        "QuestionTranslationId": "bc3d6baa-bf32-48f5-bfe3-4b10c64d45f4",
+        "QuestionId": "27dfbc67-4c4c-48f1-8ef7-02d002c83cd0",
+        "Language": 2,
+        "Title": "Título da Pergunta 2",
+        "Description": "Descrição da Pergunta 2"
+      },
+      {
+        "QuestionTranslationId": "44a22000-e546-4b8b-87da-081e34f18ec2",
+        "QuestionId": "27dfbc67-4c4c-48f1-8ef7-02d002c83cd0",
+        "Language": 1,
+        "Title": "Question Title 2 (English)",
+        "Description": "Question Description 2 (English)"
+      }
+    ]
+  }
+]

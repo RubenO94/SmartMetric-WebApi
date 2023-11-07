@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SmartMetric.Core.Entities
 {
-    internal class SingleChoiceOption
+    public class SingleChoiceOption
     {
+        public Guid SingleChoiceOptionId { get; set; }
+        public Guid SingleChoiceTemplateId { get; set; }
+        public ICollection<SingleChoiceOptionTranslation>? Translations { get; set; }
+
+        [ForeignKey(nameof(SingleChoiceTemplateId))]
+        public SingleChoiceTemplate? SingleChoiceTemplate { get; set; }
     }
 }
