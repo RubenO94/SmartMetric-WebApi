@@ -13,6 +13,7 @@ namespace SmartMetric.Core.Domain.Entities
         public Guid? SingleChoiceTemplateId { get; set; }
         public ICollection<QuestionTranslation>? Translations { get; set; }
         public bool IsRequired { get; set; }
+        public string? ReviewerType { get; set; }
         public string? ResponseType { get; set; }
 
 

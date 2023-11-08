@@ -12,6 +12,7 @@ namespace SmartMetric.Core.DTO
     public class AddReviewRequest
     {
         public Guid FormTemplateId { get; set; }
+        public int CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }

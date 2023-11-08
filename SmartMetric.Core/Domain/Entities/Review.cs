@@ -7,6 +7,7 @@ namespace SmartMetric.Core.Domain.Entities
     {
         public Guid ReviewId { get; set; }
         public Guid FormTemplateId { get; set; }
+        public int CreatedByUserId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
