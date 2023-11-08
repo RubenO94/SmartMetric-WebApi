@@ -1,11 +1,13 @@
 ﻿using SmartMetric.Core.Enums;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
-namespace SmartMetric.Core.Entities
+namespace SmartMetric.Core.Domain.Entities
 {
-    public class RatingOptionTranslation
+    public class RatingTemplateTranslation
     {
-        public Guid RatingOptionTranslationId { get; set; }
+        [Key]
+        public Guid RatingTemplateTranslationId { get; set; }
         public Guid RatingTemplateId { get; set; }
         public string? Language { get; set; }
         public string? Title { get; set; }

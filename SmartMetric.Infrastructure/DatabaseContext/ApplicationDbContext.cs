@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
-using SmartMetric.Core.Entities;
+using SmartMetric.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

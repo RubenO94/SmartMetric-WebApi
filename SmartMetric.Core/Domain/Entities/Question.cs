@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartMetric.Core.Entities
+namespace SmartMetric.Core.Domain.Entities
 {
     public class Question
     {
@@ -13,7 +13,7 @@ namespace SmartMetric.Core.Entities
         public Guid? SingleChoiceTemplateId { get; set; }
         public ICollection<QuestionTranslation>? Translations { get; set; }
         public bool IsRequired { get; set; }
-        public ResponseType ResponseType { get; set; } 
+        public string? ResponseType { get; set; }
 
 
         [ForeignKey(nameof(FormTemplateId))]

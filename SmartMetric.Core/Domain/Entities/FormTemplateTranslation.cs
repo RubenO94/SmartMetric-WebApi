@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace SmartMetric.Core.Entities
+namespace SmartMetric.Core.Domain.Entities
 {
     public class FormTemplateTranslation
     {

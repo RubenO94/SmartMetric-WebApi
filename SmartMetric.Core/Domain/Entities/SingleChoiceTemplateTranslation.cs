@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartMetric.Core.Entities
+namespace SmartMetric.Core.Domain.Entities
 {
     public class SingleChoiceTemplateTranslation
     {
