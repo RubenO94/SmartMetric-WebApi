@@ -9,10 +9,10 @@ namespace SmartMetric.Core.Domain.Entities
         public int EvaluatedEmployeeId { get; set; }
         public int EvaluatorEmployeeId { get; set; }
         public DateTime SubmissionDate { get; set; }
+        public ICollection<ReviewResponse>? ReviewResponses { get; set; }
 
         [ForeignKey(nameof(ReviewId))]
-        public Review? Review { get; set; }
-        public ICollection<ReviewResponse>? ReviewResponses { get; set; }
+        Review? Review { get; set; }
     }
 
 }

@@ -13,15 +13,15 @@ namespace SmartMetric.Core.Domain.Entities
         public int? RatingValue { get; set; }
 
         [ForeignKey(nameof(SingleChoiceOptionId))]
-        public SingleChoiceOption? SingleChoiceOption { get; set; }
+        SingleChoiceOption? SingleChoiceOption { get; set; }
 
         [ForeignKey(nameof(QuestionId))]
         [Required]
-        public Question? Question { get; set; }
+        Question? Question { get; set; }
 
         [ForeignKey(nameof(SubmissionId))]
         [Required]
-        public Submission? Submission { get; set; }
+        Submission? Submission { get; set; }
     }
 }
 

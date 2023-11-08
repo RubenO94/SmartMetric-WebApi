@@ -12,6 +12,6 @@ namespace SmartMetric.Core.Domain.Entities
         public string? Description { get; set; }
 
         [ForeignKey(nameof(QuestionId))]
-        public Question? Question { get; set; }
+        Question? Question { get; set; }
     }
 }

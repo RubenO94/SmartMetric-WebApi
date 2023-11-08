@@ -20,12 +20,8 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public DbSet<FormTemplateTranslation> FormTemplateTranslations { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionTranslation> QuestionTranslations { get; set; }
-        public DbSet<RatingTemplate> RatingTemplates { get; set; }
-        public DbSet<RatingTemplateTranslation> RatingTemplateTranslations { get; set; }
         public DbSet<RatingOption> RatingOptions { get; set; }
         public DbSet<RatingOptionTranslation> RatingOptionTranslations { get; set; }
-        public DbSet<SingleChoiceTemplate> SingleChoiceTemplates { get; set; }
-        public DbSet<SingleChoiceTemplateTranslation> SingleChoiceTemplateTranslations { get; set; }
         public DbSet<SingleChoiceOption> SingleChoiceOptions { get; set; }
         public DbSet<SingleChoiceOptionTranslation> SingleChoiceOptionTranslations { get; set; }
         public DbSet<Review> Reviews { get; set; }

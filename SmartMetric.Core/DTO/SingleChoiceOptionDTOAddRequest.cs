@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO
 {
-    public class FormTemplateResponse
+    public class SingleChoiceOptionDTOAddRequest
     {
-
-
     }
 }

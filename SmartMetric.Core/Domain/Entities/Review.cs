@@ -16,7 +16,7 @@ namespace SmartMetric.Core.Domain.Entities
         public string? ReviewStatus { get; set; }
 
         [ForeignKey(nameof(FormTemplateId))]
-        public FormTemplate? FormTemplate { get; set; }
+        FormTemplate? FormTemplate { get; set; }
         public ICollection<Submission>? Submissions { get; set; }
     }
 

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartMetric.Infrastructure.DatabaseContext;
 
@@ -11,9 +12,11 @@ using SmartMetric.Infrastructure.DatabaseContext;
 namespace SmartMetric.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231108115203_RemovedRatingAndSingleChoiceTemplatesAndTrasnlations")]
+    partial class RemovedRatingAndSingleChoiceTemplatesAndTrasnlations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,27 +57,6 @@ namespace SmartMetric.Infrastructure.Migrations
                             CreatedByUserId = 2,
                             CreatedDate = new DateTime(2023, 11, 6, 14, 0, 0, 0, DateTimeKind.Unspecified)
                         });
-                });
-
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateQuestion", b =>
-                {
-                    b.Property<Guid>("FormTemplateQuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FormTemplateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FormTemplateQuestionId");
-
-                    b.HasIndex("FormTemplateId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("FormTemplateQuestion");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateTranslation", b =>
@@ -142,13 +124,21 @@ namespace SmartMetric.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("FormTemplateId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsRequired")
                         .HasColumnType("bit");
 
                     b.Property<string>("ResponseType")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ReviewerType")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("QuestionId");
+
+                    b.HasIndex("FormTemplateId");
 
                     b.ToTable("Questions");
                 });
@@ -357,29 +347,21 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.ToTable("Submissions");
                 });
 
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateQuestion", b =>
-                {
-                    b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
-                        .WithMany("FormTemplateQuestions")
-                        .HasForeignKey("FormTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartMetric.Core.Domain.Entities.Question", "Question")
-                        .WithMany("FormTemplateQuestions")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FormTemplate");
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateTranslation", b =>
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
                         .WithMany("Translations")
+                        .HasForeignKey("FormTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FormTemplate");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
+                {
+                    b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
+                        .WithMany("Questions")
                         .HasForeignKey("FormTemplateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -491,15 +473,13 @@ namespace SmartMetric.Infrastructure.Migrations
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplate", b =>
                 {
-                    b.Navigation("FormTemplateQuestions");
+                    b.Navigation("Questions");
 
                     b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
                 {
-                    b.Navigation("FormTemplateQuestions");
-
                     b.Navigation("RatingOptions");
 
                     b.Navigation("SingleChoiceOptions");

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO
 {
-    public class AddSubmissionRequest
+    public class SubmissionDTOAddRequest
     {
         public Guid ReviewId { get; set; }
         public int EvaluatedEmployeeId { get; set; }

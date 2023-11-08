@@ -1,4 +1,4 @@
-﻿using SmartMetric.Core.Enums;
+﻿using SmartMetric.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO
 {
-    public class AddFormTemplateRequest
+    public class FormTemplateDTOResponse
     {
+        public Guid FormTemplateId { get; set; }
         public DateTime CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
         public int CreatedByUserId { get; set; }
-        public Language Language { get; set; }
+        public string? Language { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
+        public List<Question>? Questions { get; set; }
 
-        //TODO: Adicionar metodo para conversão do objecto Request em objeto Entity
     }
 }

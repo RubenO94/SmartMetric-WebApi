@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartMetric.Core.Enums
+namespace SmartMetric.Core.Domain.RepositoryContracts
 {
-    public enum SubjectType
+    public interface IQuestionsRepository
     {
-        WholeCompany,
-        Department,
-        Team,
-        Employee
+
     }
 }
