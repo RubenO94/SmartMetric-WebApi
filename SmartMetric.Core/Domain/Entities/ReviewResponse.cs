@@ -6,23 +6,26 @@ namespace SmartMetric.Core.Domain.Entities
     public class ReviewResponse
     {
         public Guid ReviewResponseId { get; set; }
-        public Guid QuestionId { get; set; }
-        public Guid SubmissionId { get; set; }
+        public Guid? ReviewQuestionId { get; set; }
+        public Guid? SubmissionId { get; set; }
         public Guid? SingleChoiceOptionId { get; set; }
+
+        [StringLength(500)]
         public string? TextResponse { get; set; }
         public int? RatingValue { get; set; }
 
         [ForeignKey(nameof(SingleChoiceOptionId))]
-        SingleChoiceOption? SingleChoiceOption { get; set; }
+        public virtual SingleChoiceOption? SingleChoiceOption { get; set; }
 
-        [ForeignKey(nameof(QuestionId))]
+        [ForeignKey(nameof(ReviewQuestionId))]
         [Required]
-        Question? Question { get; set; }
+        public virtual ReviewQuestion? ReviewQuestion { get; set; }
 
         [ForeignKey(nameof(SubmissionId))]
         [Required]
-        Submission? Submission { get; set; }
+        public virtual Submission? Submission { get; set; }
     }
+
 }
 
 

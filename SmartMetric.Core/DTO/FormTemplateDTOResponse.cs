@@ -10,12 +10,10 @@ namespace SmartMetric.Core.DTO
     public class FormTemplateDTOResponse
     {
         public Guid FormTemplateId { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public int CreatedByUserId { get; set; }
-        public string? Language { get; set; }
-        public string? Title { get; set; }
-        public string? Description { get; set; }
+        public int? CreatedByUserId { get; set; }
+        public List<FormTemplateTranslation>? Translations { get; set; }
         public List<Question>? Questions { get; set; }
 
     }

@@ -9,11 +9,11 @@ namespace SmartMetric.Core.Domain.Entities
     {
         [Key]
         public Guid FormTemplateId { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
-        public int CreatedByUserId { get; set; }
-        public ICollection<FormTemplateTranslation>? Translations { get; set; }
-        public ICollection<FormTemplateQuestion>? FormTemplateQuestions { get; set; }
+        public int? CreatedByUserId { get; set; }
+        public virtual ICollection<FormTemplateTranslation>? Translations { get; set; }
+        public virtual ICollection<FormTemplateQuestion>? FormTemplateQuestions { get; set; }
     }
 
 
@@ -37,9 +37,9 @@ namespace SmartMetric.Core.Domain.Entities
 
     //    return new FormTemplateDTOResponse()
     //    {
-          
+
     //    };
-        
+
 
     //}
 

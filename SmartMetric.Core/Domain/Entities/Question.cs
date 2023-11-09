@@ -8,11 +8,15 @@ namespace SmartMetric.Core.Domain.Entities
     {
         [Key]
         public Guid QuestionId { get; set; }
-        public ICollection<FormTemplateQuestion>? FormTemplateQuestions { get; set; }
-        public ICollection<QuestionTranslation>? Translations { get; set; }
-        public ICollection<RatingOption>? RatingOptions { get; set; }
-        public ICollection <SingleChoiceOption>? SingleChoiceOptions { get; set; }
+        public virtual ICollection<FormTemplateQuestion>? FormTemplateQuestions { get; set; }
+        public virtual ICollection<ReviewQuestion>? ReviewQuestions { get; set; }
+        public virtual ICollection<QuestionTranslation>? Translations { get; set; }
+        public virtual ICollection<RatingOption>? RatingOptions { get; set; }
+        public virtual ICollection<SingleChoiceOption>? SingleChoiceOptions { get; set; }
         public bool IsRequired { get; set; }
+
+        [StringLength(20)]
         public string? ResponseType { get; set; }
+        public int? Position { get; set; }
     }
 }
