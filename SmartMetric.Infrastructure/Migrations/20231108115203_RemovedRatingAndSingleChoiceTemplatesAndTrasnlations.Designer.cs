@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartMetric.Infrastructure.DatabaseContext;
 
@@ -11,9 +12,11 @@ using SmartMetric.Infrastructure.DatabaseContext;
 namespace SmartMetric.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231108115203_RemovedRatingAndSingleChoiceTemplatesAndTrasnlations")]
+    partial class RemovedRatingAndSingleChoiceTemplatesAndTrasnlations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,10 +31,10 @@ namespace SmartMetric.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("CreatedByUserId")
+                    b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("ModifiedDate")
@@ -56,27 +59,6 @@ namespace SmartMetric.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateQuestion", b =>
-                {
-                    b.Property<Guid>("FormTemplateQuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("FormTemplateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("QuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("FormTemplateQuestionId");
-
-                    b.HasIndex("FormTemplateId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.ToTable("FormTemplateQuestions");
-                });
-
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateTranslation", b =>
                 {
                     b.Property<Guid>("FormTemplateTranslationId")
@@ -84,19 +66,16 @@ namespace SmartMetric.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("FormTemplateId")
+                    b.Property<Guid>("FormTemplateId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Language")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("FormTemplateTranslationId");
 
@@ -145,17 +124,21 @@ namespace SmartMetric.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("FormTemplateId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsRequired")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("Position")
-                        .HasColumnType("int");
-
                     b.Property<string>("ResponseType")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReviewerType")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("QuestionId");
+
+                    b.HasIndex("FormTemplateId");
 
                     b.ToTable("Questions");
                 });
@@ -167,19 +150,16 @@ namespace SmartMetric.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("QuestionTranslationId");
 
@@ -214,15 +194,16 @@ namespace SmartMetric.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("RatingOptionId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("RatingOptionTranslationId");
 
@@ -237,32 +218,29 @@ namespace SmartMetric.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("CreatedByUserId")
+                    b.Property<int>("CreatedByUserId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("EndDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("FormTemplateId")
+                    b.Property<Guid>("FormTemplateId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ReviewStatus")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ReviewType")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("SubjectType")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ReviewId");
 
@@ -271,56 +249,30 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.ToTable("Reviews");
                 });
 
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewQuestion", b =>
-                {
-                    b.Property<Guid>("ReviewQuestionId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("QuestionId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ReviewId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ReviewQuestionId");
-
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("ReviewId");
-
-                    b.ToTable("ReviewsQuestions");
-                });
-
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
                 {
                     b.Property<Guid>("ReviewResponseId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("QuestionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int?>("RatingValue")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("ReviewQuestionId")
-                        .IsRequired()
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SingleChoiceOptionId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("SubmissionId")
-                        .IsRequired()
+                    b.Property<Guid>("SubmissionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TextResponse")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ReviewResponseId");
 
-                    b.HasIndex("ReviewQuestionId");
+                    b.HasIndex("QuestionId");
 
                     b.HasIndex("SingleChoiceOptionId");
 
@@ -335,7 +287,7 @@ namespace SmartMetric.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("QuestionId")
+                    b.Property<Guid>("QuestionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("SingleChoiceOptionId");
@@ -352,19 +304,16 @@ namespace SmartMetric.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Language")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("SingleChoiceOptionId")
+                    b.Property<Guid>("SingleChoiceOptionId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Title")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SingleChoiceOptionTranslationId");
 
@@ -379,16 +328,16 @@ namespace SmartMetric.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("EvaluatedEmployeeId")
+                    b.Property<int>("EvaluatedEmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EvaluatorEmployeeId")
+                    b.Property<int>("EvaluatorEmployeeId")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("ReviewId")
+                    b.Property<Guid>("ReviewId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("SubmissionDate")
+                    b.Property<DateTime>("SubmissionDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("SubmissionId");
@@ -398,30 +347,24 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.ToTable("Submissions");
                 });
 
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateQuestion", b =>
-                {
-                    b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
-                        .WithMany("FormTemplateQuestions")
-                        .HasForeignKey("FormTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartMetric.Core.Domain.Entities.Question", "Question")
-                        .WithMany("FormTemplateQuestions")
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FormTemplate");
-
-                    b.Navigation("Question");
-                });
-
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateTranslation", b =>
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
                         .WithMany("Translations")
-                        .HasForeignKey("FormTemplateId");
+                        .HasForeignKey("FormTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("FormTemplate");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
+                {
+                    b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
+                        .WithMany("Questions")
+                        .HasForeignKey("FormTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("FormTemplate");
                 });
@@ -463,35 +406,18 @@ namespace SmartMetric.Infrastructure.Migrations
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.FormTemplate", "FormTemplate")
                         .WithMany()
-                        .HasForeignKey("FormTemplateId");
+                        .HasForeignKey("FormTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("FormTemplate");
                 });
 
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewQuestion", b =>
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.Question", "Question")
                         .WithMany()
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SmartMetric.Core.Domain.Entities.Review", "Review")
-                        .WithMany()
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Question");
-
-                    b.Navigation("Review");
-                });
-
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
-                {
-                    b.HasOne("SmartMetric.Core.Domain.Entities.ReviewQuestion", "ReviewQuestion")
-                        .WithMany()
-                        .HasForeignKey("ReviewQuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -505,7 +431,7 @@ namespace SmartMetric.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ReviewQuestion");
+                    b.Navigation("Question");
 
                     b.Navigation("SingleChoiceOption");
 
@@ -516,7 +442,9 @@ namespace SmartMetric.Infrastructure.Migrations
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.Question", "Question")
                         .WithMany("SingleChoiceOptions")
-                        .HasForeignKey("QuestionId");
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
                 });
@@ -525,7 +453,9 @@ namespace SmartMetric.Infrastructure.Migrations
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.SingleChoiceOption", "SingleChoiceOption")
                         .WithMany("Translations")
-                        .HasForeignKey("SingleChoiceOptionId");
+                        .HasForeignKey("SingleChoiceOptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("SingleChoiceOption");
                 });
@@ -534,22 +464,22 @@ namespace SmartMetric.Infrastructure.Migrations
                 {
                     b.HasOne("SmartMetric.Core.Domain.Entities.Review", "Review")
                         .WithMany("Submissions")
-                        .HasForeignKey("ReviewId");
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Review");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplate", b =>
                 {
-                    b.Navigation("FormTemplateQuestions");
+                    b.Navigation("Questions");
 
                     b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
                 {
-                    b.Navigation("FormTemplateQuestions");
-
                     b.Navigation("RatingOptions");
 
                     b.Navigation("SingleChoiceOptions");

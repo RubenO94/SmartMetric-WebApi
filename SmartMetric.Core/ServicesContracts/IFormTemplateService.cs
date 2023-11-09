@@ -14,20 +14,20 @@ namespace SmartMetric.Core.ServicesContracts
         /// Metodo para retornar todos os modelos de formulário criados.
         /// </summary>
         /// <returns>Retorna todos os modelos criados  caso haja, senão retorna NULL</returns>
-        Task<List<FormTemplateResponse?>> GetAllFormTemplates();
+        Task<List<FormTemplateDTOResponse?>> GetAllFormTemplates();
 
         /// <summary>
         /// Metodo para retornar o modelo de formulário por GUID
         /// </summary>
         /// <param name="formTemplateId">GUID do modelo de formulário pertentido</param>
         /// <returns>Retorna o modelo de formulário que seja igual ao GUID do paremetro ou se não houver correspondência retorna NULL</returns>
-        Task<FormTemplateResponse?> GetFormTemplateById(Guid formTemplateId);
+        Task<FormTemplateDTOResponse?> GetFormTemplateById(Guid formTemplateId);
 
         /// <summary>
         /// Metodo para inserir um novo modelo de formulário e guardar na base dados. 
         /// </summary>
         /// <param name="addFormTemplateRequest">Modelo de formulário a ser adicionado</param>
         /// <returns>Retorna o modelo de formulário inserido em caso de sucesso, senão NULL </returns>
-        Task<FormTemplateResponse?> AddFormTemplate(AddFormTemplateRequest addFormTemplateRequest);
+        Task<FormTemplateDTOResponse?> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest);
     }
 }

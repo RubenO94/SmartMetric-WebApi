@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartMetric.Core.Enums
+namespace SmartMetric.Core.DTO
 {
-    public enum ReviewerType
+    public class QuestionTranslationDTOAddRequest
     {
-        SelfEvaluation,
-        FromReviewer
     }
 }

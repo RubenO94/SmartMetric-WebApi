@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartMetric.Core.Enums
+namespace SmartMetric.Core.DTO
 {
-    public enum SubjectType
+    internal class SubmissionDTOResponse
     {
-        WholeCompany,
-        Department,
-        Team,
-        Employee
     }
 }

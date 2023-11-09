@@ -9,6 +9,9 @@ namespace SmartMetric.Core.Enums
     public enum ReviewType
     {
         TopToBottom,
-        BottomToTop
+        BottomToTop,
+        SelfEvaluation,
+        InterDepartment,
+        PeerReview
     }
 }

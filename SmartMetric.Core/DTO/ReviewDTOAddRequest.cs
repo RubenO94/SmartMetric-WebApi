@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO
 {
-    public class AddReviewRequest
+    public class ReviewDTOAddRequest
     {
         public Guid FormTemplateId { get; set; }
         public int CreatedByUserId { get; set; }
