@@ -7,17 +7,13 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.ServicesContracts
 {
-    /// <summary>
-    /// Representa a logica de negócio para a inserção de traduções
-    /// </summary>
-    public interface ITranslationsAdderService
+    public interface ISingleChoiceOptionTranslationAdderService
     {
         /// <summary>
-        /// Adiciona uma tradução de um modelo de formulário à sua lista de traduções
+        /// Adiciona uma tradução de um modelo de resposta unica à sua lista de traduções
         /// </summary>
         /// <param name="request">A Tradução a ser adicionada</param>
         /// <returns>Retorna o objeto Tradução (incluindo o novo FormTemplateTranslationId gerado)</returns>
-        Task<FormTemplateTranslationDTOResponse> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request);
-
+        Task<SingleChoiceOptionTranslationDTOResponse> AddSingleChoiceOptionTranslation(SingleChoiceOptionTranslationDTOAddRequest? request);
     }
 }

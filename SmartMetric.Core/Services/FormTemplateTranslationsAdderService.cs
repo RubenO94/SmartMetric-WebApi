@@ -12,14 +12,14 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services
 {
-    public class TranslationsAdderService : ITranslationsAdderService //Chamar respectiva Interface e implementar o seu contrato
+    public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService //Chamar respectiva Interface e implementar o seu contrato
     {
 
-        private readonly ITranslationsRepository _translationsRepository; // Chamar o seu repositorio
-        private readonly ILogger<TranslationsAdderService> _logger; //Chamar o Logger
+        private readonly IFormTemplateTranslationsRepository _translationsRepository; // Chamar o seu repositorio
+        private readonly ILogger<FormTemplateTranslationsAdderService> _logger; //Chamar o Logger
 
         //Injectar Dependencias
-        public TranslationsAdderService(ITranslationsRepository translationsRepository, ILogger<TranslationsAdderService> logger)
+        public FormTemplateTranslationsAdderService(IFormTemplateTranslationsRepository translationsRepository, ILogger<FormTemplateTranslationsAdderService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;

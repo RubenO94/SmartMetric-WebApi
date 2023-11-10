@@ -10,7 +10,7 @@ namespace SmartMetric.Core.ServicesContracts
     /// <summary>
     /// Representa a logica de negócio receber uma lista de Traduções
     /// </summary>
-    public interface ITranslationsGetterService
+    public interface IFormTemplateTranslationsGetterService
     {
         /// <summary>
         /// Retorna todas as traduções dos modelos de formulário

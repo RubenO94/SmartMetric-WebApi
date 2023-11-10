@@ -8,41 +8,34 @@ using SmartMetric.Core.DTO;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.Services;
 using SmartMetric.Core.ServicesContracts;
-using System;
-using System.Collections.Generic;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
-using Xunit.Sdk;
 
 namespace SmartMetric.ServiceTests
 {
-    public class TranslationsServiceTest
+    public class FormTemplateTranslationsServiceTest
     {
-        private readonly ITranslationsAdderService _translationsAdderService;
-        private readonly ITranslationsGetterService _translationsGetterService;
+        private readonly IFormTemplateTranslationsAdderService _translationsAdderService;
+        private readonly IFormTemplateTranslationsGetterService _translationsGetterService;
 
-        private readonly Mock<ITranslationsRepository> _translationsRepositoryMock;
-        private readonly ITranslationsRepository _translationsRepository;
+        private readonly Mock<IFormTemplateTranslationsRepository> _translationsRepositoryMock;
+        private readonly IFormTemplateTranslationsRepository _translationsRepository;
 
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly IFixture _fixture;
 
-        public TranslationsServiceTest(ITestOutputHelper testOutputHelper)
+        public FormTemplateTranslationsServiceTest(ITestOutputHelper testOutputHelper)
         {
 
             _fixture = new Fixture();
-            _translationsRepositoryMock = new Mock<ITranslationsRepository>();
+            _translationsRepositoryMock = new Mock<IFormTemplateTranslationsRepository>();
             _translationsRepository = _translationsRepositoryMock.Object;
             _testOutputHelper = testOutputHelper;
 
-            var AdderloggerMock = new Mock<ILogger<TranslationsAdderService>>();
-            var GetterloggerMock = new Mock<ILogger<TranslationsGetterService>>();
+            var AdderloggerMock = new Mock<ILogger<FormTemplateTranslationsAdderService>>();
+            var GetterloggerMock = new Mock<ILogger<FormTemplateTranslationsGetterService>>();
 
-            _translationsAdderService = new TranslationsAdderService(_translationsRepository, AdderloggerMock.Object);
-            _translationsGetterService = new TranslationsGetterService(_translationsRepository, GetterloggerMock.Object);
+            _translationsAdderService = new FormTemplateTranslationsAdderService(_translationsRepository, AdderloggerMock.Object);
+            _translationsGetterService = new FormTemplateTranslationsGetterService(_translationsRepository, GetterloggerMock.Object);
         }
 
         #region AddFormTemplateTranslation
