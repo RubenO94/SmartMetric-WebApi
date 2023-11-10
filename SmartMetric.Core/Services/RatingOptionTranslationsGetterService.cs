@@ -39,7 +39,7 @@ namespace SmartMetric.Core.Services
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptionTranslationById)} foi iniciado");
 
-            if (ratingOptionTranslationId == null) { return null; }
+            if (ratingOptionTranslationId == null) { throw new ArgumentNullException(nameof(ratingOptionTranslationId)); }
 
             RatingOptionTranslation? translation = await _translationsRepository.GetRatingOptionTranslationById(ratingOptionTranslationId.Value);
 
@@ -52,11 +52,11 @@ namespace SmartMetric.Core.Services
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptiontranslationsByRatingOptionId)} foi iniciado");
 
-            if (ratingOptionId == null) { return null; }
+            if (ratingOptionId == null) { throw new ArgumentNullException(nameof(ratingOptionId)); }
 
             var translation = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(ratingOptionId.Value);
 
-            if (translation.Count <= 0) { return null; }
+            //if (translation.Count <= 0) { return null; }
 
             return translation.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList();
         }

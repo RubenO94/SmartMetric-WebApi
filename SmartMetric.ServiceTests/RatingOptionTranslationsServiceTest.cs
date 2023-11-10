@@ -223,9 +223,9 @@ namespace SmartMetric.ServiceTests
         #region GetRatingOptionTranslationById Tests
 
         /// <summary>
-        /// 
+        /// Teste sobre a função que retorna um objeto do tipo RatingOptionTranslation recebendo por parâmetro o seu Id
         /// </summary>
-        /// <returns>deve retornar um objeto null do tipo RatingOptionTranslation</returns>
+        /// <returns>Deve retornar uma exceção do tipo ArgumentNullException</returns>
         [Fact]
         public async Task GetRatingOptionTranslationsById_NullRatingOptionTranslationId_ToBeNull()
         {
@@ -233,10 +233,98 @@ namespace SmartMetric.ServiceTests
             Guid? id = null;
 
             //Act
-            RatingOptionTranslationDTOResponse? response = await _translationsGetterService.GetRatingOptionTranslationById(id);
+            Func<Task> action = async () => await _translationsGetterService.GetRatingOptionTranslationById(id);
 
             //Assert
-            response.Should().BeNull();
+            await action.Should().ThrowAsync<ArgumentNullException>();
+        }
+
+        /// <summary>
+        /// Teste sobre a função que retorna um objeto do tipo RatingOptionTranslation recebendo por parâmetro o seu Id
+        /// </summary>
+        /// <returns>Deve retornar um objeto do tipo RatingOptionTranslationDTOResponse correspondendo com o Id recebido como parâmetro</returns>
+        [Fact]
+        public async Task GetRatingOptionTranslationsById_WithValidId_ToBeSuccessful()
+        {
+            //Arrange
+            RatingOptionTranslation translation = _fixture.Build<RatingOptionTranslation>().With(temp => temp.RatingOption, null as RatingOption).Create();
+
+            RatingOptionTranslationDTOResponse expectedResponse = translation.ToRatingOptionTranslationDTOResponse();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationById(It.IsAny<Guid>())).ReturnsAsync(translation);
+
+            //Act
+            RatingOptionTranslationDTOResponse? actualResponse = await _translationsGetterService.GetRatingOptionTranslationById(translation.RatingOptionTranslationId);
+
+            //Assert
+            actualResponse.Should().Be(expectedResponse);
+        }
+
+        #endregion
+
+        #region GetRatingOptionTranslationByRatingOptionId Tests
+
+        /// <summary>
+        /// </summary>
+        /// <returns>Deve lançar uma exceção do tipo ArgumentNullException quando recebe como parâmetro um RatingOptionId nulo</returns>
+        [Fact]
+        public async Task GetRatingOptionTranslationsByRatingOptionId_NullRatingOptionId_ToThrowArgumentNullException()
+        {
+            //Arrange
+            Guid? ratingOptionId = null;
+
+            //Act
+            Func<Task> action = async () => await _translationsGetterService.GetRatingOptiontranslationsByRatingOptionId(ratingOptionId);
+
+            //Assert
+            await action.Should().ThrowAsync<ArgumentNullException>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Deve retornar uma lista vazia quando apesar de receber um RatingOptionId válido, não tem traduções associadas a este Id</returns>
+        [Fact]
+        public async Task GetRatingOptionTranslationsByRatingOptionId_WithValidId_NoTranslations_ToBeEmptyList()
+        {
+            //Arrange
+            Guid ratingOptionId = Guid.NewGuid();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationByRatingOptionId(It.IsAny<Guid>())).ReturnsAsync(new List<RatingOptionTranslation>());
+
+            //Act
+            List<RatingOptionTranslationDTOResponse>? response = await _translationsGetterService.GetRatingOptiontranslationsByRatingOptionId(ratingOptionId);
+
+            //Assert
+            response.Should().BeEmpty();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Deve retornar uma lista de objetos do tipo RatingOptionTranslationDTOResponse correspondente com o parâmetro passado (ratingOptionId) </returns>
+        [Fact]
+        public async Task GetRatingOptionTranslationsByRatingOptionId_WithValidId_WithTranslations_ToBeSuccessful()
+        {
+            //Arrange
+            Guid ratingOptionId = Guid.NewGuid();
+
+            List<RatingOptionTranslation> translations = new List<RatingOptionTranslation>()
+            {
+                _fixture.Build<RatingOptionTranslation>().With(temp => temp.RatingOptionId, ratingOptionId).With(temp => temp.RatingOption, null as RatingOption).Create(),
+                _fixture.Build<RatingOptionTranslation>().With(temp => temp.RatingOptionId, ratingOptionId).With(temp => temp.RatingOption, null as RatingOption).Create(),
+                _fixture.Build<RatingOptionTranslation>().With(temp => temp.RatingOptionId, ratingOptionId).With(temp => temp.RatingOption, null as RatingOption).Create(),
+            };
+
+            List<RatingOptionTranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationByRatingOptionId(It.IsAny<Guid>())).ReturnsAsync(translations);
+
+            //Act
+            List<RatingOptionTranslationDTOResponse>? actualResponse = await _translationsGetterService.GetRatingOptiontranslationsByRatingOptionId(ratingOptionId);
+
+            //Assert
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
         }
 
         #endregion

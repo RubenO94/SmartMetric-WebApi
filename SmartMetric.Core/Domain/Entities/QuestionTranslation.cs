@@ -17,7 +17,7 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o identificador único da questão associada a esta tradução.
         /// </summary>
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
 
         /// <summary>
         /// Obtém ou define o código do idioma para o qual esta tradução está associada.
