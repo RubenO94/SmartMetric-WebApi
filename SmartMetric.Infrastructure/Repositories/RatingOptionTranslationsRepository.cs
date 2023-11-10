@@ -38,23 +38,23 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Getters
 
-        //public async Task<List<FormTemplateTranslation>> GetAllFormTemplateTranslations()
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetAllFormTemplateTranslations foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.ToListAsync();
-        //}
+        public async Task<List<RatingOptionTranslation>> GetAllRatingOptionTranslations()
+        {
+            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(GetAllRatingOptionTranslations)} foi iniciado.");
+            return await _dbContext.RatingOptionTranslations.ToListAsync();
+        }
 
-        //public async Task<List<FormTemplateTranslation>> GetFilteredTranslationsByFormTemplateId(Guid formTemplateId)
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetFilteredTranslationsByFormTemplateId foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
-        //}
+        public async Task<RatingOptionTranslation?> GetRatingOptionTranslationById(Guid ratingOptionTranslationId)
+        {
+            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(GetRatingOptionTranslationById)} foi iniciado.");
+            return await _dbContext.RatingOptionTranslations.FirstOrDefaultAsync(temp => temp.RatingOptionTranslationId == ratingOptionTranslationId);
+        }
 
-        //public async Task<FormTemplateTranslation?> GetFormTemplateTranslationById(Guid formTemplateTranslationId)
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetFormTemplateTranslationById foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.FirstOrDefaultAsync(temp => temp.FormTemplateTranslationId == formTemplateTranslationId);
-        //}
+        public async Task<List<RatingOptionTranslation>> GetRatingOptionTranslationByRatingOptionId(Guid ratingOptionId)
+        {
+            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(GetRatingOptionTranslationByRatingOptionId)} foi iniciado.");
+            return await _dbContext.RatingOptionTranslations.Where(temp => temp.RatingOptionId == ratingOptionId).ToListAsync();
+        }
 
         #endregion
     }

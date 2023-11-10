@@ -17,11 +17,29 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="ratingOptionTranslation">O objeto RatingOptionTranslation a ser adicionado </param>
         /// <returns>Retorna o objeto RatingOptionTranslation após ser adicionado á tabela</returns>
         Task<RatingOptionTranslation> AddRatingOptionTranslation(RatingOptionTranslation ratingOptionTranslation);
-        
+
         #endregion
 
         #region Getters
-        //TODO: Getters
+
+        /// <summary>
+        /// Retorna todas as traduções de todas as RatingOptions
+        /// </summary>
+        /// <returns>Retorna uma lista de RatingOptionTranslation</returns>
+        Task<List<RatingOptionTranslation>> GetAllRatingOptionTranslations();
+
+        /// <summary>
+        /// Procura uma linha na tabela RatingOptionTranslation recebendo como parametro um Id
+        /// </summary>
+        /// <returns>Retorna um objecto RatingOptionTranslation com o Id correspondente ao enviado como parâmetro.</returns>
+        Task<RatingOptionTranslation?> GetRatingOptionTranslationById(Guid ratingOptionTranslationId);
+
+        /// <summary>
+        /// Procura linhas na tabela RatingOptionTranslation recebendo como parametro um RatingOptionId
+        /// </summary>
+        /// <returns>Retorna uma lista de objectos do tipo RatingOptionTranslation onde RatingOptionId é igual ao recebido como parâmetro.</returns>
+        Task<List<RatingOptionTranslation>> GetRatingOptionTranslationByRatingOptionId(Guid ratingOptionId);
+
         #endregion
     }
 }

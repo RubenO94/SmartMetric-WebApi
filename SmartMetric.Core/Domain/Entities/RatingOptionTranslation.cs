@@ -7,7 +7,7 @@ namespace SmartMetric.Core.Domain.Entities
     public class RatingOptionTranslation
     {
         public Guid RatingOptionTranslationId { get; set; }
-        public Guid RatingOptionId { get; set; }
+        public Guid? RatingOptionId { get; set; }
 
         [StringLength(10)]
         public string? Language { get; set; }
