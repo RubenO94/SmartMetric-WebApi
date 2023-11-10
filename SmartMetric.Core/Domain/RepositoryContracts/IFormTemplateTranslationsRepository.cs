@@ -41,7 +41,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="formTemplateId">Id do modelo de forumário a ser pesquisado</param>
         /// <returns>Retorna uma lista de objetos FormTemplateTranslations</returns>
-        Task<List<FormTemplateTranslation>> GetFilteredTranslationsByFormTemplateId(Guid formTemplateId);
+        Task<List<FormTemplateTranslation>> GetTranslationsByFormTemplateId(Guid formTemplateId);
         #endregion
     }
 }

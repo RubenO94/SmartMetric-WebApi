@@ -44,9 +44,9 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _dbContext.FormTemplateTranslations.ToListAsync();
         }
 
-        public async Task<List<FormTemplateTranslation>> GetFilteredTranslationsByFormTemplateId(Guid formTemplateId)
+        public async Task<List<FormTemplateTranslation>> GetTranslationsByFormTemplateId(Guid formTemplateId)
         {
-            _logger.LogInformation($"{nameof(FormTemplateTranslationsRepository)}.{nameof(GetFilteredTranslationsByFormTemplateId)} foi iniciado.");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationsRepository)}.{nameof(GetTranslationsByFormTemplateId)} foi iniciado.");
             return await _dbContext.FormTemplateTranslations.Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
         }
 

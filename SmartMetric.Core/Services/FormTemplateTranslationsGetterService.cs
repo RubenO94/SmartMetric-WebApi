@@ -32,15 +32,15 @@ namespace SmartMetric.Core.Services
             return translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
         }
 
-        public async Task<List<FormTemplateTranslationDTOResponse>?> GetFilteredTranslationsByFormTemplateId(Guid? formTemplateId)
+        public async Task<List<FormTemplateTranslationDTOResponse>?> GetTranslationsByFormTemplateId(Guid? formTemplateId)
         {
-            _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetFilteredTranslationsByFormTemplateId)} foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetTranslationsByFormTemplateId)} foi iniciado");
 
             if (formTemplateId == null)
             {
                 throw new ArgumentNullException(nameof(formTemplateId));
             }
-            var translations = await _translationsRepository.GetFilteredTranslationsByFormTemplateId(formTemplateId.Value);
+            var translations = await _translationsRepository.GetTranslationsByFormTemplateId(formTemplateId.Value);
             
 
             return translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();

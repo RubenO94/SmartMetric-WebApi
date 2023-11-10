@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO;
 using SmartMetric.Core.ServicesContracts;
@@ -28,14 +29,37 @@ namespace SmartMetric.Core.Services
             return translations.Select(temp => temp.ToSingleChoiceOptionTranslationDTOResponse()).ToList();
         }
 
-        public Task<SingleChoiceOptionTranslationDTOResponse?> GetSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId)
+        public async Task<SingleChoiceOptionTranslationDTOResponse?> GetSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsGetterService)}.{nameof(GetSingleChoiceOptionTranslationById)} foi iniciado");
+
+            if (singleChoiceOptionTranslationId == null)
+            {
+                throw new ArgumentNullException(nameof(singleChoiceOptionTranslationId));
+            }
+
+            SingleChoiceOptionTranslation? translation = await _translationsRepository.GetSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId.Value);
+
+            if( translation == null )
+            {
+                return null;
+            }
+
+            return translation.ToSingleChoiceOptionTranslationDTOResponse();
         }
 
-        public Task<List<SingleChoiceOptionTranslationDTOResponse>?> GetTranslationsBySingleChoiceOptionId(Guid? singleChoiceOptionId)
+        public async Task<List<SingleChoiceOptionTranslationDTOResponse>?> GetTranslationsBySingleChoiceOptionId(Guid? singleChoiceOptionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsGetterService)}.{nameof(GetTranslationsBySingleChoiceOptionId)} foi iniciado");
+            
+            if (singleChoiceOptionId == null)
+            {
+                throw new ArgumentNullException(nameof(singleChoiceOptionId));
+            }
+            var translations = await  _translationsRepository.GetTranslationsBySingleChoiceOptionId(singleChoiceOptionId.Value);
+
+
+            return translations.Select(temp => temp.ToSingleChoiceOptionTranslationDTOResponse()).ToList();
         }
     }
 }

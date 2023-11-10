@@ -241,11 +241,11 @@ namespace SmartMetric.ServiceTests
         }
         #endregion
 
-        #region GetFilteredTranslationsByFormTemplateId
+        #region GetTranslationsByFormTemplateId
 
         //TESTE: Fornecido um FormTemplateId nulo, deve lançar um ArgumenteNullException
         [Fact]
-        public async Task GetFilteredTranslationsByFormTemplateId_NullFormTemplateId_ToThrowArgumentNullException()
+        public async Task GetTranslationsByFormTemplateId_NullFormTemplateId_ToThrowArgumentNullException()
         {
             //Arrange
             Guid? formTemplateId = null;
@@ -253,7 +253,7 @@ namespace SmartMetric.ServiceTests
             //Act
             Func<Task> action = async () =>
             {
-                await _translationsGetterService.GetFilteredTranslationsByFormTemplateId(formTemplateId);
+                await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
             };
 
             //Assert
@@ -262,15 +262,15 @@ namespace SmartMetric.ServiceTests
 
         //TESTE: Fornecido um FormTemplateId válido, mas sem traduções associadas, deve retornar uma lista vazia de FormTemplateTranslationDTOResponse
         [Fact]
-        public async Task GetFilteredTranslationsByFormTemplateId_WithValidId_NoTranslations_ToBeEmptyList()
+        public async Task GetTranslationsByFormTemplateId_WithValidId_NoTranslations_ToBeEmptyList()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
 
-            _translationsRepositoryMock.Setup(temp => temp.GetFilteredTranslationsByFormTemplateId(It.IsAny<Guid>())).ReturnsAsync(new List<FormTemplateTranslation>());
+            _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(It.IsAny<Guid>())).ReturnsAsync(new List<FormTemplateTranslation>());
 
             //Act
-            List<FormTemplateTranslationDTOResponse>? response = await _translationsGetterService.GetFilteredTranslationsByFormTemplateId(formTemplateId);
+            List<FormTemplateTranslationDTOResponse>? response = await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
 
             //Assert
             response.Should().BeEmpty();
@@ -278,7 +278,7 @@ namespace SmartMetric.ServiceTests
 
         //TESTE: Fornecido um FormTemplateId válido, com traduções associadas, deve retornar a lista correspondente de FormTemplateTranslationDTOResponse
         [Fact]
-        public async Task GetFilteredTranslationsByFormTemplateId_WithValidId_WithTranslations_ToBeSuccessful()
+        public async Task GetTranslationsByFormTemplateId_WithValidId_WithTranslations_ToBeSuccessful()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -301,10 +301,10 @@ namespace SmartMetric.ServiceTests
 
             List<FormTemplateTranslationDTOResponse> expected_response = translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
 
-            _translationsRepositoryMock.Setup(temp => temp.GetFilteredTranslationsByFormTemplateId(It.IsAny<Guid>())).ReturnsAsync(translations);
+            _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(It.IsAny<Guid>())).ReturnsAsync(translations);
 
             //Act
-            List<FormTemplateTranslationDTOResponse>? actual_response = await _translationsGetterService.GetFilteredTranslationsByFormTemplateId(formTemplateId);
+            List<FormTemplateTranslationDTOResponse>? actual_response = await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
 
             //Assert
             actual_response.Should().BeEquivalentTo(expected_response);
