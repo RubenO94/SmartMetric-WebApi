@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    internal class FormTemplatesRepository : IFormTemplateRepository
+    public class FormTemplatesRepository : IFormTemplateRepository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<FormTemplatesRepository> _logger;
@@ -22,19 +22,26 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public Task<FormTemplate?> AddFormTemplate(FormTemplate formTemplate)
+        public async Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(AddFormTemplate)} foi iniciado");
+
+            _dbContext.FormTemplates.Add(formTemplate);
+            await _dbContext.SaveChangesAsync();
+
+            return formTemplate;
         }
 
-        public Task<List<FormTemplate>?> GetAllFormTemplates()
+        public async Task<List<FormTemplate>> GetAllFormTemplates()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
+
+            return await _dbContext.FormTemplates.Include("FormTemplateTranslations").ToListAsync();
         }
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId)
         {
-            _logger.LogInformation("GetFormTemplateByID foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
             return await _dbContext.FormTemplates.Include("FormTemplateTranslations").FirstOrDefaultAsync(tempalte =>  tempalte.FormTemplateId == formTemplateId);
         }
     }

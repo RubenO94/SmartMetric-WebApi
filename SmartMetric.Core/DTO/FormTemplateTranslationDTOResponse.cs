@@ -13,6 +13,7 @@ namespace SmartMetric.Core.DTO
         public string? Title { get; set; }
         public string? Description { get; set; }
 
+
         /// <summary>
         /// Compara os dados atuais deste objeto com o parâmetro.
         /// </summary>

@@ -8,26 +8,31 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Domain.RepositoryContracts
 {
+    /// <summary>
+    /// Interface que define operações de acesso a dados para modelos de formulários.
+    /// </summary>
     public interface IFormTemplateRepository
     {
         /// <summary>
-        /// Metodo para retornar todos os modelos de formulário criados.
+        /// Obtém todos os modelos de formulário existentes.
         /// </summary>
-        /// <returns>Retorna todos os modelos criados  caso haja, senão retorna NULL</returns>
-        Task<List<FormTemplate>?> GetAllFormTemplates();
+        /// <returns>Uma lista de modelos de formulário.</returns>
+        Task<List<FormTemplate>> GetAllFormTemplates();
 
         /// <summary>
-        /// Metodo para retornar o modelo de formulário por GUID
+        /// Obtém um modelo de formulário pelo seu identificador único (GUID).
         /// </summary>
-        /// <param name="formTemplateId">GUID do modelo de formulário pertentido</param>
-        /// <returns>Retorna o modelo de formulário que seja igual ao GUID do paremetro ou se não houver correspondência retorna NULL</returns>
+        /// <param name="formTemplateId">O identificador único (GUID) do modelo de formulário.</param>
+        /// <returns>O modelo de formulário correspondente ao identificador ou null em caso de não haver correspondência.</returns>
         Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId);
 
         /// <summary>
-        /// Metodo para inserir um novo modelo de formulário e guardar na base dados. 
+        /// Adiciona um novo modelo de formulário à base de dados.
         /// </summary>
-        /// <param name="formTemplate">Modelo de formulário a ser adicionado</param>
-        /// <returns>Retorna o modelo de formulário inserido em caso de sucesso, senão NULL </returns>
-        Task<FormTemplate?> AddFormTemplate(FormTemplate formTemplate);
+        /// <param name="formTemplate">O modelo de formulário a ser adicionado.</param>
+        /// <returns>O modelo de formulário inserido.</returns>
+        Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate);
     }
+
+
 }
