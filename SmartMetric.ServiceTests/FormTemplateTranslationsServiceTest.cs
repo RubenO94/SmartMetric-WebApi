@@ -205,7 +205,7 @@ namespace SmartMetric.ServiceTests
 
         #region GetFormTemplateTranslationById
 
-        //TESTE: Fornecido um FormTemplateTranslationId null, deve retornar null como FormTemplateTranslationDTOResponse
+        //TESTE: Fornecido um FormTemplateTranslationId null, deve lançar um ArgumenteNullException
         [Fact]
         public async Task GetFormTemplateTranslationById_NullFormTemplateTranslationId_ToBeNull()
         {
@@ -213,10 +213,13 @@ namespace SmartMetric.ServiceTests
             Guid? id = null;
 
             //Act
-            FormTemplateTranslationDTOResponse? response = await _translationsGetterService.GetFormTemplateTranslationById(id);
+            Func<Task> action = async () =>
+            {
+                await _translationsGetterService.GetFormTemplateTranslationById(id);
+            };
 
             //Assert
-            response.Should().BeNull();
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
 
         //TESTE: Fornecido um FormTemplateTranslationId válido deve retornar o objeto FormTemplateTranslationDTOResponse correspondente ao id
@@ -238,23 +241,77 @@ namespace SmartMetric.ServiceTests
         }
         #endregion
 
-        #region AddSingleChoiceOptionTranslation
+        #region GetFilteredTranslationsByFormTemplateId
 
-        //TESTE: Fornecido um objeto SingleChoiceOptionTranslation como null, deve lançar um ArgumenteNullException
+        //TESTE: Fornecido um FormTemplateId nulo, deve lançar um ArgumenteNullException
         [Fact]
-        public async Task AddSingleChoiceOptionTranslation_WithNullObject_ToBeArgumentNullException()
+        public async Task GetFilteredTranslationsByFormTemplateId_NullFormTemplateId_ToThrowArgumentNullException()
         {
             //Arrange
-            SingleChoiceOptionTranslation? translation = null;
+            Guid? formTemplateId = null;
 
             //Act
-            //Func<Task> () =>
-            //{
-            //    //_translationsAdderService.
-            //};
+            Func<Task> action = async () =>
+            {
+                await _translationsGetterService.GetFilteredTranslationsByFormTemplateId(formTemplateId);
+            };
 
             //Assert
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
+
+        //TESTE: Fornecido um FormTemplateId válido, mas sem traduções associadas, deve retornar uma lista vazia de FormTemplateTranslationDTOResponse
+        [Fact]
+        public async Task GetFilteredTranslationsByFormTemplateId_WithValidId_NoTranslations_ToBeEmptyList()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetFilteredTranslationsByFormTemplateId(It.IsAny<Guid>())).ReturnsAsync(new List<FormTemplateTranslation>());
+
+            //Act
+            List<FormTemplateTranslationDTOResponse>? response = await _translationsGetterService.GetFilteredTranslationsByFormTemplateId(formTemplateId);
+
+            //Assert
+            response.Should().BeEmpty();
+        }
+
+        //TESTE: Fornecido um FormTemplateId válido, com traduções associadas, deve retornar a lista correspondente de FormTemplateTranslationDTOResponse
+        [Fact]
+        public async Task GetFilteredTranslationsByFormTemplateId_WithValidId_WithTranslations_ToBeSuccessful()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            List<FormTemplateTranslation> translations = new List<FormTemplateTranslation>()
+            {
+                _fixture.Build<FormTemplateTranslation>()
+                .With(temp => temp.FormTemplateId, formTemplateId)
+                .With(temp => temp.FormTemplate, null as FormTemplate)
+                .Create(),
+                _fixture.Build<FormTemplateTranslation>()
+                .With(temp => temp.FormTemplateId, formTemplateId)
+                .With(temp => temp.FormTemplate, null as FormTemplate)
+                .Create(),
+                _fixture.Build<FormTemplateTranslation>()
+                .With(temp => temp.FormTemplateId, formTemplateId)
+                .With(temp => temp.FormTemplate, null as FormTemplate)
+                .Create(),
+            };
+
+            List<FormTemplateTranslationDTOResponse> expected_response = translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetFilteredTranslationsByFormTemplateId(It.IsAny<Guid>())).ReturnsAsync(translations);
+
+            //Act
+            List<FormTemplateTranslationDTOResponse>? actual_response = await _translationsGetterService.GetFilteredTranslationsByFormTemplateId(formTemplateId);
+
+            //Assert
+            actual_response.Should().BeEquivalentTo(expected_response);
+        }
+
         #endregion
+
+
     }
 }

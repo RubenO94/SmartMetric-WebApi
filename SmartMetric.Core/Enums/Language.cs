@@ -6,13 +6,36 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Enums
 {
+    /// <summary>
+    /// Enumeração que representa os diferentes idiomas suportados no sistema.
+    /// </summary>
     public enum Language
     {
-        PT, // Português
-        EN, // Inglês
-        ES, // Espanhol
-        FR, // Francês
-        PL  // Polonês
+        /// <summary>
+        /// Português.
+        /// </summary>
+        PT,
+
+        /// <summary>
+        /// Inglês.
+        /// </summary>
+        EN,
+
+        /// <summary>
+        /// Espanhol.
+        /// </summary>
+        ES,
+
+        /// <summary>
+        /// Francês.
+        /// </summary>
+        FR,
+
+        /// <summary>
+        /// Polonês.
+        /// </summary>
+        PL
     }
+
 
 }

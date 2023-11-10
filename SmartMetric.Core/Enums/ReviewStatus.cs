@@ -6,12 +6,35 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Enums
 {
+    /// <summary>
+    /// Enumeração que representa os diferentes estados possíveis de uma revisão.
+    /// </summary>
     public enum ReviewStatus
     {
+        /// <summary>
+        /// Revisão ainda não iniciada.
+        /// </summary>
         NotStarted,
+
+        /// <summary>
+        /// Revisão em andamento.
+        /// </summary>
         Active,
+
+        /// <summary>
+        /// Revisão inativa.
+        /// </summary>
         Inactive,
+
+        /// <summary>
+        /// Revisão cancelada.
+        /// </summary>
         Canceled,
-        Completed,
+
+        /// <summary>
+        /// Revisão concluída.
+        /// </summary>
+        Completed
     }
+
 }

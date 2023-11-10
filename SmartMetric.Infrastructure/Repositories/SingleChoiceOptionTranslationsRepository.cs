@@ -38,23 +38,23 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Getters
 
-        //public async Task<List<FormTemplateTranslation>> GetAllFormTemplateTranslations()
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetAllFormTemplateTranslations foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.ToListAsync();
-        //}
+        public async Task<List<SingleChoiceOptionTranslation>> GetAllSingleChoiceOptionTranslations()
+        {
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(AddSingleChoiceOptionTranslation)} foi iniciado.");
+            return await _dbContext.SingleChoiceOptionTranslations.ToListAsync();
+        }
 
-        //public async Task<List<FormTemplateTranslation>> GetFilteredTranslationsByFormTemplateId(Guid formTemplateId)
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetFilteredTranslationsByFormTemplateId foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
-        //}
+        public async Task<List<SingleChoiceOptionTranslation>> GetTranslationsBySingleChoiceOptionId(Guid formTemplateId)
+        {
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(GetTranslationsBySingleChoiceOptionId)} foi iniciado.");
+            return await _dbContext.SingleChoiceOptionTranslations.Where(temp => temp.SingleChoiceOptionId == formTemplateId).ToListAsync();
+        }
 
-        //public async Task<FormTemplateTranslation?> GetFormTemplateTranslationById(Guid formTemplateTranslationId)
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetFormTemplateTranslationById foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.FirstOrDefaultAsync(temp => temp.FormTemplateTranslationId == formTemplateTranslationId);
-        //}
+        public async Task<SingleChoiceOptionTranslation?> GetSingleChoiceOptionTranslationById(Guid singleChoiceOptionTranslationId)
+        {
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(GetSingleChoiceOptionTranslationById)} foi iniciado.");
+            return await _dbContext.SingleChoiceOptionTranslations.FirstOrDefaultAsync(temp => temp.SingleChoiceOptionTranslationId == singleChoiceOptionTranslationId);
+        }
 
         #endregion
     }

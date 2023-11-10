@@ -28,7 +28,7 @@ namespace SmartMetric.Core.Services
         public async Task<FormTemplateTranslationDTOResponse> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request)
         {
             //1º - Fazer log do Metodo.
-            _logger.LogInformation("TranslationsAdderService.AddFormTemplateTranslation foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
             //2º - Verifcar se é null, se sim lançar ArgumenteNullException
             if (request == null)

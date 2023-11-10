@@ -7,7 +7,10 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.ServicesContracts
 {
-    public interface ISingleChoiceOptionTranslationAdderService
+    /// <summary>
+    /// Representa a lógica de negócio para inserção traduções de Opções de Escolha Única.
+    /// </summary>
+    public interface ISingleChoiceOptionTranslationsAdderService
     {
         /// <summary>
         /// Adiciona uma tradução de um modelo de resposta unica à sua lista de traduções
