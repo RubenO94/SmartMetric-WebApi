@@ -244,5 +244,24 @@ namespace SmartMetric.ServiceTests
             actual_response.Should().Be(expected_response);
         }
         #endregion
+
+        #region AddSingleChoiceOptionTranslation
+
+        //TESTE: Fornecido um objeto SingleChoiceOptionTranslation como null, deve lançar um ArgumenteNullException
+        [Fact]
+        public async Task AddSingleChoiceOptionTranslation_WithNullObject_ToBeArgumentNullException()
+        {
+            //Arrange
+            SingleChoiceOptionTranslation? translation = null;
+
+            //Act
+            //Func<Task> () =>
+            //{
+            //    //_translationsAdderService.
+            //};
+
+            //Assert
+        }
+        #endregion
     }
 }
