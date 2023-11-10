@@ -17,8 +17,7 @@ namespace SmartMetric.Core.DTO
         [Required(ErrorMessage = "Please select a Language to translate")]
         public Language? Language { get; set; }
         
-        [Required(ErrorMessage = "Title can't be blank")]
-        public string? Title { get; set; }
+        [Required(ErrorMessage = "Description can't be blank")]
         public string? Description { get; set; }
 
 
@@ -28,7 +27,6 @@ namespace SmartMetric.Core.DTO
             {
                 SingleChoiceOptionId = SingleChoiceOptionId,
                 Language = this.Language.ToString(),
-                Title = this.Title,
                 Description = this.Description
             };
         }

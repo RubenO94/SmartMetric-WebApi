@@ -16,7 +16,6 @@ namespace SmartMetric.Core.DTO
         public Guid SingleChoiceOptionTranslationId { get; set; }
         public Guid SingleChoiceOptionId { get; set; }
         public Language? Language { get; set; }
-        public string? Title { get; set; }
         public string? Description { get; set; }
 
         /// <summary>
@@ -30,7 +29,7 @@ namespace SmartMetric.Core.DTO
             if (obj.GetType() != typeof(SingleChoiceOptionTranslationDTOResponse)) return false;
 
             SingleChoiceOptionTranslationDTOResponse translation = (SingleChoiceOptionTranslationDTOResponse)obj;
-            return this.SingleChoiceOptionTranslationId == translation.SingleChoiceOptionTranslationId && this.SingleChoiceOptionId == translation.SingleChoiceOptionId && this.Language == translation.Language && this.Title == translation.Title && this.Description == translation.Description;
+            return this.SingleChoiceOptionTranslationId == translation.SingleChoiceOptionTranslationId && this.SingleChoiceOptionId == translation.SingleChoiceOptionId && this.Language == translation.Language && this.Description == translation.Description;
         }
 
         public override int GetHashCode()
@@ -40,7 +39,7 @@ namespace SmartMetric.Core.DTO
 
         public override string ToString()
         {
-            return $"FormTemplateTranslationdId: {this.SingleChoiceOptionTranslationId}\nFormTemplateId: {this.SingleChoiceOptionId}\nTitle: {this.Title}\nDescription:{this.Description}\n";
+            return $"FormTemplateTranslationdId: {this.SingleChoiceOptionTranslationId}\nFormTemplateId: {this.SingleChoiceOptionId}\nDescription:{this.Description}\n";
         }
     }
 }
