@@ -3,7 +3,7 @@
 namespace SmartMetric.Core.DTO
 {
     /// <summary>
-    /// Representa a DTO que é usada na maioria dos returns para os métodos dos serviços FormTemplateTranslation
+    /// Representa a DTO usada na maioria dos retornos para os métodos dos serviços de tradução de modelo de formulário.
     /// </summary>
     public class FormTemplateTranslationDTOResponse
     {
@@ -13,12 +13,11 @@ namespace SmartMetric.Core.DTO
         public string? Title { get; set; }
         public string? Description { get; set; }
 
-
         /// <summary>
-        /// Compara os dados atuais deste objeto com o parametro
+        /// Compara os dados atuais deste objeto com o parâmetro.
         /// </summary>
-        /// <param name="obj">Objeto parametro para ser comparado</param>
-        /// <returns>Retorna True ou False, indicando se todos os detalhes da tradução correspondem com o objeto especificado no parametro</returns>
+        /// <param name="obj">O objeto parâmetro a ser comparado.</param>
+        /// <returns>Retorna True ou False, indicando se todos os detalhes da tradução correspondem ao objeto especificado no parâmetro.</returns>
         public override bool Equals(object? obj)
         {
             if (obj == null) return false;
@@ -35,17 +34,17 @@ namespace SmartMetric.Core.DTO
 
         public override string ToString()
         {
-            return $"FormTemplateTranslationdId: {this.FormTemplateTranslationId}\nFormTemplateId: {this.FormTemplateId}\nTitle: {this.Title}\nDescription:{this.Description}\n";
+            return $"FormTemplateTranslationId: {this.FormTemplateTranslationId}\nFormTemplateId: {this.FormTemplateId}\nTitle: {this.Title}\nDescription: {this.Description}\n";
         }
     }
 
     public static class FormTemplateTranslationExtensions
     {
         /// <summary>
-        /// Um método de extensão que converte um objeto FormTemplateTranslation em um objeto FormTemplateTranslationDTOResponse
+        /// Um método de extensão que converte um objeto FormTemplateTranslation em um objeto FormTemplateTranslationDTOResponse.
         /// </summary>
-        /// <param name="formTemplateTranslation">O objeto FormTemplateTranslation a ser convertido</param>
-        /// <returns>Retorna o convertido FormTemplateTranslationDTOResponse</returns>
+        /// <param name="formTemplateTranslation">O objeto FormTemplateTranslation a ser convertido.</param>
+        /// <returns>Retorna o FormTemplateTranslationDTOResponse convertido.</returns>
         public static FormTemplateTranslationDTOResponse ToFormTemplateTranslationDTOResponse(this FormTemplateTranslation formTemplateTranslation)
         {
             return new FormTemplateTranslationDTOResponse()
@@ -58,4 +57,5 @@ namespace SmartMetric.Core.DTO
             };
         }
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Core.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,7 +22,28 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         #endregion
 
         #region Getters
-        //TODO: Getters
+
+        /// <summary>
+        /// Obtém todas as traduções de Opções de Escolha Única.
+        /// </summary>
+        /// <returns>Uma lista de SingleChoiceOptionTranslationDTOResponse.</returns>
+        Task<List<SingleChoiceOptionTranslation>> GetAllSingleChoiceOptionTranslations();
+
+        /// <summary>
+        /// Obtém uma tradução de Opção de Escolha Única pelo seu identificador.
+        /// </summary>
+        /// <param name="singleChoiceOptionTranslationId">O identificador da tradução a obter.</param>
+        /// <returns>A tradução correspondente, ou null se não for encontrada.</returns>
+        Task<SingleChoiceOptionTranslation?> GetSingleChoiceOptionTranslationById(Guid singleChoiceOptionTranslationId);
+
+        /// <summary>
+        /// Obtém todas as traduções associadas a uma Opção de Escolha Única.
+        /// </summary>
+        /// <param name="singleChoiceOptionId">O identificador da Opção de Escolha Única.</param>
+        /// <returns>Uma lista de SingleChoiceOptionTranslationDTOResponse.</returns>
+        Task<List<SingleChoiceOptionTranslation>> GetTranslationsBySingleChoiceOptionId(Guid singleChoiceOptionId);
+
+
         #endregion
     }
 }

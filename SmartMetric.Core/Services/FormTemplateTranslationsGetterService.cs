@@ -26,7 +26,7 @@ namespace SmartMetric.Core.Services
         #region FormTemplateTranslation Getters
         public async Task<List<FormTemplateTranslationDTOResponse>> GetAllFormTemplateTranslations()
         {
-            _logger.LogInformation("TranslationsGetterService.GetAllFormTemplateTranslations foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetAllFormTemplateTranslations)} foi iniciado");
             var translations = await _translationsRepository.GetAllFormTemplateTranslations();
 
             return translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
@@ -34,18 +34,14 @@ namespace SmartMetric.Core.Services
 
         public async Task<List<FormTemplateTranslationDTOResponse>?> GetFilteredTranslationsByFormTemplateId(Guid? formTemplateId)
         {
-            _logger.LogInformation("TranslationsGetterService.GetFilteredTranslationsByFormTemplateId foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetFilteredTranslationsByFormTemplateId)} foi iniciado");
 
-            if(formTemplateId == null)
+            if (formTemplateId == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(formTemplateId));
             }
             var translations = await _translationsRepository.GetFilteredTranslationsByFormTemplateId(formTemplateId.Value);
             
-            if(translations.Count <= 0)
-            {
-                return null;
-            }
 
             return translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
            
@@ -53,11 +49,11 @@ namespace SmartMetric.Core.Services
 
         public async Task<FormTemplateTranslationDTOResponse?> GetFormTemplateTranslationById(Guid? formTemplateTranslationId)
         {
-            _logger.LogInformation("TranslationsGetterService.GetFormTemplateTranslationById foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetFormTemplateTranslationById)} foi iniciado");
 
             if (formTemplateTranslationId == null)
             {
-                return null;
+                throw new ArgumentNullException(nameof(formTemplateTranslationId));
             }
 
             FormTemplateTranslation? translation = await _translationsRepository.GetFormTemplateTranslationById(formTemplateTranslationId.Value);
