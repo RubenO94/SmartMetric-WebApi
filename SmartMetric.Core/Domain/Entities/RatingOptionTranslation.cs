@@ -17,7 +17,7 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o identificador único da opção de classificação à qual esta tradução está associada.
         /// </summary>
-        public Guid RatingOptionId { get; set; }
+        public Guid? RatingOptionId { get; set; }
 
         /// <summary>
         /// Obtém ou define o idioma da tradução.
