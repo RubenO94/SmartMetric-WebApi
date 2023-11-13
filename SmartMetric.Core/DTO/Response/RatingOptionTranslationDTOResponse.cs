@@ -14,7 +14,7 @@ namespace SmartMetric.Core.DTO.Response
     public class RatingOptionTranslationDTOResponse
     {
         public Guid RatingOptionTranslationId { get; set; }
-        public Guid? RatingOptionId { get; set; }
+        private Guid? RatingOptionId { get; set; }
         public string? Language { get; set; }
         public string? Description { get; set; }
 
@@ -56,7 +56,6 @@ namespace SmartMetric.Core.DTO.Response
             return new RatingOptionTranslationDTOResponse()
             {
                 RatingOptionTranslationId = ratingOptionTranslation.RatingOptionTranslationId,
-                RatingOptionId = ratingOptionTranslation.RatingOptionId,
                 Language = ratingOptionTranslation.Language,
                 Description = ratingOptionTranslation.Description,
             };

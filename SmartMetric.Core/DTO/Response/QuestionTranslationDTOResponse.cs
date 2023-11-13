@@ -14,7 +14,7 @@ namespace SmartMetric.Core.DTO.Response
     public class QuestionTranslationDTOResponse
     {
         public Guid QuestionTranslationId { get; set; }
-        public Guid? QuestionId { get; set; }
+        private Guid? QuestionId { get; set; }
         public string? Language { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
@@ -51,7 +51,6 @@ namespace SmartMetric.Core.DTO.Response
             return new QuestionTranslationDTOResponse()
             {
                 QuestionTranslationId = questionTranslation.QuestionTranslationId,
-                QuestionId = questionTranslation.QuestionId,
                 Language = questionTranslation.Language,
                 Title = questionTranslation.Title,
                 Description = questionTranslation.Description,

@@ -8,7 +8,7 @@ namespace SmartMetric.Core.DTO.Response
     public class SingleChoiceOptionTranslationDTOResponse
     {
         public Guid SingleChoiceOptionTranslationId { get; set; }
-        public Guid? SingleChoiceOptionId { get; set; }
+        private Guid? SingleChoiceOptionId { get; set; }
         public string? Language { get; set; }
         public string? Description { get; set; }
 
@@ -55,7 +55,6 @@ namespace SmartMetric.Core.DTO.Response
             return new SingleChoiceOptionTranslationDTOResponse()
             {
                 SingleChoiceOptionTranslationId = translation.SingleChoiceOptionTranslationId,
-                SingleChoiceOptionId = translation.SingleChoiceOptionId,
                 Language = translation.Language,
                 Description = translation.Description
             };
