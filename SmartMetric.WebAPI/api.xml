@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<doc>
+	<assembly>
+		<name>SmartMetric.WebAPI</name>
+	</assembly>
+	<members>
+		<member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplates.GetAllFormTemplates">
+			<summary>
+				Return all FormTemplates
+			</summary>
+			<returns></returns>
+		</member>
+	</members>
+</doc>

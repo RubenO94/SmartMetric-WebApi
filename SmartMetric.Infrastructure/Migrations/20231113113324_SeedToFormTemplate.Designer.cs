@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartMetric.Infrastructure.DatabaseContext;
 
@@ -11,9 +12,11 @@ using SmartMetric.Infrastructure.DatabaseContext;
 namespace SmartMetric.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231113113324_SeedToFormTemplate")]
+    partial class SeedToFormTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,20 +75,6 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.HasIndex("QuestionId");
 
                     b.ToTable("FormTemplateQuestions");
-
-                    b.HasData(
-                        new
-                        {
-                            FormTemplateQuestionId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afbb"),
-                            FormTemplateId = new Guid("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
-                            QuestionId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa8")
-                        },
-                        new
-                        {
-                            FormTemplateQuestionId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afbc"),
-                            FormTemplateId = new Guid("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
-                            QuestionId = new Guid("3fa85f64-5717-4562-b3fc-2c963f66afb1")
-                        });
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateTranslation", b =>

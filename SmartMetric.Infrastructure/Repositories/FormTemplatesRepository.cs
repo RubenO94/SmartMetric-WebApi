@@ -1,18 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
-using SmartMetric.Core.DTO;
 using SmartMetric.Infrastructure.DatabaseContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    internal class FormTemplatesRepository : IFormTemplateRepository
+    public class FormTemplatesRepository : IFormTemplateRepository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<FormTemplatesRepository> _logger;
@@ -22,20 +17,44 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public Task<FormTemplate?> AddFormTemplate(FormTemplate formTemplate)
+        public async Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(AddFormTemplate)} foi iniciado");
+
+            _dbContext.FormTemplates.Add(formTemplate);
+            await _dbContext.SaveChangesAsync();
+
+            return formTemplate;
         }
 
-        public Task<List<FormTemplate>?> GetAllFormTemplates()
+        public async Task<List<FormTemplate>> GetAllFormTemplates()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
+
+
+            return await _dbContext.FormTemplates
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q!.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .ToListAsync();
         }
+
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId)
         {
-            _logger.LogInformation("GetFormTemplateByID foi iniciado");
-            return await _dbContext.FormTemplates.Include("FormTemplateTranslations").FirstOrDefaultAsync(tempalte =>  tempalte.FormTemplateId == formTemplateId);
+            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
+
+
+            var response = await _dbContext.FormTemplates
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q!.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .FirstOrDefaultAsync(template => template.FormTemplateId == formTemplateId);
+
+            return response;
         }
+            
     }
 }
