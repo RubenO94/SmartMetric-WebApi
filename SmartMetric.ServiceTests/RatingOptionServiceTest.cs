@@ -141,10 +141,41 @@ namespace SmartMetric.ServiceTests
         }
 
         //TESTE: retornar uma lista de todas as opções de resposta de classificação de todas as questões disponíveis na base de dados
-        //[Fact]
-        //public async Task GetAllRatingOption_ToBeSuccessful()
-        //{
-        //}
+        [Fact]
+        public async Task GetAllRatingOption_ToBeSuccessful()
+        {
+            //Arrange
+            List<RatingOption> translations = new List<RatingOption>()
+            {
+                _fixture.Build<RatingOption>().Create(),
+                _fixture.Build<RatingOption>().Create(),
+                _fixture.Build<RatingOption>().Create()
+            };
+
+            List<RatingOptionDTOResponse> expectedResponse = translations.Select(temp => temp.ToRatingOptionDTOResponse()).ToList();
+
+            //Log expectedResponse
+            _testOutputHelper.WriteLine("Expected Response:");
+            foreach (var item in expectedResponse)
+            {
+                _testOutputHelper.WriteLine(item.ToString());
+            }
+
+            _ratingOptionRepositoryMock.Setup(temp => temp.GetAllRatingOption()).ReturnsAsync(translations);
+
+            //Act
+            List<RatingOptionDTOResponse> actualResponse = await _ratingOptionGetterService.GetAllRatingOption();
+
+            //Log actualResponse
+            _testOutputHelper.WriteLine("Actual Response:");
+            foreach (var item in actualResponse)
+            {
+                _testOutputHelper.WriteLine(item.ToString());
+            }
+
+            //Assert
+            actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
 
         #endregion
 

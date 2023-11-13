@@ -1,4 +1,5 @@
 ﻿using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,17 @@ namespace SmartMetric.Core.DTO.AddRequest
         [Required(ErrorMessage = "NumericValue can't be blank")]
         public int? NumericValue { get; set; }
 
+        [Required(ErrorMessage = "Translations can't be blank")]
+        public List<RatingOptionTranslationDTOResponse>? Translations { get; set; }
+
 
         public RatingOption ToRatingOption()
         {
             return new RatingOption()
             {
                 QuestionId = this.QuestionId,
-                NumericValue = this.NumericValue
+                NumericValue = this.NumericValue,
+                Translations = this.Translations.Select()
             };
         }
 
