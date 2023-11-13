@@ -2,21 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO;
+using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Getters;
 using SmartMetric.Infrastructure.DatabaseContext;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class FormTemplateController : CustomBaseController
+    public class FormTemplatesController : CustomBaseController
     {
         private readonly IFormTemplatesGetterService _formTemplateGetterService;
+        private readonly IFormTemplatesAdderService _formTemplateAdderService;
 
-        public FormTemplateController(IFormTemplatesGetterService formTemplateGetterService)
+        public FormTemplatesController(IFormTemplatesGetterService formTemplateGetterService, IFormTemplatesAdderService formTemplatesAdderService)
         {
             _formTemplateGetterService = formTemplateGetterService;
+            _formTemplateAdderService = formTemplatesAdderService;
         }
 
 
@@ -48,11 +52,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return Ok(formTemplate);
         }
 
-        //[HttpPost]
-        //public IActionResult AddFormTemplate([FromBody] FormTemplateDTOAddRequest formTemplateDTOAddRequest)
-        //{
-        //    var createdFormTemplate = _formTemplateService.AddFormTemplate(formTemplateDTOAddRequest);
-        //    return CreatedAtAction(nameof(GetFormTemplateById), new { id = createdFormTemplate.FormTemplateId }, createdFormTemplate);
-        //}
+        [HttpPost]
+        public IActionResult AddFormTemplate([FromBody] FormTemplateDTOAddRequest formTemplateDTOAddRequest)
+        {
+            var createdFormTemplate = _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
+            return CreatedAtAction(nameof(GetFormTemplateById), createdFormTemplate);
+        }
     }
 }

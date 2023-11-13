@@ -14,8 +14,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+
+//Dependency Injection:
+
+//Repositories
 builder.Services.AddScoped<IFormTemplateRepository, FormTemplatesRepository>();
 
+//Services
 builder.Services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
 builder.Services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
 
@@ -89,7 +94,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
-        options.SwaggerEndpoint("/swagger/v2/swagger.json", "2.0");
     }); //creates swagger UI for testing all Web API endpoints / action methods
 }
 
