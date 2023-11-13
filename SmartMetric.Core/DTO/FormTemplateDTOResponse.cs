@@ -13,8 +13,8 @@ namespace SmartMetric.Core.DTO
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public int? CreatedByUserId { get; set; }
-        public List<FormTemplateTranslation>? Translations { get; set; }
-        public List<Question>? Questions { get; set; }
+        public List<FormTemplateTranslationDTOResponse>? Translations { get; set; }
+        public List<QuestionDTOResponse>? Questions { get; set; }
 
 
         /// <summary>
@@ -52,13 +52,15 @@ namespace SmartMetric.Core.DTO
         /// <returns>Retorna o FormTemplateDTOResponse convertido.</returns>
         public static FormTemplateDTOResponse ToFormTemplateDTOResponse(this FormTemplate formTemplate)
         {
+
             return new FormTemplateDTOResponse()
             {
                 FormTemplateId = formTemplate.FormTemplateId,
                 CreatedByUserId = formTemplate.CreatedByUserId,
                 CreatedDate = formTemplate.CreatedDate,
                 ModifiedDate = formTemplate.ModifiedDate,
-                Translations = (List<FormTemplateTranslation>?)formTemplate.Translations
+                Translations = formTemplate.Translations?.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList() ?? new List<FormTemplateTranslationDTOResponse>(),
+                Questions = formTemplate.FormTemplateQuestions?.Select(q => q.Question).ToList() ?? new List<QuestionDTOResponse>(),//Convertendo ICollection para List
             };
         }
     }

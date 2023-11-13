@@ -21,12 +21,12 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o identificador único do modelo de formulário.
         /// </summary>
-        public Guid FormTemplateId { get; set; }
+        public Guid? FormTemplateId { get; set; }
 
         /// <summary>
         /// Obtém ou define o identificador único da pergunta associada.
         /// </summary>
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
 
         /// <summary>
         /// Obtém ou define o modelo de formulário associado à relação.

@@ -33,47 +33,178 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //Seed to FormTemplateTranslations
-            string formTemplateTranslationsJson = System.IO.File.ReadAllText("formTemplateTranslations.json");
-
-            List<FormTemplateTranslation>? formTemplateTranslations = System.Text.Json.JsonSerializer.Deserialize<List<FormTemplateTranslation>>(formTemplateTranslationsJson);
-
-            if(formTemplateTranslations != null)
-            foreach (var translation in formTemplateTranslations)
-            {
-                modelBuilder.Entity<FormTemplateTranslation>().HasData(translation);
-            }
-
-            //Seed to FormTemplates
-            string formTemplatesJson = System.IO.File.ReadAllText("formTemplates.json");
-
-            List<FormTemplate>? formTemplates = System.Text.Json.JsonSerializer.Deserialize<List<FormTemplate>>(formTemplatesJson);
-
-            if (formTemplates != null)
-                foreach (var template in formTemplates)
+            // Semente para FormTemplate
+            modelBuilder.Entity<FormTemplate>().HasData(
+                new FormTemplate
                 {
-                    //if (template.Questions != null)
-                    //    foreach (var question in template.Questions)
-                    //    {
-                    //        if (question.Translations != null)
-                    //            foreach (var translation in question.Translations)
-                    //            {
-                    //                modelBuilder.Entity<QuestionTranslation>().HasData(translation);
-                    //            }
-
-                    //        modelBuilder.Entity<Question>().HasData(question);
-                    //    }
-
-                    if (template.Translations != null)
-                        foreach (var translation in template.Translations)
-                        {
-                            modelBuilder.Entity<FormTemplateTranslation>().HasData(translation);
-                        }
-
-                    modelBuilder.Entity<FormTemplate>().HasData(template);
+                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
+                    CreatedDate = DateTime.Parse("2023-11-13T10:51:27.873Z"),
+                    ModifiedDate = DateTime.Parse("2023-11-13T10:51:27.873Z"),
+                    CreatedByUserId = 1
+                    // outras propriedades...
                 }
+            );
+
+            // Semente para FormTemplateTranslation
+            modelBuilder.Entity<FormTemplateTranslation>().HasData(
+                new FormTemplateTranslation
+                {
+                    FormTemplateTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa7"),
+                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
+                    Language = "en",
+                    Title = "Employee Satisfaction Survey",
+                    Description = "A survey to measure employee satisfaction."
+                }
+            );
+
+            // Semente para Question e suas traduções, RatingOptions e SingleChoiceOptions
+            modelBuilder.Entity<Question>().HasData(
+                new
+                {
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
+                    IsRequired = true,
+                    ResponseType = "Rating"
+                    // outras propriedades...
+                },
+                new
+                {
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1"),
+                    IsRequired = true,
+                    ResponseType = "SingleChoice"
+                    // outras propriedades...
+                }
+            );
+
+            modelBuilder.Entity<QuestionTranslation>().HasData(
+                new
+                {
+                    QuestionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afaa"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
+                    Language = "en",
+                    Title = "How satisfied are you with your work?",
+                    Description = "Please rate your overall satisfaction with your work on a scale of 1 to 10."
+                },
+                new
+                {
+                    QuestionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb3"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1"),
+                    Language = "en",
+                    Title = "How would you rate the cafeteria food?",
+                    Description = "Please select your rating for the cafeteria food."
+                }
+            );
+
+            modelBuilder.Entity<RatingOption>().HasData(
+                new
+                {
+                    RatingOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afab"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
+                    NumericValue = 1
+                    // outras propriedades...
+                },
+                new
+                {
+                    RatingOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afad"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
+                    NumericValue = 5
+                    // outras propriedades...
+                },
+                new
+                {
+                    RatingOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afaf"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
+                    NumericValue = 10
+                    // outras propriedades...
+                }
+            );
+
+            modelBuilder.Entity<RatingOptionTranslation>().HasData(
+                new
+                {
+                    RatingOptionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afac"),
+                    RatingOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afab"),
+                    Language = "en",
+                    Description = "Not Satisfied"
+                },
+                new
+                {
+                    RatingOptionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afae"),
+                    RatingOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afad"),
+                    Language = "en",
+                    Description = "Neutral"
+                },
+                new
+                {
+                    RatingOptionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb0"),
+                    RatingOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afaf"),
+                    Language = "en",
+                    Description = "Very Satisfied"
+                }
+            );
+
+            modelBuilder.Entity<SingleChoiceOption>().HasData(
+                new
+                {
+                    SingleChoiceOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb4"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
+                    // outras propriedades...
+                },
+                new
+                {
+                    SingleChoiceOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb6"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
+                    // outras propriedades...
+                },
+                new
+                {
+                    SingleChoiceOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb8"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
+                    // outras propriedades...
+                }
+            );
+
+            modelBuilder.Entity<SingleChoiceOptionTranslation>().HasData(
+                new
+                {
+                    SingleChoiceOptionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb5"),
+                    SingleChoiceOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb4"),
+                    Language = "en",
+                    Description = "Excellent"
+                },
+                new
+                {
+                    SingleChoiceOptionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb7"),
+                    SingleChoiceOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb6"),
+                    Language = "en",
+                    Description = "Good"
+                },
+                new
+                {
+                    SingleChoiceOptionTranslationId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb9"),
+                    SingleChoiceOptionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb8"),
+                    Language = "en",
+                    Description = "Fair"
+                }
+            );
+
+            // Semente para FormTemplateQuestion
+            modelBuilder.Entity<FormTemplateQuestion>().HasData(
+                new FormTemplateQuestion
+                {
+                    FormTemplateQuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afbb"),
+                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8")
+                },
+                new FormTemplateQuestion
+                {
+                    FormTemplateQuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afbc"),
+                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
+                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
+                }
+            );
         }
+
+
 
     }
 

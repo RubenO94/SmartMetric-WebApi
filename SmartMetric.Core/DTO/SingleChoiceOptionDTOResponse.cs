@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO
 {
-    internal class SingleChoiceOptionDTOResponse
+    public class SingleChoiceOptionDTOResponse
     {
     }
 }

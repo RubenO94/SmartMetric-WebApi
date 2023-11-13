@@ -13,11 +13,11 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services
 {
-    public class FormTemplatesService : IFormTemplatesAdderService
+    public class FormTemplatesAdderService : IFormTemplatesAdderService
     {
         private readonly IFormTemplateRepository _formTemplateRepository;
-        private readonly ILogger<FormTemplatesService> _logger;
-        public FormTemplatesService(IFormTemplateRepository formTemplateRepository, ILogger<FormTemplatesService> logger)
+        private readonly ILogger<FormTemplatesAdderService> _logger;
+        public FormTemplatesAdderService(IFormTemplateRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
         {
             _formTemplateRepository = formTemplateRepository;
             _logger = logger;
@@ -25,7 +25,7 @@ namespace SmartMetric.Core.Services
 
         public async Task<FormTemplateDTOResponse?> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest)
         {
-            _logger.LogInformation($"{nameof(FormTemplatesService)}.{nameof(AddFormTemplate)} foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplatesAdderService)}.{nameof(AddFormTemplate)} foi iniciado");
 
 
             if (addFormTemplateRequest == null)
@@ -41,7 +41,7 @@ namespace SmartMetric.Core.Services
 
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 
-            return formTemplate.
+            return formTemplate.ToFormTemplateDTOResponse();
 
             throw new NotImplementedException();
         }

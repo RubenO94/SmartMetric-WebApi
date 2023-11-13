@@ -1,14 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
-using SmartMetric.Core.DTO;
 using SmartMetric.Infrastructure.DatabaseContext;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
@@ -36,13 +31,30 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
-            return await _dbContext.FormTemplates.Include("FormTemplateTranslations").ToListAsync();
+
+            return await _dbContext.FormTemplates
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q!.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .ToListAsync();
         }
+
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId)
         {
             _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
-            return await _dbContext.FormTemplates.Include("FormTemplateTranslations").FirstOrDefaultAsync(tempalte =>  tempalte.FormTemplateId == formTemplateId);
+
+
+            var response = await _dbContext.FormTemplates
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q!.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .FirstOrDefaultAsync(template => template.FormTemplateId == formTemplateId);
+
+            return response;
         }
+            
     }
 }

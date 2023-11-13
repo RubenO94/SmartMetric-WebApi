@@ -15,6 +15,8 @@ namespace SmartMetric.Core.DTO
         public DateTime? CreatedDate { get; set; }
         [Required(ErrorMessage ="Please select a User")]
         public int? CreatedByUserId { get; set; }
+        public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
+        public List<QuestionDTOAddRequest>? Questions { get; set; }
 
 
         public FormTemplate ToFormTemplate()
@@ -24,7 +26,8 @@ namespace SmartMetric.Core.DTO
             return new FormTemplate()
             {
                 CreatedDate = CreatedDate,
-                CreatedByUserId = CreatedByUserId
+                CreatedByUserId = CreatedByUserId,
+
             };
         }
     }
