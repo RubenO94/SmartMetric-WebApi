@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using SmartMetric.Core.Domain.RepositoryContracts;
-using SmartMetric.Core.Services;
-using SmartMetric.Core.ServicesContracts;
+using SmartMetric.Core.Services.Adders;
+using SmartMetric.Core.Services.Getters;
+using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Getters;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories;
 
