@@ -8,7 +8,7 @@ namespace SmartMetric.Core.DTO.Response
     public class FormTemplateTranslationDTOResponse
     {
         public Guid FormTemplateTranslationId { get; set; }
-        public Guid? FormTemplateId { get; set; }
+        private Guid? FormTemplateId { get; set; }
         public string? Language { get; set; }
         public string? Title { get; set; }
         public string? Description { get; set; }
@@ -51,7 +51,6 @@ namespace SmartMetric.Core.DTO.Response
             return new FormTemplateTranslationDTOResponse()
             {
                 FormTemplateTranslationId = formTemplateTranslation.FormTemplateTranslationId,
-                FormTemplateId = formTemplateTranslation.FormTemplateId,
                 Language = formTemplateTranslation.Language,
                 Title = formTemplateTranslation.Title,
                 Description = formTemplateTranslation.Description,

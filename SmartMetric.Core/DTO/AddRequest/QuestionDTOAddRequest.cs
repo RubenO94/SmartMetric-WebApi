@@ -9,33 +9,59 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
 {
+    /// <summary>
+    /// DTO (Data Transfer Object) para adicionar uma nova pergunta a um modelo de formulário.
+    /// </summary>
     public class QuestionDTOAddRequest
     {
+        /// <summary>
+        /// Obtém ou define o identificador único do modelo de formulário ao qual a pergunta será associada.
+        /// </summary>
         [Required(ErrorMessage = "Please select a FormTemplate")]
         public Guid FormTemplateId { get; set; }
-        public Guid? RatingTemplateId { get; set; }
-        public Guid? SingleChoiceTemplateId { get; set; }
+
+        /// <summary>
+        /// Obtém ou define se a resposta a esta pergunta é obrigatória.
+        /// </summary>
         public bool IsRequired { get; set; }
+
+        /// <summary>
+        /// Obtém ou define o tipo de resposta esperado para esta pergunta.
+        /// </summary>
         [Required(ErrorMessage = "Please select a response type for this question")]
         public ResponseType ResponseType { get; set; }
+
+        /// <summary>
+        /// Obtém ou define as traduções associadas a esta pergunta.
+        /// </summary>
+        [Required(ErrorMessage = "At least one title and description translation is required.")]
         public List<QuestionTranslationDTOAddRequest>? Translations { get; set; }
+
+        /// <summary>
+        /// Obtém ou define as opções de escolha única associadas a esta pergunta.
+        /// </summary>
         public List<SingleChoiceOptionDTOAddRequest>? SingleChoiceOptions { get; set; }
+
+        /// <summary>
+        /// Obtém ou define as opções de classificação associadas a esta pergunta.
+        /// </summary>
         public List<RatingOptionDTOAddRequest>? RatingOptions { get; set; }
 
-        //TODO: Adicionar metodo para conversão do objecto Request em objeto Entity
+        /// <summary>
+        /// Converte a instância atual em uma entidade Question correspondente.
+        /// </summary>
+        /// <returns>Entidade Question correspondente.</returns>
         public Question ToQuestion()
         {
-            List<QuestionTranslation> translations;
-            if (Translations != null)
-                foreach (QuestionTranslationDTOAddRequest translationRequest in Translations)
-                {
-                    //var translation = translationRequest.t
-                }
-
             return new Question()
             {
-                //RatingOptions 
+                IsRequired = this.IsRequired,
+                ResponseType = this.ResponseType.ToString(),
+                Translations = this.Translations?.Select(temp => temp.ToQuestionTranslation()).ToList(),
+                SingleChoiceOptions = this.SingleChoiceOptions?.Select(temp => temp.ToSingleChoiceOption()).ToList(),
+                RatingOptions = this.RatingOptions?.Select(temp => temp.ToRatingOption()).ToList(),
             };
         }
     }
+
 }

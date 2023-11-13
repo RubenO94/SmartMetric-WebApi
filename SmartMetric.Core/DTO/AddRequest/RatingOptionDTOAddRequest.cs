@@ -12,23 +12,23 @@ namespace SmartMetric.Core.DTO.AddRequest
 {
     public class RatingOptionDTOAddRequest
     {
-        [Required(ErrorMessage = "Please select a QuestionId")]
-        public Guid? QuestionId { get; set; }
 
-        [Required(ErrorMessage = "NumericValue can't be blank")]
-        public int? NumericValue { get; set; }
-
-        [Required(ErrorMessage = "Translations can't be blank")]
-        public List<RatingOptionTranslationDTOResponse>? Translations { get; set; }
+        [Required(ErrorMessage ="Please select a Question")]
+        public Guid QuestionId { get; set; }
+        [Required(ErrorMessage ="Please select a value for this rating option")]
+        public int NumericValue { get; set; }
+        [Required(ErrorMessage = "Please select a response type for this rating option")]
+        public List<RatingOptionTranslationDTOAddRequest>? Translations { get; set; }
 
 
         public RatingOption ToRatingOption()
         {
             return new RatingOption()
             {
-                QuestionId = this.QuestionId,
-                NumericValue = this.NumericValue,
-                Translations = this.Translations.Select()
+
+                 QuestionId = QuestionId,
+                 NumericValue = NumericValue, 
+                 Translations =Translations?.Select(temp => temp.ToRatingOptionTranslation()).ToList()
             };
         }
 

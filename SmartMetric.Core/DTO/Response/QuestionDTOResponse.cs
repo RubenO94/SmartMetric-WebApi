@@ -27,8 +27,8 @@ namespace SmartMetric.Core.DTO.Response
                 IsRequired = question.IsRequired,
                 ResponseType = question.ResponseType,
                 Translations = question.Translations?.Select(translation => translation.ToQuestionTranslationDTOResponse()).ToList(),
+                SingleChoiceOptions = question.SingleChoiceOptions?.Select(sco => sco.ToSingleChoiceOptionDTOResponse()).ToList(),
                 //RatingOptions = question.RatingOptions.Select(rt => rt)
-                //SingleChoiceOptions = question.SingleChoiceOptions.Select(sco =>)
             };
         }
     }
