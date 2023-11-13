@@ -15,7 +15,7 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o identificador único da questão à qual esta opção de classificação está associada.
         /// </summary>
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
 
         /// <summary>
         /// Obtém ou define a coleção de traduções associadas a esta opção de classificação.
@@ -25,7 +25,7 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o valor numérico associado a esta opção de classificação.
         /// </summary>
-        public int NumericValue { get; set; }
+        public int? NumericValue { get; set; }
 
         /// <summary>
         /// Obtém ou define a associação com a questão relacionada a esta opção de classificação.
