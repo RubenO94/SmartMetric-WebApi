@@ -38,23 +38,23 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Getters
 
-        //public async Task<List<FormTemplateTranslation>> GetAllFormTemplateTranslations()
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetAllFormTemplateTranslations foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.ToListAsync();
-        //}
+        public async Task<List<QuestionTranslation>> GetAllQuestionTranslations()
+        {
+            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetAllQuestionTranslations)} foi iniciado");
+            return await _dbContext.QuestionTranslations.ToListAsync();
+        }
 
-        //public async Task<List<FormTemplateTranslation>> GetFilteredTranslationsByFormTemplateId(Guid formTemplateId)
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetFilteredTranslationsByFormTemplateId foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
-        //}
+        public async Task<QuestionTranslation?> GetQuestionTranslationsById(Guid questionTranslationId)
+        {
+            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetQuestionTranslationsById)} foi iniciado");
+            return await _dbContext.QuestionTranslations.FirstOrDefaultAsync(temp => temp.QuestionTranslationId == questionTranslationId);
+        }
 
-        //public async Task<FormTemplateTranslation?> GetFormTemplateTranslationById(Guid formTemplateTranslationId)
-        //{
-        //    _logger.LogInformation("FormTemplateTranslationRepository.GetFormTemplateTranslationById foi iniciado.");
-        //    return await _dbContext.FormTemplateTranslations.FirstOrDefaultAsync(temp => temp.FormTemplateTranslationId == formTemplateTranslationId);
-        //}
+        public async Task<List<QuestionTranslation>> GetQuestionTranslationsByQuestionId(Guid questionId)
+        {
+            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetQuestionTranslationsByQuestionId)} foi iniciado");
+            return await _dbContext.QuestionTranslations.Where(temp => temp.QuestionId == questionId).ToListAsync();
+        }
 
         #endregion
     }
