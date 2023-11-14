@@ -10,6 +10,6 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request"></param>
         /// <returns>Retorna um objeto do tipo QuestionDTOResponse</returns>
-        Task<QuestionDTOResponse> AddQuestion(QuestionDTOAddRequest? request);
+        Task<QuestionDTOResponse?> AddQuestion(QuestionDTOAddRequest? request);
     }
 }

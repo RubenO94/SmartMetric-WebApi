@@ -25,11 +25,11 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<RatingOption> AddRatingOption(RatingOption ratingOption)
         {
-            _logger.LogInformation($"{nameof(RatingOptionRepository)}.{nameof(AddRatingOption)} foi iniciado");
+                _logger.LogInformation($"{nameof(RatingOptionRepository)}.{nameof(AddRatingOption)} foi iniciado");
 
-            _dbContext.RatingOptions.Add(ratingOption);
-            await _dbContext.SaveChangesAsync();
-            return ratingOption;
+                _dbContext.RatingOptions.Add(ratingOption);
+                await _dbContext.SaveChangesAsync();
+                return ratingOption;
         }
 
         #endregion

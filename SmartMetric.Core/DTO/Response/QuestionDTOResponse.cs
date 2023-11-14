@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -29,6 +30,14 @@ namespace SmartMetric.Core.DTO.Response
                 Translations = question.Translations?.Select(translation => translation.ToQuestionTranslationDTOResponse()).ToList(),
                 SingleChoiceOptions = question.SingleChoiceOptions?.Select(sco => sco.ToSingleChoiceOptionDTOResponse()).ToList(),
                 //RatingOptions = question.RatingOptions.Select(rt => rt)
+            };
+        }
+
+        public static FormTemplateQuestion ToFormTemplateQuestion(this QuestionDTOResponse question)
+        {
+            return new FormTemplateQuestion()
+            {
+                QuestionId = question.QuestionId,
             };
         }
     }

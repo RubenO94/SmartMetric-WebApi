@@ -28,12 +28,20 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestion)} foi iniciado");
 
-            if ( request == null ) { throw new ArgumentNullException(nameof(request)); }
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             ValidationHelper.ModelValidation(request);
-            Question translation = request.ToQuestion();
-            translation.QuestionId = Guid.NewGuid();
-            await _questionRepository.AddQuestion(translation);
-            return translation.ToQuestionDTOResponse();
+
+            Question question = request.ToQuestion();
+
+            question.QuestionId = Guid.NewGuid();
+
+            await _questionRepository.AddQuestion(question);
+
+            return question.ToQuestionDTOResponse();
         }
     }
 }

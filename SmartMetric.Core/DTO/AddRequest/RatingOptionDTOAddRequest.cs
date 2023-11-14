@@ -13,9 +13,9 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class RatingOptionDTOAddRequest
     {
 
-        [Required(ErrorMessage ="Please select a Question")]
+        [Required(ErrorMessage = "Please select a Question")]
         public Guid QuestionId { get; set; }
-        [Required(ErrorMessage ="Please select a value for this rating option")]
+        [Required(ErrorMessage = "Please select a value for this rating option")]
         public int NumericValue { get; set; }
         [Required(ErrorMessage = "Please select a response type for this rating option")]
         public List<RatingOptionTranslationDTOAddRequest>? Translations { get; set; }
@@ -26,9 +26,9 @@ namespace SmartMetric.Core.DTO.AddRequest
             return new RatingOption()
             {
 
-                 QuestionId = QuestionId,
-                 NumericValue = NumericValue, 
-                 Translations =Translations?.Select(temp => temp.ToRatingOptionTranslation()).ToList()
+                QuestionId = QuestionId,
+                NumericValue = NumericValue,
+                Translations = Translations?.Select(temp => temp.ToRatingOptionTranslation()).ToList() ?? new List<RatingOptionTranslation>()
             };
         }
 
