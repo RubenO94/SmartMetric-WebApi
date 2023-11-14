@@ -27,6 +27,7 @@ namespace SmartMetric.Core.DTO.AddRequest
             {
                 CreatedDate = CreatedDate,
                 CreatedByUserId = CreatedByUserId,
+                Translations = Translations?.Select(temp => temp.ToFormTemplateTranslation()).ToList(),
 
             };
         }

@@ -14,7 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddScoped<IFormTemplateRepository, FormTemplatesRepository>();
+builder.Services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
 
 builder.Services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
 builder.Services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();

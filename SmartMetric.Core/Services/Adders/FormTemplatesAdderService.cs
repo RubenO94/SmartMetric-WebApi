@@ -16,12 +16,14 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class FormTemplatesAdderService : IFormTemplatesAdderService
     {
-        private readonly IFormTemplateRepository _formTemplateRepository;
+        private readonly IFormTemplatesRepository _formTemplateRepository;
+        private readonly IFormTemplateTranslationsAdderService _formTemplateTranslationsAdderService;
         private readonly ILogger<FormTemplatesAdderService> _logger;
-        public FormTemplatesAdderService(IFormTemplateRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
+        public FormTemplatesAdderService(IFormTemplatesRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger, IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService)
         {
             _formTemplateRepository = formTemplateRepository;
             _logger = logger;
+            _formTemplateTranslationsAdderService = formTemplateTranslationsAdderService;
         }
 
         public async Task<FormTemplateDTOResponse?> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest)
@@ -36,9 +38,42 @@ namespace SmartMetric.Core.Services.Adders
 
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
+
             FormTemplate formTemplate = addFormTemplateRequest.ToFormTemplate();
 
             formTemplate.FormTemplateId = Guid.NewGuid();
+
+           
+            //TRANSLATIONS
+            if(formTemplate.Translations != null && addFormTemplateRequest?.Translations?.Count() > 0)
+            {
+                foreach (var translationRequest in addFormTemplateRequest.Translations)
+                {
+                    translationRequest.FormTemplateId = formTemplate.FormTemplateId;
+                    var translationResponse = await  _formTemplateTranslationsAdderService.AddFormTemplateTranslation(translationRequest);
+                }
+            }
+
+            //QUESTIONS
+            formTemplate.FormTemplateQuestions = new List<FormTemplateQuestion>();
+
+            if (addFormTemplateRequest?.Questions != null && addFormTemplateRequest.Questions.Count() > 0)
+            {
+                foreach (var question in addFormTemplateRequest.Questions)
+                {
+                    formTemplate.FormTemplateQuestions.Add(new FormTemplateQuestion()
+                    {
+                        FormTemplateId = formTemplate.FormTemplateId,
+                        //QuestionId = question.QuestionId
+                    });
+                    //TODO: Add Questions
+                }
+            }
+            else
+            {
+                throw new ArgumentException(nameof(addFormTemplateRequest.Questions));
+            }
+
 
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 

@@ -12,9 +12,9 @@ namespace SmartMetric.Core.Services.Getters
 {
     public class FormTemplatesGetterService : IFormTemplatesGetterService
     {
-        private readonly IFormTemplateRepository _formTemplateRepository;
+        private readonly IFormTemplatesRepository _formTemplateRepository;
         private readonly ILogger<FormTemplatesGetterService> _logger;
-        public FormTemplatesGetterService(IFormTemplateRepository formTemplateRepository, ILogger<FormTemplatesGetterService> logger)
+        public FormTemplatesGetterService(IFormTemplatesRepository formTemplateRepository, ILogger<FormTemplatesGetterService> logger)
         {
             _formTemplateRepository = formTemplateRepository;
             _logger = logger;

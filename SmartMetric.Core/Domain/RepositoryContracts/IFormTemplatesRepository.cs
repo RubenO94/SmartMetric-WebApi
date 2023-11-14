@@ -11,7 +11,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
     /// <summary>
     /// Interface que define operações de acesso a dados para modelos de formulários.
     /// </summary>
-    public interface IFormTemplateRepository
+    public interface IFormTemplatesRepository
     {
         /// <summary>
         /// Obtém todos os modelos de formulário existentes.
