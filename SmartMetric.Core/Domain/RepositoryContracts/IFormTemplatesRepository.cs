@@ -13,6 +13,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
     /// </summary>
     public interface IFormTemplatesRepository
     {
+        #region Getters
         /// <summary>
         /// Obtém todos os modelos de formulário existentes.
         /// </summary>
@@ -25,13 +26,16 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="formTemplateId">O identificador único (GUID) do modelo de formulário.</param>
         /// <returns>O modelo de formulário correspondente ao identificador ou null em caso de não haver correspondência.</returns>
         Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId);
+        #endregion
 
+        #region Adders
         /// <summary>
         /// Adiciona um novo modelo de formulário à base de dados.
         /// </summary>
         /// <param name="formTemplate">O modelo de formulário a ser adicionado.</param>
         /// <returns>O modelo de formulário inserido.</returns>
         Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate);
+        #endregion
     }
 
 

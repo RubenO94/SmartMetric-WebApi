@@ -21,13 +21,25 @@ namespace SmartMetric.ServiceTests
     public class FormTemplateServiceTest
     {
         private readonly IFormTemplatesAdderService _formTemplatesAdderService;
-        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
+        //private readonly IFormTemplatesGetterService _formTemplatesGetterService;
         private readonly Mock<IFormTemplatesRepository> _formTemplatesRepositoryMock;
         private readonly IFormTemplatesRepository _formTemplatesRepository;
 
-        private readonly IFormTemplateTranslationsAdderService _formTemplatesTranslationsAdderService;
-        private readonly Mock<IFormTemplateTranslationsRepository> _formTemplatesTranslationsRepositoryMock;
-        private readonly IFormTemplateTranslationsRepository _formTemplatesTranslationsRepository;
+        //private readonly IFormTemplateTranslationsAdderService _formTemplatesTranslationsAdderService;
+        //private readonly Mock<IFormTemplateTranslationsRepository> _formTemplatesTranslationsRepositoryMock;
+        //private readonly IFormTemplateTranslationsRepository _formTemplatesTranslationsRepository;
+
+        //private readonly IQuestionAdderService _questionAdderService;
+        //private readonly Mock<IQuestionRepository> _questionRepositoryMock;
+        //private readonly IQuestionRepository _questionRepository;
+
+        //private readonly ISingleChoiceOptionsAdderService _singleChoiceOptionsAdderService;
+        //private readonly Mock<ISingleChoiceOptionRepository> _singleChoiceOptionRepositoryMock;
+        //private readonly ISingleChoiceOptionRepository _singleChoiceOptionRepository;
+
+        //private readonly IRatingOptionAdderService _ratingOptionAdderService;
+        //private readonly Mock<IRatingOptionRepository> _ratingOptionRepositoryMock;
+        //private readonly IRatingOptionRepository _ratingOptionRepository;
 
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly IFixture _fixture;
@@ -41,18 +53,30 @@ namespace SmartMetric.ServiceTests
             _formTemplatesRepositoryMock = new Mock<IFormTemplatesRepository>();
             _formTemplatesRepository = _formTemplatesRepositoryMock.Object;
 
-            _formTemplatesTranslationsRepositoryMock = new Mock<IFormTemplateTranslationsRepository>();
-            _formTemplatesTranslationsRepository = _formTemplatesTranslationsRepositoryMock.Object;
+            //_formTemplatesTranslationsRepositoryMock = new Mock<IFormTemplateTranslationsRepository>();
+            //_formTemplatesTranslationsRepository = _formTemplatesTranslationsRepositoryMock.Object;
+
+            //_questionRepositoryMock = new Mock<IQuestionRepository>();
+            //_questionRepository = _questionRepositoryMock.Object;
+
+            //_singleChoiceOptionRepositoryMock = new Mock<ISingleChoiceOptionRepository>();
+            //_singleChoiceOptionRepository = _singleChoiceOptionRepositoryMock.Object;
+
+            //_ratingOptionRepositoryMock = new Mock<IRatingOptionRepository>();
+            //_ratingOptionRepository = _ratingOptionRepositoryMock.Object;
 
             var AdderloggerMock = new Mock<ILogger<FormTemplatesAdderService>>();
             var GetterloggerMock = new Mock<ILogger<FormTemplatesGetterService>>();
+            //var TranslationsLoggerMock = new Mock<ILogger<FormTemplateTranslationsAdderService>>();
 
-            var TranslationsLoggerMock = new Mock<ILogger<FormTemplateTranslationsAdderService>>();
+            //var QuestionLogger = new Mock<ILogger<QuestionAdderService>>();
+            //var SingleChoiceOptionLogger = new Mock<ILogger<SingleChoiceOptionAdderSerive>>();
+            //var RatingOptionLogger = new Mock<ILogger<RatingOptionAdderService>>();
 
-            _formTemplatesTranslationsAdderService = new FormTemplateTranslationsAdderService(_formTemplatesTranslationsRepository, TranslationsLoggerMock.Object);
-
-            _formTemplatesAdderService = new FormTemplatesAdderService(_formTemplatesRepository, AdderloggerMock.Object, _formTemplatesTranslationsAdderService);
-            _formTemplatesGetterService = new FormTemplatesGetterService(_formTemplatesRepository, GetterloggerMock.Object);
+            //_questionAdderService = new QuestionAdderService(_questionRepository, QuestionLogger.Object);
+            //_singleChoiceOptionsAdderService = new SingleChoiceOptionAdderSerive(_singleChoiceOptionRepository, SingleChoiceOptionLogger.Object);
+            //_formTemplatesTranslationsAdderService = new FormTemplateTranslationsAdderService(_formTemplatesTranslationsRepository, TranslationsLoggerMock.Object);
+            _formTemplatesAdderService = new FormTemplatesAdderService(_formTemplatesRepository, AdderloggerMock.Object);
         }
 
         #region AddFormTemplate
@@ -63,7 +87,8 @@ namespace SmartMetric.ServiceTests
         {
             // Arrange
             var formTemplateDTOAddRequest = _fixture.Build<FormTemplateDTOAddRequest>()
-                .With(temp => temp.Questions, new List<QuestionDTOAddRequest>() { _fixture.Build<QuestionDTOAddRequest>().Create() })
+                .Without(temp => temp.Translations) // Lista de traduções vazia
+                .Without(temp => temp.Questions) // Lista de perguntas vazia
                 .Create();
 
             _formTemplatesRepositoryMock
@@ -77,8 +102,8 @@ namespace SmartMetric.ServiceTests
             Assert.NotNull(result);
             Assert.IsType<FormTemplateDTOResponse>(result);
 
-            //_formTemplatesRepositoryMock
-            //    .Verify(repo => repo.AddFormTemplate(It.IsAny<FormTemplate>()), Times.Once);
+            _formTemplatesRepositoryMock
+                .Verify(repo => repo.AddFormTemplate(It.IsAny<FormTemplate>()), Times.Once);
         }
 
         #endregion
