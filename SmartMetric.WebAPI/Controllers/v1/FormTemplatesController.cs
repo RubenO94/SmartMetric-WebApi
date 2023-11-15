@@ -89,26 +89,43 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
 
             var hasDeleted = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
+            if (hasDeleted)
+            {
+                return NoContent();
+            }
 
-            return NoContent();
+            return BadRequest();
+            
         }
 
         [HttpPost]
         [Route("Translation")]
-        public async Task<IActionResult> AddFormTemplateTranslation([FromQuery] Guid formTemplateId,[FromBody] FormTemplateTranslationDTOAddRequest formTemplateTranslationDTOAddRequest)
+        public async Task<IActionResult> AddFormTemplateTranslation([FromQuery] Guid formTemplateId, [FromBody] FormTemplateTranslationDTOAddRequest formTemplateTranslationDTOAddRequest)
         {
             var formTemplateExist = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
             if (formTemplateExist != null)
             {
-                formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
-                var response = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
-
-                return CreatedAtAction(nameof(AddFormTemplateTranslation), new
+                try
                 {
-                    StatusCode = (int)HttpStatusCode.Created,
-                    Message = "FormTemplate Translation Created",
-                    FormTemplateTranslationId = response.FormTemplateTranslationId.ToString(),
-                });
+                    formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
+                    var response = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
+
+                    return CreatedAtAction(nameof(AddFormTemplateTranslation), new
+                    {
+                        StatusCode = (int)HttpStatusCode.Created,
+                        Message = "FormTemplate Translation Created",
+                        FormTemplateTranslationId = response.FormTemplateTranslationId.ToString(),
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = ex.Message.ToString(),
+                    });
+                }
+
             }
 
             return BadRequest(new
@@ -116,7 +133,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 StatusCode = (int)HttpStatusCode.BadRequest,
                 Message = "FormTemplateId does not exist"
             });
-            
+
         }
     }
 }

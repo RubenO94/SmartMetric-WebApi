@@ -24,6 +24,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             //Repositories
             services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
             services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
 
             //Services
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
@@ -31,6 +32,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
             services.AddScoped<IFormTemplateTranslationsGetterService, FormTemplateTranslationsGetterService>();
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
+            services.AddScoped<IQuestionAdderService, QuestionAdderService>();
+            services.AddScoped<IQuestionGetterService, QuestionGetterService>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

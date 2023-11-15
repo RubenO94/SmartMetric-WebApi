@@ -24,7 +24,7 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<QuestionDTOResponse> AddQuestion(QuestionDTOAddRequest? request)
+        public async Task<QuestionDTOResponse?> AddQuestion(QuestionDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestion)} foi iniciado");
 
@@ -33,11 +33,60 @@ namespace SmartMetric.Core.Services.Adders
                 throw new ArgumentNullException(nameof(request));
             }
 
-            ValidationHelper.ModelValidation(request);
+            Guid questionId = Guid.NewGuid();
+
+            var translations = request.Translations?.Select(temp =>
+             {
+                 temp.QuestionId = questionId;
+                 ValidationHelper.ModelValidation(temp);
+                 return temp.ToQuestionTranslation();
+             });
+
+            
+            //TODO Restantes validações...
 
             Question question = request.ToQuestion();
 
-            question.QuestionId = Guid.NewGuid();
+            question.QuestionId = questionId;
+
+
+
+            if (question.SingleChoiceOptions != null && question.SingleChoiceOptions.Any())
+            {
+                foreach (var sco in question.SingleChoiceOptions)
+                {
+                    sco.QuestionId = question.QuestionId;
+                    sco.SingleChoiceOptionId = Guid.NewGuid();
+
+                    if (sco.Translations != null && sco.Translations.Any())
+                    {
+                        foreach (var item in sco.Translations)
+                        {
+                            item.SingleChoiceOptionId = sco.SingleChoiceOptionId;
+                            item.SingleChoiceOptionTranslationId = Guid.NewGuid();
+                        }
+                    }
+
+                }
+            }
+
+            if (question.RatingOptions != null && question.RatingOptions.Any())
+            {
+                foreach (var rto in question.RatingOptions)
+                {
+                    rto.QuestionId = question.QuestionId;
+                    rto.RatingOptionId = Guid.NewGuid();
+
+                    if (rto.Translations != null && rto.Translations.Any())
+                    {
+                        foreach (var item in rto.Translations)
+                        {
+                            item.RatingOptionId = rto.RatingOptionId;
+                            item.RatingOptionTranslationId = Guid.NewGuid();
+                        }
+                    }
+                }
+            }
 
             await _questionRepository.AddQuestion(question);
 
