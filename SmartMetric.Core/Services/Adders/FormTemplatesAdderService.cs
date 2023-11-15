@@ -43,8 +43,6 @@ namespace SmartMetric.Core.Services.Adders
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 
             return formTemplate.ToFormTemplateDTOResponse();
-
-            throw new NotImplementedException();
         }
 
     }

@@ -33,6 +33,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
             // Semente para FormTemplate
             modelBuilder.Entity<FormTemplate>().HasData(
                 new FormTemplate

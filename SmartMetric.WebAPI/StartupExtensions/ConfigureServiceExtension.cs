@@ -8,6 +8,9 @@ using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Getters;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories;
+using System.Text.Json.Serialization;
+using SmartMetric.Core.ServicesContracts.Deleters;
+using SmartMetric.Core.Services.Deleters;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -25,6 +28,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             //Services
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
+            services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
             services.AddScoped<IFormTemplateTranslationsGetterService, FormTemplateTranslationsGetterService>();
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
 
@@ -51,7 +55,14 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
             })
-             .AddXmlSerializerFormatters();
+             .AddXmlSerializerFormatters()
+             .AddJsonOptions(options =>
+             {
+                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+
+                 options.JsonSerializerOptions.DefaultIgnoreCondition =
+                     JsonIgnoreCondition.WhenWritingNull;
+             });
 
 
             //Enable versioning in Web API controllers
@@ -74,6 +85,14 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 //To add more versions here:
 
             }); //generates OpenAPI specification
+
+
+
+            services.AddVersionedApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV"; //v1
+                options.SubstituteApiVersionInUrl = true;
+            });
 
 
             return services;

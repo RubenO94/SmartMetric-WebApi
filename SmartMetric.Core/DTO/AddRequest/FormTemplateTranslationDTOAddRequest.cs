@@ -1,6 +1,8 @@
-﻿using SmartMetric.Core.Domain.Entities;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Enums;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace SmartMetric.Core.DTO.AddRequest
 {
@@ -12,19 +14,19 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o identificador do modelo de formulário a ser traduzido.
         /// </summary>
-        [Required(ErrorMessage = "Por favor, selecione um modelo de formulário.")]
+        [JsonIgnore]
         public Guid? FormTemplateId { get; set; }
 
         /// <summary>
         /// Obtém ou define o idioma para a tradução.
         /// </summary>
-        [Required(ErrorMessage = "Por favor, selecione um idioma para a tradução.")]
+        [Required(ErrorMessage = "Languague is required")]
         public Language? Language { get; set; }
 
         /// <summary>
         /// Obtém ou define o título da tradução.
         /// </summary>
-        [Required(ErrorMessage = "O título não pode estar em branco.")]
+        [Required(ErrorMessage = "Title is required")]
         public string? Title { get; set; }
 
         /// <summary>
