@@ -147,9 +147,9 @@ namespace SmartMetric.ServiceTests
             //Arrange
             List<RatingOption> translations = new List<RatingOption>()
             {
-                _fixture.Build<RatingOption>().Create(),
-                _fixture.Build<RatingOption>().Create(),
-                _fixture.Build<RatingOption>().Create()
+                _fixture.Build<RatingOption>().With(temp => temp.Question, null as Question).With(temp => temp.Translations, null as List<RatingOptionTranslation>).Create(),
+                //_fixture.Build<RatingOption>().With(temp => temp.Question, null as Question).Create(),
+                //_fixture.Build<RatingOption>().With(temp => temp.Question, null as Question).Create(),
             };
 
             List<RatingOptionDTOResponse> expectedResponse = translations.Select(temp => temp.ToRatingOptionDTOResponse()).ToList();
@@ -259,9 +259,7 @@ namespace SmartMetric.ServiceTests
 
             List<RatingOption> rows = new List<RatingOption>()
             {
-                _fixture.Build<RatingOption>().Create(),
-                _fixture.Build<RatingOption>().Create(),
-                _fixture.Build<RatingOption>().Create()
+                _fixture.Build<RatingOption>().With(temp => temp.Question, null as Question).With(temp => temp.Translations, null as List<RatingOptionTranslation>).Create(),
             };
 
             List<RatingOptionDTOResponse> expectedResponse = rows.Select(temp => temp.ToRatingOptionDTOResponse()).ToList();
