@@ -22,7 +22,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             //Dependency Injection:
 
             //Repositories
-            services.AddScoped<IFormTemplateRepository, FormTemplatesRepository>();
+            services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
             services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
 
             //Services
