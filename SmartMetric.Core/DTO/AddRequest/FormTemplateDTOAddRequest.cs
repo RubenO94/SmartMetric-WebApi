@@ -16,7 +16,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         [Required(ErrorMessage = "Please select a User")]
         public int? CreatedByUserId { get; set; }
         public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
-        public List<QuestionDTOAddRequest>? Questions { get; set; }
+        //public List<QuestionDTOAddRequest>? Questions { get; set; }
 
 
         public FormTemplate ToFormTemplate()
