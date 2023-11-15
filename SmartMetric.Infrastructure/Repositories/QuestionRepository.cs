@@ -41,7 +41,11 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<List<Question>?> GetQuestionByFormTemplateId(Guid formTemplateId)
         {
             _logger.LogInformation($"{nameof(QuestionRepository)}.{nameof(GetQuestionByFormTemplateId)} foi iniciado");
-            return await _dbContext.Questions.Include(temp => temp.FormTemplateQuestions).Where(temp => temp.FormTemplateQuestions.Any(x => x.FormTemplateId == formTemplateId)).ToListAsync();
+            return await _dbContext.Questions
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.SingleChoiceOptions).ThenInclude(temp =>  temp.Translations)
+                .Include(temp => temp.RatingOptions).ThenInclude(temp => temp.Translations)
+                .Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
         }
 
         public async Task<Question?> GetQuestionById(Guid questionId)

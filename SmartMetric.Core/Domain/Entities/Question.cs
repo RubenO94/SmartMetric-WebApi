@@ -18,12 +18,16 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define as associações com os relacionamentos de modelo de formulário para esta questão.
         /// </summary>
-        public virtual ICollection<FormTemplateQuestion>? FormTemplateQuestions { get; set; }
+        public Guid? FormTemplateId { get; set; }
+        [ForeignKey(nameof(FormTemplateId))]
+        public virtual FormTemplate? FormTemplate { get; set; }
 
         /// <summary>
         /// Obtém ou define as associações com os relacionamentos de revisão para esta questão.
         /// </summary>
-        public virtual ICollection<ReviewQuestion>? ReviewQuestions { get; set; }
+        public Guid? ReviewId { get; set; }
+        [ForeignKey(nameof(ReviewId))]
+        public virtual Review? Review { get; set; }
 
         /// <summary>
         /// Obtém ou define as traduções associadas a esta questão para diferentes idiomas.

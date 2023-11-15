@@ -43,5 +43,14 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <returns>Retorna uma lista de objetos FormTemplateTranslations</returns>
         Task<List<FormTemplateTranslation>> GetTranslationsByFormTemplateId(Guid formTemplateId);
         #endregion
+
+        #region Deleters
+        /// <summary>
+        /// Elimina um FormTemplateTranslation através do GUID fornecido
+        /// </summary>
+        /// <param name="formTemplateTranslationId">GUID para pesquisar</param>
+        /// <returns>Retorna True em caso de sucesso, caso contrário retorna False</returns>
+        Task<bool> DeleteFormTemplateTranslationById(Guid formTemplateTranslationId);
+        #endregion
     }
 }

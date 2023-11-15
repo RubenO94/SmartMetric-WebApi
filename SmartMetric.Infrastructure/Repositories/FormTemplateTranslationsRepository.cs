@@ -56,6 +56,11 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _dbContext.FormTemplateTranslations.FirstOrDefaultAsync(temp => temp.FormTemplateTranslationId == formTemplateTranslationId);
         }
 
+        public Task<bool> DeleteFormTemplateTranslationById(Guid formTemplateTranslationId)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

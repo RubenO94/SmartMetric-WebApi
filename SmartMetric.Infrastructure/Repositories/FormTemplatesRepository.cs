@@ -29,10 +29,26 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<bool> DeleteFormTemplateById(Guid formTemplateId)
         {
-            _dbContext.FormTemplates.RemoveRange(_dbContext.FormTemplates.Where(temp => temp.FormTemplateId == formTemplateId));
-            int rowsDeleted = await _dbContext.SaveChangesAsync();
+           var  formTemplateToDelete = await _dbContext.FormTemplates.FindAsync(formTemplateId);
+            if (formTemplateToDelete != null)
+            {
+                //// Excluir traduções relacionadas manualmente
+                //var translationsToDelete = await _dbContext.FormTemplateTranslations
+                //    .Where(t => t.FormTemplateId == formTemplateId)
+                //    .ToListAsync();
 
-            return rowsDeleted > 0;
+                //_dbContext.FormTemplateTranslations.RemoveRange(translationsToDelete);
+
+                // Agora, você pode excluir o FormTemplate
+                _dbContext.FormTemplates.Remove(formTemplateToDelete);
+
+                var rowsDeleted = await _dbContext.SaveChangesAsync();
+
+                return rowsDeleted > 0;
+            }
+
+            return false;
+            
         }
 
         public async Task<List<FormTemplate>> GetAllFormTemplates()
@@ -42,9 +58,9 @@ namespace SmartMetric.Infrastructure.Repositories
 
             return await _dbContext.FormTemplates
                 .Include(temp => temp.Translations)
-                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q!.Translations)
-                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
-                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
                 .ToListAsync();
         }
 
@@ -57,9 +73,9 @@ namespace SmartMetric.Infrastructure.Repositories
 
             var response = await _dbContext.FormTemplates
                 .Include(temp => temp.Translations)
-                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q!.Translations)
-                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
-                .Include(temp => temp.FormTemplateQuestions)!.ThenInclude(ftq => ftq.Question).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
                 .FirstOrDefaultAsync(template => template.FormTemplateId == formTemplateId);
 
             return response;

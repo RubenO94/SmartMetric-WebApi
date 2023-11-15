@@ -149,8 +149,8 @@ namespace SmartMetric.ServiceTests
             {
                 _fixture
                     .Build<Question>()
-                    .With(temp => temp.FormTemplateQuestions, null as List<FormTemplateQuestion>)
-                    .With(temp => temp.ReviewQuestions, null as List<ReviewQuestion>)
+                    //.With(temp => temp.FormTemplateQuestions, null as List<FormTemplateQuestion>)
+                    //.With(temp => temp.ReviewQuestions, null as List<ReviewQuestion>)
                     .With(temp => temp.Translations, null as List<QuestionTranslation>)
                     .With(temp => temp.RatingOptions, null as List<RatingOption>)
                     .With(temp => temp.SingleChoiceOptions, null as List<SingleChoiceOption>)
