@@ -17,10 +17,6 @@ namespace SmartMetric.Core.Services.Adders
     public class FormTemplatesAdderService : IFormTemplatesAdderService
     {
         private readonly IFormTemplatesRepository _formTemplateRepository;
-        //private readonly IFormTemplateTranslationsAdderService _formTemplateTranslationsAdderService;
-        //private readonly IQuestionAdderService _questionAdderService;
-        //private readonly ISingleChoiceOptionsAdderService _singleChoiceOptionsAdderService;
-        //private readonly IRatingOptionAdderService _ratingOptionAdderService;
         private readonly ILogger<FormTemplatesAdderService> _logger;
         public FormTemplatesAdderService(IFormTemplatesRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
         {
