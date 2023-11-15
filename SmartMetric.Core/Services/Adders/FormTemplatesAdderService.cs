@@ -16,12 +16,20 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class FormTemplatesAdderService : IFormTemplatesAdderService
     {
-        private readonly IFormTemplateRepository _formTemplateRepository;
+        private readonly IFormTemplatesRepository _formTemplateRepository;
+        //private readonly IFormTemplateTranslationsAdderService _formTemplateTranslationsAdderService;
+        //private readonly IQuestionAdderService _questionAdderService;
+        //private readonly ISingleChoiceOptionsAdderService _singleChoiceOptionsAdderService;
+        //private readonly IRatingOptionAdderService _ratingOptionAdderService;
         private readonly ILogger<FormTemplatesAdderService> _logger;
-        public FormTemplatesAdderService(IFormTemplateRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
+        public FormTemplatesAdderService(IFormTemplatesRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
         {
             _formTemplateRepository = formTemplateRepository;
             _logger = logger;
+            //_formTemplateTranslationsAdderService = formTemplateTranslationsAdderService;
+            //_questionAdderService = questionAdderService;
+            //_singleChoiceOptionsAdderService = singleChoiceOptionsAdderService;
+            //_ratingOptionAdderService = ratingOptionAdderService;
         }
 
         public async Task<FormTemplateDTOResponse?> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest)
@@ -36,6 +44,7 @@ namespace SmartMetric.Core.Services.Adders
 
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
+
             FormTemplate formTemplate = addFormTemplateRequest.ToFormTemplate();
 
             formTemplate.FormTemplateId = Guid.NewGuid();
@@ -44,6 +53,33 @@ namespace SmartMetric.Core.Services.Adders
 
             return formTemplate.ToFormTemplateDTOResponse();
         }
+
+        //private async Task<FormTemplateQuestion> AddQuestionWithAssociations(QuestionDTOAddRequest questionRequest)
+        //{
+        //    var addedQuestion = await _questionAdderService.AddQuestion(questionRequest);
+
+        //    // Adiciona as SINGLE CHOICE OPTIONS, se houver
+        //    if (questionRequest.SingleChoiceOptions != null && questionRequest.SingleChoiceOptions.Any())
+        //    {
+        //        foreach (var singleChoiceOptionRequest in questionRequest.SingleChoiceOptions)
+        //        {
+        //            singleChoiceOptionRequest.QuestionId = addedQuestion.QuestionId;
+        //            await _singleChoiceOptionsAdderService.AddSingleChoiceOption(singleChoiceOptionRequest);
+        //        }
+        //    }
+
+        //    // Adiciona as RATING OPTIONS, se houver
+        //    if (questionRequest.RatingOptions != null && questionRequest.RatingOptions.Any())
+        //    {
+        //        foreach (var ratingOptionRequest in questionRequest.RatingOptions)
+        //        {
+        //            ratingOptionRequest.QuestionId = addedQuestion.QuestionId;
+        //            await _ratingOptionAdderService.AddRatingOption(ratingOptionRequest);
+        //        }
+        //    }
+
+        //    return addedQuestion.ToFormTemplateQuestion();
+        //}
 
     }
 }

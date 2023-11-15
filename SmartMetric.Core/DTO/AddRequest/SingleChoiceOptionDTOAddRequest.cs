@@ -34,7 +34,7 @@ namespace SmartMetric.Core.DTO.AddRequest
             return new SingleChoiceOption()
             {
                 QuestionId = QuestionId,
-                Translations = Translations?.Select(temp => temp.ToSingleChoiceOptionTranslation()).ToList(),
+                Translations = Translations?.Select(temp => temp.ToSingleChoiceOptionTranslation()).ToList() ?? new List<SingleChoiceOptionTranslation>(),
             };
         }
     }

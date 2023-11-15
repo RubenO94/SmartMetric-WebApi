@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// Obtém ou define o identificador único do modelo de formulário ao qual a pergunta será associada.
         /// </summary>
         [Required(ErrorMessage = "Please select a FormTemplate")]
-        public Guid FormTemplateId { get; set; }
+        public Guid? FormTemplateId { get; set; }
 
         /// <summary>
         /// Obtém ou define se a resposta a esta pergunta é obrigatória.
@@ -57,9 +58,9 @@ namespace SmartMetric.Core.DTO.AddRequest
             {
                 IsRequired = this.IsRequired,
                 ResponseType = this.ResponseType.ToString(),
-                Translations = this.Translations?.Select(temp => temp.ToQuestionTranslation()).ToList(),
-                SingleChoiceOptions = this.SingleChoiceOptions?.Select(temp => temp.ToSingleChoiceOption()).ToList(),
-                RatingOptions = this.RatingOptions?.Select(temp => temp.ToRatingOption()).ToList(),
+                Translations = this.Translations?.Select(temp => temp.ToQuestionTranslation()).ToList() ?? new List<QuestionTranslation>(),
+                SingleChoiceOptions = this.SingleChoiceOptions?.Select(temp => temp.ToSingleChoiceOption()).ToList() ?? new List<SingleChoiceOption>(),
+                RatingOptions = this.RatingOptions?.Select(temp => temp.ToRatingOption()).ToList() ?? new List<RatingOption>(),
             };
         }
     }

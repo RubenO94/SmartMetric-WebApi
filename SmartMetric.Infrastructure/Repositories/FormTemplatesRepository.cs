@@ -7,7 +7,7 @@ using SmartMetric.Infrastructure.DatabaseContext;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class FormTemplatesRepository : IFormTemplateRepository
+    public class FormTemplatesRepository : IFormTemplatesRepository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<FormTemplatesRepository> _logger;

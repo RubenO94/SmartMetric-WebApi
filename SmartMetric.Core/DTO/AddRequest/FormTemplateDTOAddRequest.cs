@@ -11,6 +11,7 @@ namespace SmartMetric.Core.DTO.AddRequest
 {
     public class FormTemplateDTOAddRequest
     {
+        [Required(ErrorMessage ="Create Date is required")]
         [DataType(DataType.Date)]
         public DateTime? CreatedDate { get; set; }
         [Required(ErrorMessage = "Please select a User")]
@@ -27,7 +28,6 @@ namespace SmartMetric.Core.DTO.AddRequest
             {
                 CreatedDate = CreatedDate,
                 CreatedByUserId = CreatedByUserId,
-
             };
         }
     }
