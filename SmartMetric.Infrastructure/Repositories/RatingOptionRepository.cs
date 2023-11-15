@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Infrastructure.DatabaseContext;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class RatingOptionRepository
+    public class RatingOptionRepository : IRatingOptionRepository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<RatingOptionRepository> _logger;
@@ -52,6 +53,18 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(RatingOptionRepository)}.{nameof(GetRatingOptionByQuestionId)} foi iniciado.");
             return await _dbContext.RatingOptions.Where(temp => temp.QuestionId == questionId).ToListAsync();
+        }
+
+        #endregion
+
+        #region Deleters
+
+        public async Task<bool> DeleteRatingOptionById(Guid ratingOptionId)
+        {
+            _dbContext.RatingOptions.RemoveRange(_dbContext.RatingOptions.Where(temp => temp.RatingOptionId == ratingOptionId));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
         }
 
         #endregion

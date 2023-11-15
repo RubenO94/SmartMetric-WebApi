@@ -7,8 +7,10 @@ using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Services.Adders;
+using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using Xunit.Abstractions;
 
@@ -19,6 +21,7 @@ namespace SmartMetric.ServiceTests
         //variables
         private readonly IRatingOptionAdderService _ratingOptionAdderService;
         private readonly IRatingOptionGetterService _ratingOptionGetterService;
+        private readonly IRatingOptionDeleterService _ratingOptionDeleterService;
 
         private readonly Mock<IRatingOptionRepository> _ratingOptionRepositoryMock;
         private readonly IRatingOptionRepository _ratingOptionRepository;
@@ -36,9 +39,11 @@ namespace SmartMetric.ServiceTests
 
             var AdderLoggerMock = new Mock<ILogger<RatingOptionAdderService>>();
             var GetterLoggerMock = new Mock<ILogger<RatingOptionGetterService>>();
+            var DeleterLoggerMock = new Mock<ILogger<RatingOptionDeleterService>>();
 
             _ratingOptionAdderService = new RatingOptionAdderService(_ratingOptionRepository, AdderLoggerMock.Object);
             _ratingOptionGetterService = new RatingOptionGetterService(_ratingOptionRepository, GetterLoggerMock.Object);
+            _ratingOptionDeleterService = new RatingOptionDeleterService(_ratingOptionRepository, DeleterLoggerMock.Object);
         }
 
         #region AddRatingOption Tests
@@ -271,6 +276,60 @@ namespace SmartMetric.ServiceTests
 
             //Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        #endregion
+
+        #region DeleteRatingOptionById
+
+        //TESTE: recebe um Guid nulo, logo deve retornar falso
+        [Fact]
+        public async Task DeleteRatingOptionById_RatingOptionIdIsNull_ShouldReturnFalse()
+        {
+            //Arrange
+            Guid? ratingOptionId = null;
+
+            //Act
+            var result = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um id válido que não existe, logo deve retornar falso
+        [Fact]
+        public async Task DeleteRatingOptionById_RatingOptionIdIsValidAndDoesntExist_ShouldReturnFalse()
+        {
+            //Arrange
+            var ratingOptionId = Guid.NewGuid();
+
+            _ratingOptionRepositoryMock
+                .Setup(temp => temp.DeleteRatingOptionById(ratingOptionId))
+                .ReturnsAsync(false);
+
+            //Act
+            var result = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um id válido que existe, logo retorna true
+        [Fact]
+        public async Task DeleteRatingOptionById_RatingOptionIdIsValidAndExists_ShouldReturnTrue()
+        {
+            //Arrange
+            var ratingOptionId = Guid.NewGuid();
+
+            _ratingOptionRepositoryMock
+                .Setup(temp => temp.DeleteRatingOptionById(ratingOptionId))
+                .ReturnsAsync(true);
+
+            //Act
+            var result = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
+
+            //Assert
+            Assert.True(result);
         }
 
         #endregion

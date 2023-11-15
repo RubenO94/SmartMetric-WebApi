@@ -57,5 +57,17 @@ namespace SmartMetric.Infrastructure.Repositories
         }
 
         #endregion
+
+        #region Deleters
+
+        public async Task<bool> DeleteRatingOptionTranslationById(Guid ratingOptionTranslationId)
+        {
+            _dbContext.RatingOptionTranslations.RemoveRange(_dbContext.RatingOptionTranslations.Where(temp => temp.RatingOptionTranslationId == ratingOptionTranslationId));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
+        }
+
+        #endregion
     }
 }
