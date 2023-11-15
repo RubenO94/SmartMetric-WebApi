@@ -57,5 +57,18 @@ namespace SmartMetric.Infrastructure.Repositories
         }
 
         #endregion
+
+        #region Deleters
+
+        public async Task<bool> DeleteSingleChoiceOptionTranslationById(Guid singleChoiceOptionTranslationId)
+        {
+            _dbContext.SingleChoiceOptionTranslations
+                .RemoveRange(_dbContext.SingleChoiceOptionTranslations.Where(temp => temp.SingleChoiceOptionTranslationId == singleChoiceOptionTranslationId));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
+        }
+
+        #endregion
     }
 }

@@ -8,8 +8,10 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.Services.Adders;
+using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using Xunit.Abstractions;
 
@@ -20,6 +22,7 @@ namespace SmartMetric.ServiceTests
 
         private readonly ISingleChoiceOptionTranslationsAdderService _translationsAdderService;
         private readonly ISingleChoiceOptionTranslationsGetterService _translationsGetterService;
+        private readonly ISingleChoiceOptionTranslationDeleterService _translationsDeleterService;
 
         private readonly Mock<ISingleChoiceOptionTranslationsRepository> _translationsRepositoryMock;
         private readonly ISingleChoiceOptionTranslationsRepository _translationsRepository;
@@ -37,9 +40,11 @@ namespace SmartMetric.ServiceTests
 
             var AdderloggerMock = new Mock<ILogger<SingleChoiceOptionTranslationsAdderService>>();
             var GetterloggerMock = new Mock<ILogger<SingleChoiceOptionTranslationsGetterService>>();
+            var DeleterloggerMock = new Mock<ILogger<SingleChoiceOptionTranslationDeleterService>>();
 
             _translationsAdderService = new SingleChoiceOptionTranslationsAdderService(_translationsRepository, AdderloggerMock.Object);
             _translationsGetterService = new SingleChoiceOptionTranslationsGetterService(_translationsRepository, GetterloggerMock.Object);
+            _translationsDeleterService = new SingleChoiceOptionTranslationDeleterService(_translationsRepository, DeleterloggerMock.Object);
         }
 
         #region AddSingleChoiceOptionTranslation
@@ -306,6 +311,59 @@ namespace SmartMetric.ServiceTests
 
             //Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        #endregion
+
+        #region DeleteSingleChoiceOptionTranslationById Tests
+
+        //TESTE: recebe um Guid nulo, logo deve retornar falso
+        [Fact]
+        public async Task DeleteSingleChoiceOptionTranslationById_SingleChoiceOptionTranslationIdIsNull_ShouldReturnFalse()
+        {
+            //Arrange
+            Guid? singleChoiceOptionTranslationId = null;
+
+            //Act
+            var result = await _translationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um id válido que não existe, logo deve retornar falso
+        [Fact]
+        public async Task DeleteSingleChoiceOptionTranslationById_SingleChoiceOptionTranslationIdIsValidAndDoesntExist_ShouldReturnFalse()
+        {
+            //Arrange
+            var singleChoiceOptionTranslationId = Guid.NewGuid();
+
+            _translationsRepositoryMock
+                .Setup(temp => temp.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId))
+                .ReturnsAsync(false);
+
+            //Act
+            var result = await _translationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um id válido que existe, logo retorna true
+        [Fact]
+        public async Task DeleteSingleChoiceOptionTranslationById_SingleChoiceOptionTranslationIdIsValidAndExists_ShouldReturnTrue()
+        {
+            //Arrange
+            var singleChoiceOptionTranslationId = Guid.NewGuid();
+
+            _translationsRepositoryMock
+                .Setup(temp => temp.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId)).ReturnsAsync(true);
+
+            //Act
+            var result = await _translationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId);
+
+            //Assert
+            Assert.True(result);
         }
 
         #endregion

@@ -10,7 +10,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
 {
     public interface ISingleChoiceOptionTranslationsRepository
     {
-        #region
+        #region Adders
 
         /// <summary>
         /// Adiciona um novo objeto de SingleChoiceOptionTranslation na base de dados.
@@ -43,6 +43,17 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <returns>Uma lista de SingleChoiceOptionTranslationDTOResponse.</returns>
         Task<List<SingleChoiceOptionTranslation>> GetTranslationsBySingleChoiceOptionId(Guid singleChoiceOptionId);
 
+
+        #endregion
+
+        #region Deleters
+
+        /// <summary>
+        /// Elimina uma tradução de uma resposta escolha única através do seu Guid passado por parâmetro
+        /// </summary>
+        /// <param name="singleChoiceOptionTranslationId"></param>
+        /// <returns>Retorna um boolean, True quando remove com sucesso, False se não foi possível remover</returns>
+        Task<bool> DeleteSingleChoiceOptionTranslationById (Guid singleChoiceOptionTranslationId);
 
         #endregion
     }

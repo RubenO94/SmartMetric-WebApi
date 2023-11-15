@@ -21,6 +21,8 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
+        #region Adders
+
         public async Task<SingleChoiceOption> AddSingleChoiceOption(SingleChoiceOption singleChoiceOption)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionRepository)}.{nameof(AddSingleChoiceOption)} foi iniciado");
@@ -29,6 +31,10 @@ namespace SmartMetric.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
             return singleChoiceOption;
         }
+
+        #endregion
+
+        #region Getters
 
         public Task<List<SingleChoiceOption>> GetAllSingleChoiceOptions()
         {
@@ -44,5 +50,19 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             throw new NotImplementedException();
         }
+
+        #endregion
+
+        #region Deleters
+
+        public async Task<bool> DeleteSingleChoiceOptionById(Guid singleChoiceOptionId)
+        {
+            _dbContext.SingleChoiceOptions.RemoveRange(_dbContext.SingleChoiceOptions.Where(temp => temp.SingleChoiceOptionId == singleChoiceOptionId));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
+        }
+
+        #endregion
     }
 }
