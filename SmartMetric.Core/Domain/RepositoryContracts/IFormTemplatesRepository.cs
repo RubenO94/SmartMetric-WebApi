@@ -42,6 +42,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="formTemplateId">GUID para pesquisar</param>
         /// <returns>Retorna True em caso de sucesso, caso contrário retorna False</returns>
         Task<bool> DeleteFormTemplateById (Guid formTemplateId);
+        #endregion
 
     }
 

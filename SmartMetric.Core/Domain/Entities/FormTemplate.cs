@@ -39,7 +39,7 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define as perguntas associadas ao modelo de formulário.
         /// </summary>
-        public virtual ICollection<FormTemplateQuestion>? FormTemplateQuestions { get; set; }
+        public virtual ICollection<Question>? Questions { get; set; }
 
     }
 

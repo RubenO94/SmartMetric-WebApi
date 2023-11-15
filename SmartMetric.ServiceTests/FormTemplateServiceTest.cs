@@ -88,7 +88,6 @@ namespace SmartMetric.ServiceTests
             // Arrange
             var formTemplateDTOAddRequest = _fixture.Build<FormTemplateDTOAddRequest>()
                 .Without(temp => temp.Translations) // Lista de traduções vazia
-                .Without(temp => temp.Questions) // Lista de perguntas vazia
                 .Create();
 
             _formTemplatesRepositoryMock

@@ -15,11 +15,6 @@ namespace SmartMetric.Core.Domain.Entities
         public Guid ReviewId { get; set; }
 
         /// <summary>
-        /// Obtém ou define o identificador único do modelo de formulário associado à revisão.
-        /// </summary>
-        public Guid? FormTemplateId { get; set; }
-
-        /// <summary>
         /// Obtém ou define o identificador único do usuário que criou a revisão.
         /// </summary>
         public int? CreatedByUserId { get; set; }
@@ -63,10 +58,9 @@ namespace SmartMetric.Core.Domain.Entities
         public virtual ICollection<Submission>? Submissions { get; set; }
 
         /// <summary>
-        /// Obtém ou define a associação com o modelo de formulário relacionado à revisão.
+        /// Obtém ou define as questões relacionadas à revisão.
         /// </summary>
-        [ForeignKey(nameof(FormTemplateId))]
-        public virtual FormTemplate? FormTemplate { get; set; }
+        public virtual ICollection<Question>? Questions { get; set; }
     }
 
 

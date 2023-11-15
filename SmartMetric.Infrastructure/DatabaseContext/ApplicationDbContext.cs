@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Abstractions;
+using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,6 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
         public DbSet<FormTemplate> FormTemplates { get; set; }
         public DbSet<FormTemplateTranslation> FormTemplateTranslations { get; set; }
-        public DbSet<FormTemplateQuestion> FormTemplateQuestions { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<QuestionTranslation> QuestionTranslations { get; set; }
         public DbSet<RatingOption> RatingOptions { get; set; }
@@ -26,13 +26,67 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public DbSet<SingleChoiceOption> SingleChoiceOptions { get; set; }
         public DbSet<SingleChoiceOptionTranslation> SingleChoiceOptionTranslations { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<ReviewQuestion> ReviewsQuestions { get; set; }
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
         public DbSet<Submission> Submissions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            //Edição de Relações Manualemente:
+            modelBuilder.Entity<FormTemplate>()
+            .HasMany(ft => ft.Translations)
+            .WithOne(translation => translation.FormTemplate)
+            .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<FormTemplate>()
+                .HasMany(ft => ft.Questions)
+                .WithOne(ftq => ftq.FormTemplate)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Review>()
+                .HasMany(rv => rv.Questions)
+                .WithOne(q => q.Review)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.Translations)
+                .WithOne(translation => translation.Question)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+                .HasOne(q => q.FormTemplate)
+                .WithMany(ft => ft.Questions)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+                .HasOne(q => q.Review)
+                .WithMany(rv => rv.Questions)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.SingleChoiceOptions)
+                .WithOne(sco => sco.Question)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+                .HasMany(q => q.RatingOptions)
+                .WithOne(rto  => rto.Question)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<RatingOption>()
+                .HasMany(rto => rto.Translations)
+                .WithOne(translation => translation.RatingOption)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SingleChoiceOption>()
+                .HasMany(sco => sco.Translations)
+                .WithOne( translation => translation.SingleChoiceOption)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+
 
             // Semente para FormTemplate
             modelBuilder.Entity<FormTemplate>().HasData(
@@ -63,6 +117,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                 new
                 {
                     QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
+                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
                     IsRequired = true,
                     ResponseType = "Rating"
                     // outras propriedades...
@@ -70,6 +125,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                 new
                 {
                     QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1"),
+                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
                     IsRequired = true,
                     ResponseType = "SingleChoice"
                     // outras propriedades...
@@ -189,20 +245,18 @@ namespace SmartMetric.Infrastructure.DatabaseContext
             );
 
             // Semente para FormTemplateQuestion
-            modelBuilder.Entity<FormTemplateQuestion>().HasData(
-                new FormTemplateQuestion
-                {
-                    FormTemplateQuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afbb"),
-                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
-                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8")
-                },
-                new FormTemplateQuestion
-                {
-                    FormTemplateQuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afbc"),
-                    FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
-                    QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
-                }
-            );
+            //modelBuilder.Entity<FormTemplateQuestion>().HasData(
+            //    new FormTemplateQuestion
+            //    {
+            //        FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
+            //        QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8")
+            //    },
+            //    new FormTemplateQuestion
+            //    {
+            //        FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
+            //        QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
+            //    }
+            //);
         }
 
 

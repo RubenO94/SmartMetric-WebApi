@@ -16,7 +16,7 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o identificador único da questão de revisão à qual a resposta está associada.
         /// </summary>
-        public Guid? ReviewQuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
 
         /// <summary>
         /// Obtém ou define o identificador único da submissão à qual a resposta está vinculada.
@@ -48,9 +48,9 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define a associação com a questão de revisão relacionada.
         /// </summary>
-        [ForeignKey(nameof(ReviewQuestionId))]
+        [ForeignKey(nameof(QuestionId))]
         [Required]
-        public virtual ReviewQuestion? ReviewQuestion { get; set; }
+        public virtual Question? Question { get; set; }
 
         /// <summary>
         /// Obtém ou define a associação com a submissão à qual a resposta está vinculada.

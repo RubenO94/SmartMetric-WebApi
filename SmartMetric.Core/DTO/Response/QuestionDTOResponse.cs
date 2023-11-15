@@ -32,13 +32,5 @@ namespace SmartMetric.Core.DTO.Response
                 //RatingOptions = question.RatingOptions.Select(rt => rt)
             };
         }
-
-        public static FormTemplateQuestion ToFormTemplateQuestion(this QuestionDTOResponse question)
-        {
-            return new FormTemplateQuestion()
-            {
-                QuestionId = question.QuestionId,
-            };
-        }
     }
 }
