@@ -41,5 +41,16 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<List<RatingOptionTranslation>> GetRatingOptionTranslationByRatingOptionId(Guid ratingOptionId);
 
         #endregion
+
+        #region Deleters
+
+        /// <summary>
+        /// Elimina uma tradução de uma opção de resposta de classificação através do seu Id passado por parâmetro
+        /// </summary>
+        /// <param name="ratingOptionTranslationId"></param>
+        /// <returns>Retorna um boolean, True quando remove com sucesso, False se não foi possível remover</returns>
+        Task<bool> DeleteRatingOptionTranslationById (Guid ratingOptionTranslationId);
+
+        #endregion
     }
 }

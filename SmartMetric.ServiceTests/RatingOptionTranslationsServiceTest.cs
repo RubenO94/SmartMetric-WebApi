@@ -8,8 +8,10 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.Services.Adders;
+using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using Xunit.Abstractions;
 
@@ -20,6 +22,7 @@ namespace SmartMetric.ServiceTests
         //variables
         private readonly IRatingOptionTranslationAdderService _translationsAdderService;
         private readonly IRatingOptionTranslationGetterService _translationsGetterService;
+        private readonly IRatingOptionTranslationDeleterService _translationsDeleterService;
 
         private readonly Mock<IRatingOptionTranslationsRepository> _translationsRepositoryMock;
         private readonly IRatingOptionTranslationsRepository _translationsRepository;
@@ -37,9 +40,11 @@ namespace SmartMetric.ServiceTests
 
             var AdderLoggerMock = new Mock<ILogger<RatingOptionTranslationsAdderService>>();
             var GetterLoggerMock = new Mock<ILogger<RatingOptionTranslationsGetterService>>();
+            var DeleterLoggerMock = new Mock<ILogger<RatingOptionTranslationDeleterService>>();
 
             _translationsAdderService = new RatingOptionTranslationsAdderService(_translationsRepository, AdderLoggerMock.Object);
             _translationsGetterService = new RatingOptionTranslationsGetterService(_translationsRepository, GetterLoggerMock.Object);
+            _translationsDeleterService = new RatingOptionTranslationDeleterService(_translationsRepository, DeleterLoggerMock.Object);
         }
 
         #region AddRatingOptionTranslation Tests
@@ -328,6 +333,60 @@ namespace SmartMetric.ServiceTests
 
             //Assert
             actualResponse.Should().BeEquivalentTo(expectedResponse);
+        }
+
+        #endregion
+
+        #region DeleteRatingOptionById Tests
+
+        //TESTE: recebe um Guid nulo, logo deve retornar falso
+        [Fact]
+        public async Task DeleteRatingOptionTranslationById_RatingOptionTranslationIdIsNull_ShouldReturnFalse()
+        {
+            //Arrange
+            Guid? ratingOptionTranslationId = null;
+
+            //Act
+            var result = await _translationsDeleterService.DeleteRatingOptionTranslationById(ratingOptionTranslationId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um Guid válido que não existe, logo deve retornar falso
+        [Fact]
+        public async Task DeleteRatingOptionTranslationById_RatingOptionTranslationIdIsValidAndDoesntExist_ShouldReturnFalse()
+        {
+            //Arrange
+            var ratingOptionTranslationId = Guid.NewGuid();
+
+            _translationsRepositoryMock
+                .Setup(temp => temp.DeleteRatingOptionTranslationById(ratingOptionTranslationId))
+                .ReturnsAsync(false);
+
+            //Act
+            var result = await _translationsDeleterService.DeleteRatingOptionTranslationById(ratingOptionTranslationId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um id válido que existe, logo retorna true
+        [Fact]
+        public async Task DeleteRatingOptionTranslationById_RatingOptionTranslationIdIsValidAndExists_ShouldReturnTrue()
+        {
+            //Arrange
+            var ratingOptionTranslationId = Guid.NewGuid();
+
+            _translationsRepositoryMock
+                .Setup(temp => temp.DeleteRatingOptionTranslationById(ratingOptionTranslationId))
+                .ReturnsAsync(true);
+
+            //Act
+            var result = await _translationsDeleterService.DeleteRatingOptionTranslationById(ratingOptionTranslationId);
+
+            //Assert
+            Assert.True(result);
         }
 
         #endregion

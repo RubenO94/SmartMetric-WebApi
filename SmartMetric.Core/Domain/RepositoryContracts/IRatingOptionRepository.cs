@@ -43,5 +43,16 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<List<RatingOption>?> GetRatingOptionByQuestionId(Guid questionId);
 
         #endregion
+
+        #region Deleters
+
+        /// <summary>
+        /// Elimina uma opção de resposta de classificação através do seu Guid passado por parâmetro
+        /// </summary>
+        /// <param name="ratingOptionId"></param>
+        /// <returns>Retorna um boolean, True quando remove com sucesso, False se não foi possível remover</returns>
+        Task<bool> DeleteRatingOptionById (Guid ratingOptionId);
+
+        #endregion
     }
 }
