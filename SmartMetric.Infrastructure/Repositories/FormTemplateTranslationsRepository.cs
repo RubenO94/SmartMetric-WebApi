@@ -17,7 +17,7 @@ namespace SmartMetric.Infrastructure.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<FormTemplateTranslationsRepository> _logger;
 
-        FormTemplateTranslationsRepository(ApplicationDbContext dbContext, ILogger<FormTemplateTranslationsRepository> logger)
+        public FormTemplateTranslationsRepository(ApplicationDbContext dbContext, ILogger<FormTemplateTranslationsRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;

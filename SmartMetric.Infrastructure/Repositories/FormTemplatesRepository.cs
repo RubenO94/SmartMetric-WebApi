@@ -27,6 +27,14 @@ namespace SmartMetric.Infrastructure.Repositories
             return formTemplate;
         }
 
+        public async Task<bool> DeleteFormTemplateById(Guid formTemplateId)
+        {
+            _dbContext.FormTemplates.RemoveRange(_dbContext.FormTemplates.Where(temp => temp.FormTemplateId == formTemplateId));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
+        }
+
         public async Task<List<FormTemplate>> GetAllFormTemplates()
         {
             _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
@@ -44,6 +52,7 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId)
         {
             _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
+
 
 
             var response = await _dbContext.FormTemplates

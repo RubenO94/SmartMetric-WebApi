@@ -35,7 +35,14 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="formTemplate">O modelo de formulário a ser adicionado.</param>
         /// <returns>O modelo de formulário inserido.</returns>
         Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate);
-        #endregion
+
+        /// <summary>
+        /// Elimina um FormTemplate através do GUID fornecido
+        /// </summary>
+        /// <param name="formTemplateId">GUID para pesquisar</param>
+        /// <returns>Retorna True em caso de sucesso, caso contrário retorna False</returns>
+        Task<bool> DeleteFormTemplateById (Guid formTemplateId);
+
     }
 
 

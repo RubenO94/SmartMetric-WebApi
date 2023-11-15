@@ -39,7 +39,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasKey("FormTemplateId");
 
-                    b.ToTable("FormTemplates");
+                    b.ToTable("FormTemplates", (string)null);
 
                     b.HasData(
                         new
@@ -71,7 +71,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("FormTemplateQuestions");
+                    b.ToTable("FormTemplateQuestions", (string)null);
 
                     b.HasData(
                         new
@@ -113,7 +113,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("FormTemplateId");
 
-                    b.ToTable("FormTemplateTranslations");
+                    b.ToTable("FormTemplateTranslations", (string)null);
 
                     b.HasData(
                         new
@@ -144,7 +144,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasKey("QuestionId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Questions", (string)null);
 
                     b.HasData(
                         new
@@ -186,7 +186,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuestionTranslations");
+                    b.ToTable("QuestionTranslations", (string)null);
 
                     b.HasData(
                         new
@@ -223,7 +223,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("RatingOptions");
+                    b.ToTable("RatingOptions", (string)null);
 
                     b.HasData(
                         new
@@ -267,7 +267,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("RatingOptionId");
 
-                    b.ToTable("RatingOptionTranslations");
+                    b.ToTable("RatingOptionTranslations", (string)null);
 
                     b.HasData(
                         new
@@ -330,7 +330,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("FormTemplateId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewQuestion", b =>
@@ -353,7 +353,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("ReviewsQuestions");
+                    b.ToTable("ReviewsQuestions", (string)null);
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
@@ -388,7 +388,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("SubmissionId");
 
-                    b.ToTable("ReviewResponses");
+                    b.ToTable("ReviewResponses", (string)null);
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.SingleChoiceOption", b =>
@@ -404,7 +404,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("SingleChoiceOptions");
+                    b.ToTable("SingleChoiceOptions", (string)null);
 
                     b.HasData(
                         new
@@ -445,7 +445,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("SingleChoiceOptionId");
 
-                    b.ToTable("SingleChoiceOptionTranslations");
+                    b.ToTable("SingleChoiceOptionTranslations", (string)null);
 
                     b.HasData(
                         new
@@ -493,7 +493,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("Submissions");
+                    b.ToTable("Submissions", (string)null);
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateQuestion", b =>
