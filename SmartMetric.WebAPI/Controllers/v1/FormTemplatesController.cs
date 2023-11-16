@@ -25,10 +25,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplateTranslationsDeleterService _formTemplateTranslationsDeleterService;
 
         public FormTemplatesController(
-            IFormTemplatesGetterService formTemplateGetterService, 
-            IFormTemplatesAdderService formTemplatesAdderService, 
-            IFormTemplatesDeleterService formTemplatesDeleterService, 
-            IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService, 
+            IFormTemplatesGetterService formTemplateGetterService,
+            IFormTemplatesAdderService formTemplatesAdderService,
+            IFormTemplatesDeleterService formTemplatesDeleterService,
+            IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService,
             IFormTemplateTranslationsDeleterService formTemplateTranslationsDeleterService
         )
         {
@@ -142,12 +142,45 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         }
 
-        [HttpDelete]
-        [Route("Translation")]
-        public async Task<IActionResult> DeleteFormTemplateTranslation([FromQuery] Guid formTemplateTranslationId)
+        [HttpDelete("Translation")]
+        public async Task<IActionResult> DeleteFormTemplateTranslation([FromQuery] Guid formTemplateId, [FromQuery] Language language)
         {
-            await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
-            return NoContent();
+            var formTemplate = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
+
+            if (formTemplate == null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Message = $"FormTemplateTranslation with ID {formTemplateId} not found."
+                });
+            }
+
+            if (formTemplate.Translations == null || formTemplate.Translations.Count() < 2)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = $"FormTemplate Translations must have at least one translation."
+                });
+            }
+
+            var translationToBeDeleted = formTemplate.Translations.FirstOrDefault(temp => temp.Language == language.ToString());
+
+            if (translationToBeDeleted == null)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = $"FormTemplate Translations does not have a {language} translation."
+                });
+            }
+
+            var hasDeleted = await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
+
+            return hasDeleted ? NoContent() : StatusCode((int)HttpStatusCode.InternalServerError);
         }
+
+
     }
 }
