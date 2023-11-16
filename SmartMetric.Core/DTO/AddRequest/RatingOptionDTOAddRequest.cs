@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
@@ -13,7 +14,7 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class RatingOptionDTOAddRequest
     {
 
-        [Required(ErrorMessage = "Please select a Question")]
+        [JsonIgnore]
         public Guid QuestionId { get; set; }
         [Required(ErrorMessage = "Please select a value for this rating option")]
         public int NumericValue { get; set; }

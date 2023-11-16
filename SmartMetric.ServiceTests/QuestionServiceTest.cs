@@ -57,7 +57,7 @@ namespace SmartMetric.ServiceTests
             QuestionDTOAddRequest? request = null;
 
             //Act
-            Func<Task> action = async () => await _questionAdderService.AddQuestion(request);
+            Func<Task> action = async () => await _questionAdderService.AddQuestionToFormTemplate(request);
 
             //Assert
             await action.Should().ThrowAsync<ArgumentNullException>();

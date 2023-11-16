@@ -17,6 +17,8 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
         }
 
+        #region Entities
+
         public DbSet<FormTemplate> FormTemplates { get; set; }
         public DbSet<FormTemplateTranslation> FormTemplateTranslations { get; set; }
         public DbSet<Question> Questions { get; set; }
@@ -29,11 +31,12 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
         public DbSet<Submission> Submissions { get; set; }
 
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            //Edição de Relações Manualemente:
+            #region Edição Manual de Relações
             modelBuilder.Entity<FormTemplate>()
             .HasMany(ft => ft.Translations)
             .WithOne(translation => translation.FormTemplate)
@@ -72,7 +75,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
             modelBuilder.Entity<Question>()
                 .HasMany(q => q.RatingOptions)
-                .WithOne(rto  => rto.Question)
+                .WithOne(rto => rto.Question)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<RatingOption>()
@@ -82,12 +85,12 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
             modelBuilder.Entity<SingleChoiceOption>()
                 .HasMany(sco => sco.Translations)
-                .WithOne( translation => translation.SingleChoiceOption)
+                .WithOne(translation => translation.SingleChoiceOption)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            #endregion
 
-
-
+            #region Seeds
             // Semente para FormTemplate
             modelBuilder.Entity<FormTemplate>().HasData(
                 new FormTemplate
@@ -119,16 +122,16 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                     QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8"),
                     FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
                     IsRequired = true,
-                    ResponseType = "Rating"
-                    // outras propriedades...
+                    ResponseType = "Rating",
+                    Positon = 0
                 },
                 new
                 {
                     QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1"),
                     FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
                     IsRequired = true,
-                    ResponseType = "SingleChoice"
-                    // outras propriedades...
+                    ResponseType = "SingleChoice",
+                    Positon = 1
                 }
             );
 
@@ -243,20 +246,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                     Description = "Fair"
                 }
             );
-
-            // Semente para FormTemplateQuestion
-            //modelBuilder.Entity<FormTemplateQuestion>().HasData(
-            //    new FormTemplateQuestion
-            //    {
-            //        FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
-            //        QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa8")
-            //    },
-            //    new FormTemplateQuestion
-            //    {
-            //        FormTemplateId = Guid.Parse("8f7f0f64-5317-4562-b3fc-2c963f66afa6"),
-            //        QuestionId = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afb1")
-            //    }
-            //);
+            #endregion
         }
 
 

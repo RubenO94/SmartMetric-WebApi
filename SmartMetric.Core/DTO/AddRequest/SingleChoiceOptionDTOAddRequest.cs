@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
@@ -16,7 +17,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o identificador único da pergunta à qual a opção de escolha única será associada.
         /// </summary>
-        [Required(ErrorMessage = "Question ID is required")]
+        [JsonIgnore]
         public Guid QuestionId { get; set; }
 
         /// <summary>
