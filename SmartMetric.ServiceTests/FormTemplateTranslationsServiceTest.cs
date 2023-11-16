@@ -8,8 +8,10 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.Services.Adders;
+using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using Xunit.Abstractions;
 
@@ -19,6 +21,7 @@ namespace SmartMetric.ServiceTests
     {
         private readonly IFormTemplateTranslationsAdderService _translationsAdderService;
         private readonly IFormTemplateTranslationsGetterService _translationsGetterService;
+        private readonly IFormTemplateTranslationsDeleterService _translationsDeleterService;
 
         private readonly Mock<IFormTemplateTranslationsRepository> _translationsRepositoryMock;
         private readonly IFormTemplateTranslationsRepository _translationsRepository;
@@ -36,9 +39,11 @@ namespace SmartMetric.ServiceTests
 
             var AdderloggerMock = new Mock<ILogger<FormTemplateTranslationsAdderService>>();
             var GetterloggerMock = new Mock<ILogger<FormTemplateTranslationsGetterService>>();
+            var DeleterLoggerMock = new Mock<ILogger<FormTemplateTranslationDeleterService>>();
 
             _translationsAdderService = new FormTemplateTranslationsAdderService(_translationsRepository, AdderloggerMock.Object);
             _translationsGetterService = new FormTemplateTranslationsGetterService(_translationsRepository, GetterloggerMock.Object);
+            _translationsDeleterService = new FormTemplateTranslationDeleterService(_translationsRepository, DeleterLoggerMock.Object);
         }
 
         #region AddFormTemplateTranslation
@@ -315,6 +320,59 @@ namespace SmartMetric.ServiceTests
 
         #endregion
 
+        #region DeleteFormTemplateTranslationById
 
+        //TESTE: recebe um Guid nulo, logo deve retornar falso
+        [Fact]
+        public async Task DeleteFormTemplateTranslationById_FormTemplateTranslationIdIsNull_ShouldReturnFalse()
+        {
+            //Arrange
+            Guid? formTemplateTranslationId = null;
+
+            //Act
+            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+        //TESTE: recebe um Guid válido que não existe, logo deve retornar falso
+        [Fact]
+        public async Task DeleteFormTemplateTranslationById_FormTemplateTranslationIdIsValidAndDoesntExist_ShouldReturnFalse()
+        {
+            //Arrange
+            var formTemplateTranslationId = Guid.NewGuid();
+
+            _translationsRepositoryMock
+                .Setup(temp => temp.DeleteFormTemplateTranslationById(formTemplateTranslationId))
+                .ReturnsAsync(false);
+
+            //Act
+            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+
+            //Assert
+            Assert.False(result);
+        }
+
+
+        //TESTE: recebe um id válido que existe, logo retorna true
+        [Fact]
+        public async Task DeleteFormTemplateTranslationById_FormTemplateTranslationIdIsValidAndExists_ShouldReturnTrue()
+        {
+            //Arrange
+            var formTemplateTranslationId = Guid.NewGuid();
+
+            _translationsRepositoryMock
+                .Setup(temp => temp.DeleteFormTemplateTranslationById(formTemplateTranslationId))
+                .ReturnsAsync(true);
+
+            //Act
+            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+
+            //Assert
+            Assert.True(result);
+        }
+
+        #endregion
     }
 }
