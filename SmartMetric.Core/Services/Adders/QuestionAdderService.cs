@@ -5,11 +5,6 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services.Adders
 {
@@ -24,9 +19,9 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<QuestionDTOResponse> AddQuestion(QuestionDTOAddRequest? request)
+        public async Task<QuestionDTOResponse?> AddQuestionToFormTemplate(QuestionDTOAddRequest? request)
         {
-            _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestion)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestionToFormTemplate)} foi iniciado");
 
             if (request == null)
             {
@@ -35,13 +30,75 @@ namespace SmartMetric.Core.Services.Adders
 
             ValidationHelper.ModelValidation(request);
 
-            Question question = request.ToQuestion();
+            Guid questionId = Guid.NewGuid();
 
-            question.QuestionId = Guid.NewGuid();
+            foreach (var translation in request.Translations!)
+            {
+                translation.QuestionId = questionId;
+            }
+
+            if (request.SingleChoiceOptions != null && request.SingleChoiceOptions.Any())
+            {
+                foreach (var sco in request.SingleChoiceOptions)
+                {
+                    sco.QuestionId = questionId;
+                }
+            }
+
+            if (request.RatingOptions != null && request.RatingOptions.Any())
+            {
+                foreach (var rto in request.RatingOptions)
+                {
+                    rto.QuestionId = questionId;
+                }
+            }
+
+
+            Question question = request.ToQuestion();
+            question.QuestionId = questionId;
+
+            foreach (var translation in question.Translations!)
+            {
+                translation.QuestionTranslationId = Guid.NewGuid();
+            }
+
+            if (question.SingleChoiceOptions != null && question.SingleChoiceOptions.Any())
+            {
+                foreach (var sco in question.SingleChoiceOptions)
+                {
+                    sco.SingleChoiceOptionId = Guid.NewGuid();
+
+                    foreach (var scoTranslation in sco.Translations!)
+                    {
+                        scoTranslation.SingleChoiceOptionId = sco.SingleChoiceOptionId;
+                        scoTranslation.SingleChoiceOptionTranslationId = Guid.NewGuid();
+                    }
+                }
+            }
+
+            if (question.RatingOptions != null && question.RatingOptions.Any())
+            {
+                foreach (var rto in question.RatingOptions)
+                {
+                    rto.RatingOptionId = Guid.NewGuid();
+
+                    foreach (var rtoTranslation in rto.Translations!)
+                    {
+                        rtoTranslation.RatingOptionId = rto.RatingOptionId;
+                        rtoTranslation.RatingOptionTranslationId = Guid.NewGuid();
+                    }
+                }
+            }
+
 
             await _questionRepository.AddQuestion(question);
 
             return question.ToQuestionDTOResponse();
+        }
+
+        public Task<QuestionDTOResponse?> AddQuestionToReview(QuestionDTOAddRequest? request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

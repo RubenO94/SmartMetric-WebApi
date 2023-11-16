@@ -40,6 +40,16 @@ namespace SmartMetric.Core.Services.Adders
             //3º - Validação do Modelo
             ValidationHelper.ModelValidation(request);
 
+            var existenceTranslations =  await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
+
+            foreach (var item in existenceTranslations)
+            {
+                if(item.Language == request.Language.ToString())
+                {
+                    throw new Exception("This Language is already created");
+                }
+            }
+
             //4º - Converter o Request em Modelo(Entity)
             FormTemplateTranslation translation = request.ToFormTemplateTranslation();
 

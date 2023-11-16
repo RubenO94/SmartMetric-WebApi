@@ -16,8 +16,8 @@ namespace SmartMetric.Core.DTO.AddRequest
         public DateTime? CreatedDate { get; set; }
         [Required(ErrorMessage = "Please select a User")]
         public int? CreatedByUserId { get; set; }
+        [Required(ErrorMessage = "Please enter data in at least one language.")]
         public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
-        //public List<QuestionDTOAddRequest>? Questions { get; set; }
 
 
         public FormTemplate ToFormTemplate()
@@ -28,6 +28,7 @@ namespace SmartMetric.Core.DTO.AddRequest
             {
                 CreatedDate = CreatedDate,
                 CreatedByUserId = CreatedByUserId,
+                Translations = Translations?.Select(temp => temp.ToFormTemplateTranslation()).ToList()
             };
         }
     }

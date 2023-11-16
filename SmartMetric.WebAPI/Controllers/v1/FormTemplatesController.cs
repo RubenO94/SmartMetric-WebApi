@@ -64,23 +64,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest formTemplateDTOAddRequest)
         {
-            var createdFormTemplate = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
-
-            // Adicionar traduções
-            if (formTemplateDTOAddRequest.Translations != null && formTemplateDTOAddRequest.Translations.Any() && createdFormTemplate != null)
-            {
-                foreach (var translationDTO in formTemplateDTOAddRequest.Translations)
-                {
-                    translationDTO.FormTemplateId = createdFormTemplate.FormTemplateId;
-                    await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(translationDTO);
-                }
-            }
+            var formTemplate = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
 
             return CreatedAtAction(nameof(AddFormTemplate), new
             {
                 StatusCode = (int)HttpStatusCode.Created,
-                Message = "FormTemplate Created",
-                FormTemplateId = createdFormTemplate?.FormTemplateId.ToString(),
+                Message = "Success! FormTemplate Created",
+                formTemplate,
             });
         }
 
@@ -89,26 +79,44 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
 
             var hasDeleted = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
-
-            return NoContent();
+            if (hasDeleted)
+            {
+                return NoContent();
+            }
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
         [Route("Translation")]
-        public async Task<IActionResult> AddFormTemplateTranslation([FromQuery] Guid formTemplateId,[FromBody] FormTemplateTranslationDTOAddRequest formTemplateTranslationDTOAddRequest)
+        public async Task<IActionResult> AddFormTemplateTranslation([FromQuery] Guid formTemplateId, [FromBody] FormTemplateTranslationDTOAddRequest formTemplateTranslationDTOAddRequest)
         {
             var formTemplateExist = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
             if (formTemplateExist != null)
             {
-                formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
-                var response = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
-
-                return CreatedAtAction(nameof(AddFormTemplateTranslation), new
+                try
                 {
-                    StatusCode = (int)HttpStatusCode.Created,
-                    Message = "FormTemplate Translation Created",
-                    FormTemplateTranslationId = response.FormTemplateTranslationId.ToString(),
-                });
+                    formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
+                    var translation = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
+
+                    return CreatedAtAction(nameof(AddFormTemplateTranslation), new
+                    {
+                        StatusCode = (int)HttpStatusCode.Created,
+                        Message = "Success! FormTemplate Translation Created",
+                        translation,
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(new
+                    {
+                        StatusCode = HttpStatusCode.BadRequest,
+                        Message = ex.Message.ToString(),
+                    });
+                }
+
             }
 
             return BadRequest(new
@@ -116,7 +124,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 StatusCode = (int)HttpStatusCode.BadRequest,
                 Message = "FormTemplateId does not exist"
             });
-            
+
         }
     }
 }

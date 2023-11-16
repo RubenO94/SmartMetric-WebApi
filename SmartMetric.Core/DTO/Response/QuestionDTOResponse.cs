@@ -12,6 +12,7 @@ namespace SmartMetric.Core.DTO.Response
     {
         public Guid QuestionId { get; set; }
         public bool? IsRequired { get; set; }
+        public int? Position { get; set; }
         public string? ResponseType { get; set; }
         public List<QuestionTranslationDTOResponse>? Translations { get; set; }
         public List<SingleChoiceOptionDTOResponse>? SingleChoiceOptions { get; set; }
@@ -26,6 +27,7 @@ namespace SmartMetric.Core.DTO.Response
             {
                 QuestionId = question.QuestionId,
                 IsRequired = question.IsRequired,
+                Position = question.Position,
                 ResponseType = question.ResponseType,
                 Translations = question.Translations?.Select(translation => translation.ToQuestionTranslationDTOResponse()).ToList(),
                 SingleChoiceOptions = question.SingleChoiceOptions?.Select(sco => sco.ToSingleChoiceOptionDTOResponse()).ToList(),
