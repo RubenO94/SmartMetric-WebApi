@@ -22,14 +22,22 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplatesDeleterService _formTemplatesDeleterService;
 
         private readonly IFormTemplateTranslationsAdderService _formTemplateTranslationsAdderService;
+        private readonly IFormTemplateTranslationsDeleterService _formTemplateTranslationsDeleterService;
 
-        public FormTemplatesController(IFormTemplatesGetterService formTemplateGetterService, IFormTemplatesAdderService formTemplatesAdderService, IFormTemplatesDeleterService formTemplatesDeleterService, IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService)
+        public FormTemplatesController(
+            IFormTemplatesGetterService formTemplateGetterService, 
+            IFormTemplatesAdderService formTemplatesAdderService, 
+            IFormTemplatesDeleterService formTemplatesDeleterService, 
+            IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService, 
+            IFormTemplateTranslationsDeleterService formTemplateTranslationsDeleterService
+        )
         {
             _formTemplateGetterService = formTemplateGetterService;
             _formTemplateAdderService = formTemplatesAdderService;
             _formTemplatesDeleterService = formTemplatesDeleterService;
 
             _formTemplateTranslationsAdderService = formTemplateTranslationsAdderService;
+            _formTemplateTranslationsDeleterService = formTemplateTranslationsDeleterService;
         }
 
 
@@ -117,6 +125,14 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 Message = "FormTemplateId does not exist"
             });
             
+        }
+
+        [HttpDelete]
+        [Route("Translation")]
+        public async Task<IActionResult> DeleteFormTemplateTranslation([FromQuery] Guid formTemplateTranslationId)
+        {
+            await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+            return NoContent();
         }
     }
 }

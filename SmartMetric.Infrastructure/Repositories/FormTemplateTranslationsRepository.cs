@@ -56,9 +56,16 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _dbContext.FormTemplateTranslations.FirstOrDefaultAsync(temp => temp.FormTemplateTranslationId == formTemplateTranslationId);
         }
 
-        public Task<bool> DeleteFormTemplateTranslationById(Guid formTemplateTranslationId)
+        #endregion
+
+        #region Deleters
+
+        public async Task<bool> DeleteFormTemplateTranslationById(Guid formTemplateTranslationId)
         {
-            throw new NotImplementedException();
+            _dbContext.FormTemplateTranslations.RemoveRange(_dbContext.FormTemplateTranslations.Where(temp => temp.FormTemplateTranslationId.Equals(formTemplateTranslationId)));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
         }
 
         #endregion

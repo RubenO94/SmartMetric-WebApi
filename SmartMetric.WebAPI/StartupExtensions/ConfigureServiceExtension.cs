@@ -37,6 +37,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
             services.AddScoped<IFormTemplateTranslationsGetterService, FormTemplateTranslationsGetterService>();
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
+            services.AddScoped<IFormTemplateTranslationsDeleterService, FormTemplateTranslationDeleterService>();
 
             services.AddScoped<IQuestionGetterService, QuestionGetterService>();
 
