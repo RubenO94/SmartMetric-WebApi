@@ -36,6 +36,11 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
             services.AddScoped<IQuestionAdderService, QuestionAdderService>();
             services.AddScoped<IQuestionGetterService, QuestionGetterService>();
+            services.AddScoped<IRatingOptionAdderService, RatingOptionAdderService>();
+            services.AddScoped<IRatingOptionGetterService, RatingOptionGetterService>();
+            services.AddScoped<IRatingOptionDeleterService, RatingOptionDeleterService>();
+            services.AddScoped<IRatingOptionTranslationAdderService, RatingOptionTranslationsAdderService>();
+            services.AddScoped<IRatingOptionTranslationDeleterService, RatingOptionTranslationDeleterService>();
 
             #endregion
 
