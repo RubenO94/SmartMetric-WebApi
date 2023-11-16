@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
@@ -18,13 +19,26 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o identificador único do modelo de formulário ao qual a pergunta será associada.
         /// </summary>
-        [Required(ErrorMessage = "Please select a FormTemplate")]
+        [JsonIgnore]
         public Guid? FormTemplateId { get; set; }
+
+        /// <summary>
+        /// Obtém ou define o identificador único da revisão ao qual a pergunta será associada.
+        /// </summary>
+        [JsonIgnore]
+        public Guid? ReviewId { get; set; }
 
         /// <summary>
         /// Obtém ou define se a resposta a esta pergunta é obrigatória.
         /// </summary>
+        [Required(ErrorMessage ="Please select a option for IsRequired")]
         public bool IsRequired { get; set; }
+
+        /// <summary>
+        /// Obtém ou define o posicionamento desta pergunta na sua lista.
+        /// </summary>
+        [Required(ErrorMessage ="Please select a position number for this  question")]
+        public int Position { get; set; }
 
         /// <summary>
         /// Obtém ou define o tipo de resposta esperado para esta pergunta.
@@ -56,6 +70,9 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new Question()
             {
+                FormTemplateId = FormTemplateId,
+                ReviewId = ReviewId,
+                Position = Position,
                 IsRequired = this.IsRequired,
                 ResponseType = this.ResponseType.ToString(),
                 Translations = this.Translations?.Select(temp => temp.ToQuestionTranslation()).ToList() ?? new List<QuestionTranslation>(),

@@ -64,23 +64,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest formTemplateDTOAddRequest)
         {
-            var createdFormTemplate = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
-
-            // Adicionar traduções
-            if (formTemplateDTOAddRequest.Translations != null && formTemplateDTOAddRequest.Translations.Any() && createdFormTemplate != null)
-            {
-                foreach (var translationDTO in formTemplateDTOAddRequest.Translations)
-                {
-                    translationDTO.FormTemplateId = createdFormTemplate.FormTemplateId;
-                    await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(translationDTO);
-                }
-            }
+            var formTemplate = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
 
             return CreatedAtAction(nameof(AddFormTemplate), new
             {
                 StatusCode = (int)HttpStatusCode.Created,
-                Message = "FormTemplate Created",
-                FormTemplateId = createdFormTemplate?.FormTemplateId.ToString(),
+                Message = "Success! FormTemplate Created",
+                formTemplate,
             });
         }
 
@@ -93,9 +83,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
             {
                 return NoContent();
             }
-
-            return BadRequest();
-            
+            else
+            {
+                return NotFound();
+            }
         }
 
         [HttpPost]
@@ -108,13 +99,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 try
                 {
                     formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
-                    var response = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
+                    var translation = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
 
                     return CreatedAtAction(nameof(AddFormTemplateTranslation), new
                     {
                         StatusCode = (int)HttpStatusCode.Created,
-                        Message = "FormTemplate Translation Created",
-                        FormTemplateTranslationId = response.FormTemplateTranslationId.ToString(),
+                        Message = "Success! FormTemplate Translation Created",
+                        translation,
                     });
                 }
                 catch (Exception ex)

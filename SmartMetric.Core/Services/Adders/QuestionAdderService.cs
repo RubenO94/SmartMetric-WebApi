@@ -5,11 +5,6 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services.Adders
 {
@@ -24,49 +19,60 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<QuestionDTOResponse?> AddQuestion(QuestionDTOAddRequest? request)
+        public async Task<QuestionDTOResponse?> AddQuestionToFormTemplate(QuestionDTOAddRequest? request)
         {
-            _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestion)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestionToFormTemplate)} foi iniciado");
 
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
+            ValidationHelper.ModelValidation(request);
+
             Guid questionId = Guid.NewGuid();
 
-            var translations = request.Translations?.Select(temp =>
-             {
-                 temp.QuestionId = questionId;
-                 ValidationHelper.ModelValidation(temp);
-                 return temp.ToQuestionTranslation();
-             });
+            foreach (var translation in request.Translations!)
+            {
+                translation.QuestionId = questionId;
+            }
 
-            
-            //TODO Restantes validações...
+            if (request.SingleChoiceOptions != null && request.SingleChoiceOptions.Any())
+            {
+                foreach (var sco in request.SingleChoiceOptions)
+                {
+                    sco.QuestionId = questionId;
+                }
+            }
+
+            if (request.RatingOptions != null && request.RatingOptions.Any())
+            {
+                foreach (var rto in request.RatingOptions)
+                {
+                    rto.QuestionId = questionId;
+                }
+            }
+
 
             Question question = request.ToQuestion();
-
             question.QuestionId = questionId;
 
-
+            foreach (var translation in question.Translations!)
+            {
+                translation.QuestionTranslationId = Guid.NewGuid();
+            }
 
             if (question.SingleChoiceOptions != null && question.SingleChoiceOptions.Any())
             {
                 foreach (var sco in question.SingleChoiceOptions)
                 {
-                    sco.QuestionId = question.QuestionId;
                     sco.SingleChoiceOptionId = Guid.NewGuid();
 
-                    if (sco.Translations != null && sco.Translations.Any())
+                    foreach (var scoTranslation in sco.Translations!)
                     {
-                        foreach (var item in sco.Translations)
-                        {
-                            item.SingleChoiceOptionId = sco.SingleChoiceOptionId;
-                            item.SingleChoiceOptionTranslationId = Guid.NewGuid();
-                        }
+                        scoTranslation.SingleChoiceOptionId = sco.SingleChoiceOptionId;
+                        scoTranslation.SingleChoiceOptionTranslationId = Guid.NewGuid();
                     }
-
                 }
             }
 
@@ -74,23 +80,25 @@ namespace SmartMetric.Core.Services.Adders
             {
                 foreach (var rto in question.RatingOptions)
                 {
-                    rto.QuestionId = question.QuestionId;
                     rto.RatingOptionId = Guid.NewGuid();
 
-                    if (rto.Translations != null && rto.Translations.Any())
+                    foreach (var rtoTranslation in rto.Translations!)
                     {
-                        foreach (var item in rto.Translations)
-                        {
-                            item.RatingOptionId = rto.RatingOptionId;
-                            item.RatingOptionTranslationId = Guid.NewGuid();
-                        }
+                        rtoTranslation.RatingOptionId = rto.RatingOptionId;
+                        rtoTranslation.RatingOptionTranslationId = Guid.NewGuid();
                     }
                 }
             }
 
+
             await _questionRepository.AddQuestion(question);
 
             return question.ToQuestionDTOResponse();
+        }
+
+        public Task<QuestionDTOResponse?> AddQuestionToReview(QuestionDTOAddRequest? request)
+        {
+            throw new NotImplementedException();
         }
     }
 }

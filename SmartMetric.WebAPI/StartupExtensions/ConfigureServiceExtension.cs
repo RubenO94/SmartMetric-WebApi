@@ -19,14 +19,16 @@ namespace SmartMetric.WebAPI.StartupExtensions
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
 
-            //Dependency Injection:
+            #region Repositories
 
-            //Repositories
             services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
             services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
 
-            //Services
+            #endregion
+
+            #region Services
+
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
@@ -35,23 +37,27 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IQuestionAdderService, QuestionAdderService>();
             services.AddScoped<IQuestionGetterService, QuestionGetterService>();
 
+            #endregion
+
+            #region EntityFrameWork Configurations
 
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("Default"));
             });
 
+            #endregion
+
+            #region Loggers
 
             services.AddHttpLogging(options =>
             {
                 options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
             });
 
+            #endregion
 
-            services.AddHttpLogging(options =>
-            {
-                options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestProperties | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
-            });
+            #region Controllers
 
             services.AddControllers(options =>
             {
@@ -67,6 +73,9 @@ namespace SmartMetric.WebAPI.StartupExtensions
                      JsonIgnoreCondition.WhenWritingNull;
              });
 
+            #endregion
+
+            #region API Versioning
 
             //Enable versioning in Web API controllers
             services.AddApiVersioning(config =>
@@ -97,6 +106,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 options.SubstituteApiVersionInUrl = true;
             });
 
+            #endregion
 
             return services;
         }

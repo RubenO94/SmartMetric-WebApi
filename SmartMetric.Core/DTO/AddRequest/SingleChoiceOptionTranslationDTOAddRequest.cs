@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
@@ -17,7 +18,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o identificador da opção de escolha única a ser traduzida.
         /// </summary>
-        [Required(ErrorMessage = "Por favor, selecione uma opção de escolha única para traduzir.")]
+        [JsonIgnore]
         public Guid? SingleChoiceOptionId { get; set; }
 
         /// <summary>

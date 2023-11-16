@@ -24,11 +24,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
             questionDTOAddRequest.FormTemplateId = formTemplateId;
 
-            var response = await _questionAdderService.AddQuestion(questionDTOAddRequest);
+            var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
 
             if(response != null)
             {
-                Ok(response);
+               return Ok(response);
             }
             return BadRequest();
         }

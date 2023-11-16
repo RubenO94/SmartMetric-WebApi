@@ -22,10 +22,6 @@ namespace SmartMetric.Core.Services.Adders
         {
             _formTemplateRepository = formTemplateRepository;
             _logger = logger;
-            //_formTemplateTranslationsAdderService = formTemplateTranslationsAdderService;
-            //_questionAdderService = questionAdderService;
-            //_singleChoiceOptionsAdderService = singleChoiceOptionsAdderService;
-            //_ratingOptionAdderService = ratingOptionAdderService;
         }
 
         public async Task<FormTemplateDTOResponse?> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest)
@@ -38,12 +34,27 @@ namespace SmartMetric.Core.Services.Adders
                 throw new ArgumentNullException(nameof(addFormTemplateRequest));
             }
 
+
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
+            var formTemplateId = Guid.NewGuid();
+            
+
+
+            foreach (var translation in addFormTemplateRequest.Translations!)
+            {
+                translation.FormTemplateId = formTemplateId;
+            }
 
             FormTemplate formTemplate = addFormTemplateRequest.ToFormTemplate();
+            formTemplate.FormTemplateId = formTemplateId;
 
-            formTemplate.FormTemplateId = Guid.NewGuid();
+            foreach (var translation in formTemplate.Translations!)
+            {
+                translation.FormTemplateTranslationId = Guid.NewGuid();
+            }
+
+            //formTemplate.FormTemplateId = Guid.NewGuid();
 
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 

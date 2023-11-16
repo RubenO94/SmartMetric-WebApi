@@ -1,14 +1,3 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using SmartMetric.Core.Domain.RepositoryContracts;
-using SmartMetric.Core.Services.Adders;
-using SmartMetric.Core.Services.Getters;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Getters;
-using SmartMetric.Infrastructure.DatabaseContext;
-using SmartMetric.Infrastructure.Repositories;
 using SmartMetric.WebAPI.StartupExtensions;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +19,11 @@ if (app.Environment.IsDevelopment())
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
     }); //creates swagger UI for testing all Web API endpoints / action methods
+}
+else
+{
+    //Exception Handling
+    app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExceptionHandler());
 }
 
 app.UseRouting();
