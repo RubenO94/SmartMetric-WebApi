@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.Response
@@ -10,8 +11,12 @@ namespace SmartMetric.Core.DTO.Response
     public class RatingOptionDTOResponse
     {
         public Guid RatingOptionId { get; set; }
+
+        [JsonIgnore]
         public Guid? QuestionId { get; set; }
         public int? NumericValue { get; set; }
+
+        public List<RatingOptionTranslationDTOResponse>? Translations { get; set; }
 
 
         /// <summary>
@@ -25,7 +30,7 @@ namespace SmartMetric.Core.DTO.Response
             if (obj.GetType() != typeof(RatingOptionDTOResponse)) return false;
 
             RatingOptionDTOResponse translation = (RatingOptionDTOResponse)obj;
-            return this.RatingOptionId == translation.RatingOptionId && this.QuestionId == translation.QuestionId && this.NumericValue == translation.NumericValue;
+            return this.RatingOptionId == translation.RatingOptionId && this.QuestionId == translation.QuestionId && this.NumericValue == translation.NumericValue && this.Translations == translation.Translations;
         }
 
         public override int GetHashCode()
@@ -35,7 +40,7 @@ namespace SmartMetric.Core.DTO.Response
 
         public override string ToString()
         {
-            return $"{nameof(RatingOptionId)}: {this.RatingOptionId}\n{nameof(QuestionId)}: {this.QuestionId}\n{nameof(NumericValue)}: {this.NumericValue}\n";
+            return $"{nameof(RatingOptionId)}: {this.RatingOptionId}\n{nameof(QuestionId)}: {this.QuestionId}\n{nameof(NumericValue)}: {this.NumericValue}\nTranslations count: {Translations?.Count()}";
         }
     }
 
@@ -52,7 +57,8 @@ namespace SmartMetric.Core.DTO.Response
             {
                 RatingOptionId = ratingOption.RatingOptionId,
                 QuestionId = ratingOption.QuestionId,
-                NumericValue = ratingOption.NumericValue
+                NumericValue = ratingOption.NumericValue,
+                Translations = ratingOption.Translations?.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList(),
             };
         }
     }

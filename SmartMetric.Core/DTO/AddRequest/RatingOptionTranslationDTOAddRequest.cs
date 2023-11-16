@@ -5,13 +5,14 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
 {
     public class RatingOptionTranslationDTOAddRequest
     {
-        [Required(ErrorMessage = "Please select a RatingOption to translate")]
+        [JsonIgnore]
         public Guid? RatingOptionId { get; set; }
 
         [Required(ErrorMessage = "Please select a Language")]
