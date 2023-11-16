@@ -45,16 +45,16 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return Ok(formTemplates);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<FormTemplateDTOResponse>> GetFormTemplateById(Guid id)
+        [HttpGet("{formTemplateId}")]
+        public async Task<ActionResult<FormTemplateDTOResponse>> GetFormTemplateById(Guid formTemplateId)
         {
-            var formTemplate = await _formTemplateGetterService.GetFormTemplateById(id);
+            var formTemplate = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
             if (formTemplate == null)
             {
                 return NotFound(new
                 {
-                    statusCode = (int)HttpStatusCode.NotFound,
-                    errorMessage = "FormTemplate not found."
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Message = $"FormTemplate with ID {formTemplateId} not found."
                 });
             }
 
@@ -78,15 +78,22 @@ namespace SmartMetric.WebAPI.Controllers.v1
         public async Task<IActionResult> DeleteFormTemplateById(Guid formTemplateId)
         {
 
-            var hasDeleted = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
-            if (hasDeleted)
+            var formTemplate = _formTemplateGetterService.GetFormTemplateById(formTemplateId);
+
+            if (formTemplate != null)
             {
-                return NoContent();
+                var hasDeleted = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
+                if (hasDeleted)
+                {
+                    return NoContent();
+                }
             }
-            else
+
+            return NotFound(new
             {
-                return NotFound();
-            }
+                StatusCode = (int)HttpStatusCode.NotFound,
+                Message = $"FormTemplate with ID {formTemplateId} not found."
+            });
         }
 
         [HttpPost]

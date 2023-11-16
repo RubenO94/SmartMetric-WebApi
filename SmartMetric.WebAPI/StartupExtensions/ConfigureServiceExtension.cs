@@ -24,6 +24,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
             services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
+            services.AddScoped<IRatingOptionRepository, RatingOptionRepository>();
+            services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
 
             #endregion
 

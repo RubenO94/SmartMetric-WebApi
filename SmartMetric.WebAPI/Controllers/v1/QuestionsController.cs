@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Getters;
+using System.Net;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -11,26 +12,43 @@ namespace SmartMetric.WebAPI.Controllers.v1
     {
         private readonly IQuestionAdderService _questionAdderService;
         private readonly IQuestionGetterService _questionGetterService;
+        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
 
-        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService)
+        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService, IFormTemplatesGetterService formTemplatesGetterService)
         {
             _questionAdderService = questionAdderService;
             _questionGetterService = questionGetterService;
+            _formTemplatesGetterService = formTemplatesGetterService;
         }
 
 
         [HttpPost]
         public async Task<IActionResult> AddQuestionToFormTemplate([FromQuery] Guid formTemplateId, [FromBody] QuestionDTOAddRequest questionDTOAddRequest)
         {
-            questionDTOAddRequest.FormTemplateId = formTemplateId;
+            var formTemplate = await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
 
-            var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
-
-            if(response != null)
+            if (formTemplate != null)
             {
-               return Ok(response);
+                questionDTOAddRequest.FormTemplateId = formTemplateId;
+
+                var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
+
+                if (response != null)
+                {
+                    return Ok(response);
+                }
+                return BadRequest(new
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = "Something went wrong. Please check the provided data."
+                });
             }
-            return BadRequest();
+
+            return NotFound(new
+            {
+                StatusCode = (int)HttpStatusCode.NotFound,
+                Message = $"FormTemplate with ID {formTemplateId} not found."
+            });
         }
     }
 }

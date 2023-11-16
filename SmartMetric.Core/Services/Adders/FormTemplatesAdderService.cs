@@ -34,13 +34,10 @@ namespace SmartMetric.Core.Services.Adders
                 throw new ArgumentNullException(nameof(addFormTemplateRequest));
             }
 
-
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
             var formTemplateId = Guid.NewGuid();
             
-
-
             foreach (var translation in addFormTemplateRequest.Translations!)
             {
                 translation.FormTemplateId = formTemplateId;
@@ -54,39 +51,10 @@ namespace SmartMetric.Core.Services.Adders
                 translation.FormTemplateTranslationId = Guid.NewGuid();
             }
 
-            //formTemplate.FormTemplateId = Guid.NewGuid();
-
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 
             return formTemplate.ToFormTemplateDTOResponse();
         }
-
-        //private async Task<FormTemplateQuestion> AddQuestionWithAssociations(QuestionDTOAddRequest questionRequest)
-        //{
-        //    var addedQuestion = await _questionAdderService.AddQuestion(questionRequest);
-
-        //    // Adiciona as SINGLE CHOICE OPTIONS, se houver
-        //    if (questionRequest.SingleChoiceOptions != null && questionRequest.SingleChoiceOptions.Any())
-        //    {
-        //        foreach (var singleChoiceOptionRequest in questionRequest.SingleChoiceOptions)
-        //        {
-        //            singleChoiceOptionRequest.QuestionId = addedQuestion.QuestionId;
-        //            await _singleChoiceOptionsAdderService.AddSingleChoiceOption(singleChoiceOptionRequest);
-        //        }
-        //    }
-
-        //    // Adiciona as RATING OPTIONS, se houver
-        //    if (questionRequest.RatingOptions != null && questionRequest.RatingOptions.Any())
-        //    {
-        //        foreach (var ratingOptionRequest in questionRequest.RatingOptions)
-        //        {
-        //            ratingOptionRequest.QuestionId = addedQuestion.QuestionId;
-        //            await _ratingOptionAdderService.AddRatingOption(ratingOptionRequest);
-        //        }
-        //    }
-
-        //    return addedQuestion.ToFormTemplateQuestion();
-        //}
 
     }
 }
