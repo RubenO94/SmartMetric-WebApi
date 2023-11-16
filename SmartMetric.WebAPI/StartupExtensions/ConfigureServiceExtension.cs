@@ -25,12 +25,26 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
             services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
 
+            services.AddScoped<IQuestionRepository, QuestionRepository>();
+            //services.AddScoped<IQuestionTranslationsRepository, QuestionTranslationsRepository>();
+
+            services.AddScoped<IRatingOptionRepository, RatingOptionRepository>();
+            services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
+
             //Services
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
             services.AddScoped<IFormTemplateTranslationsGetterService, FormTemplateTranslationsGetterService>();
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
+
+            services.AddScoped<IQuestionGetterService, QuestionGetterService>();
+
+            services.AddScoped<IRatingOptionAdderService, RatingOptionAdderService>();
+            services.AddScoped<IRatingOptionGetterService, RatingOptionGetterService>();
+            services.AddScoped<IRatingOptionDeleterService, RatingOptionDeleterService>();
+            services.AddScoped<IRatingOptionTranslationAdderService, RatingOptionTranslationsAdderService>();
+            services.AddScoped<IRatingOptionTranslationDeleterService, RatingOptionTranslationDeleterService>();
 
 
             services.AddDbContext<ApplicationDbContext>(options =>

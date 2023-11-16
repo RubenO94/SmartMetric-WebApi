@@ -40,7 +40,7 @@ namespace SmartMetric.Core.Services.Getters
 
             if (questionId == null) { throw new ArgumentNullException(nameof(questionId)); }
             Question? question = await _questionRepository.GetQuestionById(questionId.Value);
-            if (question != null) { return null; }
+            if (question == null) { return null; }
             return question.ToQuestionDTOResponse();
         }
     }
