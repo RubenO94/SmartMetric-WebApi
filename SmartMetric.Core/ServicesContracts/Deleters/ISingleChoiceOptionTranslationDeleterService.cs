@@ -1,4 +1,5 @@
-﻿using SmartMetric.Core.Enums;
+﻿using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,6 @@ namespace SmartMetric.Core.ServicesContracts.Deleters
         /// <param name="singleChoiceOptionId">>O GUID da escolha única a ser pesquisada</param>
         /// /// <param name="language">O idioma da tradução a ser excluída.</param>
         /// <returns>Retorna true se a exclusão for bem-sucedida; caso contrário, retorna false.</returns>
-        Task<bool> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionId, Language? language);
+        Task<ApiResponse<bool>> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionId, Language? language);
     }
 }
