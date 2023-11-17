@@ -21,7 +21,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IRatingOptionDeleterService _ratingOptionDeleterService;
         private readonly IRatingOptionTranslationAdderService _ratingOptionTranslationAdderService;
         private readonly IRatingOptionTranslationDeleterService _ratingOptionTranslationDeleterService;
-        private readonly IQuestionGetterService _questionGetterService;
 
         //CONSTRUCTOR
         public RatingOptionController(
@@ -29,8 +28,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             IRatingOptionGetterService ratingOptionGetterService,
             IRatingOptionDeleterService ratingOptionDeleterService,
             IRatingOptionTranslationAdderService ratingOptionTranslationAdderService,
-            IRatingOptionTranslationDeleterService ratingOptionTranslationDeleterService,
-            IQuestionGetterService questionGetterService
+            IRatingOptionTranslationDeleterService ratingOptionTranslationDeleterService
         )
         {
             _ratingOptionAdderService = ratingOptionAdderService;
@@ -38,7 +36,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _ratingOptionDeleterService = ratingOptionDeleterService;
             _ratingOptionTranslationAdderService = ratingOptionTranslationAdderService;
             _ratingOptionTranslationDeleterService = ratingOptionTranslationDeleterService;
-            _questionGetterService = questionGetterService;
         }
 
         //ENDPOINTS

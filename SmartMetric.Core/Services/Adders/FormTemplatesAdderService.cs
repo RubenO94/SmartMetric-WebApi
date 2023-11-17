@@ -47,10 +47,10 @@ namespace SmartMetric.Core.Services.Adders
             FormTemplate formTemplate = addFormTemplateRequest.ToFormTemplate();
             formTemplate.FormTemplateId = formTemplateId;
 
-            foreach (var translation in formTemplate.Translations!)
-            {
-                translation.FormTemplateTranslationId = Guid.NewGuid();
-            }
+            //foreach (var translation in formTemplate.Translations!)
+            //{
+            //    translation.FormTemplateTranslationId = Guid.NewGuid();
+            //}
 
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 

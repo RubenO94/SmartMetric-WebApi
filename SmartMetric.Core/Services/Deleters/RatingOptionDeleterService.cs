@@ -37,12 +37,12 @@ namespace SmartMetric.Core.Services.Deleters
 
             var ratingOptionExist = _ratingOptionGetterService.GetRatingOptionById(ratingOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "RatingOption doesn't exist!");
 
-            await _ratingOptionRepository.DeleteRatingOptionById(ratingOptionId.Value);
+            var response = await _ratingOptionRepository.DeleteRatingOptionById(ratingOptionId.Value);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,
                 Message = "RatingOption deleted with success!",
-                Data = true
+                Data = response
             };
         }
     }

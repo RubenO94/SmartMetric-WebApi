@@ -45,12 +45,12 @@ namespace SmartMetric.Core.Services.Deleters
             }
 
             var translationToBeDeleted = ratingOptionExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"RatingOption doesn't have a {language} translation!");
-            await _ratingOptionTranslationsRepository.DeleteRatingOptionTranslationById(translationToBeDeleted.RatingOptionTranslationId);
+            var response = await _ratingOptionTranslationsRepository.DeleteRatingOptionTranslationById(translationToBeDeleted.RatingOptionTranslationId);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,
                 Message = "Translation of RatingOption deleted with success!",
-                Data = true
+                Data = response
             };
         }
     }

@@ -38,12 +38,12 @@ namespace SmartMetric.Core.Services.Deleters
 
             var singleChoiceOptionExist = _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist!");
 
-            await _singleChoiceOptionRepository.DeleteSingleChoiceOptionById(singleChoiceOptionId.Value);
+            var response = await _singleChoiceOptionRepository.DeleteSingleChoiceOptionById(singleChoiceOptionId.Value);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,
                 Message = "SingleChoiceOption deleted with success!",
-                Data = true
+                Data = response
             };
         }
     }

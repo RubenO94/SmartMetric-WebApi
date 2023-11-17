@@ -56,13 +56,14 @@ namespace SmartMetric.Core.Services.Getters
         {
             _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionById)} foi iniciado");
 
-            if (questionId == null) 
+            if (questionId == null)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
             }
             Question? question = await _questionRepository.GetQuestionById(questionId.Value);
 
-            if (question == null) {
+            if (question == null)
+            {
                 throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
             }
 
@@ -70,7 +71,7 @@ namespace SmartMetric.Core.Services.Getters
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = question.ToQuestionDTOResponse();
+                Data = question.ToQuestionDTOResponse()
             };
         }
     }
