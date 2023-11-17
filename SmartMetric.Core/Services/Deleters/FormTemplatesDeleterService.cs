@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
@@ -35,7 +36,7 @@ namespace SmartMetric.Core.Services.Deleters
 
             var formTemplateExist = _formTemplatesGetterService.GetFormTemplateById(formTemplateId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "FormTemplate doesn't exist");
 
-            await _formTemplateRepository.DeleteFormTemplateById(formTemplateId!.Value);
+            await _formTemplateRepository.DeleteFormTemplateById(formTemplateId.Value);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,

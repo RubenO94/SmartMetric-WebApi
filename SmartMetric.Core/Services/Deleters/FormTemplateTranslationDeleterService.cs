@@ -2,6 +2,7 @@
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System;
@@ -45,7 +46,7 @@ namespace SmartMetric.Core.Services.Deleters
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplate must have at least one translation, so can't execute your request!");
             }
 
-            var translationToBeDeleted = formTemplateExist.Data!.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"FormTemplate doesn't have a {language} translation");
+            var translationToBeDeleted = formTemplateExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"FormTemplate doesn't have a {language} translation");
             await _formTemplateTranslationsRepository.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
             return new ApiResponse<bool>()
             {

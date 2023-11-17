@@ -1,9 +1,15 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
+using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Deleters;
+using SmartMetric.Core.ServicesContracts.Getters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,23 +19,40 @@ namespace SmartMetric.Core.Services.Deleters
     {
         //variables
         private readonly ISingleChoiceOptionTranslationsRepository _translationRepository;
+        private readonly ISingleChoiceOptionGetterService _singleChoiceOptionGetterService;
         private readonly ILogger<SingleChoiceOptionTranslationDeleterService> _logger;
 
         //constructor
-        public SingleChoiceOptionTranslationDeleterService (ISingleChoiceOptionTranslationsRepository translationRepository, ILogger<SingleChoiceOptionTranslationDeleterService> logger)
+        public SingleChoiceOptionTranslationDeleterService (ISingleChoiceOptionTranslationsRepository translationRepository, ISingleChoiceOptionGetterService singleChoiceOptionGetterService, ILogger<SingleChoiceOptionTranslationDeleterService> logger)
         {
             _translationRepository = translationRepository;
+            _singleChoiceOptionGetterService = singleChoiceOptionGetterService;
             _logger = logger;
         }
 
         //deleters
-        public async Task<bool> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId)
+        public async Task<ApiResponse<bool>> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionId, Language? language)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationDeleterService)}.{nameof(DeleteSingleChoiceOptionTranslationById)} foi iniciado");
 
-            if (singleChoiceOptionTranslationId == null ) { return false; }
+            if (singleChoiceOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "SingleChoiceOption can't be null!");
 
-            return await _translationRepository.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionTranslationId.Value);
+            var singleChoiceOptionExist = await _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist");
+
+            if (singleChoiceOptionExist.Data!.Translations == null || singleChoiceOptionExist.Data.Translations.Count < 2)
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "SingleChoiceOption must have at least one translation, so can't execute your request!");
+            }
+
+            var translationToBeDeleted = singleChoiceOptionExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"SingleChoiceOption doesn't have a {language} translation!");
+
+            await _translationRepository.DeleteSingleChoiceOptionTranslationById(translationToBeDeleted.SingleChoiceOptionTranslationId);
+            return new ApiResponse<bool>()
+            {
+                StatusCode = (int)HttpStatusCode.NoContent,
+                Message = "Translation of SingleChoiceOption deleted with success!",
+                Data = true
+            };
         }
     }
 }
