@@ -46,25 +46,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> AddSingleChoiceOption([FromQuery] Guid questionId, [FromBody] SingleChoiceOptionDTOAddRequest singleChoiceOptionDTOAddRequest)
         {
-            var questionExist = await _questionGetterService.GetQuestionById(questionId);
-            if (questionExist != null && questionExist.ResponseType == ResponseType.SingleChoice.ToString())
-            {
-                singleChoiceOptionDTOAddRequest.QuestionId = questionId;
-                var response = await _singleChoiceOptionsAdderService.AddSingleChoiceOption(singleChoiceOptionDTOAddRequest);
+            singleChoiceOptionDTOAddRequest.QuestionId = questionId;
+            var response = await _singleChoiceOptionsAdderService.AddSingleChoiceOption(singleChoiceOptionDTOAddRequest);
 
-                return CreatedAtAction(nameof(AddSingleChoiceOption), new
-                {
-                    StatusCode = (int)HttpStatusCode.Created,
-                    Message = "SingleChoiceOption created",
-                    SingleChoiceOptionId = response?.SingleChoiceOptionId.ToString(),
-                });
-            }
-
-            return BadRequest(new
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Question doesn't exist or Question isn't from type SingleChoice"
-            });
+            return CreatedAtAction(nameof(AddSingleChoiceOption), response);
         }
 
         #endregion
@@ -75,27 +60,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [Route("Translation")]
         public async Task<IActionResult> AddSingleChoiceOptionTranslation([FromQuery] Guid singleChoiceOptionId, [FromBody] SingleChoiceOptionTranslationDTOAddRequest singleChoiceOptionTranslationDTOAddRequest)
         {
-            var singleChoiceOptionExist = await _singleChoiceOptionsGetterService.GetSingleChoiceOptionById(singleChoiceOptionId);
+            singleChoiceOptionTranslationDTOAddRequest.SingleChoiceOptionId = singleChoiceOptionId;
+            var response = await _singleChoiceOptionTranslationsAdderService.AddSingleChoiceOptionTranslation(singleChoiceOptionTranslationDTOAddRequest);
 
-            if (singleChoiceOptionExist != null)
-            {
-                singleChoiceOptionTranslationDTOAddRequest.SingleChoiceOptionId = singleChoiceOptionId;
-                var response = await _singleChoiceOptionTranslationsAdderService.AddSingleChoiceOptionTranslation(singleChoiceOptionTranslationDTOAddRequest);
-
-                return CreatedAtAction(nameof(AddSingleChoiceOptionTranslation), new
-                {
-                    StatusCode = (int)HttpStatusCode.Created,
-                    Message = "SingleChoiceOption Translation Created",
-                    RatingOptionTranslationId = response.SingleChoiceOptionTranslationId.ToString(),
-                });
-
-            }
-
-            return BadRequest(new
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "SingleChoiceOption doesn't exist"
-            });
+            return CreatedAtAction(nameof(AddSingleChoiceOptionTranslation), response);
         }
 
         #endregion

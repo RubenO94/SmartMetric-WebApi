@@ -47,12 +47,12 @@ namespace SmartMetric.Core.Services.Deleters
             }
 
             var translationToBeDeleted = formTemplateExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"FormTemplate doesn't have a {language} translation");
-            await _formTemplateTranslationsRepository.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
+            var response = await _formTemplateTranslationsRepository.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,
                 Message = "Translation of FormTemplate deleted with success!",
-                Data = true,
+                Data = response,
             };
         }
     }

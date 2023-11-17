@@ -17,6 +17,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         [Required(ErrorMessage = "Please select a User")]
         public int? CreatedByUserId { get; set; }
         [Required(ErrorMessage = "Please enter data in at least one language.")]
+        [MinLength(1, ErrorMessage = "Please enter data in at least one language.")]
         public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
 
 
