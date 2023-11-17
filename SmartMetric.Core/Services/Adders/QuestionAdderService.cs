@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
 using System.Net;
@@ -24,23 +25,17 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestionToFormTemplate)} foi iniciado");
 
-            try
+            if (request == null)
             {
-                if (request == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
+            }
 
-                ValidationHelper.ModelValidation(request);
-            }
-            catch (Exception ex)
+            if (request.FormTemplateId == null)
             {
-                return new ApiResponse<QuestionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The question does not have a FormTemplateId to associate.");
             }
+
+            ValidationHelper.ModelValidation(request);
 
 
             if (request.ReviewId != null)
@@ -48,14 +43,7 @@ namespace SmartMetric.Core.Services.Adders
                 request.ReviewId = null;
             }
 
-            if(request.FormTemplateId == null)
-            {
-                return new ApiResponse<QuestionDTOResponse?>
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The question does not have a FormTemplateId to associate."
-                };
-            }
+           
 
             ValidationHelper.ModelValidation(request);
 

@@ -8,6 +8,7 @@ using SmartMetric.Core.ServicesContracts.Adders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,40 +16,58 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class RatingOptionTranslationsAdderService : IRatingOptionTranslationAdderService
     {
-        //Variables
         private readonly IRatingOptionTranslationsRepository _translationsRepository;
         private readonly ILogger<RatingOptionTranslationsAdderService> _logger;
 
-        //Constructor
         public RatingOptionTranslationsAdderService(IRatingOptionTranslationsRepository translationsRepository, ILogger<RatingOptionTranslationsAdderService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;
         }
 
-        //Implementing Interface
         public async Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(RatingOptionTranslationDTOAddRequest? request)
         {
-            //1º - Fazer log do Metodo.
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");
 
-            //2º - Verifcar se é null, se sim lançar ArgumenteNullException
-            if (request == null) { throw new ArgumentNullException(nameof(request)); }
+            try
+            {
+                if (request == null)
+                {
+                    throw new ArgumentNullException("Request can't be null");
+                }
 
-            //3º - Validação do Modelo
-            ValidationHelper.ModelValidation(request);
+                ValidationHelper.ModelValidation(request);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<RatingOptionTranslationDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = ex.Message
+                };
+            }
 
-            //4º - Converter o Request em Modelo(Entity)
+            if (request.RatingOptionId == null)
+            {
+                return new ApiResponse<RatingOptionTranslationDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = "The 'ratingOptionId' parameter is required and must be a valid GUID."
+                };
+            }
+
             RatingOptionTranslation translation = request.ToRatingOptionTranslation();
 
-            //5º - Gerar novo Guid para a tradução.
             translation.RatingOptionTranslationId = Guid.NewGuid();
 
-            // 6º - Enviar para o Repositorio
-            await _translationsRepository.AddRatingOptionTranslation(translation);
+            var result = await _translationsRepository.AddRatingOptionTranslation(translation);
 
-            // 7º - Por ultimo, returnar a converção do modelo em DTOResponse
-            return translation.ToRatingOptionTranslationDTOResponse();
+            return new ApiResponse<RatingOptionTranslationDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = "Translation added successfully to the RatingOption.",
+                Data = result.ToRatingOptionTranslationDTOResponse()
+            };
         }
     }
 }

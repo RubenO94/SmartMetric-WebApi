@@ -1,7 +1,9 @@
-﻿using System;
+﻿using SmartMetric.Core.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,7 +18,7 @@ namespace SmartMetric.Core.Helpers
         /// Realiza validação de modelo em um objeto usando anotações de dados.
         /// </summary>
         /// <param name="obj">O objeto a ser validado.</param>
-        /// <exception cref="ArgumentException">Lançada se a validação falhar, contendo a primeira mensagem de erro encontrada.</exception>
+        /// <exception cref="HttpStatusException">Lançada se a validação falhar, contendo a primeira mensagem de erro encontrada.</exception>
         internal static void ModelValidation(object obj)
         {
             //Model Validations
@@ -27,7 +29,7 @@ namespace SmartMetric.Core.Helpers
             // Lança uma exceção se a validação falhar, contendo a primeira mensagem de erro encontrada.
             if (!isValid)
             {
-                throw new ArgumentException(validationResults.FirstOrDefault()?.ErrorMessage);
+                throw new HttpStatusException(HttpStatusCode.BadRequest,validationResults.FirstOrDefault()?.ErrorMessage!);
             }
         }
     }

@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.ServicesContracts.Getters;
+using System.Net;
 
 namespace SmartMetric.Core.Services.Getters
 {
@@ -17,24 +18,30 @@ namespace SmartMetric.Core.Services.Getters
             _logger = logger;
         }
 
-        public async Task<List<QuestionDTOResponse>> GetAllQuestion()
+        public async Task<ApiResponse<List<QuestionDTOResponse>>> GetAllQuestions()
         {
-            _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetAllQuestion)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetAllQuestions)} foi iniciado");
 
-            var question = await _questionRepository.GetAllQuestion();
-            return question.Select(temp => temp.ToQuestionDTOResponse()).ToList();
+            var questions = await _questionRepository.GetAllQuestion();
+
+            return new ApiResponse<List<QuestionDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = questions.Select(temp => temp.ToQuestionDTOResponse()).ToList()
+            };
         }
 
-        public async Task<List<QuestionDTOResponse>?> GetQuestionByFormTemplateId(Guid? formTemplateId)
+        public async Task<ApiResponse<List<QuestionDTOResponse>?>> GetQuestionsByFormTemplateId(Guid? formTemplateId)
         {
-            _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionByFormTemplateId)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionsByFormTemplateId)} foi iniciado");
 
             if (formTemplateId == null) { throw new ArgumentNullException(nameof(formTemplateId)); }
             var question = await _questionRepository.GetQuestionByFormTemplateId(formTemplateId.Value);
             return question.Select(temp => temp.ToQuestionDTOResponse()).ToList();
         }
 
-        public async Task<QuestionDTOResponse?> GetQuestionById(Guid? questionId)
+        public async Task<ApiResponse<QuestionDTOResponse?>> GetQuestionById(Guid? questionId)
         {
             _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionById)} foi iniciado");
 

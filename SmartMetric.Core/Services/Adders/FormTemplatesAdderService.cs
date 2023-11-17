@@ -4,6 +4,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
 using System;
@@ -29,24 +30,12 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(FormTemplatesAdderService)}.{nameof(AddFormTemplate)} foi iniciado");
 
-            try
+            if (addFormTemplateRequest == null)
             {
-                if (addFormTemplateRequest == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
+            }
 
-                ValidationHelper.ModelValidation(addFormTemplateRequest);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<FormTemplateDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message
-                };
-            }
-            
+            ValidationHelper.ModelValidation(addFormTemplateRequest);
 
             var formTemplateId = Guid.NewGuid();
 

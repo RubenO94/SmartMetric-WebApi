@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
 using System;
@@ -14,8 +15,8 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services.Adders
 {
-    public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService 
-    { 
+    public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService
+    {
 
         private readonly IFormTemplateTranslationsRepository _translationsRepository;
         private readonly ILogger<FormTemplateTranslationsAdderService> _logger;
@@ -30,36 +31,19 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
-            try
+            if (request == null)
             {
-                if (request == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
-
-                ValidationHelper.ModelValidation(request);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<FormTemplateTranslationDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
             }
 
             if (request.FormTemplateId == null)
             {
-                return new ApiResponse<FormTemplateTranslationDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'formTemplateId' parameter is required and must be a valid GUID."
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
             }
 
             ValidationHelper.ModelValidation(request);
 
-            var existenceTranslations =  await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
+            var existenceTranslations = await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
 
             if (existenceTranslations.Any())
             {
@@ -67,15 +51,11 @@ namespace SmartMetric.Core.Services.Adders
                 {
                     if (item.Language == request.Language.ToString())
                     {
-                        return new ApiResponse<FormTemplateTranslationDTOResponse?>()
-                        {
-                            StatusCode = (int)HttpStatusCode.BadRequest,
-                            Message = "This language already exists in the provided FormTemplate."
-                        };
+                        throw new HttpStatusException(HttpStatusCode.BadRequest, "This language already exists in the provided FormTemplate.");
                     }
                 }
             }
-            
+
             FormTemplateTranslation translation = request.ToFormTemplateTranslation();
 
             translation.FormTemplateTranslationId = Guid.NewGuid();
