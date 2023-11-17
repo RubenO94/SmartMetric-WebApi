@@ -2,10 +2,12 @@
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,36 +26,61 @@ namespace SmartMetric.Core.Services.Getters
 
         #region Getters
 
-        public async Task<List<RatingOptionDTOResponse>> GetAllRatingOption()
+        public async Task<ApiResponse<List<RatingOptionDTOResponse>>> GetAllRatingOptions()
         {
-            _logger.LogInformation($"{nameof(RatingOptionGetterService)}.{nameof(GetAllRatingOption)} foi iniciado");
+            _logger.LogInformation($"{nameof(RatingOptionGetterService)}.{nameof(GetAllRatingOptions)} foi iniciado");
             var ratingOption = await _ratingOptionRepository.GetAllRatingOption();
 
-            return ratingOption.Select(temp => temp.ToRatingOptionDTOResponse()).ToList();
+            return new ApiResponse<List<RatingOptionDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = ratingOption.Select(temp => temp.ToRatingOptionDTOResponse()).ToList()
+            };
         }
 
-        public async Task<RatingOptionDTOResponse?> GetRatingOptionById(Guid? ratingOptionId)
+        public async Task<ApiResponse<RatingOptionDTOResponse?>> GetRatingOptionById(Guid? ratingOptionId)
         {
             _logger.LogInformation($"{nameof(RatingOptionGetterService)}.{nameof(GetRatingOptionById)} foi iniciado");
 
-            if (ratingOptionId == null) { throw new ArgumentNullException(nameof(ratingOptionId)); }
+            if (ratingOptionId == null)
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
+            }
 
             RatingOption? ratingOption = await _ratingOptionRepository.GetRatingOptionById(ratingOptionId.Value);
 
-            if (ratingOption == null) { return null; }
+            if (ratingOption == null)
+            {
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+            }
 
-            return ratingOption.ToRatingOptionDTOResponse();
+            return new ApiResponse<RatingOptionDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = ratingOption.ToRatingOptionDTOResponse()
+            };
+
         }
 
-        public async Task<List<RatingOptionDTOResponse>?> GetRatingOptionByQuestionId(Guid? questionId)
+        public async Task<ApiResponse<List<RatingOptionDTOResponse>?>> GetRatingOptionsByQuestionId(Guid? questionId)
         {
-            _logger.LogInformation($"{nameof(RatingOptionGetterService)}.{nameof(GetRatingOptionByQuestionId)} foi iniciado");
+            _logger.LogInformation($"{nameof(RatingOptionGetterService)}.{nameof(GetRatingOptionsByQuestionId)} foi iniciado");
 
-            if (questionId == null) { throw new ArgumentNullException(nameof(questionId)); }
+            if (questionId == null) 
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
+            }
 
             var ratingOption = await _ratingOptionRepository.GetRatingOptionByQuestionId(questionId.Value);
 
-            return ratingOption.Select(temp => temp.ToRatingOptionDTOResponse()).ToList();
+            return new ApiResponse<List<RatingOptionDTOResponse>?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = ratingOption?.Select(temp => temp.ToRatingOptionDTOResponse()).ToList()
+            };
         }
 
         #endregion

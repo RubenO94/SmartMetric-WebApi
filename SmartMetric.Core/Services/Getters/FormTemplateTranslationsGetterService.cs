@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System;
@@ -43,21 +44,9 @@ namespace SmartMetric.Core.Services.Getters
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetTranslationsByFormTemplateId)} foi iniciado");
 
-            try
+            if (formTemplateId == null)
             {
-                if (formTemplateId == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<List<FormTemplateTranslationDTOResponse>?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message,
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
             }
 
             var translations = await _translationsRepository.GetTranslationsByFormTemplateId(formTemplateId.Value);
@@ -76,32 +65,16 @@ namespace SmartMetric.Core.Services.Getters
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetFormTemplateTranslationById)} foi iniciado");
 
-            try
+            if (formTemplateTranslationId == null)
             {
-                if (formTemplateTranslationId == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
-
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<FormTemplateTranslationDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message,
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
             }
 
             FormTemplateTranslation? translation = await _translationsRepository.GetFormTemplateTranslationById(formTemplateTranslationId.Value);
 
             if (translation == null)
             {
-                return new ApiResponse<FormTemplateTranslationDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.NotFound,
-                    Message = "Resource not found. The provided ID does not exist.",
-                };
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
             }
 
             return new ApiResponse<FormTemplateTranslationDTOResponse?>()

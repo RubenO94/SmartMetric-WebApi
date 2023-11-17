@@ -2,10 +2,12 @@
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,11 +15,9 @@ namespace SmartMetric.Core.Services.Getters
 {
     public class SingleChoiceOptionGetterService : ISingleChoiceOptionGetterService
     {
-        //VARIABLES
         private readonly ISingleChoiceOptionRepository _singleChoiceOptionRepository;
         private readonly ILogger<SingleChoiceOptionGetterService> _logger;
 
-        //CONSTRUCTOR
         public SingleChoiceOptionGetterService (ISingleChoiceOptionRepository singleChoiceOptionRepository, ILogger<SingleChoiceOptionGetterService> logger)
         {
             _singleChoiceOptionRepository = singleChoiceOptionRepository;
@@ -25,27 +25,63 @@ namespace SmartMetric.Core.Services.Getters
         }
 
 
-        public Task<List<SingleChoiceOptionDTOResponse>> GetAllSingleChoiceOption()
+        public async Task<ApiResponse<List<SingleChoiceOptionDTOResponse>>> GetAllSingleChoiceOption()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionGetterService)}.{nameof(GetAllSingleChoiceOption)} foi iniciado");
+
+            var sco = await _singleChoiceOptionRepository.GetAllSingleChoiceOptions();
+
+            return new ApiResponse<List<SingleChoiceOptionDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = sco.Select(temp => temp.ToSingleChoiceOptionDTOResponse()).ToList()
+            };
         }
 
-        public async Task<SingleChoiceOptionDTOResponse?> GetSingleChoiceOptionById(Guid? singleChoiceOptionId)
+        public async Task<ApiResponse<SingleChoiceOptionDTOResponse?>> GetSingleChoiceOptionById(Guid? singleChoiceOptionId)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionGetterService)}.{nameof(GetSingleChoiceOptionById)} foi iniciado");
 
-            if (singleChoiceOptionId == null ) { throw new ArgumentNullException(nameof(singleChoiceOptionId)); }
+            if (singleChoiceOptionId == null ) 
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'singleChoiceOptionId' parameter is required and must be a valid GUID.");
+            }
 
             SingleChoiceOption? singleChoiceOption = await _singleChoiceOptionRepository.GetSingleChoiceOptionById(singleChoiceOptionId.Value);
 
-            if (singleChoiceOption == null) { return null; }
+            if (singleChoiceOption == null) 
+            {
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+            }
 
-            return singleChoiceOption.ToSingleChoiceOptionDTOResponse();
+            return new ApiResponse<SingleChoiceOptionDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = singleChoiceOption.ToSingleChoiceOptionDTOResponse()
+            };
         }
 
-        public Task<List<SingleChoiceOptionDTOResponse>?> GetSingleChoiceOptionByQuestionId(Guid? questionId)
+        public async Task<ApiResponse<List<SingleChoiceOptionDTOResponse>?>> GetSingleChoiceOptionByQuestionId(Guid? questionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionGetterService)}.{nameof(GetSingleChoiceOptionByQuestionId)} foi iniciado");
+
+            if (questionId == null)
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
+            }
+
+
+            var sco = await _singleChoiceOptionRepository.GetSingleChoiceOptionsByQuestionId(questionId.Value);
+
+            return new ApiResponse<List<SingleChoiceOptionDTOResponse>?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = sco?.Select(temp => temp.ToSingleChoiceOptionDTOResponse()).ToList()
+            };
+
         }
     }
 }

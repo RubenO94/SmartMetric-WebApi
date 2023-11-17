@@ -1,13 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SmartMetric.Core.Services.Getters
 {
@@ -43,11 +46,7 @@ namespace SmartMetric.Core.Services.Getters
 
             if(formTemplateId == null )
             {
-                return new ApiResponse<FormTemplateDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'formTemplateId' parameter is required and must be a valid GUID.",
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
             }
 
             var formTemplate = await _formTemplateRepository.GetFormTemplateById(formTemplateId.Value);

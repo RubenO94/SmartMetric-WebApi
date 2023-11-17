@@ -2,6 +2,7 @@
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System.Net;
 
@@ -36,19 +37,41 @@ namespace SmartMetric.Core.Services.Getters
         {
             _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionsByFormTemplateId)} foi iniciado");
 
-            if (formTemplateId == null) { throw new ArgumentNullException(nameof(formTemplateId)); }
-            var question = await _questionRepository.GetQuestionByFormTemplateId(formTemplateId.Value);
-            return question.Select(temp => temp.ToQuestionDTOResponse()).ToList();
+            if (formTemplateId == null)
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
+            }
+
+            var questions = await _questionRepository.GetQuestionByFormTemplateId(formTemplateId.Value);
+
+            return new ApiResponse<List<QuestionDTOResponse>?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = questions?.Select(temp => temp.ToQuestionDTOResponse()).ToList()
+            };
         }
 
         public async Task<ApiResponse<QuestionDTOResponse?>> GetQuestionById(Guid? questionId)
         {
             _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionById)} foi iniciado");
 
-            if (questionId == null) { throw new ArgumentNullException(nameof(questionId)); }
+            if (questionId == null) 
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
+            }
             Question? question = await _questionRepository.GetQuestionById(questionId.Value);
-            if (question == null) { return null; }
-            return question.ToQuestionDTOResponse();
+
+            if (question == null) {
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+            }
+
+            return new ApiResponse<QuestionDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = question.ToQuestionDTOResponse();
+            };
         }
     }
 }

@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
 using System;
@@ -29,31 +30,16 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");
 
-            try
+            if (request == null)
             {
-                if (request == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
+            }
 
-                ValidationHelper.ModelValidation(request);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<RatingOptionTranslationDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message
-                };
-            }
+            ValidationHelper.ModelValidation(request);
 
             if (request.RatingOptionId == null)
             {
-                return new ApiResponse<RatingOptionTranslationDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'ratingOptionId' parameter is required and must be a valid GUID."
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
             }
 
             RatingOptionTranslation translation = request.ToRatingOptionTranslation();
