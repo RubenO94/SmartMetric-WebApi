@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
@@ -44,7 +46,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         public async Task<IActionResult> AddRatingOption([FromQuery] Guid questionId, [FromBody] RatingOptionDTOAddRequest ratingOptionDTOAddRequest)
         {
             var questionExist = await _questionGetterService.GetQuestionById(questionId);
-            if (questionExist != null)
+            if (questionExist != null && questionExist.ResponseType == ResponseType.Rating.ToString())
             {
                 ratingOptionDTOAddRequest.QuestionId = questionId;
                 var response = await _ratingOptionAdderService.AddRatingOption(ratingOptionDTOAddRequest);
@@ -60,7 +62,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return BadRequest(new
             {
                 StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Question doesn't exist"
+                Message = "Question doesn't exist or isn't from type Rating"
             });
         }
 
@@ -110,10 +112,41 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpDelete]
         [Route("Translation")]
-        public async Task<IActionResult> DeleteRatingOptionTranslationById(Guid ratingOptionTranslationId)
+        public async Task<IActionResult> DeleteRatingOptionTranslationById([FromQuery] Language language, [FromQuery] Guid ratingOptionId)
         {
-            await _ratingOptionTranslationDeleterService.DeleteRatingOptionTranslationById(ratingOptionTranslationId);
-            return NoContent();
+            var ratingOptionExist = await _ratingOptionGetterService.GetRatingOptionById(ratingOptionId);
+
+            if (ratingOptionExist == null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = HttpStatusCode.NotFound,
+                    Message = $"Rating with Id equal to {ratingOptionId} not found"
+                });
+            }
+
+            if (ratingOptionExist.Translations == null || ratingOptionExist.Translations.Count < 2)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = $"Rating must have at least one translation."
+                });
+            }
+
+            var translationToBeDeleted = ratingOptionExist.Translations.FirstOrDefault(temp => temp.Language == language.ToString());
+
+            if (translationToBeDeleted == null)
+            {
+                return BadRequest(new
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = $"Rating doesn't have a {language} translation."
+                });
+            }
+
+            var hasDeleted = await _ratingOptionTranslationDeleterService.DeleteRatingOptionTranslationById(translationToBeDeleted.RatingOptionTranslationId);
+            return hasDeleted ? NoContent() : StatusCode((int)HttpStatusCode.InternalServerError);
         }
 
         #endregion
