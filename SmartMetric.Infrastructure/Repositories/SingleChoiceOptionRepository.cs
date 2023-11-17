@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Infrastructure.DatabaseContext;
@@ -36,19 +37,24 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Getters
 
-        public Task<List<SingleChoiceOption>> GetAllSingleChoiceOptions()
+        public async Task<List<SingleChoiceOption>> GetAllSingleChoiceOptions()
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionRepository)}.{nameof(GetAllSingleChoiceOptions)} foi iniciado");
+            return await _dbContext.SingleChoiceOptions.ToListAsync();
         }
 
-        public Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid singleChoiceOptionId)
+        public async Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid singleChoiceOptionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionRepository)}.{nameof(GetSingleChoiceOptionById)} foi iniciado");
+
+            var response = await _dbContext.SingleChoiceOptions.Include(temp => temp.Translations).FirstOrDefaultAsync(sco => sco.SingleChoiceOptionId == singleChoiceOptionId);
+            return response;
         }
 
-        public Task<List<SingleChoiceOption>?> GetSingleChoiceOptionsByQuestionId(Guid questionId)
+        public async Task<List<SingleChoiceOption>?> GetSingleChoiceOptionsByQuestionId(Guid questionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SingleChoiceOptionRepository)}.{nameof(GetSingleChoiceOptionsByQuestionId)} foi iniciado");
+            return await _dbContext.SingleChoiceOptions.Where(temp => temp.QuestionId.Equals(questionId)).ToListAsync();
         }
 
         #endregion

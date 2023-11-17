@@ -17,7 +17,7 @@ namespace SmartMetric.Infrastructure.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<RatingOptionTranslationsRepository> _logger;
 
-        SingleChoiceOptionTranslationsRepository(ApplicationDbContext dbContext, ILogger<RatingOptionTranslationsRepository> logger)
+        public SingleChoiceOptionTranslationsRepository(ApplicationDbContext dbContext, ILogger<RatingOptionTranslationsRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;

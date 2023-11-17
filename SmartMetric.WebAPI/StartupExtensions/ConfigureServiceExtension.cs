@@ -26,6 +26,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IQuestionRepository, QuestionRepository>();
             services.AddScoped<IRatingOptionRepository, RatingOptionRepository>();
             services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
+            services.AddScoped<ISingleChoiceOptionRepository, SingleChoiceOptionRepository>();
+            services.AddScoped<ISingleChoiceOptionTranslationsRepository, SingleChoiceOptionTranslationsRepository>();
 
             #endregion
 
@@ -44,6 +46,11 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IRatingOptionDeleterService, RatingOptionDeleterService>();
             services.AddScoped<IRatingOptionTranslationAdderService, RatingOptionTranslationsAdderService>();
             services.AddScoped<IRatingOptionTranslationDeleterService, RatingOptionTranslationDeleterService>();
+            services.AddScoped<ISingleChoiceOptionsAdderService, SingleChoiceOptionAdderService>();
+            services.AddScoped<ISingleChoiceOptionGetterService, SingleChoiceOptionGetterService>();
+            services.AddScoped<ISingleChoiceOptionDeleterService, SingleChoiceOptionDeleterService>();
+            services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
+            services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
 
             #endregion
 

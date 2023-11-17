@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.Response
@@ -21,7 +22,8 @@ namespace SmartMetric.Core.DTO.Response
         /// <summary>
         /// Obtém ou define o identificador único da pergunta associada.
         /// </summary>
-        private Guid QuestionId { get; set; }
+        [JsonIgnore]
+        public Guid? QuestionId { get; set; }
 
         /// <summary>
         /// Obtém ou define as traduções associadas a esta opção de escolha única.
@@ -39,7 +41,7 @@ namespace SmartMetric.Core.DTO.Response
             if (obj.GetType() != typeof(SingleChoiceOptionDTOResponse)) return false;
 
             SingleChoiceOptionDTOResponse singleChoiceOption = (SingleChoiceOptionDTOResponse)obj;
-            return SingleChoiceOptionId == singleChoiceOption.SingleChoiceOptionId && Translations == singleChoiceOption.Translations;
+            return this.SingleChoiceOptionId == singleChoiceOption.SingleChoiceOptionId && this.QuestionId == singleChoiceOption.QuestionId && this.Translations == singleChoiceOption.Translations;
         }
 
         /// <summary>
@@ -57,7 +59,7 @@ namespace SmartMetric.Core.DTO.Response
         /// <returns>String que representa esta instância.</returns>
         public override string ToString()
         {
-            return $"SingleChoiceOptionId: {SingleChoiceOptionId}\nTranslations count: {Translations?.Count()}";
+            return $"SingleChoiceOptionId: {SingleChoiceOptionId}\n{nameof(QuestionId)}: {this.QuestionId}\nTranslations count: {Translations?.Count()}";
         }
     }
 
@@ -76,6 +78,7 @@ namespace SmartMetric.Core.DTO.Response
             return new SingleChoiceOptionDTOResponse()
             {
                 SingleChoiceOptionId = singleChoiceOption.SingleChoiceOptionId,
+                QuestionId = singleChoiceOption.QuestionId,
                 Translations = singleChoiceOption.Translations?.Select(temp => temp.ToSingleChoiceOptionTranslationDTOResponse()).ToList(),
             };
         }
