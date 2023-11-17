@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartMetric.Core.DTO.Response;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,11 @@ namespace SmartMetric.Core.ServicesContracts.Deleters
     public interface ISingleChoiceOptionDeleterService
     {
         /// <summary>
-        /// Elimina uma opção de resposta de escolha única através do Id passado por parâmetro
+        /// Exclui uma opção de resposta de escolha única com base no ID fornecido como parâmetro.
         /// </summary>
-        /// <param name="singleChoiceOptionId"></param>
-        /// <returns>Retorna True em caso de sucesso, em caso contrário retorna False</returns>
-        Task<bool> DeleteSingleChoiceOptionById(Guid? singleChoiceOptionId);
+        /// <param name="singleChoiceOptionId">O GUID da opção de resposta de escolha única a ser excluída.</param>
+        /// <returns>Retorna true se a exclusão for bem-sucedida; caso contrário, retorna false.</returns>
+        Task<ApiResponse<bool>> DeleteSingleChoiceOptionById(Guid? singleChoiceOptionId);
+
     }
 }

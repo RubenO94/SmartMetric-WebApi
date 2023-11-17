@@ -8,30 +8,30 @@ using System.Threading.Tasks;
 namespace SmartMetric.Core.ServicesContracts.Getters
 {
     /// <summary>
-    /// Representa a lógica de negócio para obter traduções de Opções de Escolha Única.
+    /// Define os métodos para a obtenção de informações sobre traduções de Opções de Escolha Única.
     /// </summary>
     public interface ISingleChoiceOptionTranslationsGetterService
     {
         /// <summary>
         /// Obtém todas as traduções de Opções de Escolha Única.
         /// </summary>
-        /// <returns>Uma lista de SingleChoiceOptionTranslationDTOResponse.</returns>
-        Task<List<SingleChoiceOptionTranslationDTOResponse>> GetAllSingleChoiceOptionTranslations();
+        /// <returns>Uma lista de objetos do tipo <see cref="SingleChoiceOptionTranslationDTOResponse"/>.</returns>
+        Task<ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>>> GetAllSingleChoiceOptionTranslations();
 
         /// <summary>
-        /// Obtém uma tradução de Opção de Escolha Única pelo seu identificador.
+        /// Obtém uma tradução de Opção de Escolha Única com base no seu identificador único.
         /// </summary>
-        /// <param name="singleChoiceOptionTranslationId">O identificador da tradução a obter.</param>
-        /// <returns>A tradução correspondente, ou null se não for encontrada.</returns>
-        Task<SingleChoiceOptionTranslationDTOResponse?> GetSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId);
+        /// <param name="singleChoiceOptionTranslationId">O identificador único da tradução a ser obtida.</param>
+        /// <returns>O objeto <see cref="SingleChoiceOptionTranslationDTOResponse"/> correspondente ao identificador fornecido.</returns>
+        Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> GetSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId);
 
         /// <summary>
-        /// Obtém todas as traduções associadas a uma Opção de Escolha Única.
+        /// Obtém todas as traduções associadas a uma Opção de Escolha Única com base no seu identificador.
         /// </summary>
-        /// <param name="singleChoiceOptionId">O identificador da Opção de Escolha Única.</param>
-        /// <returns>Uma lista de SingleChoiceOptionTranslationDTOResponse, ou null se não for encontrada.</returns>
-        Task<List<SingleChoiceOptionTranslationDTOResponse>?> GetTranslationsBySingleChoiceOptionId(Guid? singleChoiceOptionId);
-
+        /// <param name="singleChoiceOptionId">O identificador único da Opção de Escolha Única.</param>
+        /// <returns>Uma lista de objetos do tipo <see cref="SingleChoiceOptionTranslationDTOResponse"/>, ou null se não forem encontradas traduções.</returns>
+        Task<ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>?>> GetTranslationsBySingleChoiceOptionId(Guid? singleChoiceOptionId);
     }
+
 
 }

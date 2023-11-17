@@ -3,21 +3,25 @@ using SmartMetric.Core.DTO.Response;
 
 namespace SmartMetric.Core.ServicesContracts.Adders
 {
+    /// <summary>
+    /// Define o serviço para adição de questões.
+    /// </summary>
     public interface IQuestionAdderService
     {
         /// <summary>
-        /// Adiciona uma questão com associação a um modelo de formulário
+        /// Adiciona uma questão com associação a um modelo de formulário.
         /// </summary>
-        /// <param name="request">A questão a ser adicionada</param>
-        /// <returns>Retorna um objeto do tipo QuestionDTOResponse</returns>
-        Task<QuestionDTOResponse?> AddQuestionToFormTemplate(QuestionDTOAddRequest? request);
+        /// <param name="request">A questão a ser adicionada.</param>
+        /// <returns>Uma ApiResponse contendo o objeto QuestionDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
+        Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToFormTemplate(QuestionDTOAddRequest? request);
 
         /// <summary>
-        /// Adiciona uma questão com associação a uma revisão
+        /// Adiciona uma questão com associação a uma revisão.
         /// </summary>
-        /// <param name="request">A questão a ser adicionada</param>
-        /// <returns>Retorna um objeto do tipo QuestionDTOResponse</returns>
-        Task<QuestionDTOResponse?> AddQuestionToReview(QuestionDTOAddRequest? request);
+        /// <param name="request">A questão a ser adicionada.</param>
+        /// <returns>Uma ApiResponse contendo o objeto QuestionDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
+        Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToReview(QuestionDTOAddRequest? request);
     }
+
 }
 

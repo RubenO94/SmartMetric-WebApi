@@ -328,9 +328,10 @@ namespace SmartMetric.ServiceTests
         {
             //Arrange
             Guid? formTemplateTranslationId = null;
+            Language language = Language.PT;
 
             //Act
-            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId, Language.PT);
 
             //Assert
             Assert.False(result);
@@ -342,13 +343,14 @@ namespace SmartMetric.ServiceTests
         {
             //Arrange
             var formTemplateTranslationId = Guid.NewGuid();
+            Language language = Language.PT;
 
             _translationsRepositoryMock
                 .Setup(temp => temp.DeleteFormTemplateTranslationById(formTemplateTranslationId))
                 .ReturnsAsync(false);
 
             //Act
-            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId, language);
 
             //Assert
             Assert.False(result);
@@ -361,13 +363,14 @@ namespace SmartMetric.ServiceTests
         {
             //Arrange
             var formTemplateTranslationId = Guid.NewGuid();
+            Language language = Language.PT;
 
             _translationsRepositoryMock
                 .Setup(temp => temp.DeleteFormTemplateTranslationById(formTemplateTranslationId))
                 .ReturnsAsync(true);
 
             //Act
-            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId);
+            var result = await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateTranslationId, language);
 
             //Assert
             Assert.True(result);

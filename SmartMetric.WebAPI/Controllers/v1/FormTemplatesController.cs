@@ -72,14 +72,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest formTemplateDTOAddRequest)
         {
-            var formTemplate = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
+            var response = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
 
-            return CreatedAtAction(nameof(AddFormTemplate), new
-            {
-                StatusCode = (int)HttpStatusCode.Created,
-                Message = "Success! FormTemplate Created",
-                formTemplate,
-            });
+            return CreatedAtAction(nameof(AddFormTemplate), response);
         }
 
         [HttpDelete]
@@ -176,7 +171,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 });
             }
 
-            var hasDeleted = await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
+            var hasDeleted = false;
+            //await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
 
             return hasDeleted ? NoContent() : StatusCode((int)HttpStatusCode.InternalServerError);
         }

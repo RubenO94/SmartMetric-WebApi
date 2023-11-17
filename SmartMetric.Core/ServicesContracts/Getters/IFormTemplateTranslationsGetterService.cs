@@ -8,29 +8,31 @@ using System.Threading.Tasks;
 namespace SmartMetric.Core.ServicesContracts.Getters
 {
     /// <summary>
-    /// Representa a logica de negócio receber uma lista de Traduções
+    /// Representa a lógica de negócio para a obtenção de traduções de modelos de formulário.
     /// </summary>
     public interface IFormTemplateTranslationsGetterService
     {
         /// <summary>
-        /// Retorna todas as traduções dos modelos de formulário
+        /// Obtém todas as traduções dos modelos de formulário.
         /// </summary>
-        /// <returns>Retorna uma lista de ForTemplateTranslationDTOResponse</returns>
-        Task<List<FormTemplateTranslationDTOResponse>> GetAllFormTemplateTranslations();
+        /// <returns>Uma lista de objetos <see cref="FormTemplateTranslationDTOResponse"/>.</returns>
+        Task<ApiResponse<List<FormTemplateTranslationDTOResponse>>> GetAllFormTemplateTranslations();
 
         /// <summary>
-        /// Procura por uma tradução de um modelo de formulário baseado no id da tradução fornecida.
+        /// Obtém uma tradução de um modelo de formulário com base no ID da tradução fornecido.
         /// </summary>
-        /// <param name="formTemplateTranslationId">Id da tradução para pesquisa</param>
-        /// <returns>Retorna a tradução correspondente</returns>
-        Task<FormTemplateTranslationDTOResponse?> GetFormTemplateTranslationById(Guid? formTemplateTranslationId);
+        /// <param name="formTemplateTranslationId">ID da tradução para pesquisa.</param>
+        /// <returns>A tradução correspondente, ou null se não encontrada.</returns>
+        Task<ApiResponse<FormTemplateTranslationDTOResponse?>> GetFormTemplateTranslationById(Guid? formTemplateTranslationId);
 
         /// <summary>
-        /// Procura por todas as traduções corresnpondentes ao id do modelo de formulário fornecido nos paremetros 
+        /// Obtém todas as traduções correspondentes ao ID do modelo de formulário fornecido.
         /// </summary>
-        /// <param name="formTemplateId">Id do modelo de forumário a ser pesquisado</param>
-        /// <returns>Retorna uma lista de objetos FormTemplateTranslationsDTOResponse</returns>
-        Task<List<FormTemplateTranslationDTOResponse>?> GetTranslationsByFormTemplateId(Guid? formTemplateId);
-
+        /// <param name="formTemplateId">ID do modelo de formulário a ser pesquisado.</param>
+        /// <returns>Uma lista de objetos <see cref="FormTemplateTranslationDTOResponse"/> ou null se não houver traduções.</returns>
+        Task<ApiResponse<List<FormTemplateTranslationDTOResponse>?>> GetTranslationsByFormTemplateId(Guid? formTemplateId);
     }
+
+
+}
 }

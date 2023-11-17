@@ -61,17 +61,17 @@ namespace SmartMetric.WebAPI.Controllers.v1
             {
                 questionDTOAddRequest.FormTemplateId = formTemplateId;
 
-                var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
+                //var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
 
-                if (response != null)
-                {
-                    return Ok(response);
-                }
-                return BadRequest(new
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "Something went wrong. Please check the provided data."
-                });
+                //if (response != null)
+                //{
+                //    return Ok(response);
+                //}
+                //return BadRequest(new
+                //{
+                //    StatusCode = (int)HttpStatusCode.BadRequest,
+                //    Message = "Something went wrong. Please check the provided data."
+                //});
             }
 
             return NotFound(new

@@ -8,28 +8,29 @@ using System.Threading.Tasks;
 namespace SmartMetric.Core.ServicesContracts.Getters
 {
     /// <summary>
-    /// Representa a logica de negócio receber uma lista de Traduções
+    /// Define os métodos para a obtenção de informações sobre traduções de respostas de classificação.
     /// </summary>
     public interface IRatingOptionTranslationGetterService
     {
         /// <summary>
-        /// Retorna todas as traduções das respostas de classificação
+        /// Obtém todas as traduções das respostas de classificação.
         /// </summary>
-        /// <returns>Retorna uma lista de todas as linhas da tabela de traduções de resposta de classificação (RatingOptiontranslationsDTOResponse)</returns>
-        Task<List<RatingOptionTranslationDTOResponse>> GetAllRatingOptionTranslations();
+        /// <returns>Uma lista de objetos do tipo <see cref="RatingOptionTranslationDTOResponse"/>.</returns>
+        Task<ApiResponse<List<RatingOptionTranslationDTOResponse>>> GetAllRatingOptionTranslations();
 
         /// <summary>
-        /// Procura por uma tradução de uma resposta de classificação baseado no id da tradução fornecida.
+        /// Obtém uma tradução de uma resposta de classificação com base no ID fornecido.
         /// </summary>
-        /// <param name="ratingOptionTranslationId"></param>
-        /// <returns>Retorna um objeto do tipo RatingOptionTranslationDTOResponse, que corresponde à tradução pedida através do Id</returns>
-        Task<RatingOptionTranslationDTOResponse?> GetRatingOptionTranslationById(Guid? ratingOptionTranslationId);
+        /// <param name="ratingOptionTranslationId">O ID da tradução da resposta de classificação a ser pesquisada.</param>
+        /// <returns>O objeto <see cref="RatingOptionTranslationDTOResponse"/> correspondente ao ID fornecido.</returns>
+        Task<ApiResponse<RatingOptionTranslationDTOResponse?>> GetRatingOptionTranslationById(Guid? ratingOptionTranslationId);
 
         /// <summary>
-        /// Procura por todas as traduções correspondentes ao id da resposta de classificação fornecido nos parâmetros.
+        /// Obtém todas as traduções correspondentes ao ID da resposta de classificação fornecido nos parâmetros.
         /// </summary>
-        /// <param name="ratingOptionId"></param>
-        /// <returns>Retorna uma lista de objectos do tipo RatingOptionTranslationDTOResponse (todas as traduções da resposta de classificação)</returns>
-        Task<List<RatingOptionTranslationDTOResponse>?> GetRatingOptiontranslationsByRatingOptionId(Guid? ratingOptionId);
+        /// <param name="ratingOptionId">O ID da resposta de classificação para a qual as traduções serão recuperadas.</param>
+        /// <returns>Uma lista de objetos do tipo <see cref="RatingOptionTranslationDTOResponse"/>.</returns>
+        Task<ApiResponse<List<RatingOptionTranslationDTOResponse>?>> GetRatingOptionTranslationsByRatingOptionId(Guid? ratingOptionId);
     }
+
 }

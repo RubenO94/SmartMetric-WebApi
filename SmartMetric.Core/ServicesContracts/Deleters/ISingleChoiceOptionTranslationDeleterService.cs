@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartMetric.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +10,11 @@ namespace SmartMetric.Core.ServicesContracts.Deleters
     public interface ISingleChoiceOptionTranslationDeleterService
     {
         /// <summary>
-        /// Elimina uma tradução de uma opção de resposta de escolha única através do Id passado por parâmetro
+        /// Exclui a tradução de uma opção de escolha única com base no ID da opção de escolha única e no idioma fornecidos como parâmetros.
         /// </summary>
-        /// <param name="singleChoiceOptionTranslationId"></param>
-        /// <returns>Retorna True em caso de sucesso, em caso contrário retorna False</returns>
-        Task<bool> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId);
+        /// <param name="singleChoiceOptionId">>O GUID da escolha única a ser pesquisada</param>
+        /// /// <param name="language">O idioma da tradução a ser excluída.</param>
+        /// <returns>Retorna true se a exclusão for bem-sucedida; caso contrário, retorna false.</returns>
+        Task<bool> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionId, Language? language);
     }
 }

@@ -7,26 +7,30 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.ServicesContracts.Getters
 {
+    /// <summary>
+    /// Define os métodos para a obtenção de informações sobre traduções de questões.
+    /// </summary>
     public interface IQuestionTranslationGetterService
     {
         /// <summary>
-        /// Retorna todas as traduções das questões
+        /// Obtém todas as traduções das questões.
         /// </summary>
-        /// <returns>Retorna uma lista de todas as linhas da tabela de traduções de questões (QuestionTranslationDTOResponse)</returns>
-        Task<List<QuestionTranslationDTOResponse>> GetAllQuestionTranslations();
+        /// <returns>Uma lista de objetos do tipo <see cref="QuestionTranslationDTOResponse"/>.</returns>
+        Task<ApiResponse<List<QuestionTranslationDTOResponse>>> GetAllQuestionTranslations();
 
         /// <summary>
-        /// Procura por uma tradução de uma questão baseado no id da tradução fornecida.
+        /// Obtém uma tradução de uma questão com base no ID fornecido.
         /// </summary>
-        /// <param name="questionTranslationId"></param>
-        /// <returns>Retorna um objeto do tipo QuestionTranslationDTOResponse, que corresponde à tradução pedida através do Id</returns>
-        Task<QuestionTranslationDTOResponse> GetQuestionTranslationById(Guid? questionTranslationId);
+        /// <param name="questionTranslationId">O ID da tradução da questão a ser pesquisada.</param>
+        /// <returns>O objeto <see cref="QuestionTranslationDTOResponse"/> correspondente ao ID fornecido.</returns>
+        Task<ApiResponse<QuestionTranslationDTOResponse>> GetQuestionTranslationById(Guid? questionTranslationId);
 
         /// <summary>
-        /// Procura por todas as traduções correspondentes ao id da questão fornecido nos parâmetros.
+        /// Obtém todas as traduções correspondentes ao ID da questão fornecido nos parâmetros.
         /// </summary>
-        /// <param name="questionId"></param>
-        /// <returns>Retorna uma lista de objectos do tipo QuestionTranslationDTOResponse (todas as traduções da questão)</returns>
-        Task<List<QuestionTranslationDTOResponse>?> GetQuestionTranslationByQuestionId(Guid? questionId);
+        /// <param name="questionId">O ID da questão para a qual as traduções serão recuperadas.</param>
+        /// <returns>Uma lista de objetos do tipo <see cref="QuestionTranslationDTOResponse"/> (todas as traduções da questão).</returns>
+        Task<ApiResponse<List<QuestionTranslationDTOResponse>?>> GetQuestionTranslationsByQuestionId(Guid? questionId);
     }
+
 }

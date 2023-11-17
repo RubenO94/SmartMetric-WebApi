@@ -15,15 +15,21 @@ namespace SmartMetric.Core.ServicesContracts.Getters
         /// <summary>
         /// Obtém todos os modelos de formulário existentes.
         /// </summary>
-        /// <returns>Uma lista de objetos FormTemplateDTOResponse, ou null se nenhum modelo de formulário estiver disponível.</returns>
-        Task<List<FormTemplateDTOResponse?>> GetAllFormTemplates();
+        /// <returns>
+        /// Uma lista de objetos <see cref="FormTemplateDTOResponse"/>, ou null se nenhum modelo de formulário estiver disponível.
+        /// </returns>
+        Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates();
 
         /// <summary>
         /// Obtém um modelo de formulário com base no seu identificador único (GUID).
         /// </summary>
         /// <param name="formTemplateId">O identificador único (GUID) do modelo de formulário desejado.</param>
-        /// <returns>O objeto FormTemplateDTOResponse correspondente ao identificador fornecido, ou null se nenhum modelo for encontrado.</returns>
-        Task<FormTemplateDTOResponse?> GetFormTemplateById(Guid formTemplateId);
+        /// <returns>
+        /// O objeto <see cref="FormTemplateDTOResponse"/> correspondente ao identificador fornecido, 
+        /// ou null se nenhum modelo for encontrado.
+        /// </returns>
+        Task<ApiResponse<FormTemplateDTOResponse?>> GetFormTemplateById(Guid? formTemplateId);
     }
+
 
 }
