@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace SmartMetric.Core.ServicesContracts.Adders
 {
     /// <summary>
-    /// Representa a lógica de negócio para inserção traduções de Opções de Escolha Única.
+    /// Define o serviço para adição de traduções de opções de resposta única.
     /// </summary>
     public interface ISingleChoiceOptionTranslationsAdderService
     {
         /// <summary>
-        /// Adiciona uma tradução de um modelo de resposta unica à sua lista de traduções
+        /// Adiciona uma tradução de um modelo de resposta única à sua lista de traduções.
         /// </summary>
-        /// <param name="request">A Tradução a ser adicionada</param>
-        /// <returns>Retorna o objeto Tradução (incluindo o novo FormTemplateTranslationId gerado)</returns>
-        Task<SingleChoiceOptionTranslationDTOResponse> AddSingleChoiceOptionTranslation(SingleChoiceOptionTranslationDTOAddRequest? request);
+        /// <param name="request">A Tradução a ser adicionada.</param>
+        /// <returns>Retorna o objeto SingleChoiceOptionTranslationDTOResponse em caso de sucesso, ou null em caso de falha.</returns>
+        Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> AddSingleChoiceOptionTranslation(SingleChoiceOptionTranslationDTOAddRequest? request);
     }
 }

@@ -2,26 +2,30 @@
 
 namespace SmartMetric.Core.ServicesContracts.Getters
 {
+    /// <summary>
+    /// Define os métodos para a obtenção de informações sobre questões.
+    /// </summary>
     public interface IQuestionGetterService
     {
         /// <summary>
-        /// Procura todas as questões
+        /// Obtém todas as questões disponíveis.
         /// </summary>
-        /// <returns>Retorna uma lista de objetos do tipo QuestionDTOResponse</returns>
-        Task<List<QuestionDTOResponse>> GetAllQuestion();
+        /// <returns>Uma lista de objetos do tipo <see cref="QuestionDTOResponse"/>.</returns>
+        Task<ApiResponse<List<QuestionDTOResponse>>> GetAllQuestions();
 
         /// <summary>
-        /// Procura por uma questão através do seu Id passado por parâmetro
+        /// Obtém uma questão com base no ID fornecido.
         /// </summary>
-        /// <param name="questionId"></param>
-        /// <returns>Retorna um objeto do tipo QuestionDTOResponse</returns>
-        Task<QuestionDTOResponse?> GetQuestionById(Guid? questionId);
+        /// <param name="questionId">O ID da questão a ser pesquisada.</param>
+        /// <returns>O objeto <see cref="QuestionDTOResponse"/> correspondente ao ID fornecido, ou null se não encontrado.</returns>
+        Task<ApiResponse<QuestionDTOResponse?>> GetQuestionById(Guid? questionId);
 
         /// <summary>
-        /// Procura por todas as questões associadas ao formTemplate pretendido
+        /// Obtém todas as questões associadas a um modelo de formulário específico.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <returns>Retorna uma lista de objetos do tipo QuestionDTOResponse</returns>
-        Task<List<QuestionDTOResponse>?> GetQuestionByFormTemplateId(Guid? formTemplateId);
+        /// <param name="formTemplateId">O ID do modelo de formulário para o qual as questões estão associadas.</param>
+        /// <returns>Uma lista de objetos <see cref="QuestionDTOResponse"/> associados ao modelo de formulário fornecido, ou null se não houver questões.</returns>
+        Task<ApiResponse<List<QuestionDTOResponse>?>> GetQuestionsByFormTemplateId(Guid? formTemplateId);
     }
+
 }

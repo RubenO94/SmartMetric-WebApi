@@ -10,12 +10,16 @@ namespace SmartMetric.Core.ServicesContracts.Adders
 {
 
     /// <summary>
-    /// Adiciona uma tradução de um modelo de classificação à sua lista de traduções
+    /// Define o serviço para adição de traduções de questões.
     /// </summary>
-    /// <param name="request">A Tradução a ser adicionada</param>
-    /// <returns>Retorna o objeto Tradução (incluindo o novo QuestionTranslationId gerado)</returns>
     public interface IQuestionTranslationAdderService
     {
-        Task<QuestionTranslationDTOResponse> AddQuestionTranslation(QuestionTranslationDTOAddRequest? request);
+        /// <summary>
+        /// Adiciona uma tradução de um modelo de classificação à sua lista de traduções.
+        /// </summary>
+        /// <param name="request">A Tradução a ser adicionada.</param>
+        /// <returns>Uma ApiResponse contendo o objeto QuestionTranslationDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
+        Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(QuestionTranslationDTOAddRequest? request);
     }
+
 }

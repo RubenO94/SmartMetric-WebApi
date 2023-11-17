@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.RepositoryContracts;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,12 @@ namespace SmartMetric.Core.Services.Deleters
         }
 
         //DELETERS
-        public async Task<bool> DeleteFormTemplateTranslationById(Guid? formTemplateTranslationId)
+        public async Task<bool> DeleteFormTemplateTranslationById(Guid? formTemplate, Language language)
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationDeleterService)}.{nameof(DeleteFormTemplateTranslationById)} foi iniciado");
 
-            if (formTemplateTranslationId == null ) { return false; }
-            return await _formTemplateTranslationsRepository.DeleteFormTemplateTranslationById(formTemplateTranslationId.Value);
+            if (formTemplate == null ) { return false; }
+            return await _formTemplateTranslationsRepository.DeleteFormTemplateTranslationById(formTemplate.Value);
         }
     }
 }

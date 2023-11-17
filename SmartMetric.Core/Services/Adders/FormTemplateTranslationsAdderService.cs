@@ -8,60 +8,73 @@ using SmartMetric.Core.ServicesContracts.Adders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services.Adders
 {
-    public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService //Chamar respectiva Interface e implementar o seu contrato
-    {
+    public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService 
+    { 
 
-        private readonly IFormTemplateTranslationsRepository _translationsRepository; // Chamar o seu repositorio
-        private readonly ILogger<FormTemplateTranslationsAdderService> _logger; //Chamar o Logger
+        private readonly IFormTemplateTranslationsRepository _translationsRepository;
+        private readonly ILogger<FormTemplateTranslationsAdderService> _logger;
 
-        //Injectar Dependencias
         public FormTemplateTranslationsAdderService(IFormTemplateTranslationsRepository translationsRepository, ILogger<FormTemplateTranslationsAdderService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;
         }
 
-        public async Task<FormTemplateTranslationDTOResponse> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request)
         {
-            //1º - Fazer log do Metodo.
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
-            //2º - Verifcar se é null, se sim lançar ArgumenteNullException
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
 
-            //3º - Validação do Modelo
+            if(request.FormTemplateId == null)
+            {
+                return new ApiResponse<FormTemplateTranslationDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = "The 'formTemplateId' parameter is required and must be a valid GUID."
+                };
+            }
+
             ValidationHelper.ModelValidation(request);
 
             var existenceTranslations =  await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
 
-            foreach (var item in existenceTranslations)
+            if (existenceTranslations.Any())
             {
-                if(item.Language == request.Language.ToString())
+                foreach (var item in existenceTranslations)
                 {
-                    throw new Exception("This Language is already created");
+                    if (item.Language == request.Language.ToString())
+                    {
+                        return new ApiResponse<FormTemplateTranslationDTOResponse?>()
+                        {
+                            StatusCode = (int)HttpStatusCode.BadRequest,
+                            Message = "This language already exists in the provided FormTemplate."
+                        };
+                    }
                 }
             }
-
-            //4º - Converter o Request em Modelo(Entity)
+            
             FormTemplateTranslation translation = request.ToFormTemplateTranslation();
 
-            //5º - Gerar novo Guid para a traduçãao.
             translation.FormTemplateTranslationId = Guid.NewGuid();
 
-
-            // 6º - Enviar para o Repositorio
             await _translationsRepository.AddFormTemplateTranslation(translation);
 
-            // 7º - Por ultimo, returnar a converção do modelo em DTOResponse
-            return translation.ToFormTemplateTranslationDTOResponse();
+            return new ApiResponse<FormTemplateTranslationDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.Created,
+                Message = "Translation added successfully to the FormTemplate.",
+                Data = translation.ToFormTemplateTranslationDTOResponse(),
+            };
         }
     }
 }

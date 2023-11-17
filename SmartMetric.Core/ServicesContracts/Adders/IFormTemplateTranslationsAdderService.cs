@@ -9,16 +9,16 @@ using System.Threading.Tasks;
 namespace SmartMetric.Core.ServicesContracts.Adders
 {
     /// <summary>
-    /// Representa a logica de negócio para a inserção de traduções
+    /// Representa a lógica de negócio para a inserção de traduções.
     /// </summary>
     public interface IFormTemplateTranslationsAdderService
     {
         /// <summary>
-        /// Adiciona uma tradução de um modelo de formulário à sua lista de traduções
+        /// Adiciona uma tradução de um modelo de formulário à sua lista de traduções.
         /// </summary>
-        /// <param name="request">A Tradução a ser adicionada</param>
-        /// <returns>Retorna o objeto Tradução (incluindo o novo FormTemplateTranslationId gerado)</returns>
-        Task<FormTemplateTranslationDTOResponse> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request);
-
+        /// <param name="request">A tradução a ser adicionada.</param>
+        /// <returns>Uma ApiResponse contendo o objeto FormTemplateTranslationDTOResponse (incluindo o novo FormTemplateTranslationId gerado) em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
+        Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request);
     }
+
 }

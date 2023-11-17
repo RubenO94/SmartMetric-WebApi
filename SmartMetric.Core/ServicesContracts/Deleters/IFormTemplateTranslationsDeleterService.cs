@@ -1,4 +1,6 @@
-﻿using System;
+﻿using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,10 +11,12 @@ namespace SmartMetric.Core.ServicesContracts.Deleters
     public interface IFormTemplateTranslationsDeleterService
     {
         /// <summary>
-        /// Elimina uma tradução de um template de formulário através do Id passado por parâmetro
+        /// Exclui uma tradução de um modelo de formulário com base no ID do modelo de formulário e no idioma fornecidos como parâmetros.
         /// </summary>
-        /// <param name="formTemplateTranslationId"></param>
-        /// <returns>Retorna True se for executado com sucesso, caso contrário retorna False</returns>
-        Task<bool> DeleteFormTemplateTranslationById(Guid? formTemplateTranslationId);
+        /// <param name="formTemplateId">O GUID do modelo de formulário a ser pesquisado.</param>
+        /// <param name="language">O idioma da tradução a ser excluída.</param>
+        /// <returns>Retorna true se a exclusão for bem-sucedida; caso contrário, retorna false.</returns>
+        Task<ApiResponse<bool>> DeleteFormTemplateTranslationById(Guid? formTemplateId, Language language);
+
     }
 }

@@ -24,7 +24,7 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<FormTemplateDTOResponse?> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest)
+        public async Task<ApiResponse<FormTemplateDTOResponse?>> AddFormTemplate(FormTemplateDTOAddRequest? addFormTemplateRequest)
         {
             _logger.LogInformation($"{nameof(FormTemplatesAdderService)}.{nameof(AddFormTemplate)} foi iniciado");
 
@@ -37,7 +37,7 @@ namespace SmartMetric.Core.Services.Adders
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
             var formTemplateId = Guid.NewGuid();
-            
+
             foreach (var translation in addFormTemplateRequest.Translations!)
             {
                 translation.FormTemplateId = formTemplateId;
@@ -53,7 +53,12 @@ namespace SmartMetric.Core.Services.Adders
 
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 
-            return formTemplate.ToFormTemplateDTOResponse();
+            return new ApiResponse<FormTemplateDTOResponse?>()
+            {
+                StatusCode = (int)System.Net.HttpStatusCode.Created,
+                Message = "FormTemplate create with success!",
+                Data = formTemplate.ToFormTemplateDTOResponse()
+            };
         }
 
     }
