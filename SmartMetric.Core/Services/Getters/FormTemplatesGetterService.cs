@@ -51,6 +51,12 @@ namespace SmartMetric.Core.Services.Getters
 
             var formTemplate = await _formTemplateRepository.GetFormTemplateById(formTemplateId.Value);
 
+            if(formTemplate == null )
+            {
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found.The provided ID does not exist.");
+                
+            }
+
             return new ApiResponse<FormTemplateDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,

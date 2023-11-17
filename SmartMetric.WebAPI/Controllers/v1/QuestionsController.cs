@@ -12,13 +12,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
     {
         private readonly IQuestionAdderService _questionAdderService;
         private readonly IQuestionGetterService _questionGetterService;
-        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
 
-        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService, IFormTemplatesGetterService formTemplatesGetterService)
+        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService)
         {
             _questionAdderService = questionAdderService;
             _questionGetterService = questionGetterService;
-            _formTemplatesGetterService = formTemplatesGetterService;
         }
 
 
@@ -26,28 +24,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [Route("FormTemplateQuestions")]
         public async Task<IActionResult> GetAllQuestionsByFormTemplateId([FromQuery] Guid formTemplateId)
         {
-            var formTemplate = await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
-
-            if (formTemplate != null)
-            {
-               var questions = await _questionGetterService.GetQuestionByFormTemplateId(formTemplateId);
-
-                if (questions != null)
-                {
-                    return Ok(questions);
-                }
-                return BadRequest(new
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "Something went wrong. Please check the provided data."
-                });
-            }
-
-            return NotFound(new
-            {
-                StatusCode = (int)HttpStatusCode.NotFound,
-                Message = $"FormTemplate with ID {formTemplateId} not found."
-            });
+            var questions = await _questionGetterService.GetQuestionsByFormTemplateId(formTemplateId);
+            return Ok(questions);
         }
 
 
@@ -55,30 +33,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [Route("FormTemplateQuestions")]
         public async Task<IActionResult> AddQuestionToFormTemplate([FromQuery] Guid formTemplateId, [FromBody] QuestionDTOAddRequest questionDTOAddRequest)
         {
-            var formTemplate = await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
+            questionDTOAddRequest.FormTemplateId = formTemplateId;
 
-            if (formTemplate != null)
-            {
-                questionDTOAddRequest.FormTemplateId = formTemplateId;
+            var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
+            return Ok(response);
 
-                //var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
-
-                //if (response != null)
-                //{
-                //    return Ok(response);
-                //}
-                //return BadRequest(new
-                //{
-                //    StatusCode = (int)HttpStatusCode.BadRequest,
-                //    Message = "Something went wrong. Please check the provided data."
-                //});
-            }
-
-            return NotFound(new
-            {
-                StatusCode = (int)HttpStatusCode.NotFound,
-                Message = $"FormTemplate with ID {formTemplateId} not found."
-            });
         }
     }
 }

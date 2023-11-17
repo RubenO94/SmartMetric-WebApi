@@ -6,6 +6,7 @@ using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Getters;
 using System.Net;
 
 namespace SmartMetric.Core.Services.Adders
@@ -13,11 +14,13 @@ namespace SmartMetric.Core.Services.Adders
     public class QuestionAdderService : IQuestionAdderService
     {
         private readonly IQuestionRepository _questionRepository;
+        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
         private readonly ILogger<QuestionAdderService> _logger;
 
-        public QuestionAdderService(IQuestionRepository questionRepository, ILogger<QuestionAdderService> logger)
+        public QuestionAdderService(IQuestionRepository questionRepository, IFormTemplatesGetterService formTemplatesGetterService, ILogger<QuestionAdderService> logger)
         {
             _questionRepository = questionRepository;
+            _formTemplatesGetterService = formTemplatesGetterService;
             _logger = logger;
         }
 
@@ -33,6 +36,13 @@ namespace SmartMetric.Core.Services.Adders
             if (request.FormTemplateId == null)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "The question does not have a FormTemplateId to associate.");
+            }
+
+            var formTempalte = _formTemplatesGetterService.GetFormTemplateById(request.FormTemplateId);
+
+            if(formTempalte == null)
+            {
+                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
             }
 
             ValidationHelper.ModelValidation(request);
