@@ -5,6 +5,7 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
+using System.Net;
 
 namespace SmartMetric.Core.Services.Adders
 {
@@ -19,13 +20,27 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<QuestionDTOResponse?> AddQuestionToFormTemplate(QuestionDTOAddRequest? request)
+        public async Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToFormTemplate(QuestionDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestionToFormTemplate)} foi iniciado");
 
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
+            }
+
+            if(request.ReviewId != null)
+            {
+                request.ReviewId = null;
+            }
+
+            if(request.FormTemplateId == null)
+            {
+                return new ApiResponse<QuestionDTOResponse?>
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = "The question does not have a FormTemplateId to associate."
+                };
             }
 
             ValidationHelper.ModelValidation(request);
@@ -91,12 +106,17 @@ namespace SmartMetric.Core.Services.Adders
             }
 
 
-            await _questionRepository.AddQuestion(question);
+           var result =  await _questionRepository.AddQuestion(question);
 
-            return question.ToQuestionDTOResponse();
+            return new ApiResponse<QuestionDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Question added successfully to the FormTemplate.",
+                Data = result.ToQuestionDTOResponse()
+            };
         }
 
-        public Task<QuestionDTOResponse?> AddQuestionToReview(QuestionDTOAddRequest? request)
+        public Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToReview(QuestionDTOAddRequest? request)
         {
             throw new NotImplementedException();
         }
