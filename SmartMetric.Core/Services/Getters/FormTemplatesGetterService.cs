@@ -5,6 +5,7 @@ using SmartMetric.Core.ServicesContracts.Getters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@ namespace SmartMetric.Core.Services.Getters
             _logger = logger;
         }
 
-        public async Task<List<FormTemplateDTOResponse?>> GetAllFormTemplates()
+        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates()
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
@@ -28,26 +29,35 @@ namespace SmartMetric.Core.Services.Getters
 
             var response = formTemplates.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
-            if (response != null)
+            return new ApiResponse<List<FormTemplateDTOResponse?>>()
             {
-                return response!;
-            }
-            return new List<FormTemplateDTOResponse?>();
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = response!
+            };
         }
 
-        public async Task<FormTemplateDTOResponse?> GetFormTemplateById(Guid formTemplateId)
+        public async Task<ApiResponse<FormTemplateDTOResponse?>> GetFormTemplateById(Guid? formTemplateId)
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetFormTemplateById)} foi iniciado");
 
-            var formTemplate = await _formTemplateRepository.GetFormTemplateById(formTemplateId);
-
-            if (formTemplate != null)
+            if(formTemplateId == null )
             {
-                var response = formTemplate.ToFormTemplateDTOResponse();
-                return response!;
+                return new ApiResponse<FormTemplateDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = "The 'formTemplateId' parameter is required and must be a valid GUID.",
+                };
             }
 
-            return null;
+            var formTemplate = await _formTemplateRepository.GetFormTemplateById(formTemplateId.Value);
+
+            return new ApiResponse<FormTemplateDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = formTemplate?.ToFormTemplateDTOResponse()!
+            };
         }
     }
 }

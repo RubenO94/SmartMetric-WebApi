@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using SmartMetric.Core.Exceptions;
 using System.Diagnostics;
+using System.Net;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -17,14 +19,25 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
                 logger.LogError(exception, $"Cloud not process the request. TraceId: {Activity.Current?.Id}");
 
-                await Results.Problem(
-                    title: "Oops! Something Went Wrong – Our Apologies.",
-                    statusCode: StatusCodes.Status500InternalServerError,
-                    extensions: new Dictionary<string, object?> {
-                        { "traceId", Activity.Current?.Id }
-                    }
-                    ).ExecuteAsync(context);
 
+                HttpStatusCode code;
+
+                if (exception is HttpStatusException errorResponse)
+                {
+                    code = errorResponse.Status;
+                }
+                else
+                {
+                    code = HttpStatusCode.InternalServerError;
+                }
+
+                var response = new
+                {
+                    code = (int)code,
+                    error = exception?.Message,
+                };
+
+                await context.Response.WriteAsJsonAsync(response);
 
             });
         }
