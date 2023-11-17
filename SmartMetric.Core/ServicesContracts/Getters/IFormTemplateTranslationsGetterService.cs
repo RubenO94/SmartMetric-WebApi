@@ -35,4 +35,4 @@ namespace SmartMetric.Core.ServicesContracts.Getters
 
 
 }
-}
+

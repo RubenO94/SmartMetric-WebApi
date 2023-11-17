@@ -4,6 +4,7 @@ using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Getters;
@@ -22,7 +23,7 @@ namespace SmartMetric.Core.Services.Adders
         private readonly IQuestionGetterService _questionGetterService;
         private readonly ILogger<RatingOptionAdderService> _logger;
 
-        public RatingOptionAdderService(IRatingOptionRepository ratingOptionRepository, IQuestionGetterService questionGetterService ILogger<RatingOptionAdderService> logger)
+        public RatingOptionAdderService(IRatingOptionRepository ratingOptionRepository, IQuestionGetterService questionGetterService, ILogger<RatingOptionAdderService> logger)
         {
             _ratingOptionRepository = ratingOptionRepository;
             _questionGetterService = questionGetterService;
@@ -33,51 +34,28 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(RatingOptionAdderService)}.{nameof(AddRatingOption)} foi iniciado");
 
-            try
+            if (request == null)
             {
-                if (request == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
-
-                ValidationHelper.ModelValidation(request);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<RatingOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
             }
 
-            if(request.QuestionId == null)
+            ValidationHelper.ModelValidation(request);
+
+            if (request.QuestionId == null)
             {
-                return new ApiResponse<RatingOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'questionId' parameter is required and must be a valid GUID."
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
             }
 
             var question = await _questionGetterService.GetQuestionById(request.QuestionId);
 
-            if(question.Data == null)
+            if (question.Data == null)
             {
-                return new ApiResponse<RatingOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'questionId' provided does not exist."
-                };
+                throw new HttpStatusException(HttpStatusCode.NotFound, "The 'questionId' provided does not exist.");
             }
 
-            if(question.Data.ResponseType != ResponseType.Rating.ToString())
+            if (question.Data.ResponseType != ResponseType.Rating.ToString())
             {
-                return new ApiResponse<RatingOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"The question provided isn't of type {ResponseType.Rating}"
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.Rating}");
             }
 
             var ratingOptionId = Guid.NewGuid();

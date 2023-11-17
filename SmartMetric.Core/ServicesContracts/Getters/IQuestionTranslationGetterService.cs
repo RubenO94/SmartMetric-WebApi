@@ -23,7 +23,7 @@ namespace SmartMetric.Core.ServicesContracts.Getters
         /// </summary>
         /// <param name="questionTranslationId">O ID da tradução da questão a ser pesquisada.</param>
         /// <returns>O objeto <see cref="QuestionTranslationDTOResponse"/> correspondente ao ID fornecido.</returns>
-        Task<ApiResponse<QuestionTranslationDTOResponse>> GetQuestionTranslationById(Guid? questionTranslationId);
+        Task<ApiResponse<QuestionTranslationDTOResponse?>> GetQuestionTranslationById(Guid? questionTranslationId);
 
         /// <summary>
         /// Obtém todas as traduções correspondentes ao ID da questão fornecido nos parâmetros.

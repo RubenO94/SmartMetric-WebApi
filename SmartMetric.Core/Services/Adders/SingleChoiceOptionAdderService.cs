@@ -4,6 +4,7 @@ using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Getters;
@@ -32,51 +33,28 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionAdderService)}.{nameof(AddSingleChoiceOption)} foi iniciado");
 
-            try
+            if (request == null)
             {
-                if (request == null)
-                {
-                    throw new ArgumentNullException("Request can't be null");
-                }
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
+            }
 
-                ValidationHelper.ModelValidation(request);
-            }
-            catch (Exception ex)
-            {
-                return new ApiResponse<SingleChoiceOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = ex.Message
-                };
-            }
+            ValidationHelper.ModelValidation(request);
 
             if (request.QuestionId == null)
             {
-                return new ApiResponse<SingleChoiceOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'questionId' parameter is required and must be a valid GUID."
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
             }
 
             var question = await _questionGetterService.GetQuestionById(request.QuestionId);
 
             if (question.Data == null)
             {
-                return new ApiResponse<SingleChoiceOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = "The 'questionId' provided does not exist."
-                };
+                throw new HttpStatusException(HttpStatusCode.NotFound, "The 'questionId' provided does not exist.");
             }
 
             if (question.Data.ResponseType != ResponseType.SingleChoice.ToString())
             {
-                return new ApiResponse<SingleChoiceOptionDTOResponse?>()
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"The question provided isn't of type {ResponseType.SingleChoice}"
-                };
+                throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.SingleChoice}");
             }
 
             var singleChoiceOptionId = Guid.NewGuid();
