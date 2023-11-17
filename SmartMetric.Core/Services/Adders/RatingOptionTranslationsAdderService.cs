@@ -27,7 +27,7 @@ namespace SmartMetric.Core.Services.Adders
         }
 
         //Implementing Interface
-        public async Task<RatingOptionTranslationDTOResponse> AddRatingOptionTranslation(RatingOptionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(RatingOptionTranslationDTOAddRequest? request)
         {
             //1º - Fazer log do Metodo.
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");

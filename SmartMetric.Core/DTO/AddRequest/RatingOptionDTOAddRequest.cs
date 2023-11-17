@@ -15,7 +15,7 @@ namespace SmartMetric.Core.DTO.AddRequest
     {
 
         [JsonIgnore]
-        public Guid QuestionId { get; set; }
+        public Guid? QuestionId { get; set; }
         [Required(ErrorMessage = "Please select a value for this rating option")]
         public int NumericValue { get; set; }
         [Required(ErrorMessage = "Please select a response type for this rating option")]

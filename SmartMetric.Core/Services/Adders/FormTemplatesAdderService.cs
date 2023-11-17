@@ -9,6 +9,7 @@ using SmartMetric.Core.ServicesContracts.Adders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -28,13 +29,24 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(FormTemplatesAdderService)}.{nameof(AddFormTemplate)} foi iniciado");
 
-
-            if (addFormTemplateRequest == null)
+            try
             {
-                throw new ArgumentNullException(nameof(addFormTemplateRequest));
-            }
+                if (addFormTemplateRequest == null)
+                {
+                    throw new ArgumentNullException("Request can't be null");
+                }
 
-            ValidationHelper.ModelValidation(addFormTemplateRequest);
+                ValidationHelper.ModelValidation(addFormTemplateRequest);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<FormTemplateDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = ex.Message
+                };
+            }
+            
 
             var formTemplateId = Guid.NewGuid();
 
