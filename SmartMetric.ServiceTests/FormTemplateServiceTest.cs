@@ -1,4 +1,5 @@
 ﻿using AutoFixture;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Moq;
 using SmartMetric.Core.Domain.Entities;
@@ -6,8 +7,10 @@ using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Services.Adders;
+using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using System;
 using System.Collections.Generic;
@@ -21,7 +24,8 @@ namespace SmartMetric.ServiceTests
     public class FormTemplateServiceTest
     {
         private readonly IFormTemplatesAdderService _formTemplatesAdderService;
-        //private readonly IFormTemplatesGetterService _formTemplatesGetterService;
+        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
+        private readonly IFormTemplatesDeleterService _formTemplatesDeleterService;
         private readonly Mock<IFormTemplatesRepository> _formTemplatesRepositoryMock;
         private readonly IFormTemplatesRepository _formTemplatesRepository;
 
@@ -66,7 +70,8 @@ namespace SmartMetric.ServiceTests
             //_ratingOptionRepository = _ratingOptionRepositoryMock.Object;
 
             var AdderloggerMock = new Mock<ILogger<FormTemplatesAdderService>>();
-            var GetterloggerMock = new Mock<ILogger<FormTemplatesGetterService>>();
+            //var GetterloggerMock = new Mock<ILogger<FormTemplatesGetterService>>();
+            var DeleterLoggerMock = new Mock<ILogger<FormTemplatesDeleterService>>();
             //var TranslationsLoggerMock = new Mock<ILogger<FormTemplateTranslationsAdderService>>();
 
             //var QuestionLogger = new Mock<ILogger<QuestionAdderService>>();
@@ -77,6 +82,7 @@ namespace SmartMetric.ServiceTests
             //_singleChoiceOptionsAdderService = new SingleChoiceOptionAdderSerive(_singleChoiceOptionRepository, SingleChoiceOptionLogger.Object);
             //_formTemplatesTranslationsAdderService = new FormTemplateTranslationsAdderService(_formTemplatesTranslationsRepository, TranslationsLoggerMock.Object);
             _formTemplatesAdderService = new FormTemplatesAdderService(_formTemplatesRepository, AdderloggerMock.Object);
+            _formTemplatesDeleterService = new FormTemplatesDeleterService(_formTemplatesRepository, _formTemplatesGetterService!, DeleterLoggerMock.Object);
         }
 
         #region AddFormTemplate
@@ -103,6 +109,60 @@ namespace SmartMetric.ServiceTests
 
             _formTemplatesRepositoryMock
                 .Verify(repo => repo.AddFormTemplate(It.IsAny<FormTemplate>()), Times.Once);
+        }
+
+        #endregion
+
+        #region DeleteFormTemplateById
+
+        //TESTE: recebe um Guid nulo, logo deve retornar falso
+        [Fact]
+        public async Task DeleteFormTemplateById_FormTemplateIdIsNull()
+        {
+            //Arrange
+            Guid? formTemplateId = null;
+
+            //Act
+            var result = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
+
+            //Assert
+            Assert.False(result.Data);
+        }
+
+        //TESTE: recebe um id válido que não existe, logo deve retornar falso
+        [Fact]
+        public async Task DeleteFromTemplateById_FormTemplateIdIsValidButDoesntExist()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            _formTemplatesRepositoryMock
+                .Setup(temp => temp.DeleteFormTemplateById(formTemplateId))
+                .ReturnsAsync(false);
+
+            //Act
+            var result = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
+
+            //Assert
+            Assert.False(result.Data);
+        }
+
+        //TESTE: recebe um id válido que existe, logo retorna true
+        [Fact]
+        public async Task DeleteFromTemplateById_FormTemplateIdIsValidAndExist()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            _formTemplatesRepositoryMock
+                .Setup(temp => temp.DeleteFormTemplateById(formTemplateId))
+                .ReturnsAsync(true);
+
+            //Act
+            var result = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
+
+            //Assert
+            Assert.True(result.Data);
         }
 
         #endregion

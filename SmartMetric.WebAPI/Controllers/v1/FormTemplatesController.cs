@@ -78,25 +78,17 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteFormTemplateById(Guid formTemplateId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateById(Guid formTemplateId)
         {
+            var response = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
+            return response;
+        }
 
-            var formTemplate = _formTemplateGetterService.GetFormTemplateById(formTemplateId);
-
-            if (formTemplate != null)
-            {
-                var hasDeleted = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
-                if (hasDeleted)
-                {
-                    return NoContent();
-                }
-            }
-
-            return NotFound(new
-            {
-                StatusCode = (int)HttpStatusCode.NotFound,
-                Message = $"FormTemplate with ID {formTemplateId} not found."
-            });
+        [HttpDelete("Translation")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateTranslation([FromQuery] Guid formTemplateId, [FromQuery] Language language)
+        {
+            var response = await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(formTemplateId, language);
+            return response;
         }
 
         [HttpPost]
@@ -136,47 +128,5 @@ namespace SmartMetric.WebAPI.Controllers.v1
             });
 
         }
-
-        [HttpDelete("Translation")]
-        public async Task<IActionResult> DeleteFormTemplateTranslation([FromQuery] Guid formTemplateId, [FromQuery] Language language)
-        {
-            var formTemplate = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
-
-            if (formTemplate == null)
-            {
-                return NotFound(new
-                {
-                    StatusCode = (int)HttpStatusCode.NotFound,
-                    Message = $"FormTemplateTranslation with ID {formTemplateId} not found."
-                });
-            }
-
-            if (formTemplate.Translations == null || formTemplate.Translations.Count() < 2)
-            {
-                return BadRequest(new
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"FormTemplate Translations must have at least one translation."
-                });
-            }
-
-            var translationToBeDeleted = formTemplate.Translations.FirstOrDefault(temp => temp.Language == language.ToString());
-
-            if (translationToBeDeleted == null)
-            {
-                return BadRequest(new
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"FormTemplate Translations does not have a {language} translation."
-                });
-            }
-
-            var hasDeleted = false;
-            //await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
-
-            return hasDeleted ? NoContent() : StatusCode((int)HttpStatusCode.InternalServerError);
-        }
-
-
     }
 }
