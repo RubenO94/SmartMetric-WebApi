@@ -29,9 +29,22 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(QuestionTranslationAdderService)}.{nameof(AddQuestionTranslation)} foi iniciado");
 
-            if (request == null)
+            try
             {
-                throw new ArgumentNullException(nameof(request));
+                if (request == null)
+                {
+                    throw new ArgumentNullException("Request can't be null");
+                }
+
+                ValidationHelper.ModelValidation(request);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<QuestionTranslationDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = ex.Message
+                };
             }
 
             if (request.QuestionId == null)

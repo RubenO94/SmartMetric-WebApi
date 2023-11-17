@@ -30,12 +30,25 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
-            if (request == null)
+            try
             {
-                throw new ArgumentNullException(nameof(request));
+                if (request == null)
+                {
+                    throw new ArgumentNullException("Request can't be null");
+                }
+
+                ValidationHelper.ModelValidation(request);
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponse<FormTemplateTranslationDTOResponse?>()
+                {
+                    StatusCode = (int)HttpStatusCode.BadRequest,
+                    Message = ex.Message
+                };
             }
 
-            if(request.FormTemplateId == null)
+            if (request.FormTemplateId == null)
             {
                 return new ApiResponse<FormTemplateTranslationDTOResponse?>()
                 {
