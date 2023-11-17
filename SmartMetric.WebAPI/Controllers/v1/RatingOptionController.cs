@@ -22,7 +22,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IQuestionGetterService _questionGetterService;
 
         //CONSTRUCTOR
-        public RatingOptionController (
+        public RatingOptionController(
             IRatingOptionAdderService ratingOptionAdderService,
             IRatingOptionGetterService ratingOptionGetterService,
             IRatingOptionDeleterService ratingOptionDeleterService,
@@ -45,25 +45,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [HttpPost]
         public async Task<IActionResult> AddRatingOption([FromQuery] Guid questionId, [FromBody] RatingOptionDTOAddRequest ratingOptionDTOAddRequest)
         {
-            var questionExist = await _questionGetterService.GetQuestionById(questionId);
-            if (questionExist != null && questionExist.ResponseType == ResponseType.Rating.ToString())
-            {
-                ratingOptionDTOAddRequest.QuestionId = questionId;
-                var response = await _ratingOptionAdderService.AddRatingOption(ratingOptionDTOAddRequest);
 
-                return CreatedAtAction(nameof(AddRatingOption), new
-                {
-                    StatusCode = (int)HttpStatusCode.Created,
-                    Message = "RatingOption created",
-                    RatingOptionId = response?.RatingOptionId.ToString()
-                });
-            }
+            ratingOptionDTOAddRequest.QuestionId = questionId;
+            var response = await _ratingOptionAdderService.AddRatingOption(ratingOptionDTOAddRequest);
 
-            return BadRequest(new
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "Question doesn't exist or isn't from type Rating"
-            });
+            return CreatedAtAction(nameof(AddRatingOption), response);
         }
 
         #endregion
@@ -74,25 +60,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [Route("Translation")]
         public async Task<IActionResult> AddRatingOptionTranslation([FromQuery] Guid ratingOptionId, [FromBody] RatingOptionTranslationDTOAddRequest ratingOptionTranslationDTOAddRequest)
         {
-            var ratingOptionExist = await _ratingOptionGetterService.GetRatingOptionById(ratingOptionId);
-            if (ratingOptionExist != null)
-            {
-                ratingOptionTranslationDTOAddRequest.RatingOptionId = ratingOptionId;
-                var response = await _ratingOptionTranslationAdderService.AddRatingOptionTranslation(ratingOptionTranslationDTOAddRequest);
+            ratingOptionTranslationDTOAddRequest.RatingOptionId = ratingOptionId;
+            var response = await _ratingOptionTranslationAdderService.AddRatingOptionTranslation(ratingOptionTranslationDTOAddRequest);
 
-                return CreatedAtAction(nameof(AddRatingOptionTranslation), new
-                {
-                    StatusCode = (int)HttpStatusCode.Created,
-                    Message = "RatingOption Translation Created",
-                    RatingOptionTranslationId = response.RatingOptionTranslationId.ToString(),
-                });
-            }
-
-            return BadRequest(new
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "RatingOption doesn't exist"
-            });
+            return CreatedAtAction(nameof(AddRatingOptionTranslation), response);
         }
 
         #endregion
@@ -100,7 +71,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete to delete existing RatingOption
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteRatingOptionById (Guid ratingOptionId)
+        public async Task<IActionResult> DeleteRatingOptionById(Guid ratingOptionId)
         {
             await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
             return NoContent();

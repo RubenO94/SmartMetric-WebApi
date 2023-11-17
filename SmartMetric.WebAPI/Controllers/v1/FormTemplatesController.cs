@@ -57,15 +57,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         public async Task<ActionResult<FormTemplateDTOResponse>> GetFormTemplateById(Guid formTemplateId)
         {
             var formTemplate = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
-            if (formTemplate == null)
-            {
-                return NotFound(new
-                {
-                    StatusCode = (int)HttpStatusCode.NotFound,
-                    Message = $"FormTemplate with ID {formTemplateId} not found."
-                });
-            }
-
             return Ok(formTemplate);
         }
 
@@ -73,7 +64,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest formTemplateDTOAddRequest)
         {
             var response = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
-
             return CreatedAtAction(nameof(AddFormTemplate), response);
         }
 
@@ -95,38 +85,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [Route("Translation")]
         public async Task<IActionResult> AddFormTemplateTranslation([FromQuery] Guid formTemplateId, [FromBody] FormTemplateTranslationDTOAddRequest formTemplateTranslationDTOAddRequest)
         {
-            var formTemplateExist = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
-            if (formTemplateExist != null)
-            {
-                try
-                {
-                    formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
-                    var translation = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
+            formTemplateTranslationDTOAddRequest.FormTemplateId = formTemplateId;
+            var translation = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateTranslationDTOAddRequest);
 
-                    return CreatedAtAction(nameof(AddFormTemplateTranslation), new
-                    {
-                        StatusCode = (int)HttpStatusCode.Created,
-                        Message = "Success! FormTemplate Translation Created",
-                        translation,
-                    });
-                }
-                catch (Exception ex)
-                {
-                    return BadRequest(new
-                    {
-                        StatusCode = HttpStatusCode.BadRequest,
-                        Message = ex.Message.ToString(),
-                    });
-                }
-
-            }
-
-            return BadRequest(new
-            {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                Message = "FormTemplateId does not exist"
-            });
-
+            return CreatedAtAction(nameof(AddFormTemplateTranslation),translation);
         }
     }
 }
