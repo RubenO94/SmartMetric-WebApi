@@ -13,19 +13,19 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services.Adders
 {
-    public class SingleChoiceOptionAdderSerive : ISingleChoiceOptionsAdderService
+    public class SingleChoiceOptionAdderService : ISingleChoiceOptionsAdderService
     {
         private readonly ISingleChoiceOptionRepository _singleChoiceOptionRepository;
-        private readonly ILogger<SingleChoiceOptionAdderSerive> _logger;
+        private readonly ILogger<SingleChoiceOptionAdderService> _logger;
 
-        public SingleChoiceOptionAdderSerive(ISingleChoiceOptionRepository singleChoiceOptionRepository, ILogger<SingleChoiceOptionAdderSerive> logger)
+        public SingleChoiceOptionAdderService(ISingleChoiceOptionRepository singleChoiceOptionRepository, ILogger<SingleChoiceOptionAdderService> logger)
         {
             _singleChoiceOptionRepository = singleChoiceOptionRepository;
             _logger = logger;
         }
         public async Task<SingleChoiceOptionDTOResponse?> AddSingleChoiceOption(SingleChoiceOptionDTOAddRequest? request)
         {
-            _logger.LogInformation($"{nameof(SingleChoiceOptionAdderSerive)}.{nameof(AddSingleChoiceOption)} foi iniciado");
+            _logger.LogInformation($"{nameof(SingleChoiceOptionAdderService)}.{nameof(AddSingleChoiceOption)} foi iniciado");
 
             if (request == null) throw new ArgumentNullException(nameof(request));
 
