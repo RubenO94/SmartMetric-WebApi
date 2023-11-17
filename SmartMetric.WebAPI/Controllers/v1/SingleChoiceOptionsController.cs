@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
@@ -100,10 +103,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete to remove existing SingleChoiceQuestion
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteSingleChoiceOptionById ([FromQuery] Guid singleChoiceOptionId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionById ([FromQuery] Guid singleChoiceOptionId)
         {
-            await _singleChoiceOptionsDeleterService.DeleteSingleChoiceOptionById(singleChoiceOptionId);
-            return NoContent();
+            var response = await _singleChoiceOptionsDeleterService.DeleteSingleChoiceOptionById(singleChoiceOptionId);
+            return response;
         }
 
         #endregion
@@ -112,41 +115,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpDelete]
         [Route("Translation")]
-        public async Task<IActionResult> DeleteSingleChoiceOptionTranslationById([FromQuery] Language language, [FromQuery] Guid singleChoiceOptionId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById([FromQuery] Language language, [FromQuery] Guid singleChoiceOptionId)
         {
-            var singleChoiceOptionExist = await _singleChoiceOptionsGetterService.GetSingleChoiceOptionById(singleChoiceOptionId);
-
-            if (singleChoiceOptionExist == null)
-            {
-                return NotFound(new
-                {
-                    StatusCode = (int)HttpStatusCode.NotFound,
-                    Message = $"SingleChoice with Id equal to {singleChoiceOptionId} not found"
-                });
-            }
-
-            if (singleChoiceOptionExist.Translations == null || singleChoiceOptionExist.Translations.Count < 2)
-            {
-                return BadRequest(new
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"SingleChoice must have at least one translation."
-                });
-            }
-
-            var translationToBeDeleted = singleChoiceOptionExist.Translations.FirstOrDefault(temp => temp.Language == language.ToString());
-
-            if (translationToBeDeleted == null)
-            {
-                return BadRequest(new
-                {
-                    StatusCode = (int)HttpStatusCode.BadRequest,
-                    Message = $"SingleChoice doesn't have a {language} translation."
-                });
-            }
-
-            var hasDeleted = await _singleChoiceOptionTranslationsDeleterService.DeleteSingleChoiceOptionTranslationById(translationToBeDeleted.SingleChoiceOptionTranslationId);
-            return hasDeleted ? NoContent() : StatusCode((int)HttpStatusCode.InternalServerError);
+            var response = await _singleChoiceOptionTranslationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionId, language);
+            return response;
         }
 
         #endregion
