@@ -12,34 +12,33 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
-//app.UseExceptionHandler("/error");
-app.UseExceptionHandler(c => c.Run(async context =>
-{
+//app.UseExceptionHandler(c => c.Run(async context =>
+//{
 
-    var exception = context.Features
-        .Get<IExceptionHandlerPathFeature>()?
-        .Error;
+//    var exception = context.Features
+//        .Get<IExceptionHandlerPathFeature>()?
+//        .Error;
 
-    HttpStatusCode code;
+//    HttpStatusCode code;
 
-    if (exception is HttpStatusException errorResponse)
-    {
-        code = errorResponse.Status;
-    }
-    else
-    {
-        code = HttpStatusCode.InternalServerError;
-    }
+//    if (exception is HttpStatusException errorResponse)
+//    {
+//        code = errorResponse.Status;
+//    }
+//    else
+//    {
+//        code = HttpStatusCode.InternalServerError;
+//    }
 
-    var response = new
-    {
-        code = (int)code,
-        error = exception?.Message,
-    };
-    context.Response.StatusCode = (int)code;
-    await context.Response.WriteAsJsonAsync(response);
-}));
-//app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExceptionHandler());
+//    var response = new
+//    {
+//        code = (int)code,
+//        error = exception?.Message,
+//    };
+//    context.Response.StatusCode = (int)code;
+//    await context.Response.WriteAsJsonAsync(response);
+//}));
+app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExceptionHandler());
 
 app.UseHsts();
 app.UseHttpsRedirection();

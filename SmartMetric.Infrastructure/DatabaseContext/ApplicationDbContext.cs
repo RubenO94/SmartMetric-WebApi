@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.Domain.Entities;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.DatabaseContext
 {
-    public class ApplicationDbContext : DbContext
+    public partial class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -30,11 +31,147 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
         public DbSet<Submission> Submissions { get; set; }
+        public virtual DbSet<Departamento> Departamentos { get; set; }
+        public virtual DbSet<Funcionario> Funcionarios { get; set; }
+        public virtual DbSet<FuncionariosChefia> FuncionariosChefias { get; set; }
 
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            #region Adicionar Prefixos
+
+            foreach (IMutableEntityType entity in modelBuilder.Model.GetEntityTypes())
+            {
+                string? tableName = entity.GetTableName();
+
+                if (tableName != "Funcionarios" && tableName != "FuncionariosChefias" && tableName != "Departamentos")
+                {
+                    entity.SetTableName("Metrics_" + tableName);
+                }
+            }
+
+            #endregion
+
+            #region Tabelas: Funcionários, FuncionariosChefias, Departamentos
+            modelBuilder.Entity<Departamento>(entity =>
+            {
+                entity.HasKey(e => e.Iddepartamento).HasName("IDDepartamento");
+
+                entity.HasIndex(e => e.Identidade, "IX_Departamentos_IDEntidade").HasFillFactor(90);
+
+                entity.Property(e => e.Iddepartamento).HasColumnName("IDDepartamento");
+                entity.Property(e => e.Codigo).HasMaxLength(15);
+                entity.Property(e => e.Descricao).HasMaxLength(50);
+                entity.Property(e => e.EmailChefia).HasMaxLength(50);
+                entity.Property(e => e.IddepartamentoPai).HasColumnName("IDDepartamentoPai");
+                entity.Property(e => e.Identidade).HasColumnName("IDEntidade");
+                entity.Property(e => e.Notas).HasMaxLength(500);
+            });
+
+            modelBuilder.Entity<Funcionario>(entity =>
+            {
+                entity.HasKey(e => e.Idfuncionario).HasName("IDFuncionario");
+
+                entity.HasIndex(e => e.DeviceId, "IX_Funcionarios_DeviceID").HasFillFactor(90);
+
+                entity.HasIndex(e => e.Identidade, "IX_Funcionarios_IDEntidade").HasFillFactor(90);
+
+                entity.HasIndex(e => e.Idfuncionario, "_dta_index_Funcionarios_7_962102468__K1");
+
+                entity.Property(e => e.Idfuncionario).HasColumnName("IDFuncionario");
+                entity.Property(e => e.Assinatura).HasColumnType("image");
+                entity.Property(e => e.Cartao).HasMaxLength(12);
+                entity.Property(e => e.CartaoAlternativo).HasMaxLength(12);
+                entity.Property(e => e.CartaoAlternativo1).HasMaxLength(15);
+                entity.Property(e => e.CentroCusto).HasMaxLength(15);
+                entity.Property(e => e.CodigoPostal).HasMaxLength(50);
+                entity.Property(e => e.CstFullControl).HasColumnName("CST_FullControl");
+                entity.Property(e => e.DataAdmissao).HasColumnType("datetime");
+                entity.Property(e => e.DataDemissao).HasColumnType("datetime");
+                entity.Property(e => e.DataExpiracao).HasColumnType("datetime");
+                entity.Property(e => e.DataNascimento).HasColumnType("datetime");
+                entity.Property(e => e.DeviceId)
+                    .HasMaxLength(50)
+                    .HasColumnName("DeviceID");
+                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.EmailEquipa).HasMaxLength(50);
+                entity.Property(e => e.EstadoCivil).HasMaxLength(1);
+                entity.Property(e => e.Folha).HasMaxLength(50);
+                entity.Property(e => e.Fotografia).HasColumnType("image");
+                entity.Property(e => e.Gdpr).HasColumnName("GDPR");
+                entity.Property(e => e.HorasMensais).HasColumnType("datetime");
+                entity.Property(e => e.HorasSemanais).HasColumnType("datetime");
+                entity.Property(e => e.Iddepartamento).HasColumnName("IDDepartamento");
+                entity.Property(e => e.Identidade).HasColumnName("IDEntidade");
+                entity.Property(e => e.Idgrupo).HasColumnName("IDGrupo");
+                entity.Property(e => e.Idioma).HasMaxLength(10);
+                entity.Property(e => e.Idmunicipio).HasColumnName("IDMunicipio");
+                entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
+                entity.Property(e => e.IdperfilEquipa).HasColumnName("IDPerfilEquipa");
+                entity.Property(e => e.IdperfilEquipaAcesso).HasColumnName("IDPerfilEquipaAcesso");
+                entity.Property(e => e.IdperfilSuperiorHierarquico).HasColumnName("IDPerfilSuperiorHierarquico");
+                entity.Property(e => e.IdpersonApp).HasColumnName("IDPersonAPP");
+                entity.Property(e => e.IdplanoHorarios).HasColumnName("IDPlanoHorarios");
+                entity.Property(e => e.Local).HasMaxLength(15);
+                entity.Property(e => e.Localidade).HasMaxLength(50);
+                entity.Property(e => e.LoginLdap)
+                    .HasMaxLength(50)
+                    .HasColumnName("LoginLDAP");
+                entity.Property(e => e.Morada).HasMaxLength(80);
+                entity.Property(e => e.Morada2).HasMaxLength(80);
+                entity.Property(e => e.Nome).HasMaxLength(100);
+                entity.Property(e => e.NomeAbreviado).HasMaxLength(16);
+                entity.Property(e => e.Notas).HasMaxLength(500);
+                entity.Property(e => e.Numero).HasMaxLength(10);
+                entity.Property(e => e.OcultarBh).HasColumnName("OcultarBH");
+                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e.Pin).HasMaxLength(60);
+                entity.Property(e => e.Pinapk)
+                    .HasMaxLength(50)
+                    .HasColumnName("PINAPK");
+                entity.Property(e => e.Pinapp)
+                    .HasMaxLength(10)
+                    .HasColumnName("PINAPP");
+                entity.Property(e => e.Sexo).HasMaxLength(1);
+                entity.Property(e => e.SubAlimentacao).HasMaxLength(50);
+                entity.Property(e => e.Telefone).HasMaxLength(15);
+                entity.Property(e => e.Telemovel).HasMaxLength(15);
+                entity.Property(e => e.UltimoAcessoSmartTime).HasColumnType("datetime");
+                entity.Property(e => e.ValorBase).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorDiario).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorHora).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorHoraFds)
+                    .HasColumnType("decimal(18, 2)")
+                    .HasColumnName("ValorHoraFDS");
+                entity.Property(e => e.ValorPremioAssiduidade).HasColumnType("decimal(18, 2)");
+                entity.Property(e => e.ValorSubsidio).HasColumnType("decimal(18, 2)");
+            });
+
+            modelBuilder.Entity<FuncionariosChefia>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.HasIndex(e => e.Iddepartamento, "IX_FuncionariosChefias_IDDepartamento").HasFillFactor(100);
+
+                entity.HasIndex(e => e.Idfuncionario, "IX_FuncionariosChefias_IDFuncionario").HasFillFactor(100);
+
+                entity.HasIndex(e => e.IdfuncionarioSuperior, "IX_FuncionariosChefias_IDFuncionarioSuperior").HasFillFactor(100);
+
+                entity.Property(e => e.Iddepartamento).HasColumnName("IDDepartamento");
+                entity.Property(e => e.Idfuncionario).HasColumnName("IDFuncionario");
+                entity.Property(e => e.IdfuncionarioSuperior).HasColumnName("IDFuncionarioSuperior");
+                entity.Property(e => e.Nivel).HasMaxLength(2);
+                entity.Property(e => e.NivelAusencias).HasMaxLength(2);
+                entity.Property(e => e.NivelAusenciasServico).HasMaxLength(2);
+                entity.Property(e => e.NivelBh).HasColumnName("NivelBH");
+                entity.Property(e => e.NivelExtras).HasMaxLength(2);
+                entity.Property(e => e.NivelFerias).HasMaxLength(2);
+                entity.Property(e => e.NivelFuncionariosMarcacoes).HasMaxLength(2);
+            });
+
+            OnModelCreatingPartial(modelBuilder);
+            #endregion
 
             #region Edição Manual de Relações
             modelBuilder.Entity<FormTemplate>()
@@ -249,7 +386,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
             #endregion
         }
 
-
+        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     }
 

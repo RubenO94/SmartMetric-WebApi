@@ -21,22 +21,28 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
 
                 HttpStatusCode code;
+                string message;
 
                 if (exception is HttpStatusException errorResponse)
                 {
                     code = errorResponse.Status;
+                    message = errorResponse.Message;
                 }
                 else
                 {
                     code = HttpStatusCode.InternalServerError;
+                    message = "An unexpected error occurred. Please try again later or contact support.";
+
                 }
 
                 var response = new
                 {
-                    code = (int)code,
-                    error = exception?.Message,
+                    StatusCode = (int)code,
+                    ErrorMessage = exception?.Message,
+                    TraceId = Activity.Current?.Id
                 };
 
+                context.Response.StatusCode = (int)code;
                 await context.Response.WriteAsJsonAsync(response);
 
             });

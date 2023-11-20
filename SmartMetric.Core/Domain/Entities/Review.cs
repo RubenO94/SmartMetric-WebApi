@@ -15,7 +15,7 @@ namespace SmartMetric.Core.Domain.Entities
         public Guid ReviewId { get; set; }
 
         /// <summary>
-        /// Obtém ou define o identificador único do usuário que criou a revisão.
+        /// Obtém ou define o identificador único do utilizador que criou a revisão.
         /// </summary>
         public int? CreatedByUserId { get; set; }
 
@@ -56,11 +56,22 @@ namespace SmartMetric.Core.Domain.Entities
         /// Obtém ou define as submissões associadas à revisão.
         /// </summary>
         public virtual ICollection<Submission>? Submissions { get; set; }
+        
+        /// <summary>
+        /// Obtém ou define as traduções associadas à revisão
+        /// </summary>
+        public virtual ICollection<ReviewTranslation>? Translations { get; set; }
 
         /// <summary>
         /// Obtém ou define as questões relacionadas à revisão.
         /// </summary>
         public virtual ICollection<Question>? Questions { get; set; }
+
+        /// <summary>
+        /// Obtém ou define o Funcionário que criou a revisão
+        /// </summary>
+        [ForeignKey(nameof(CreatedByUserId))]
+        public virtual Funcionario? Funcionario { get; set; }
     }
 
 
