@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
+using SmartMetric.Core.Enums;
 using SmartMetric.Infrastructure.DatabaseContext;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace SmartMetric.Infrastructure.Repositories
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<QuestionTranslationsRepository> _logger;
 
-        QuestionTranslationsRepository(ApplicationDbContext dbContext, ILogger<QuestionTranslationsRepository> logger)
+        public QuestionTranslationsRepository(ApplicationDbContext dbContext, ILogger<QuestionTranslationsRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -54,6 +55,18 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetQuestionTranslationsByQuestionId)} foi iniciado");
             return await _dbContext.QuestionTranslations.Where(temp => temp.QuestionId == questionId).ToListAsync();
+        }
+
+        #endregion
+
+        #region Deleters
+
+        public async Task<bool> DeleteQuestionTranslationById(Guid questionTranslationId)
+        {
+            _dbContext.QuestionTranslations.RemoveRange(_dbContext.QuestionTranslations.Where(temp => temp.QuestionTranslationId == questionTranslationId));
+            int rowsDeleted = await _dbContext.SaveChangesAsync();
+
+            return rowsDeleted > 0;
         }
 
         #endregion
