@@ -30,6 +30,8 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public DbSet<SingleChoiceOptionTranslation> SingleChoiceOptionTranslations { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ReviewResponse> ReviewResponses { get; set; }
+        public DbSet<ReviewEmployee> ReviewEmployees { get; set; }
+        public DbSet<ReviewDepartment> ReviewDepartments { get; set; }
         public DbSet<Submission> Submissions { get; set; }
         public virtual DbSet<Departamento> Departamentos { get; set; }
         public virtual DbSet<Funcionario> Funcionarios { get; set; }
@@ -174,6 +176,8 @@ namespace SmartMetric.Infrastructure.DatabaseContext
             #endregion
 
             #region Edição Manual de Relações
+
+            //FormTemplates
             modelBuilder.Entity<FormTemplate>()
             .HasMany(ft => ft.Translations)
             .WithOne(translation => translation.FormTemplate)
@@ -189,7 +193,6 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                 .WithOne(q => q.Review)
                 .OnDelete(DeleteBehavior.Cascade);
 
-
             modelBuilder.Entity<Question>()
                 .HasMany(q => q.Translations)
                 .WithOne(translation => translation.Question)
@@ -198,11 +201,6 @@ namespace SmartMetric.Infrastructure.DatabaseContext
             modelBuilder.Entity<Question>()
                 .HasOne(q => q.FormTemplate)
                 .WithMany(ft => ft.Questions)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Question>()
-                .HasOne(q => q.Review)
-                .WithMany(rv => rv.Questions)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Question>()
@@ -225,6 +223,38 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                 .WithOne(translation => translation.SingleChoiceOption)
                 .OnDelete(DeleteBehavior.Cascade);
 
+
+            //Reviews
+
+            modelBuilder.Entity<Review>()
+                .HasMany(rv => rv.Translations)
+                .WithOne(translation => translation.Review)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ReviewDepartment>()
+                .HasOne(rd => rd.Review)
+                .WithMany(review => review.Departments)
+                .HasForeignKey(rd => rd.ReviewId);
+
+            modelBuilder.Entity<ReviewEmployee>()
+               .HasOne(re => re.Review)
+               .WithMany(review => review.Employees)
+               .HasForeignKey(re => re.ReviewId);
+
+            modelBuilder.Entity<Review>()
+                .HasMany(review => review.Submissions)
+                .WithOne(sub => sub.Review)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Submission>()
+                .HasMany(sub => sub.ReviewResponses)
+                .WithOne(response => response.Submission)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Question>()
+               .HasOne(q => q.Review)
+               .WithMany(rv => rv.Questions)
+               .OnDelete(DeleteBehavior.Cascade);
             #endregion
 
             #region Seeds

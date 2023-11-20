@@ -23,10 +23,6 @@ namespace SmartMetric.Core.Domain.Entities
         /// </summary>
         public Guid? SubmissionId { get; set; }
 
-        /// <summary>
-        /// Obtém ou define o identificador único da opção de escolha única à qual a resposta está associada.
-        /// </summary>
-        public Guid? SingleChoiceOptionId { get; set; }
 
         /// <summary>
         /// Obtém ou define o texto da resposta em caso de resposta textual.
@@ -37,20 +33,8 @@ namespace SmartMetric.Core.Domain.Entities
         /// <summary>
         /// Obtém ou define o valor da classificação em caso de resposta de classificação.
         /// </summary>
-        public int? RatingValue { get; set; }
+        public int? RatingValueResponse { get; set; }
 
-        /// <summary>
-        /// Obtém ou define a associação com a opção de escolha única à qual a resposta está vinculada em caso de resposta de escolha única.
-        /// </summary>
-        [ForeignKey(nameof(SingleChoiceOptionId))]
-        public virtual SingleChoiceOption? SingleChoiceOption { get; set; }
-
-        /// <summary>
-        /// Obtém ou define a associação com a questão de revisão relacionada.
-        /// </summary>
-        [ForeignKey(nameof(QuestionId))]
-        [Required]
-        public virtual Question? Question { get; set; }
 
         /// <summary>
         /// Obtém ou define a associação com a submissão à qual a resposta está vinculada.
