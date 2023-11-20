@@ -5,20 +5,20 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SmartMetric.Core.Domain.Entities
 {
     /// <summary>
-    /// Representa a tradução de uma revisão para um idioma específico.
+    /// Representa a tradução de um modelo de formulário para um idioma específico.
     /// </summary>
-    public class ReviewTranslation
+    public class FormTemplateTranslation
     {
         /// <summary>
-        /// Obtém ou define o identificador único da tradução do revisão.
+        /// Obtém ou define o identificador único da tradução do modelo de formulário.
         /// </summary>
         [Key]
-        public Guid ReviewTranslationId { get; set; }
+        public Guid FormTemplateTranslationId { get; set; }
 
         /// <summary>
-        /// Obtém ou define o identificador único da revisão associado à tradução.
+        /// Obtém ou define o identificador único do modelo de formulário associado à tradução.
         /// </summary>
-        public Guid? ReviewId { get; set; }
+        public Guid? FormTemplateId { get; set; }
 
         /// <summary>
         /// Obtém ou define o idioma para o qual a tradução está disponível.
@@ -27,21 +27,21 @@ namespace SmartMetric.Core.Domain.Entities
         public string? Language { get; set; }
 
         /// <summary>
-        /// Obtém ou define o título traduzido da revisão.
+        /// Obtém ou define o título traduzido do modelo de formulário.
         /// </summary>
         [StringLength(100)]
         public string? Title { get; set; }
 
         /// <summary>
-        /// Obtém ou define a descrição traduzida da revisão.
+        /// Obtém ou define a descrição traduzida do modelo de formulário.
         /// </summary>
         [StringLength(300)]
         public string? Description { get; set; }
 
         /// <summary>
-        /// Obtém ou define a revisão associado à tradução.
+        /// Obtém ou define o modelo de formulário associado à tradução.
         /// </summary>
-        [ForeignKey(nameof(ReviewId))]
+        [ForeignKey(nameof(FormTemplateId))]
         public virtual FormTemplate? FormTemplate { get; set; }
     }
 

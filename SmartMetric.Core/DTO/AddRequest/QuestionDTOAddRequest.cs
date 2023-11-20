@@ -49,7 +49,8 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define as traduções associadas a esta pergunta.
         /// </summary>
-        [Required(ErrorMessage = "At least one title and description translation is required.")]
+        [Required(ErrorMessage = "Please ensure that the question is inserted in at least one language.")]
+        [MinLength(1, ErrorMessage = "Please ensure that the question is inserted in at least one language.")]
         public List<QuestionTranslationDTOAddRequest>? Translations { get; set; }
 
         /// <summary>

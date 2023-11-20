@@ -24,13 +24,13 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o idioma para a tradução.
         /// </summary>
-        [Required(ErrorMessage = "Por favor, selecione um idioma para a tradução.")]
+        [Required(ErrorMessage = "Please select a language")]
         public Language? Language { get; set; }
 
         /// <summary>
         /// Obtém ou define a descrição da tradução.
         /// </summary>
-        [Required(ErrorMessage = "A descrição não pode estar em branco.")]
+        [Required(ErrorMessage = "Please insert a description for this single choice option")]
         public string? Description { get; set; }
 
         /// <summary>
