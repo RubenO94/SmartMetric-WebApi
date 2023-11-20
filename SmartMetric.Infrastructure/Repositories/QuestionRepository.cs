@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
@@ -41,17 +42,19 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<List<Question>?> GetQuestionByFormTemplateId(Guid formTemplateId)
         {
             _logger.LogInformation($"{nameof(QuestionRepository)}.{nameof(GetQuestionByFormTemplateId)} foi iniciado");
+
             return await _dbContext.Questions
                 .Include(temp => temp.Translations)
-                .Include(temp => temp.SingleChoiceOptions).ThenInclude(temp =>  temp.Translations)
-                .Include(temp => temp.RatingOptions).ThenInclude(temp => temp.Translations)
+                .Include(temp => temp.SingleChoiceOptions)!.ThenInclude(temp =>  temp.Translations)
+                .Include(temp => temp.RatingOptions)!.ThenInclude(temp => temp.Translations)
                 .Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
         }
 
         public async Task<Question?> GetQuestionById(Guid questionId)
         {
             _logger.LogInformation($"{nameof(QuestionRepository)}.{nameof(GetQuestionById)} foi iniciado");
-            return await _dbContext.Questions.FirstOrDefaultAsync(temp => temp.QuestionId == questionId);
+
+            return await _dbContext.Questions.Include(temp => temp.Translations).FirstOrDefaultAsync(trans => trans.QuestionId == questionId);
         }
 
         #endregion

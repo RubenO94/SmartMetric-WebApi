@@ -13,7 +13,7 @@ using System.Net;
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class RatingOptionController : CustomBaseController
+    public class RatingOptionsController : CustomBaseController
     {
         //VARIABLES
         private readonly IRatingOptionAdderService _ratingOptionAdderService;
@@ -23,7 +23,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IRatingOptionTranslationDeleterService _ratingOptionTranslationDeleterService;
 
         //CONSTRUCTOR
-        public RatingOptionController(
+        public RatingOptionsController(
             IRatingOptionAdderService ratingOptionAdderService,
             IRatingOptionGetterService ratingOptionGetterService,
             IRatingOptionDeleterService ratingOptionDeleterService,

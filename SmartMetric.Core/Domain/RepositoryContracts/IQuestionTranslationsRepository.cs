@@ -43,5 +43,16 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<List<QuestionTranslation>> GetQuestionTranslationsByQuestionId(Guid questionId);
 
         #endregion
+
+        #region Deleters
+
+        /// <summary>
+        /// Remove um objeto de QuestionTranslation na base de dados
+        /// </summary>
+        /// <param name="questionId"></param>
+        /// <returns>Retorna um boolean, caso True foi removido com sucesso, caso contrário retorna False</returns>
+        Task<bool> DeleteQuestionTranslationById(Guid questionTranslationId);
+
+        #endregion
     }
 }
