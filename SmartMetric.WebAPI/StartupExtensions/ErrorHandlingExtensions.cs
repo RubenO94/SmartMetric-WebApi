@@ -38,7 +38,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 var response = new
                 {
                     StatusCode = (int)code,
-                    ErrorMessage = exception?.Message,
+                    ErrorMessage = message,
                     TraceId = Activity.Current?.Id
                 };
 

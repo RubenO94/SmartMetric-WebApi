@@ -68,6 +68,16 @@ namespace SmartMetric.Core.Domain.Entities
         public virtual ICollection<Question>? Questions { get; set; }
 
         /// <summary>
+        /// Obtem ou define os funcionários a quem esta revisão se distina
+        /// </summary>
+        public virtual ICollection<ReviewEmployee>? Employees { get; set; }
+
+        /// <summary>
+        /// Obtem ou define os departamentos a quem esta revisão se distina
+        /// </summary>
+        public virtual ICollection<ReviewDepartment>? Departments { get; set; }
+
+        /// <summary>
         /// Obtém ou define o Funcionário que criou a revisão
         /// </summary>
         [ForeignKey(nameof(CreatedByUserId))]

@@ -29,6 +29,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
             services.AddScoped<ISingleChoiceOptionRepository, SingleChoiceOptionRepository>();
             services.AddScoped<ISingleChoiceOptionTranslationsRepository, SingleChoiceOptionTranslationsRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
             #endregion
 
