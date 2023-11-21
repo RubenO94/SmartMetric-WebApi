@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.IdentityModel.Abstractions;
 using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +37,10 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public virtual DbSet<Departamento> Departamentos { get; set; }
         public virtual DbSet<Funcionario> Funcionarios { get; set; }
         public virtual DbSet<FuncionariosChefia> FuncionariosChefias { get; set; }
+        public virtual DbSet<Perfis> Perfis { get; set; }
+        public virtual DbSet<PerfisDepartamento> PerfisDepartamentos { get; set; }
+        public virtual DbSet<PerfisJanela> PerfisJanelas { get; set; }
+        public virtual DbSet<Utilizador> Utilizadores { get; set; }
 
         #endregion
 
@@ -47,7 +52,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
             {
                 string? tableName = entity.GetTableName();
 
-                if (tableName != "Funcionarios" && tableName != "FuncionariosChefias" && tableName != "Departamentos")
+                if (tableName != "Funcionarios" && tableName != "FuncionariosChefias" && tableName != "Departamentos" && tableName != "Perfis" && tableName != "PerfisJanelas" && tableName != "PerfisDepartamentos" && tableName != "Utilizadores")
                 {
                     entity.SetTableName("Metrics_" + tableName);
                 }
@@ -170,6 +175,58 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                 entity.Property(e => e.NivelExtras).HasMaxLength(2);
                 entity.Property(e => e.NivelFerias).HasMaxLength(2);
                 entity.Property(e => e.NivelFuncionariosMarcacoes).HasMaxLength(2);
+            });
+
+            modelBuilder.Entity<Perfis>(entity =>
+            {
+                entity.HasKey(e => e.Idperfil).HasName("IDPerfil");
+
+                entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
+                entity.Property(e => e.Descricao).HasMaxLength(50);
+                entity.Property(e => e.Nome).HasMaxLength(25);
+            });
+
+            modelBuilder.Entity<PerfisDepartamento>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.HasIndex(e => e.Idperfil, "IX_PerfisDepartamentos_IDPerfil").HasFillFactor(90);
+
+                entity.Property(e => e.Iddepartamento).HasColumnName("IDDepartamento");
+                entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
+                entity.Property(e => e.Nivel).HasMaxLength(2);
+                entity.Property(e => e.NivelAusencias).HasMaxLength(2);
+                entity.Property(e => e.NivelAusenciasServico).HasMaxLength(2);
+                entity.Property(e => e.NivelExtras).HasMaxLength(2);
+                entity.Property(e => e.NivelFerias).HasMaxLength(2);
+                entity.Property(e => e.NivelFuncionariosMarcacoes).HasMaxLength(2);
+            });
+
+            modelBuilder.Entity<PerfisJanela>(entity =>
+            {
+                entity.HasNoKey();
+
+                entity.HasIndex(e => new { e.Idperfil, e.Aplicacao }, "IX_PerfisJanelas_IDPerfil_Aplicacao").HasFillFactor(90);
+
+                entity.Property(e => e.Aplicacao).HasMaxLength(50);
+                entity.Property(e => e.Idjanela).HasColumnName("IDJanela");
+                entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
+                entity.Property(e => e.Modulo).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Utilizador>(entity =>
+            {
+                entity.HasKey(e => e.Idutilizador).HasName("IDUtilizador");
+
+                entity.Property(e => e.Idutilizador).HasColumnName("IDUtilizador");
+                entity.Property(e => e.Descricao).HasMaxLength(50);
+                entity.Property(e => e.Email).HasMaxLength(50);
+                entity.Property(e => e.Idfuncionario).HasColumnName("IDFuncionario");
+                entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
+                entity.Property(e => e.Nome).HasMaxLength(100);
+                entity.Property(e => e.Password).HasMaxLength(50);
+                entity.Property(e => e.UltimoAcessoSmartAccess).HasColumnType("datetime");
+                entity.Property(e => e.UltimoAcessoSmartTime).HasColumnType("datetime");
             });
 
             OnModelCreatingPartial(modelBuilder);

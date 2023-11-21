@@ -11,6 +11,13 @@ using SmartMetric.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.Services.Deleters;
+using SmartMetric.Core.ServicesContracts;
+using SmartMetric.Core.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -21,6 +28,9 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             #region Repositories
 
+            //SmartTime
+            services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
+
             services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
             services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -29,12 +39,16 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
             services.AddScoped<ISingleChoiceOptionRepository, SingleChoiceOptionRepository>();
             services.AddScoped<ISingleChoiceOptionTranslationsRepository, SingleChoiceOptionTranslationsRepository>();
-            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
 
             #endregion
 
             #region Services
 
+            //JWT
+            services.AddTransient<IJwtService, JwtService>();
+
+            //Scoped Services:
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
@@ -82,6 +96,11 @@ namespace SmartMetric.WebAPI.StartupExtensions
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
+
+                //Authorization policy
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
             })
              .AddXmlSerializerFormatters()
              .AddJsonOptions(options =>
@@ -124,6 +143,47 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 options.GroupNameFormat = "'v'VVV"; //v1
                 options.SubstituteApiVersionInUrl = true;
             });
+
+            #endregion
+
+            #region CORS
+
+            services.AddCors(options => {
+                options.AddDefaultPolicy(policyBuilder =>
+                {
+                    policyBuilder
+                    .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!)
+                    .WithHeaders("Authorization", "origin", "accept", "content-type")
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    ;
+                });
+            });
+
+            #endregion
+
+            #region JWT
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateAudience = true,
+                        ValidAudience = configuration["Jwt:Audience"],
+                        ValidateIssuer = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                    };
+                });
+
+            services.AddAuthorization();
 
             #endregion
 

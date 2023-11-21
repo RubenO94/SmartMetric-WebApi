@@ -8,9 +8,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
     [ApiVersion("1.0")]
     public class EmployeesController : CustomBaseController
     {
-        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ISmartTimeRepository _employeeRepository;
 
-        public EmployeesController(IEmployeeRepository employeeRepository)
+        public EmployeesController(ISmartTimeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
