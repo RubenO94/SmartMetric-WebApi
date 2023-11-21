@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartMetric.Infrastructure.DatabaseContext;
 
@@ -11,9 +12,11 @@ using SmartMetric.Infrastructure.DatabaseContext;
 namespace SmartMetric.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231121120326_AddedPerfisAndUtilizadoresTabels")]
+    partial class AddedPerfisAndUtilizadoresTabels
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -934,7 +937,7 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.ToTable("Metrics_Submissions");
                 });
 
-            modelBuilder.Entity("SmartMetric.Infrastructure.Models.Perfis", b =>
+            modelBuilder.Entity("SmartMetric.Infrastructure.Models.Perfi", b =>
                 {
                     b.Property<int>("Idperfil")
                         .ValueGeneratedOnAdd()
@@ -1026,7 +1029,7 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.ToTable("PerfisJanelas");
                 });
 
-            modelBuilder.Entity("SmartMetric.Infrastructure.Models.Utilizador", b =>
+            modelBuilder.Entity("SmartMetric.Infrastructure.Models.Utilizadore", b =>
                 {
                     b.Property<int>("Idutilizador")
                         .ValueGeneratedOnAdd()
@@ -1064,12 +1067,6 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.Property<string>("Password")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
-
-                    b.Property<string>("RefreshToken")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("RefreshTokenExpiration")
-                        .HasColumnType("datetime2");
 
                     b.Property<int?>("TentativasAcesso")
                         .HasColumnType("int");
