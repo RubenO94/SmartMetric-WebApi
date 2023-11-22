@@ -168,4 +168,8 @@ public partial class Funcionario
     public bool? Seguranca { get; set; }
 
     public bool? Visitado { get; set; }
+
+    public string? RefreshToken { get; set; }
+
+    public DateTime? RefreshTokenExpiration { get; set; }
 }

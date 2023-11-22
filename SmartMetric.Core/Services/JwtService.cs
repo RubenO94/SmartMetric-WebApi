@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
@@ -29,7 +30,7 @@ namespace SmartMetric.Core.Services
         }
 
 
-        public AuthenticationResponse CreateJwtToken(Utilizador user)
+        public AuthenticationResponse CreateJwtToken(UserDTO user)
         {
             // Define o tempo de expiração do token
             DateTime expiration = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_configuration["Jwt:EXPIRATION_MINUTES"]));
@@ -37,11 +38,14 @@ namespace SmartMetric.Core.Services
             // Define as claims a serem incluídas no token
             Claim[] claims = new Claim[]
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.Idutilizador.ToString()), // Assunto (id do utilizador)
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Assunto (id do utilizador)
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // ID único do JWT
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()), // Emitido em (data e hora da geração do token)
-            new Claim(JwtRegisteredClaimNames.Name, user.Nome!.ToString()), // Nome do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.Idutilizador!.ToString()), // Id do utilizador (Opcional)
+            new Claim(JwtRegisteredClaimNames.Name, user.UserName!.ToString()), // Nome do utilizador (Opcional)
+            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserId!.ToString()), // Id do utilizador (Opcional)
+            new Claim(JwtRegisteredClaimNames.Email, user.UserEmail!.ToString()),// Email do utilizador (Opcional)
+            new Claim(JwtRegisteredClaimNames.GivenName, user.ApplicationUserType!.ToString()!),// Email do utilizador (Opcional)
+
             };
 
             // Configura a chave de segurança e as credenciais de assinatura
@@ -66,8 +70,8 @@ namespace SmartMetric.Core.Services
             return new AuthenticationResponse()
             {
                 Token = token,
-                UserEmail = user.Email,
-                UserName = user.Nome,
+                UserEmail = user.UserEmail,
+                UserName = user.UserName,
                 Expiration = expiration,
                 RefreshToken = GenerateRefreshToken(),
                 RefreshTokenExpiration = DateTime.Now.AddMinutes(Convert.ToInt32(_configuration["RefreshToken:EXPIRATION_MINUTES"]))

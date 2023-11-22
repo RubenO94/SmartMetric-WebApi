@@ -23,10 +23,17 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 HttpStatusCode code;
                 string message;
 
+                var type = exception?.GetType();
+
                 if (exception is HttpStatusException errorResponse)
                 {
                     code = errorResponse.Status;
                     message = errorResponse.Message;
+                }
+                else if(exception is ArgumentException argumentException)
+                {
+                    code = HttpStatusCode.BadRequest;
+                    message = "Invalid Request";
                 }
                 else
                 {

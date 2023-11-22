@@ -24,6 +24,8 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
+        #region Funcionarios
+
         public async Task<List<Funcionario>> GetAllEmployees()
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllEmployees)} foi iniciado");
@@ -31,11 +33,69 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _context.Funcionarios.ToListAsync();
         }
 
-        public async Task<Utilizador?> GetUser(int userId)
+        public async Task<Funcionario?> GetEmployeeByEmail(string email)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetUser)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeeByEmail)} foi iniciado");
+
+            return await _context.Funcionarios.FirstOrDefaultAsync(temp => temp.Email == email);
+        }
+
+        public async Task<Funcionario?> GetEmployeeById(int userId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeeById)} foi iniciado");
+
+            return await _context.Funcionarios.FirstOrDefaultAsync(temp => temp.Idfuncionario == userId);
+        }
+
+        public async Task<Funcionario?> GetEmployeeByName(string name)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeeByName)} foi iniciado");
+
+            return await _context.Funcionarios.FirstOrDefaultAsync(temp => temp.Nome == name);
+        }
+
+        public async Task<Funcionario?> UpdateEmployee(Funcionario funcionario)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(UpdateEmployee)} foi iniciado");
+
+            var user = await _context.Funcionarios.FindAsync(funcionario.Idfuncionario);
+
+            if (user == null)
+            {
+                return funcionario;
+            }
+
+            user.RefreshTokenExpiration = funcionario.RefreshTokenExpiration;
+            user.RefreshToken = funcionario.RefreshToken;
+
+            await _context.SaveChangesAsync();
+
+            return user;
+        }
+
+        #endregion
+
+        #region Utilizadores
+
+        public async Task<Utilizador?> GetUserByEmail(string email)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetUserByEmail)} foi iniciado");
+
+            return await _context.Utilizadores.FirstOrDefaultAsync(temp => temp.Email == email);
+        }
+
+        public async Task<Utilizador?> GetUserById(int userId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetUserById)} foi iniciado");
 
             return await _context.Utilizadores.FirstOrDefaultAsync(temp => temp.Idutilizador == userId);
+        }
+
+        public async Task<Utilizador?> GetUserByName(string name)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetUserByName)} foi iniciado");
+
+            return await _context.Utilizadores.FirstOrDefaultAsync(temp => temp.Nome == name);
         }
 
         public async Task<Utilizador?> UpdateUser(Utilizador utilizador)
@@ -46,7 +106,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
             if (user == null)
             {
-                return null;
+                return utilizador;
             }
 
             user.RefreshTokenExpiration = utilizador.RefreshTokenExpiration;
@@ -56,5 +116,8 @@ namespace SmartMetric.Infrastructure.Repositories
 
             return user;
         }
+
+        #endregion
+
     }
 }

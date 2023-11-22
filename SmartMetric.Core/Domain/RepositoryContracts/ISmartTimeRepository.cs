@@ -10,8 +10,19 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
 {
     public interface ISmartTimeRepository
     {
-        Task<Utilizador?> GetUser(int userId);
+        #region Utilizadores
+        Task<Utilizador?> GetUserById(int userId);
+        Task<Utilizador?> GetUserByEmail(string email);
+        Task<Utilizador?> GetUserByName(string name);
         Task<Utilizador?> UpdateUser(Utilizador utilizador);
+        #endregion
+
+        #region Funcionarios
+        Task<Funcionario?> GetEmployeeByEmail(string email);
+        Task<Funcionario?> GetEmployeeById(int userId);
+        Task<Funcionario?> GetEmployeeByName(string name);
+        Task<Funcionario?> UpdateEmployee(Funcionario funcionario);
         Task<List<Funcionario>> GetAllEmployees();
+        #endregion
     }
 }
