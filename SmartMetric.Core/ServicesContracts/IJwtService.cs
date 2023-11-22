@@ -1,4 +1,5 @@
-﻿using SmartMetric.Core.DTO.Response;
+﻿using SmartMetric.Core.DTO;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace SmartMetric.Core.ServicesContracts
         /// </summary>
         /// <param name="user">O utilizador para o qual o token é gerado.</param>
         /// <returns>Um objeto AuthenticationResponse contendo o token JWT gerado e as informações do utilizador.</returns>
-        AuthenticationResponse CreateJwtToken(Utilizador user);
+        AuthenticationResponse CreateJwtToken(UserDTO user);
 
         ClaimsPrincipal? GetPrincipalFromJwtToken(string? token);
     }

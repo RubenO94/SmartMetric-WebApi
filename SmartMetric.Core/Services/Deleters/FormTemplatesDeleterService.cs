@@ -34,12 +34,11 @@ namespace SmartMetric.Core.Services.Deleters
 
             if (formTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplateId can't be null!");
 
-            ApiResponse<FormTemplateDTOResponse?> formTemplateExist =  await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
+            ApiResponse<FormTemplateDTOResponse?> formTemplateExist = await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
 
             if (formTemplateExist == null)
             {
-                throw new ArgumentNullException("ERRO!");
-                //throw new HttpStatusException(HttpStatusCode.NotFound, "FormTemplate doesn't exist");
+                throw new HttpStatusException(HttpStatusCode.NotFound, "FormTemplate doesn't exist");
             }
 
             var response = await _formTemplateRepository.DeleteFormTemplateById(formTemplateId.Value);

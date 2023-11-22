@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using SmartMetric.WebAPI.Filters.ActionFilters;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -44,6 +45,9 @@ namespace SmartMetric.WebAPI.StartupExtensions
             #endregion
 
             #region Services
+
+            //SmartTime
+            services.AddScoped<ISmartTimeService, SmartTimeService>();
 
             //JWT
             services.AddTransient<IJwtService, JwtService>();
@@ -96,6 +100,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
+                options.Filters.Add<TokenValidationActionFilter>();
 
                 //Authorization policy
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
