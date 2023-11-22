@@ -18,17 +18,14 @@ namespace SmartMetric.Core.Services.Deleters
     {
         //VARIABLES
         private readonly IFormTemplateTranslationsRepository _formTemplateTranslationsRepository;
-        private IFormTemplatesGetterService _formTemplatesGetterService;
+        private readonly IFormTemplatesRepository _formTemplatesRepository;
         private readonly ILogger<FormTemplateTranslationDeleterService> _logger;
 
         //CONSTRUCTOR
-        public FormTemplateTranslationDeleterService (
-            IFormTemplateTranslationsRepository formTemplateTranslationsRepository,
-            IFormTemplatesGetterService formTemplatesGetterService,
-            ILogger<FormTemplateTranslationDeleterService> logger)
+        public FormTemplateTranslationDeleterService (IFormTemplateTranslationsRepository formTemplateTranslationsRepository, IFormTemplatesRepository formTemplatesRepository, ILogger<FormTemplateTranslationDeleterService> logger)
         {
             _formTemplateTranslationsRepository = formTemplateTranslationsRepository;
-            _formTemplatesGetterService = formTemplatesGetterService;
+            _formTemplatesRepository = formTemplatesRepository;
             _logger = logger;
         }
 
@@ -37,16 +34,16 @@ namespace SmartMetric.Core.Services.Deleters
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationDeleterService)}.{nameof(DeleteFormTemplateTranslationById)} foi iniciado");
 
-            if (formTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplateId or Language can't be null!");
+            if (formTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplateId can't be null!");
 
-            var formTemplateExist = await _formTemplatesGetterService.GetFormTemplateById(formTemplateId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "FormTemplate doesn't exist");
+            var formTemplateExist = await _formTemplatesRepository.GetFormTemplateById(formTemplateId);
+            
+            if (formTemplateExist == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID doesn't exist.");
 
-            if (formTemplateExist.Data!.Translations == null || formTemplateExist.Data!.Translations.Count < 2)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplate must have at least one translation, so can't execute your request!");
-            }
+            if (formTemplateExist.Translations == null || formTemplateExist.Translations.Count < 2) throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplate must have at least one translation, so can't execute your request!");
 
-            var translationToBeDeleted = formTemplateExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"FormTemplate doesn't have a {language} translation");
+            var translationToBeDeleted = formTemplateExist.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"Resource not found. The provided Language doesn't exist.");
+
             var response = await _formTemplateTranslationsRepository.DeleteFormTemplateTranslationById(translationToBeDeleted.FormTemplateTranslationId);
             return new ApiResponse<bool>()
             {

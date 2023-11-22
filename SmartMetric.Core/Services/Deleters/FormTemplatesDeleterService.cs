@@ -1,30 +1,21 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Exceptions;
-using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services.Deleters
 {
     public class FormTemplatesDeleterService : IFormTemplatesDeleterService
     {
+        private readonly IFormTemplatesRepository _formTemplateRepository;
+        private readonly ILogger<FormTemplatesDeleterService> _logger;
 
-        private IFormTemplatesRepository _formTemplateRepository;
-        private IFormTemplatesGetterService _formTemplatesGetterService;
-        private ILogger<FormTemplatesDeleterService> _logger;
-
-        public FormTemplatesDeleterService(IFormTemplatesRepository formTemplateRepository, IFormTemplatesGetterService formTemplatesGetterService, ILogger<FormTemplatesDeleterService> logger)
+        public FormTemplatesDeleterService(IFormTemplatesRepository formTemplateRepository, ILogger<FormTemplatesDeleterService> logger)
         {
             _formTemplateRepository = formTemplateRepository;
-            _formTemplatesGetterService = formTemplatesGetterService;
             _logger = logger;
         }
 
@@ -32,21 +23,15 @@ namespace SmartMetric.Core.Services.Deleters
         {
             _logger.LogInformation($"{nameof(FormTemplatesDeleterService)}.{nameof(DeleteFormTemplateById)} foi iniciado");
 
-            if (formTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "FormTemplateId can't be null!");
+            if (formTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
 
-            ApiResponse<FormTemplateDTOResponse?> formTemplateExist =  await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
+            FormTemplate? formTemplateExist =  await _formTemplateRepository.GetFormTemplateById(formTemplateId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
 
-            if (formTemplateExist == null)
-            {
-                throw new ArgumentNullException("ERRO!");
-                //throw new HttpStatusException(HttpStatusCode.NotFound, "FormTemplate doesn't exist");
-            }
-
-            var response = await _formTemplateRepository.DeleteFormTemplateById(formTemplateId.Value);
+            var response = await _formTemplateRepository.DeleteFormTemplateById(formTemplateExist.FormTemplateId);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,
-                Message = "FormTemplate deleted with success!",
+                Message = "FormTemplate deleted successfully.",
                 Data = response
             };
         }

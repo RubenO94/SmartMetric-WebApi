@@ -33,11 +33,13 @@ namespace SmartMetric.Core.Services.Deleters
         {
             _logger.LogInformation($"{nameof(RatingOptionDeleterService)}.{nameof(DeleteRatingOptionById)} foi iniciado");
 
-            if (ratingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "RatingOptionId can't be null!");
+            if (ratingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
 
-            var ratingOptionExist = _ratingOptionGetterService.GetRatingOptionById(ratingOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "RatingOption doesn't exist!");
+            var ratingOptionExist = _ratingOptionGetterService.GetRatingOptionById(ratingOptionId);
+            if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
 
             var response = await _ratingOptionRepository.DeleteRatingOptionById(ratingOptionId.Value);
+
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,

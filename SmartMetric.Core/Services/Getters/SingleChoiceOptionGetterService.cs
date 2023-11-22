@@ -72,8 +72,9 @@ namespace SmartMetric.Core.Services.Getters
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
             }
 
-
             var sco = await _singleChoiceOptionRepository.GetSingleChoiceOptionsByQuestionId(questionId.Value);
+            if (sco == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID doesn't exist.");
+
 
             return new ApiResponse<List<SingleChoiceOptionDTOResponse>?>()
             {

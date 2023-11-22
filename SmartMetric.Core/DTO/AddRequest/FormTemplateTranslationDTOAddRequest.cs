@@ -20,13 +20,11 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o idioma para a tradução.
         /// </summary>
-        [Required(ErrorMessage = "Languague is required")]
         public Language? Language { get; set; }
 
         /// <summary>
         /// Obtém ou define o título da tradução.
         /// </summary>
-        [Required(ErrorMessage = "Title is required")]
         public string? Title { get; set; }
 
         /// <summary>

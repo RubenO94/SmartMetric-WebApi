@@ -39,7 +39,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         //ENDPOINTS
-        #region Post to add new RatingOption
+        #region Post method to add new RatingOption
 
         [HttpPost]
         public async Task<IActionResult> AddRatingOption([FromQuery] Guid questionId, [FromBody] RatingOptionDTOAddRequest ratingOptionDTOAddRequest)
@@ -53,7 +53,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         #endregion
 
-        #region Post to add new Translation to existing RatingOption
+        #region Post method to add new Translation to existing RatingOption
 
         [HttpPost]
         [Route("Translation")]
@@ -67,7 +67,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         #endregion
 
-        #region Delete to delete existing RatingOption
+        #region Delete method to delete existing RatingOption
 
         [HttpDelete]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById (Guid ratingOptionId)
@@ -78,7 +78,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         #endregion
 
-        #region Delete to delete existing Translation from existing RatingOption
+        #region Delete method to delete existing Translation from existing RatingOption
 
         [HttpDelete]
         [Route("Translation")]
@@ -86,6 +86,17 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
             var response = await _ratingOptionTranslationDeleterService.DeleteRatingOptionTranslationById(ratingOptionId, language);
             return response;
+        }
+
+        #endregion
+
+        #region Get method to get all RatingOption of questionId received in parameter
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<RatingOptionDTOResponse>>> GetRatingOptionsByQuestionId(Guid questionId)
+        {
+            var ratingOptionList = await _ratingOptionGetterService.GetRatingOptionsByQuestionId(questionId);
+            return Ok(ratingOptionList);
         }
 
         #endregion

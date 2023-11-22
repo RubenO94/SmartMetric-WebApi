@@ -68,7 +68,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpDelete]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateById(Guid formTemplateId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateById(Guid? formTemplateId)
         {
             var response = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
             return response;

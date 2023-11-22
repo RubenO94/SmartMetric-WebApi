@@ -25,7 +25,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="formTemplateId">O identificador único (GUID) do modelo de formulário.</param>
         /// <returns>O modelo de formulário correspondente ao identificador ou null em caso de não haver correspondência.</returns>
-        Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId);
+        Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId);
         #endregion
 
         #region Adders

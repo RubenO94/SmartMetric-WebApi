@@ -5,26 +5,24 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
 {
     public class FormTemplateDTOAddRequest
     {
-        [Required(ErrorMessage ="Create Date is required")]
+        [JsonIgnore]
         [DataType(DataType.Date)]
         public DateTime? CreatedDate { get; set; }
-        [Required(ErrorMessage = "Please select a User")]
+
         public int? CreatedByUserId { get; set; }
-        [Required(ErrorMessage = "Please enter data in at least one language.")]
-        [MinLength(1, ErrorMessage = "Please enter data in at least one language.")]
+
         public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
 
 
         public FormTemplate ToFormTemplate()
         {
-
-
             return new FormTemplate()
             {
                 CreatedDate = CreatedDate,

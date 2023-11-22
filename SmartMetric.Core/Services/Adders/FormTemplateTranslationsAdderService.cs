@@ -31,17 +31,13 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
-            }
+            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            if (request.FormTemplateId == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
-            }
+            if (request.FormTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
 
-            ValidationHelper.ModelValidation(request);
+            if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The FormTemplateTranslation must have a 'language' field.");
+
+            if (request.Title == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The FormTemplateTranslation must have a 'title' field.");
 
             var existenceTranslations = await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
 

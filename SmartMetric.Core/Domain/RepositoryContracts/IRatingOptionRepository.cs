@@ -33,7 +33,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="ratingOptionId"></param>
         /// <returns>Retorna um objeto do tipo RatingOption</returns>
-        Task<RatingOption?> GetRatingOptionById(Guid ratingOptionId);
+        Task<RatingOption?> GetRatingOptionById(Guid? ratingOptionId);
 
         /// <summary>
         /// Procura todas as opções de respostas de classificação associadas à questão passada no parâmetro através do seu Id

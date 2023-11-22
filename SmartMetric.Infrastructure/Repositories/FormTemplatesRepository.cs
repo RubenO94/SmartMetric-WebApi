@@ -65,7 +65,7 @@ namespace SmartMetric.Infrastructure.Repositories
         }
 
 
-        public async Task<FormTemplate?> GetFormTemplateById(Guid formTemplateId)
+        public async Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId)
         {
             _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
 
