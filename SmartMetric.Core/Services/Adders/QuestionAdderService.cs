@@ -42,7 +42,7 @@ namespace SmartMetric.Core.Services.Adders
 
             if(formTempalte == null)
             {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
             }
 
             ValidationHelper.ModelValidation(request);

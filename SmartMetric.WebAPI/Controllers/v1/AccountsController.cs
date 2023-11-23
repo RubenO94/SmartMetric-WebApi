@@ -13,12 +13,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
     [AllowAnonymous]
     [ApiVersion("1.0")]
     [SkipTokenValidation]
-    public class AccountController : CustomBaseController
+    public class AccountsController : CustomBaseController
     {
         private readonly IJwtService _jwtService;
         private readonly ISmartTimeService _smartTimeService;
 
-        public AccountController(IJwtService jwtService, ISmartTimeService smartTimeService)
+        public AccountsController(IJwtService jwtService, ISmartTimeService smartTimeService)
         {
             _jwtService = jwtService;
             _smartTimeService = smartTimeService;
@@ -55,7 +55,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
 
-        [HttpPost("RefreshToken")]
+        [HttpPost]
         public async Task<IActionResult> GenerateNewAccessToken(TokenDTO tokenDTO)
         {
             //TODO: ApplicationUserType

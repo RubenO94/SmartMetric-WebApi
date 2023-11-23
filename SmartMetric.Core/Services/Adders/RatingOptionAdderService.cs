@@ -50,7 +50,7 @@ namespace SmartMetric.Core.Services.Adders
 
             if (question.Data == null)
             {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "The 'questionId' provided does not exist.");
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
             }
 
             if (question.Data.ResponseType != ResponseType.Rating.ToString())
