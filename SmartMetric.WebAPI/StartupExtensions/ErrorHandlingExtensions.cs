@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.Exceptions;
 using System.Diagnostics;
 using System.Net;
@@ -30,10 +31,20 @@ namespace SmartMetric.WebAPI.StartupExtensions
                     code = errorResponse.Status;
                     message = errorResponse.Message;
                 }
+                else if(exception is ArgumentNullException argumentNullException)
+                {
+                    code = HttpStatusCode.BadRequest;
+                    message = $"{exception.Message} can't be null";
+                }
                 else if(exception is ArgumentException argumentException)
                 {
                     code = HttpStatusCode.BadRequest;
                     message = "Invalid Request";
+                }
+                else if (exception is SecurityTokenSignatureKeyNotFoundException securityTokenSignatureKeyNotFoundException)
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    message = "Access Token invalid";
                 }
                 else
                 {

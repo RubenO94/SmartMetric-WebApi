@@ -18,12 +18,12 @@ namespace SmartMetric.Core.Services.Deleters
     public class SingleChoiceOptionTranslationDeleterService : ISingleChoiceOptionTranslationDeleterService
     {
         //variables
-        private readonly ISingleChoiceOptionTranslationsRepository _translationRepository;
+        private readonly ISingleChoiceOptionTranslationRepository _translationRepository;
         private readonly ISingleChoiceOptionGetterService _singleChoiceOptionGetterService;
         private readonly ILogger<SingleChoiceOptionTranslationDeleterService> _logger;
 
         //constructor
-        public SingleChoiceOptionTranslationDeleterService (ISingleChoiceOptionTranslationsRepository translationRepository, ISingleChoiceOptionGetterService singleChoiceOptionGetterService, ILogger<SingleChoiceOptionTranslationDeleterService> logger)
+        public SingleChoiceOptionTranslationDeleterService (ISingleChoiceOptionTranslationRepository translationRepository, ISingleChoiceOptionGetterService singleChoiceOptionGetterService, ILogger<SingleChoiceOptionTranslationDeleterService> logger)
         {
             _translationRepository = translationRepository;
             _singleChoiceOptionGetterService = singleChoiceOptionGetterService;

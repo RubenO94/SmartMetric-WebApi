@@ -15,11 +15,11 @@ namespace SmartMetric.Core.Services.Getters
 {
     public class SingleChoiceOptionTranslationsGetterService : ISingleChoiceOptionTranslationsGetterService
     {
-        private readonly ISingleChoiceOptionTranslationsRepository _translationsRepository;
+        private readonly ISingleChoiceOptionTranslationRepository _translationsRepository;
         private readonly ISingleChoiceOptionGetterService _singleChoiceOptionGetterService;
         private readonly ILogger<SingleChoiceOptionTranslationsGetterService> _logger;
 
-        public SingleChoiceOptionTranslationsGetterService(ISingleChoiceOptionTranslationsRepository translationsRepository, ISingleChoiceOptionGetterService singleChoiceOptionGetterService, ILogger<SingleChoiceOptionTranslationsGetterService> logger)
+        public SingleChoiceOptionTranslationsGetterService(ISingleChoiceOptionTranslationRepository translationsRepository, ISingleChoiceOptionGetterService singleChoiceOptionGetterService, ILogger<SingleChoiceOptionTranslationsGetterService> logger)
         {
             _translationsRepository = translationsRepository;
             _singleChoiceOptionGetterService = singleChoiceOptionGetterService;

@@ -4,6 +4,9 @@ using SmartMetric.Core.DTO.Response;
 using System.Security.Claims;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.DTO;
+using System.IdentityModel.Tokens.Jwt;
+using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 
 namespace SmartMetric.WebAPI.Filters.ActionFilters
 {
@@ -27,14 +30,6 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
 
             if (!skipTokenValidation)
             {
-
-                bool? isUtilizador = context.HttpContext.Items["isUtilizador"] as bool?;
-                if (isUtilizador == null)
-                {
-                    context.Result = new UnauthorizedObjectResult("User is not defined");
-                    return;
-                }
-
                 var authorizationHeader = context.HttpContext.Request.Headers.Authorization;
                 var acceptHeader = context.HttpContext.Request.Headers.Accept;
 
@@ -52,10 +47,12 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
                     else
                     {
                         // Check if the token has expired
-                        var expirationClaim = claimsPrincipal.FindFirst(ClaimTypes.Expiration);
-                        if (expirationClaim != null && DateTime.TryParse(expirationClaim.Value, out var expirationDate))
+                        var expirationClaim = claimsPrincipal.FindFirst(JwtRegisteredClaimNames.Exp);
+                        if (expirationClaim != null && long.TryParse(expirationClaim.Value, out var expirationUnixTime))
                         {
-                            if (expirationDate <= DateTime.UtcNow)
+                            var expirationDateTime = DateTimeOffset.FromUnixTimeSeconds(expirationUnixTime).UtcDateTime;
+
+                            if (expirationDateTime <= DateTime.UtcNow)
                             {
                                 context.Result = new UnauthorizedObjectResult("Token has expired");
                                 return;
@@ -69,39 +66,47 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
 
                         // Continue with your refresh token and other checks here...
 
-                        string? email = claimsPrincipal?.FindFirstValue(ClaimTypes.Email);
-                        UserDTO? user = await _smartTimeService.GetUserByEmail(email);
-
-                        if (user == null || user.RefreshToken != refreshToken ||
-                        user.RefreshTokenExpiration <= DateTime.Now)
+                        if (Enum.TryParse(typeof(ApplicationUserType), claimsPrincipal.FindFirstValue(ClaimTypes.GivenName), out object? valorEnum))
                         {
-                            context.Result = new UnauthorizedObjectResult("Invalid Access, login time-out");
-                        }
-                        else
-                        {
-                            AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(user);
+                            ApplicationUserType? applicationUserType = (ApplicationUserType)valorEnum;
 
-                            user.RefreshToken = authenticationResponse.RefreshToken;
-                            user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+                            if (applicationUserType == null)
+                            {
+                                context.Result = new UnauthorizedObjectResult("Invalid access token");
+                            }
 
-                            await _smartTimeService.UpdateApplicationUser(user);
+                            string? id = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+                            int userId = Convert.ToInt32(id);
 
-                            context.Result = new OkObjectResult(authenticationResponse);
+                            UserDTO? user = applicationUserType == ApplicationUserType.User ? await _smartTimeService.GetUserById(userId) : await _smartTimeService.GetEmployeeById(userId);
+
+                            if (user == null || user.RefreshTokenExpiration <= DateTime.Now)
+                            {
+                                context.Result = new UnauthorizedObjectResult("Invalid Access, login time-out");
+                            }
+                            else
+                            {
+                                AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(user);
+
+                                user.RefreshToken = authenticationResponse.RefreshToken;
+                                user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+                                user.ApplicationUserType = applicationUserType;
+
+                                await _smartTimeService.UpdateApplicationUser(user);
+
+                                //context.Result = new OkObjectResult(authenticationResponse);
+                            }
+
                         }
                     }
                 }
                 else
                 {
-                    context.Result = new BadRequestObjectResult(new
-                    {
-                        StatusCode = 400,
-                        Message = "Request invalid"
-                    });
-                    return;
+                    throw new HttpStatusException(System.Net.HttpStatusCode.Unauthorized, "Access Token is missing");
+
                 }
             }
             await next(); // Continue a execução da ação
-            return;
         }
     }
 }

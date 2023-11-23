@@ -17,12 +17,12 @@ namespace SmartMetric.Core.Services.Deleters
     public class QuestionTranslationDeleterService : IQuestionTranslationDeleterService
     {
         //VARIABLES
-        private readonly IQuestionTranslationsRepository _questionTranslationsRepository;
+        private readonly IQuestionTranslationRepository _questionTranslationsRepository;
         private readonly IQuestionGetterService _questionGetterService;
         private readonly ILogger<QuestionTranslationDeleterService> _logger;
 
         //CONSTRUCTOR
-        public QuestionTranslationDeleterService(IQuestionTranslationsRepository questionTranslationsRepository, IQuestionGetterService questionGetterService, ILogger<QuestionTranslationDeleterService> logger)
+        public QuestionTranslationDeleterService(IQuestionTranslationRepository questionTranslationsRepository, IQuestionGetterService questionGetterService, ILogger<QuestionTranslationDeleterService> logger)
         {
             _questionTranslationsRepository = questionTranslationsRepository;
             _questionGetterService = questionGetterService;

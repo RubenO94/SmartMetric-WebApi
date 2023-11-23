@@ -13,12 +13,12 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class QuestionTranslationsRepository : IQuestionTranslationsRepository
+    public class QuestionTranslationRepository : IQuestionTranslationRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<QuestionTranslationsRepository> _logger;
+        private readonly ILogger<QuestionTranslationRepository> _logger;
 
-        public QuestionTranslationsRepository(ApplicationDbContext dbContext, ILogger<QuestionTranslationsRepository> logger)
+        public QuestionTranslationRepository(ApplicationDbContext dbContext, ILogger<QuestionTranslationRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -28,7 +28,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<QuestionTranslation> AddQuestionTranslation(QuestionTranslation questionTranslation)
         {
-            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(AddQuestionTranslation)} foi iniciado.");
+            _logger.LogInformation($"{nameof(QuestionTranslationRepository)}.{nameof(AddQuestionTranslation)} foi iniciado.");
 
             _dbContext.QuestionTranslations.Add(questionTranslation);
             await _dbContext.SaveChangesAsync();
@@ -41,19 +41,19 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<QuestionTranslation>> GetAllQuestionTranslations()
         {
-            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetAllQuestionTranslations)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionTranslationRepository)}.{nameof(GetAllQuestionTranslations)} foi iniciado");
             return await _dbContext.QuestionTranslations.ToListAsync();
         }
 
         public async Task<QuestionTranslation?> GetQuestionTranslationsById(Guid questionTranslationId)
         {
-            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetQuestionTranslationsById)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionTranslationRepository)}.{nameof(GetQuestionTranslationsById)} foi iniciado");
             return await _dbContext.QuestionTranslations.FirstOrDefaultAsync(temp => temp.QuestionTranslationId == questionTranslationId);
         }
 
         public async Task<List<QuestionTranslation>> GetQuestionTranslationsByQuestionId(Guid questionId)
         {
-            _logger.LogInformation($"{nameof(QuestionTranslationsRepository)}.{nameof(GetQuestionTranslationsByQuestionId)} foi iniciado");
+            _logger.LogInformation($"{nameof(QuestionTranslationRepository)}.{nameof(GetQuestionTranslationsByQuestionId)} foi iniciado");
             return await _dbContext.QuestionTranslations.Where(temp => temp.QuestionId == questionId).ToListAsync();
         }
 

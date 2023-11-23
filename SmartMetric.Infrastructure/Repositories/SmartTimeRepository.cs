@@ -117,6 +117,29 @@ namespace SmartMetric.Infrastructure.Repositories
             return user;
         }
 
+        public async Task<List<Departamento>> GetAllDepartaments()
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllDepartaments)} foi iniciado");
+
+            return await _context.Departamentos.ToListAsync();
+
+        }
+
+        public async Task<List<FuncionariosChefia>> GetAllFuncionariosChefia(int page = 1, int pageSize = 20)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllFuncionariosChefia)} foi iniciado");
+
+            return await _context.FuncionariosChefias
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+        public Task<List<Departamento>> GetSelectedDepartments(List<int> departmentIds)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
 
     }

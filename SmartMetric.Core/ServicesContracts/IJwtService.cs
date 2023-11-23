@@ -22,6 +22,12 @@ namespace SmartMetric.Core.ServicesContracts
         /// <returns>Um objeto AuthenticationResponse contendo o token JWT gerado e as informações do utilizador.</returns>
         AuthenticationResponse CreateJwtToken(UserDTO user);
 
+        /// <summary>
+        /// Obtém o principal (ClaimsPrincipal) a partir de um token JWT.
+        /// </summary>
+        /// <param name="token">O token JWT a ser analisado.</param>
+        /// <returns>Um ClaimsPrincipal representando o utilizador contido no token ou null se o token for inválido.</returns>
         ClaimsPrincipal? GetPrincipalFromJwtToken(string? token);
     }
+
 }
