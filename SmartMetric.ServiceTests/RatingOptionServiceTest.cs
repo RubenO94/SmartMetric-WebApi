@@ -53,7 +53,7 @@ namespace SmartMetric.ServiceTests
 
             _ratingOptionAdderService = new RatingOptionAdderService(_ratingOptionRepository, _questionGetterService, AdderLoggerMock.Object);
             _ratingOptionGetterService = new RatingOptionGetterService(_ratingOptionRepository, GetterLoggerMock.Object);
-            _ratingOptionDeleterService = new RatingOptionDeleterService(_ratingOptionRepository, _ratingOptionGetterService, DeleterLoggerMock.Object);
+            _ratingOptionDeleterService = new RatingOptionDeleterService(_ratingOptionRepository, DeleterLoggerMock.Object);
         }
 
         #region AddRatingOption Tests
@@ -146,6 +146,7 @@ namespace SmartMetric.ServiceTests
         {
             //Arrange
             var translations = new List<RatingOption>();
+
             _ratingOptionRepositoryMock.Setup(temp => temp.GetAllRatingOption()).ReturnsAsync(translations);
 
             //Act
@@ -167,27 +168,16 @@ namespace SmartMetric.ServiceTests
 
             List<RatingOptionDTOResponse> expectedResponse = translations.Select(temp => temp.ToRatingOptionDTOResponse()).ToList();
 
-            //Log expectedResponse
-            _testOutputHelper.WriteLine("Expected Response:");
-            foreach (var item in expectedResponse)
-            {
-                _testOutputHelper.WriteLine(item.ToString());
-            }
-
             _ratingOptionRepositoryMock.Setup(temp => temp.GetAllRatingOption()).ReturnsAsync(translations);
 
             //Act
             ApiResponse<List<RatingOptionDTOResponse>> actualResponse = await _ratingOptionGetterService.GetAllRatingOptions();
 
-            //Log actualResponse
-            _testOutputHelper.WriteLine("Actual Response:");
-            foreach (var item in actualResponse.Data!)
-            {
-                _testOutputHelper.WriteLine(item.ToString());
-            }
-
             //Assert
-            actualResponse.Data.Should().BeEquivalentTo(expectedResponse);
+            actualResponse.Data.Should().NotBeNull();
+            actualResponse.Data.Should().NotBeEmpty();
+            actualResponse.Data.Should().HaveSameCount(expectedResponse);
+            actualResponse.Data!.Equals(expectedResponse);
         }
 
         #endregion
@@ -341,14 +331,14 @@ namespace SmartMetric.ServiceTests
             var ratingOptionId = Guid.NewGuid();
 
             _ratingOptionRepositoryMock
-                .Setup(temp => temp.DeleteRatingOptionById(ratingOptionId))
-                .ReturnsAsync(false);
+                .Setup(temp => temp.GetRatingOptionById(ratingOptionId))
+                .ReturnsAsync(null as RatingOption);
 
             //Act
-            var result = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
+            Func<Task> action = async () => await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
 
             //Assert
-            result.Data.Should().BeFalse();
+            await action.Should().ThrowAsync<HttpStatusException>();
         }
 
         //TESTE: recebe um id válido que existe, logo retorna true
@@ -357,6 +347,27 @@ namespace SmartMetric.ServiceTests
         {
             //Arrange
             var ratingOptionId = Guid.NewGuid();
+
+            var ratingOption = new RatingOption
+            {
+                RatingOptionId = ratingOptionId,
+                QuestionId = Guid.NewGuid(),
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslation>
+                {
+                    new RatingOptionTranslation
+                    {
+                        RatingOptionTranslationId = Guid.NewGuid(),
+                        RatingOptionId = ratingOptionId,
+                        Language = Language.PT.ToString(),
+                        Description = "Description",
+                    }
+                }
+            };
+
+            _ratingOptionRepositoryMock
+                .Setup(temp => temp.GetRatingOptionById(ratingOptionId))
+                .ReturnsAsync(ratingOption);
 
             _ratingOptionRepositoryMock
                 .Setup(temp => temp.DeleteRatingOptionById(ratingOptionId))
@@ -367,6 +378,7 @@ namespace SmartMetric.ServiceTests
 
             //Assert
             result.Data.Should().BeTrue();
+            Assert.True(result.Data);
         }
 
         #endregion

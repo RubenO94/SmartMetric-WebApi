@@ -194,6 +194,7 @@ namespace SmartMetric.ServiceTests
         {
             //Arrange
             var request = new List<FormTemplate>();
+
             _formTemplatesRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(request);
 
             //Act
@@ -359,7 +360,7 @@ namespace SmartMetric.ServiceTests
 
         //TESTE: recebe um Guid válido e que existe, logo retorna ApiResponse
         [Fact]
-        public async Task DeleteFromTemplateById_FormTemplateIdIsValidAndExist_ShouldBeSuccessful()
+        public async Task DeleteFromTemplateById_ShouldBeSuccessful()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -394,6 +395,7 @@ namespace SmartMetric.ServiceTests
             var result = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplate.FormTemplateId);
 
             //Assert
+            result.Data.Should().BeTrue();
             Assert.True(result.Data);
         }
 

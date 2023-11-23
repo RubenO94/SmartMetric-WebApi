@@ -70,7 +70,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete method to delete existing RatingOption
 
         [HttpDelete]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById (Guid ratingOptionId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById (Guid? ratingOptionId)
         {
             var response = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
             return response;

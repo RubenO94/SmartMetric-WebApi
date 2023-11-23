@@ -27,7 +27,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new RatingOption()
             {
-
                 QuestionId = QuestionId,
                 NumericValue = NumericValue,
                 Translations = Translations?.Select(temp => temp.ToRatingOptionTranslation()).ToList() ?? new List<RatingOptionTranslation>()
