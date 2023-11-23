@@ -50,7 +50,7 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
         }
 
-        public async Task<Question?> GetQuestionById(Guid questionId)
+        public async Task<Question?> GetQuestionById(Guid? questionId)
         {
             _logger.LogInformation($"{nameof(QuestionRepository)}.{nameof(GetQuestionById)} foi iniciado");
 

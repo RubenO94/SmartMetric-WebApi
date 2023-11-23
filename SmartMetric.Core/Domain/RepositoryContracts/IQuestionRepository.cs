@@ -28,7 +28,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="questionId"></param>
         /// <returns>Retorna um objeto do tipo Question</returns>
-        Task<Question?> GetQuestionById(Guid questionId);
+        Task<Question?> GetQuestionById(Guid? questionId);
 
         /// <summary>
         /// Função que procura através do Id passado por parâmetro, todas as questões associadas ao Template requerido por parâmetro, na base de dados

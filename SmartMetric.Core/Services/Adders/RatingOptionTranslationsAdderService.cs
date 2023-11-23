@@ -18,11 +18,13 @@ namespace SmartMetric.Core.Services.Adders
     public class RatingOptionTranslationsAdderService : IRatingOptionTranslationAdderService
     {
         private readonly IRatingOptionTranslationsRepository _translationsRepository;
+        private readonly IRatingOptionRepository _ratingOptionRepository;
         private readonly ILogger<RatingOptionTranslationsAdderService> _logger;
 
-        public RatingOptionTranslationsAdderService(IRatingOptionTranslationsRepository translationsRepository, ILogger<RatingOptionTranslationsAdderService> logger)
+        public RatingOptionTranslationsAdderService(IRatingOptionTranslationsRepository translationsRepository, IRatingOptionRepository ratingOptionRepository, ILogger<RatingOptionTranslationsAdderService> logger)
         {
             _translationsRepository = translationsRepository;
+            _ratingOptionRepository = ratingOptionRepository;
             _logger = logger;
         }
 
@@ -30,29 +32,42 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");
 
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
-            }
+            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            ValidationHelper.ModelValidation(request);
+            if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'language' field.");
 
-            if (request.RatingOptionId == null)
+            if (request.Description == null || request.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'description' field.");
+
+            if (request.RatingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
+
+            var ratingOptionExist = await _ratingOptionRepository.GetRatingOptionById(request.RatingOptionId);
+
+            if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
+
+            var existingTranslations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(request.RatingOptionId.Value);
+
+            if (existingTranslations.Any())
             {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
+                foreach (var item in existingTranslations)
+                {
+                    if (item.Language == request.Language.ToString())
+                    {
+                        throw new HttpStatusException(HttpStatusCode.BadRequest, "This language already exists in the provided FormTemplate.");
+                    }
+                }
             }
 
             RatingOptionTranslation translation = request.ToRatingOptionTranslation();
 
             translation.RatingOptionTranslationId = Guid.NewGuid();
 
-            var result = await _translationsRepository.AddRatingOptionTranslation(translation);
+            await _translationsRepository.AddRatingOptionTranslation(translation);
 
             return new ApiResponse<RatingOptionTranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.Created,
                 Message = "Translation added successfully to the RatingOption.",
-                Data = result.ToRatingOptionTranslationDTOResponse()
+                Data = translation.ToRatingOptionTranslationDTOResponse()
             };
         }
     }

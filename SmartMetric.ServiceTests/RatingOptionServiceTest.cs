@@ -28,9 +28,8 @@ namespace SmartMetric.ServiceTests
         private readonly Mock<IRatingOptionRepository> _ratingOptionRepositoryMock;
         private readonly IRatingOptionRepository _ratingOptionRepository;
 
-        private readonly IQuestionGetterService _questionGetterService;
         private readonly Mock<IQuestionRepository> _questionRepositoryMock;
-        private readonly Mock<IQuestionGetterService> _questionGetterServiceMock;
+        private readonly IQuestionRepository _questionRepository;
 
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly IFixture _fixture;
@@ -45,96 +44,333 @@ namespace SmartMetric.ServiceTests
             _ratingOptionRepository = _ratingOptionRepositoryMock.Object;
 
             _questionRepositoryMock = new Mock<IQuestionRepository>();
-            _questionGetterServiceMock = new Mock<IQuestionGetterService>();
+            _questionRepository = _questionRepositoryMock.Object;
 
             var AdderLoggerMock = new Mock<ILogger<RatingOptionAdderService>>();
             var GetterLoggerMock = new Mock<ILogger<RatingOptionGetterService>>();
             var DeleterLoggerMock = new Mock<ILogger<RatingOptionDeleterService>>();
 
-            _ratingOptionAdderService = new RatingOptionAdderService(_ratingOptionRepository, _questionGetterService, AdderLoggerMock.Object);
+            _ratingOptionAdderService = new RatingOptionAdderService(_ratingOptionRepository, _questionRepository, AdderLoggerMock.Object);
             _ratingOptionGetterService = new RatingOptionGetterService(_ratingOptionRepository, GetterLoggerMock.Object);
             _ratingOptionDeleterService = new RatingOptionDeleterService(_ratingOptionRepository, DeleterLoggerMock.Object);
         }
 
         #region AddRatingOption Tests
 
-        //        //TESTE: recebe um objeto null para adicionar uma opção de resposta de classificação à questão, deve lançar uma exceção
-        //        [Fact]
-        //        public async Task AddRatingOption_IsNull_ToThrowArgumentNullException()
-        //        {
-        //            //Arrange
-        //            RatingOptionDTOAddRequest? request = null;
+        //TESTE: fornecido um ratingOptionDTOAddRequest nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_ObjectIsNull_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest? request = null;
 
-        //            //Act
-        //            Func<Task> action = async () =>
-        //            {
-        //                await _ratingOptionAdderService.AddRatingOption(request);
-        //            };
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
-        //            //Assert
-        //            await action.Should().ThrowAsync<ArgumentNullException>();
-        //        }
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
 
-        //        //TESTE: recebe uma nova opção de resposta de classificação com o campo QuestionId nulo
-        //        [Fact]
-        //        public async Task AddRatingOption_QuestionIdIsNull_ToThrowArgumentException()
-        //        {
-        //            //Arrange
-        //            RatingOptionDTOAddRequest? request = new RatingOptionDTOAddRequest()
-        //            {
-        //                NumericValue = 1,
-        //            };
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo QuestionId nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_QuestionIdIsNull_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = null,
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = "descricao"
+                    }
+                }
+            };
 
-        //            //Act
-        //            Func<Task> action = async () =>
-        //            {
-        //                await _ratingOptionAdderService.AddRatingOption(request);
-        //            };
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
-        //            //Assert
-        //            await action.Should().ThrowAsync<ArgumentException>();
-        //        }
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
 
-        //        //TESTE: recebe uma nova opção de resposta de classificação com o campo NumericValue nulo
-        //        [Fact]
-        //        public async Task AddRatingOption_NumericValueIsNull_ToThrowArgumentException()
-        //        {
-        //            //Arrange
-        //            RatingOptionDTOAddRequest? request = new RatingOptionDTOAddRequest()
-        //            {
-        //                QuestionId = Guid.NewGuid(),
-        //            };
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo NumericValue nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_NumericValueIsNull_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = Guid.NewGuid(),
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = "descricao"
+                    }
+                }
+            };
 
-        //            //Act
-        //            Func<Task> action = async () =>
-        //            {
-        //                await _ratingOptionAdderService.AddRatingOption(request);
-        //            };
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
-        //            //Assert
-        //            await action.Should().ThrowAsync<ArgumentException>();
-        //        }
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
 
-        //        //TESTE: recebe uma nova opção de resposta de classificação com todos os campos preenchidos
-        //        [Fact]
-        //        public async Task AddRatingOption_FullDetails_ToBeSuccessful()
-        //        {
-        //            //Arrange
-        //            RatingOptionDTOAddRequest? request = _fixture.Build<RatingOptionDTOAddRequest>().Create();
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_TranslationIsNull_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = Guid.NewGuid(),
+                NumericValue = 1,
+                Translations = null
+            };
 
-        //            RatingOption translation = request.ToRatingOption();
-        //            RatingOptionDTOResponse response = translation.ToRatingOptionDTOResponse();
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
-        //            _ratingOptionRepositoryMock.Setup(temp => temp.AddRatingOption(It.IsAny<RatingOption>())).ReturnsAsync(translation);
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
 
-        //            //Act
-        //            RatingOptionDTOResponse response_from_add = await _ratingOptionAdderService.AddRatingOption(request);
-        //            response.RatingOptionId = response_from_add.RatingOptionId;
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations vazio, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_TranslationIsEmpty_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = Guid.NewGuid(),
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>()
+            };
 
-        //            //Assert
-        //            response_from_add.Should().NotBe(Guid.Empty);
-        //            response_from_add.Should().Be(response);
-        //        }
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations com campo Language nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_TranslationLanguageIsNull_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = Guid.NewGuid(),
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = null,
+                        Description = "descricao"
+                    }
+                }
+            };
+
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations com campo Description nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_TranslationDescriptionIsNull_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = Guid.NewGuid(),
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = null
+                    }
+                }
+            };
+
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations com campo Description nulo, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_TranslationDescriptionIsEmpty_ShouldThrowException()
+        {
+            //Arrange
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = Guid.NewGuid(),
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = ""
+                    }
+                }
+            };
+
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um ratingOptionAddRequest válido mas é fornecido um questionId válido mas que não existe, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_QuestionIdIsValidButDoesntExist_ShouldThrowException()
+        {
+            //Arrange
+            Guid questionId = Guid.NewGuid();
+
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = questionId,
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = "descricao"
+                    }
+                }
+            };
+
+            _questionRepositoryMock.Setup(temp => temp.GetQuestionById(questionId)).ReturnsAsync(null as Question);
+
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um ratingOptionAddRequest válido mas é fornecido um questionId de uma questão que não é do tipo Rating, deve lançar exceção
+        [Fact]
+        public async Task AddRatingOption_QuestionIdIsValidButNotRatingQuestion_ShouldThrowException()
+        {
+            //Arrange
+            Guid questionId = Guid.NewGuid();
+
+            Question question = new()
+            {
+                QuestionId = questionId,
+                ResponseType = ResponseType.Text.ToString(),
+                IsRequired = false,
+                Translations = new List<QuestionTranslation>
+                {
+                    new QuestionTranslation
+                    {
+                        QuestionTranslationId = Guid.NewGuid(),
+                        QuestionId = questionId,
+                        Language = Language.EN.ToString(),
+                        Title = "Title",
+                        Description = "Description"
+                    }
+                }
+            };
+
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = questionId,
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = "descricao"
+                    }
+                }
+            };
+
+            _questionRepositoryMock.Setup(temp => temp.GetQuestionById(questionId)).ReturnsAsync(question);
+
+            //Act
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um ratingOptionAddRequest válido e um questionId válido, retorna sucesso
+        [Fact]
+        public async Task AddRatingOption_ShouldBeSuccessful()
+        {
+            //Arrange
+            Guid questionId = Guid.NewGuid();
+            Guid ratingOptionId = Guid.NewGuid();
+
+            Question question = new()
+            {
+                QuestionId = questionId,
+                ResponseType = ResponseType.Rating.ToString(),
+                IsRequired = false,
+                Translations = new List<QuestionTranslation>
+                {
+                    new QuestionTranslation
+                    {
+                        QuestionTranslationId = Guid.NewGuid(),
+                        QuestionId = questionId,
+                        Language = Language.EN.ToString(),
+                        Title = "Title",
+                        Description = "Description"
+                    }
+                }
+            };
+
+            RatingOptionDTOAddRequest request = new()
+            {
+                QuestionId = questionId,
+                NumericValue = 1,
+                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                {
+                    new RatingOptionTranslationDTOAddRequest
+                    {
+                        Language = Language.PT,
+                        Description = "descricao"
+                    }
+                }
+            };
+
+            RatingOption ratingOption = request.ToRatingOption();
+            RatingOptionDTOResponse response = ratingOption.ToRatingOptionDTOResponse();
+
+            _questionRepositoryMock.Setup(temp => temp.GetQuestionById(questionId)).ReturnsAsync(question);
+
+            _ratingOptionRepositoryMock.Setup(temp => temp.AddRatingOption(ratingOption)).ReturnsAsync(new RatingOption { RatingOptionId = ratingOptionId});
+
+            //Act
+            var result = await _ratingOptionAdderService.AddRatingOption(request);
+
+            //Assert
+            Assert.NotNull(result.Data);
+            Assert.IsType<RatingOptionDTOResponse>(result.Data);
+            result.Data.Equals(response);
+        }
 
         #endregion
 

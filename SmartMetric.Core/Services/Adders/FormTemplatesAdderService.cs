@@ -36,6 +36,11 @@ namespace SmartMetric.Core.Services.Adders
 
             if (addFormTemplateRequest.Translations == null || addFormTemplateRequest.Translations.Count < 1) throw new HttpStatusException(HttpStatusCode.BadRequest, "The formTemplate needs at least one translation.");
 
+            foreach (var translation in addFormTemplateRequest.Translations)
+            {
+                if (translation.Language == null || translation.Title == null || translation.Title == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The Translations field are missing values.");
+            }
+
             addFormTemplateRequest.CreatedDate = DateTime.Now;
             var formTemplateId = Guid.NewGuid();
 

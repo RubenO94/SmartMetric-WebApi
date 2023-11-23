@@ -149,9 +149,73 @@ namespace SmartMetric.ServiceTests
             await action.Should().ThrowAsync<HttpStatusException>();
         }
 
+        //TESTE: fornecido um formTemplateDTOAddRequest com campo Translation sem o campo Language, deve lançar exceção
+        [Fact]
+        public async Task AddFormTemplate_LanguageIsNull_ShouldThrowHttpStatusException()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
+            {
+                CreatedByUserId = 123,
+                Translations = new List<FormTemplateTranslationDTOAddRequest>
+                {
+                    new FormTemplateTranslationDTOAddRequest
+                    {
+                        Title = "Title",
+                        Description = "Description",
+                    }
+                }
+            };
+
+            var formTemplate = request.ToFormTemplate();
+            var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
+
+            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+
+            //Act
+            Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um formTemplateDTOAddRequest com campo Translation sem o campo Title, deve lançar exceção
+        [Fact]
+        public async Task AddFormTemplate_TitleIsNull_ShouldThrowHttpStatusException()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
+            {
+                CreatedByUserId = 123,
+                Translations = new List<FormTemplateTranslationDTOAddRequest>
+                {
+                    new FormTemplateTranslationDTOAddRequest
+                    {
+                        Language = Language.EN,
+                        Description = "Description",
+                    }
+                }
+            };
+
+            var formTemplate = request.ToFormTemplate();
+            var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
+
+            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+
+            //Act
+            Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
         //TESTE: fornecido um formTemplateDTOAddRequest válido, adiciona com sucesso, retorna mensagem
         [Fact]
-        public async Task AddFormTemplate_FormTemplateIsValid_ShouldBeSuccessful()
+        public async Task AddFormTemplate_ShouldBeSuccessful()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();

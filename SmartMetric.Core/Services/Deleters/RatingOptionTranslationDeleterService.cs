@@ -19,14 +19,14 @@ namespace SmartMetric.Core.Services.Deleters
     {
         //variables
         private readonly IRatingOptionTranslationsRepository _ratingOptionTranslationsRepository;
-        private readonly IRatingOptionGetterService _ratingOptionGetterService;
+        private readonly IRatingOptionRepository _ratingOptionRepository;
         private readonly ILogger<RatingOptionTranslationDeleterService> _logger;
 
         //constructor
-        public RatingOptionTranslationDeleterService (IRatingOptionTranslationsRepository ratingOptionTranslationsRepository, IRatingOptionGetterService ratingOptionGetterService, ILogger<RatingOptionTranslationDeleterService> logger)
+        public RatingOptionTranslationDeleterService (IRatingOptionTranslationsRepository ratingOptionTranslationsRepository, IRatingOptionRepository ratingOptionRepository, ILogger<RatingOptionTranslationDeleterService> logger)
         {
             _ratingOptionTranslationsRepository = ratingOptionTranslationsRepository;
-            _ratingOptionGetterService = ratingOptionGetterService;
+            _ratingOptionRepository = ratingOptionRepository;
             _logger = logger;
         }
 
@@ -35,16 +35,19 @@ namespace SmartMetric.Core.Services.Deleters
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationDeleterService)}.{nameof(DeleteRatingOptionTranslationById)} foi iniciado");
 
-            if (ratingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "RatingOption can't be null!");
+            if (ratingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "RatingOptionId can't be null!");
 
-            var ratingOptionExist = await _ratingOptionGetterService.GetRatingOptionById(ratingOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "RatingOption doesn't exist!");
+            var ratingOptionExist = await _ratingOptionRepository.GetRatingOptionById(ratingOptionId);
 
-            if (ratingOptionExist.Data!.Translations == null || ratingOptionExist.Data.Translations.Count < 2)
+            if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID doesn't exist.");
+
+            if (ratingOptionExist.Translations == null || ratingOptionExist.Translations.Count < 2)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "RatingOption must have at least one translation, so can't execute your request!");
             }
 
-            var translationToBeDeleted = ratingOptionExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"RatingOption doesn't have a {language} translation!");
+            var translationToBeDeleted = ratingOptionExist.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"RatingOption doesn't have a {language} translation!");
+
             var response = await _ratingOptionTranslationsRepository.DeleteRatingOptionTranslationById(translationToBeDeleted.RatingOptionTranslationId);
             return new ApiResponse<bool>()
             {

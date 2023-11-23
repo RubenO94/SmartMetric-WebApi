@@ -49,7 +49,7 @@ namespace SmartMetric.ServiceTests
             var GetterloggerMock = new Mock<ILogger<FormTemplateTranslationsGetterService>>();
             var DeleterLoggerMock = new Mock<ILogger<FormTemplateTranslationDeleterService>>();
 
-            _translationsAdderService = new FormTemplateTranslationsAdderService(_translationsRepository, AdderloggerMock.Object);
+            _translationsAdderService = new FormTemplateTranslationsAdderService(_translationsRepository, _formTemplatesRepository, AdderloggerMock.Object);
             _translationsGetterService = new FormTemplateTranslationsGetterService(_translationsRepository, GetterloggerMock.Object);
             _translationsDeleterService = new FormTemplateTranslationDeleterService(_translationsRepository, _formTemplatesRepository, DeleterLoggerMock.Object);
         }
@@ -88,6 +88,54 @@ namespace SmartMetric.ServiceTests
             var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
 
             _translationsRepositoryMock.Setup(temp => temp.AddFormTemplateTranslation(formTemplateTranslation)).ReturnsAsync(new FormTemplateTranslation { FormTemplateTranslationId = formTemplateTranslationId});
+
+            //Act
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um formTemplateTranslationDTOAddRequest com campo FormTemplateId válido mas que não existe, deve lançar exceção
+        [Fact]
+        public async Task AddFormTemplateTranslation_FormTemplateIdIsValidButDoesntExist_ShouldThrowHttpStatusException()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+            Guid formTemplateNonExistingId = Guid.NewGuid();
+
+            List<FormTemplateTranslation> formTemplateTranslationExists = new()
+            {
+                new FormTemplateTranslation
+                {
+                    FormTemplateTranslationId = Guid.NewGuid(),
+                    FormTemplateId = formTemplateId,
+                    Language = Language.PT.ToString(),
+                    Title = "Title",
+                    Description = "Description",
+                }
+            };
+
+            FormTemplate formTemplate = new()
+            {
+                FormTemplateId = formTemplateId,
+                CreatedDate = DateTime.UtcNow,
+                CreatedByUserId = 123434,
+                Translations = formTemplateTranslationExists
+            };
+
+            FormTemplateTranslationDTOAddRequest request = new()
+            {
+                FormTemplateId = formTemplateId,
+                Language = Language.EN,
+                Title = "Title",
+                Description = "Description",
+            };
+
+            var formTemplateTranslation = request.ToFormTemplateTranslation();
+            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+
+            _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateNonExistingId)).ReturnsAsync(null as FormTemplate);
 
             //Act
             Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
@@ -169,6 +217,14 @@ namespace SmartMetric.ServiceTests
                 }
             };
 
+            FormTemplate formTemplate = new()
+            {
+                FormTemplateId = formTemplateId,
+                CreatedDate = DateTime.UtcNow,
+                CreatedByUserId = 123434,
+                Translations = formTemplateTranslationExists
+            };
+
             FormTemplateTranslationDTOAddRequest request = new()
             {
                 FormTemplateId = formTemplateId,
@@ -179,6 +235,8 @@ namespace SmartMetric.ServiceTests
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
             var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+
+            _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateId)).ReturnsAsync(formTemplate);
 
             _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(formTemplateId)).ReturnsAsync(formTemplateTranslationExists);
 
@@ -193,7 +251,7 @@ namespace SmartMetric.ServiceTests
 
         //TESTE: fornecido um formTemplateTranslationDTOAddRequest válido, adiciona com sucesso, retorna mensagem
         [Fact]
-        public async Task AddFormTemplateTranslation_FormTemplateTranslationIsValid_ShouldBeSuccessful()
+        public async Task AddFormTemplateTranslation_ShouldBeSuccessful()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -210,6 +268,14 @@ namespace SmartMetric.ServiceTests
                 }
             };
 
+            FormTemplate formTemplate = new()
+            {
+                FormTemplateId = formTemplateId,
+                CreatedDate = DateTime.UtcNow,
+                CreatedByUserId = 123434,
+                Translations = formTemplateTranslationExists
+            };
+
             FormTemplateTranslationDTOAddRequest request = new()
             {
                 FormTemplateId = formTemplateId,
@@ -220,6 +286,8 @@ namespace SmartMetric.ServiceTests
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
             var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+
+            _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateId)).ReturnsAsync(formTemplate);
 
             _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(formTemplateId)).ReturnsAsync(formTemplateTranslationExists);
 
@@ -459,6 +527,49 @@ namespace SmartMetric.ServiceTests
                         FormTemplateTranslationId = Guid.NewGuid(),
                         FormTemplateId = formTemplateId,
                         Language = language.ToString(),
+                        Title = "Title",
+                        Description = "Description",
+                    }
+                }
+            };
+
+            _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateId)).ReturnsAsync(formTemplate);
+
+            //Act
+            Func<Task> action = async () => await _translationsDeleterService.DeleteFormTemplateTranslationById(formTemplateId, language);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um Guid válido e que existe, language não existe, logo deve lançar exceção
+        [Fact]
+        public async Task DeleteFormTemplateTranslationById_LanguageDoesntExist_ShouldThrowException()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+            Language language = Language.PT;
+
+            FormTemplate formTemplate = new()
+            {
+                FormTemplateId = formTemplateId,
+                CreatedByUserId = 123,
+                CreatedDate = DateTime.UtcNow,
+                Translations = new List<FormTemplateTranslation>
+                {
+                    new FormTemplateTranslation
+                    {
+                        FormTemplateTranslationId = Guid.NewGuid(),
+                        FormTemplateId = formTemplateId,
+                        Language = Language.ES.ToString(),
+                        Title = "Title",
+                        Description = "Description",
+                    },
+                    new FormTemplateTranslation
+                    {
+                        FormTemplateTranslationId = Guid.NewGuid(),
+                        FormTemplateId = formTemplateId,
+                        Language = Language.FR.ToString(),
                         Title = "Title",
                         Description = "Description",
                     }
