@@ -1,4 +1,5 @@
 ﻿using SmartMetric.Core.Enums;
+using SmartMetric.Infrastructure.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -78,10 +79,10 @@ namespace SmartMetric.Core.Domain.Entities
         public virtual ICollection<ReviewDepartment>? Departments { get; set; }
 
         /// <summary>
-        /// Obtém ou define o Funcionário que criou a revisão
+        /// Obtém ou define o utilizador que criou a revisão
         /// </summary>
         [ForeignKey(nameof(CreatedByUserId))]
-        public virtual Funcionario? Funcionario { get; set; }
+        public virtual Utilizador? Utilizador { get; set; }
     }
 
 

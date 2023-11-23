@@ -16,7 +16,7 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            byte[] encbuff = Encoding.UTF8.GetBytes("marcos.bastos@smartstep.pt" + "§" + DateTime.Now.Ticks + "§" + "508268800");
+            byte[] encbuff = Encoding.UTF8.GetBytes("Pedro.Maia" + "§" + DateTime.Now.Ticks + "§" + "508268800");
 
             string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
 

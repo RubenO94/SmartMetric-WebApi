@@ -18,10 +18,10 @@ namespace SmartMetric.Core.Services.Adders
     public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService
     {
 
-        private readonly IFormTemplateTranslationsRepository _translationsRepository;
+        private readonly IFormTemplateTranslationRepository _translationsRepository;
         private readonly ILogger<FormTemplateTranslationsAdderService> _logger;
 
-        public FormTemplateTranslationsAdderService(IFormTemplateTranslationsRepository translationsRepository, ILogger<FormTemplateTranslationsAdderService> logger)
+        public FormTemplateTranslationsAdderService(IFormTemplateTranslationRepository translationsRepository, ILogger<FormTemplateTranslationsAdderService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;

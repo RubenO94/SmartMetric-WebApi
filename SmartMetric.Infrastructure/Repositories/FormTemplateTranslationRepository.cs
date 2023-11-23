@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class FormTemplateTranslationsRepository : IFormTemplateTranslationsRepository
+    public class FormTemplateTranslationRepository : IFormTemplateTranslationRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<FormTemplateTranslationsRepository> _logger;
+        private readonly ILogger<FormTemplateTranslationRepository> _logger;
 
-        public FormTemplateTranslationsRepository(ApplicationDbContext dbContext, ILogger<FormTemplateTranslationsRepository> logger)
+        public FormTemplateTranslationRepository(ApplicationDbContext dbContext, ILogger<FormTemplateTranslationRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<FormTemplateTranslation> AddFormTemplateTranslation(FormTemplateTranslation formTemplateTranslation)
         {
-            _logger.LogInformation($"{nameof(FormTemplateTranslationsRepository)}.{nameof(AddFormTemplateTranslation)} foi iniciado.");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationRepository)}.{nameof(AddFormTemplateTranslation)} foi iniciado.");
 
             _dbContext.FormTemplateTranslations.Add(formTemplateTranslation);
             await _dbContext.SaveChangesAsync();
@@ -40,19 +40,19 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<FormTemplateTranslation>> GetAllFormTemplateTranslations()
         {
-            _logger.LogInformation($"{nameof(FormTemplateTranslationsRepository)}.{nameof(GetAllFormTemplateTranslations)} foi iniciado.");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationRepository)}.{nameof(GetAllFormTemplateTranslations)} foi iniciado.");
             return await _dbContext.FormTemplateTranslations.ToListAsync();
         }
 
         public async Task<List<FormTemplateTranslation>> GetTranslationsByFormTemplateId(Guid formTemplateId)
         {
-            _logger.LogInformation($"{nameof(FormTemplateTranslationsRepository)}.{nameof(GetTranslationsByFormTemplateId)} foi iniciado.");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationRepository)}.{nameof(GetTranslationsByFormTemplateId)} foi iniciado.");
             return await _dbContext.FormTemplateTranslations.Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
         }
 
         public async Task<FormTemplateTranslation?> GetFormTemplateTranslationById(Guid formTemplateTranslationId)
         {
-            _logger.LogInformation($"{nameof(FormTemplateTranslationsRepository)}.{nameof(GetFormTemplateTranslationById)} foi iniciado.");
+            _logger.LogInformation($"{nameof(FormTemplateTranslationRepository)}.{nameof(GetFormTemplateTranslationById)} foi iniciado.");
             return await _dbContext.FormTemplateTranslations.FirstOrDefaultAsync(temp => temp.FormTemplateTranslationId == formTemplateTranslationId);
         }
 

@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class SingleChoiceOptionTranslationsRepository : ISingleChoiceOptionTranslationsRepository
+    public class SingleChoiceOptionTranslationRepository : ISingleChoiceOptionTranslationRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<RatingOptionTranslationsRepository> _logger;
+        private readonly ILogger<RatingOptionTranslationRepository> _logger;
 
-        public SingleChoiceOptionTranslationsRepository(ApplicationDbContext dbContext, ILogger<RatingOptionTranslationsRepository> logger)
+        public SingleChoiceOptionTranslationRepository(ApplicationDbContext dbContext, ILogger<RatingOptionTranslationRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<SingleChoiceOptionTranslation> AddSingleChoiceOptionTranslation(SingleChoiceOptionTranslation singleChoiceOptionTranslation)
         {
-            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(AddSingleChoiceOptionTranslation)} foi iniciado.");
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationRepository)}.{nameof(AddSingleChoiceOptionTranslation)} foi iniciado.");
 
             _dbContext.SingleChoiceOptionTranslations.Add(singleChoiceOptionTranslation);
             await _dbContext.SaveChangesAsync();
@@ -40,19 +40,19 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<SingleChoiceOptionTranslation>> GetAllSingleChoiceOptionTranslations()
         {
-            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(AddSingleChoiceOptionTranslation)} foi iniciado.");
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationRepository)}.{nameof(AddSingleChoiceOptionTranslation)} foi iniciado.");
             return await _dbContext.SingleChoiceOptionTranslations.ToListAsync();
         }
 
         public async Task<List<SingleChoiceOptionTranslation>> GetTranslationsBySingleChoiceOptionId(Guid formTemplateId)
         {
-            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(GetTranslationsBySingleChoiceOptionId)} foi iniciado.");
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationRepository)}.{nameof(GetTranslationsBySingleChoiceOptionId)} foi iniciado.");
             return await _dbContext.SingleChoiceOptionTranslations.Where(temp => temp.SingleChoiceOptionId == formTemplateId).ToListAsync();
         }
 
         public async Task<SingleChoiceOptionTranslation?> GetSingleChoiceOptionTranslationById(Guid singleChoiceOptionTranslationId)
         {
-            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsRepository)}.{nameof(GetSingleChoiceOptionTranslationById)} foi iniciado.");
+            _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationRepository)}.{nameof(GetSingleChoiceOptionTranslationById)} foi iniciado.");
             return await _dbContext.SingleChoiceOptionTranslations.FirstOrDefaultAsync(temp => temp.SingleChoiceOptionTranslationId == singleChoiceOptionTranslationId);
         }
 

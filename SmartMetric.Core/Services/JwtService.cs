@@ -43,8 +43,9 @@ namespace SmartMetric.Core.Services
             new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()), // Emitido em (data e hora da geração do token)
             new Claim(JwtRegisteredClaimNames.Name, user.UserName!.ToString()), // Nome do utilizador (Opcional)
             new Claim(JwtRegisteredClaimNames.UniqueName, user.UserId!.ToString()), // Id do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.Email, user.UserEmail!.ToString()),// Email do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.GivenName, user.ApplicationUserType!.ToString()!),// Email do utilizador (Opcional)
+            new Claim(JwtRegisteredClaimNames.Email, user.UserEmail?.ToString() ?? string.Empty),// Email do utilizador (Opcional)
+            new Claim(JwtRegisteredClaimNames.GivenName, user.ApplicationUserType!.ToString()!),// Email do utilizador (Opcional),
+            new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(expiration).ToUnixTimeSeconds().ToString()) // Tempo de expiração (Obrigatório)
 
             };
 

@@ -32,15 +32,17 @@ namespace SmartMetric.WebAPI.StartupExtensions
             //SmartTime
             services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
 
-            services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
-            services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
+            //Metrics
+            services.AddScoped<IFormTemplateRepository, FormTemplateRepository>();
+            services.AddScoped<IFormTemplateTranslationRepository, FormTemplateTranslationRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
-            services.AddScoped<IQuestionTranslationsRepository, QuestionTranslationsRepository>();
+            services.AddScoped<IQuestionTranslationRepository, QuestionTranslationRepository>();
             services.AddScoped<IRatingOptionRepository, RatingOptionRepository>();
-            services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
+            services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationRepository>();
             services.AddScoped<ISingleChoiceOptionRepository, SingleChoiceOptionRepository>();
-            services.AddScoped<ISingleChoiceOptionTranslationsRepository, SingleChoiceOptionTranslationsRepository>();
-            services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
+            services.AddScoped<ISingleChoiceOptionTranslationRepository, SingleChoiceOptionTranslationRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<ISubmissionRepository, SubmissionRepository>();
 
             #endregion
 
@@ -52,7 +54,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             //JWT
             services.AddTransient<IJwtService, JwtService>();
 
-            //Scoped Services:
+            //Metrics Services:
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
@@ -73,6 +75,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<ISingleChoiceOptionDeleterService, SingleChoiceOptionDeleterService>();
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
+            services.AddScoped<IReviewAdderService, ReviewAdderService>();
 
             #endregion
 

@@ -15,10 +15,10 @@ namespace SmartMetric.Core.Services.Getters
 {
     public class QuestionTranslationGetterService : IQuestionTranslationGetterService
     {
-        private readonly IQuestionTranslationsRepository _translationsRepository;
+        private readonly IQuestionTranslationRepository _translationsRepository;
         private readonly ILogger<QuestionTranslationGetterService> _logger;
 
-        public QuestionTranslationGetterService(IQuestionTranslationsRepository translationsRepository, ILogger<QuestionTranslationGetterService> logger)
+        public QuestionTranslationGetterService(IQuestionTranslationRepository translationsRepository, ILogger<QuestionTranslationGetterService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;

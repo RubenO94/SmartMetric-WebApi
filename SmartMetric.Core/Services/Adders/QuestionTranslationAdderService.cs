@@ -17,10 +17,10 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class QuestionTranslationAdderService : IQuestionTranslationAdderService
     {
-        private readonly IQuestionTranslationsRepository _translationsRepository;
+        private readonly IQuestionTranslationRepository _translationsRepository;
         private readonly ILogger<QuestionTranslationAdderService> _logger;
 
-        public QuestionTranslationAdderService(IQuestionTranslationsRepository translationsRepository, ILogger<QuestionTranslationAdderService> logger)
+        public QuestionTranslationAdderService(IQuestionTranslationRepository translationsRepository, ILogger<QuestionTranslationAdderService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;

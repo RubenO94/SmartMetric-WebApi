@@ -12,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class RatingOptionTranslationsRepository : IRatingOptionTranslationsRepository
+    public class RatingOptionTranslationRepository : IRatingOptionTranslationsRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<RatingOptionTranslationsRepository> _logger;
+        private readonly ILogger<RatingOptionTranslationRepository> _logger;
 
-        public RatingOptionTranslationsRepository(ApplicationDbContext dbContext, ILogger<RatingOptionTranslationsRepository> logger)
+        public RatingOptionTranslationRepository(ApplicationDbContext dbContext, ILogger<RatingOptionTranslationRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -27,7 +27,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<RatingOptionTranslation> AddRatingOptionTranslation(RatingOptionTranslation ratingOptionTranslation)
         {
-            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(AddRatingOptionTranslation)} foi iniciado.");
+            _logger.LogInformation($"{nameof(RatingOptionTranslationRepository)}.{nameof(AddRatingOptionTranslation)} foi iniciado.");
 
             _dbContext.RatingOptionTranslations.Add(ratingOptionTranslation);
             await _dbContext.SaveChangesAsync();
@@ -40,19 +40,19 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<RatingOptionTranslation>> GetAllRatingOptionTranslations()
         {
-            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(GetAllRatingOptionTranslations)} foi iniciado.");
+            _logger.LogInformation($"{nameof(RatingOptionTranslationRepository)}.{nameof(GetAllRatingOptionTranslations)} foi iniciado.");
             return await _dbContext.RatingOptionTranslations.ToListAsync();
         }
 
         public async Task<RatingOptionTranslation?> GetRatingOptionTranslationById(Guid ratingOptionTranslationId)
         {
-            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(GetRatingOptionTranslationById)} foi iniciado.");
+            _logger.LogInformation($"{nameof(RatingOptionTranslationRepository)}.{nameof(GetRatingOptionTranslationById)} foi iniciado.");
             return await _dbContext.RatingOptionTranslations.FirstOrDefaultAsync(temp => temp.RatingOptionTranslationId == ratingOptionTranslationId);
         }
 
         public async Task<List<RatingOptionTranslation>> GetRatingOptionTranslationByRatingOptionId(Guid ratingOptionId)
         {
-            _logger.LogInformation($"{nameof(RatingOptionTranslationsRepository)}.{nameof(GetRatingOptionTranslationByRatingOptionId)} foi iniciado.");
+            _logger.LogInformation($"{nameof(RatingOptionTranslationRepository)}.{nameof(GetRatingOptionTranslationByRatingOptionId)} foi iniciado.");
             return await _dbContext.RatingOptionTranslations.Where(temp => temp.RatingOptionId == ratingOptionId).ToListAsync();
         }
 

@@ -10,7 +10,6 @@ namespace SmartMetric.Core.DTO.AddRequest
     {
         public Guid QuestionId { get; set; }
         public Guid SubmissionId { get; set; }
-        public Guid? SingleChoiceOptionId { get; set; }
         public string? TextResponse { get; set; }
         public int? RatingValue { get; set; }
     }
