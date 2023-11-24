@@ -18,13 +18,8 @@ namespace SmartMetric.Core.DTO.AddRequest
         public Guid? QuestionId { get; set; }
         [Required(ErrorMessage = "Please select a value for this rating option")]
         public int NumericValue { get; set; }
-<<<<<<< HEAD
         [Required(ErrorMessage = "Please select a response type for this rating option")]
         [MinLength(1, ErrorMessage = "Please enter data in at least one language.")]
-=======
-        [Required(ErrorMessage = "Please ensure that the rating option is inserted in at least one language.")]
-        [MinLength(1, ErrorMessage = "Please ensure that the rating option is inserted in at least one language.")]
->>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
         public List<RatingOptionTranslationDTOAddRequest>? Translations { get; set; }
 
 

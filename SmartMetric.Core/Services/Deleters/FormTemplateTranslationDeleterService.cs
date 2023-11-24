@@ -17,24 +17,12 @@ namespace SmartMetric.Core.Services.Deleters
     public class FormTemplateTranslationDeleterService : IFormTemplateTranslationsDeleterService
     {
         //VARIABLES
-<<<<<<< HEAD
-        private readonly IFormTemplateTranslationsRepository _formTemplateTranslationsRepository;
-        private readonly IFormTemplatesRepository _formTemplatesRepository;
-        private readonly ILogger<FormTemplateTranslationDeleterService> _logger;
-
-        //CONSTRUCTOR
-        public FormTemplateTranslationDeleterService (IFormTemplateTranslationsRepository formTemplateTranslationsRepository, IFormTemplatesRepository formTemplatesRepository, ILogger<FormTemplateTranslationDeleterService> logger)
-=======
         private readonly IFormTemplateTranslationRepository _formTemplateTranslationsRepository;
-        private IFormTemplatesGetterService _formTemplatesGetterService;
+        private readonly IFormTemplateRepository _formTemplatesRepository;
         private readonly ILogger<FormTemplateTranslationDeleterService> _logger;
 
         //CONSTRUCTOR
-        public FormTemplateTranslationDeleterService (
-            IFormTemplateTranslationRepository formTemplateTranslationsRepository,
-            IFormTemplatesGetterService formTemplatesGetterService,
-            ILogger<FormTemplateTranslationDeleterService> logger)
->>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
+        public FormTemplateTranslationDeleterService (IFormTemplateTranslationRepository formTemplateTranslationsRepository, IFormTemplateRepository formTemplatesRepository, ILogger<FormTemplateTranslationDeleterService> logger)
         {
             _formTemplateTranslationsRepository = formTemplateTranslationsRepository;
             _formTemplatesRepository = formTemplatesRepository;
