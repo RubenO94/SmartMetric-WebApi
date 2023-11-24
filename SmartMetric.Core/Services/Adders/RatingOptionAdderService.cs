@@ -34,18 +34,20 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(RatingOptionAdderService)}.{nameof(AddRatingOption)} foi iniciado");
 
-            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The ratingOption to add can't be a null object.");
+            if (request == null) throw new ArgumentNullException(nameof(RatingOption));
 
-            if (request.QuestionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
+            ValidationHelper.ModelValidation(request);
 
-            if (request.NumericValue == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'numericValue' parameter is required and must be a valid number.");
+            //if (request.QuestionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
 
-            if (request.Translations == null || request.Translations.Count == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'translation' parameter is required and must have at least one translation.");
+            //if (request.NumericValue == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'numericValue' parameter is required and must be a valid number.");
 
-            foreach(var item in request.Translations) 
-            {
-                if (item.Language == null || item.Description == null || item.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'translation' parameter needs to have valid language and description parameters.");
-            }
+            //if (request.Translations == null || request.Translations.Count == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'translation' parameter is required and must have at least one translation.");
+
+            //foreach(var item in request.Translations) 
+            //{
+            //    if (item.Language == null || item.Description == null || item.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'translation' parameter needs to have valid language and description parameters.");
+            //}
 
             var question = await _questionRepository.GetQuestionById(request.QuestionId);
 

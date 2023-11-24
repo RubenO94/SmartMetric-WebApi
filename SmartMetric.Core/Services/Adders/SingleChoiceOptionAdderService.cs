@@ -33,10 +33,7 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionAdderService)}.{nameof(AddSingleChoiceOption)} foi iniciado");
 
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
-            }
+            if (request == null) throw new ArgumentNullException(nameof(SingleChoiceOption));
 
             ValidationHelper.ModelValidation(request);
 

@@ -69,7 +69,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
         //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo Language nulo, deve lançar exceção
         [Fact]
@@ -89,7 +89,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo Description nulo, deve lançar exceção
@@ -110,7 +110,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo Description vazio, deve lançar exceção
@@ -131,7 +131,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo RatingOptionId nulo, deve lançar exceção
@@ -152,7 +152,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
 
         }
 
@@ -284,7 +284,7 @@ namespace SmartMetric.ServiceTests
             {
                 RatingOptionId = ratingOptionId,
                 Language = Language.PT,
-                Description = "descricao"
+                Description = "descricao exemplo"
             };
 
             var ratingOptionTranslation = request.ToRatingOptionTranslation();
