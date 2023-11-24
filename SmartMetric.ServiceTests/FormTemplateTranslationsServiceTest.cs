@@ -427,11 +427,29 @@ namespace SmartMetric.ServiceTests
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
 
+            _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(formTemplateId))!.ReturnsAsync(null as List<FormTemplateTranslation>);
+
             //Act
             Func<Task> action = async () => await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: fornecido um Guid válido mas que não existe, deve lançar exceção
+        [Fact]
+        public async Task GetTranslationByFormTemplateId_FormTemplateIdIsValidWithNoTranslations_ShouldBeEmptyList()
+        {
+            //Arrange
+            Guid formTemplateId = Guid.NewGuid();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(formTemplateId)).ReturnsAsync(new List<FormTemplateTranslation>());
+
+            //Act
+            var result = await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
+
+            //Assert
+            result.Data.Should().BeEmpty();
         }
 
         //TESTE: fornecido um Guid válido e que existe, retorna lista

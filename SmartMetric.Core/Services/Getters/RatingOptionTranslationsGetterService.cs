@@ -71,7 +71,7 @@ namespace SmartMetric.Core.Services.Getters
 
             var translations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(ratingOptionId.Value);
 
-            if (translations == null || translations.Count == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
+            if (translations == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
             return new ApiResponse<List<RatingOptionTranslationDTOResponse>?>()
             {

@@ -430,14 +430,12 @@ namespace SmartMetric.ServiceTests
             await action.Should().ThrowAsync<HttpStatusException>();
         }
 
-        //TESTE: Fornecido um RatingOptionId válido, mas sem traduções associadas, deve retornar uma lista vazia de RatingOptionTranslationDTOResponse
+        //TESTE: Fornecido um RatingOptionId válido, que não existe, deve lançar exceção
         [Fact]
-        public async Task GetRatingOptionTranslationsByRatingOptionId_WithValidId_NoTranslations_ToBeEmptyList()
+        public async Task GetRatingOptionTranslationsByRatingOptionId_RatingOptionIdIsValidButDoesntExist_ShouldThrowException()
         {
             //Arrange
             Guid ratingOptionId = Guid.NewGuid();
-
-            //List<RatingOptionTranslation> translations = new();
 
             _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationByRatingOptionId(ratingOptionId))!.ReturnsAsync(null as List<RatingOptionTranslation>);
 
@@ -446,6 +444,22 @@ namespace SmartMetric.ServiceTests
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
+        //TESTE: Fornecido um RatingOptionId válido, mas sem traduções associadas, deve retornar uma lista vazia de RatingOptionTranslationDTOResponse
+        [Fact]
+        public async Task GetRatingOptionTranslationsByRatingOptionId_RatingOptionIdIsValidWithNoTranslations_ToBeEmptyList()
+        {
+            //Arrange
+            Guid ratingOptionId = Guid.NewGuid();
+
+            _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationByRatingOptionId(ratingOptionId))!.ReturnsAsync(new List<RatingOptionTranslation>());
+
+            //Act
+            var result = await _translationsGetterService.GetRatingOptionTranslationsByRatingOptionId(ratingOptionId);
+
+            //Assert
+            result.Data.Should().BeEmpty();
         }
 
         //TESTE: Fornecido um RatingOptionId válido, com algumas traduções associadas, deve retornar a lista de traduções correspondentes

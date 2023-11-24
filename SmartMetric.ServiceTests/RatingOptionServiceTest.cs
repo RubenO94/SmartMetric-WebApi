@@ -502,9 +502,25 @@ namespace SmartMetric.ServiceTests
             await action.Should().ThrowAsync<HttpStatusException>();
         }
 
+        //TESTE: recebe um id da questão, válido, mas que não existe
+        [Fact]
+        public async Task GetRatingOptionByQuestionId_QuestionIdIsValidButDoesntExist_ShouldThrowHttpStatusException()
+        {
+            //Arrange
+            Guid questionId = Guid.NewGuid();
+
+            _ratingOptionRepositoryMock.Setup(temp => temp.GetRatingOptionByQuestionId(It.IsAny<Guid>())).ReturnsAsync(null as List<RatingOption>);
+
+            //Act
+            Func<Task> action = async () => await _ratingOptionGetterService.GetRatingOptionsByQuestionId(questionId);
+
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
+
         //TESTE: recebe um id da questão, válido, mas não tem opções de resposta de classificação para essa pergunta
         [Fact]
-        public async Task GetRatingOptionByQuestionId_QuestionIdIsValid_WithNoRatingOption_ShouldThrowHttpStatusException()
+        public async Task GetRatingOptionByQuestionId_QuestionIdIsValidWithNoRatingOption_ShouldBeEmptyList()
         {
             //Arrange
             Guid questionId = Guid.NewGuid();
@@ -512,10 +528,10 @@ namespace SmartMetric.ServiceTests
             _ratingOptionRepositoryMock.Setup(temp => temp.GetRatingOptionByQuestionId(It.IsAny<Guid>())).ReturnsAsync(new List<RatingOption>());
 
             //Act
-            Func<Task> action = async () => await _ratingOptionGetterService.GetRatingOptionsByQuestionId(questionId);
+            var result = await _ratingOptionGetterService.GetRatingOptionsByQuestionId(questionId);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            result.Data.Should().BeEmpty();
         }
 
         //TESTE: recebe um id da questão válido
