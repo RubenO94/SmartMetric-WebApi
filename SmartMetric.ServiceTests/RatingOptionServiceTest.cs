@@ -68,7 +68,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
 
         //TESTE: fornecido um ratingOptionDTOAddRequest com campo QuestionId nulo, deve lançar exceção
@@ -138,7 +138,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations vazio, deve lançar exceção
@@ -157,7 +157,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations com campo Language nulo, deve lançar exceção

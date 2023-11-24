@@ -31,6 +31,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// Obtém ou define a descrição da tradução.
         /// </summary>
         [Required(ErrorMessage = "Please insert a description for this single choice option")]
+        [MinLength(10, ErrorMessage = "Description must have at least 10 caracters.")]
         public string? Description { get; set; }
 
         /// <summary>

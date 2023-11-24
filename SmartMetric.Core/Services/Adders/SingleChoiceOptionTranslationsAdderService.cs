@@ -27,17 +27,14 @@ namespace SmartMetric.Core.Services.Adders
 
         public async Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> AddSingleChoiceOptionTranslation(SingleChoiceOptionTranslationDTOAddRequest? request)
         {
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
-            }
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
             ValidationHelper.ModelValidation(request);
 
-            if (request.SingleChoiceOptionId == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'singleChoiceOptionId' parameter is required and must be a valid GUID.");
-            }
+            //if (request.SingleChoiceOptionId == null)
+            //{
+            //    throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'singleChoiceOptionId' parameter is required and must be a valid GUID.");
+            //}
 
             var translation = request.ToSingleChoiceOptionTranslation();
             translation.SingleChoiceOptionTranslationId = Guid.NewGuid();

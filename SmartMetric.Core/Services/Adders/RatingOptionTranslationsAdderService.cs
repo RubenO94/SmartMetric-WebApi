@@ -32,19 +32,21 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");
 
-            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
+            if (request == null) throw new ArgumentNullException(nameof(RatingOptionTranslation));
 
-            if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'language' field.");
+            //if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'language' field.");
 
-            if (request.Description == null || request.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'description' field.");
+            //if (request.Description == null || request.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'description' field.");
 
-            if (request.RatingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
+            //if (request.RatingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
+
+            ValidationHelper.ModelValidation(request);
 
             var ratingOptionExist = await _ratingOptionRepository.GetRatingOptionById(request.RatingOptionId);
 
             if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            var existingTranslations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(request.RatingOptionId.Value);
+            var existingTranslations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(request.RatingOptionId!.Value);
 
             if (existingTranslations.Any())
             {
