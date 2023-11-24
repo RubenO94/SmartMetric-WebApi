@@ -63,37 +63,23 @@ namespace SmartMetric.Core.Services.Getters
             };
         }
 
-        public Task<ApiResponse<List<RatingOptionTranslationDTOResponse>?>> GetRatingOptionTranslationsByRatingOptionId(Guid? ratingOptionId)
+        public async Task<ApiResponse<List<RatingOptionTranslationDTOResponse>?>> GetRatingOptionTranslationsByRatingOptionId(Guid? ratingOptionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptionTranslationsByRatingOptionId)} foi iniciado");
+
+            if (ratingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
+
+            var translations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(ratingOptionId.Value);
+
+            if (translations == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
+
+            return new ApiResponse<List<RatingOptionTranslationDTOResponse>?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList()
+            };
         }
-
-        //public async Task<ApiResponse<List<RatingOptionTranslationDTOResponse>?>> GetRatingOptionTranslationsByRatingOptionId(Guid? ratingOptionId)
-        //{
-        //    _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptionTranslationsByRatingOptionId)} foi iniciado");
-
-        //    if (ratingOptionId == null)
-        //    {
-        //        throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
-        //    }
-
-        //    var rto = _ratingOptionGetterService.GetRatingOptionById(ratingOptionId.Value);
-
-        //    if (rto == null)
-        //    {
-        //        throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
-        //    }
-
-        //    var translations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(ratingOptionId.Value);
-
-
-        //    return new ApiResponse<List<RatingOptionTranslationDTOResponse>?>()
-        //    {
-        //        StatusCode = (int)HttpStatusCode.OK,
-        //        Message = "Data retrieved successfully.",
-        //        Data = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList()
-        //    };
-        //}
 
         #endregion
     }

@@ -416,19 +416,19 @@ namespace SmartMetric.ServiceTests
 
         #region GetRatingOptionTranslationByRatingOptionId Tests
 
-        //        //TESTE: Fornecido um RatingOptionId nulo, deve lançar um HttpStatusException
-        //        [Fact]
-        //        public async Task GetRatingOptionTranslationsByRatingOptionId_NullRatingOptionId_ShouldThrowHttpStatusException()
-        //        {
-        //            //Arrange
-        //            Guid? ratingOptionId = null;
+        //TESTE: Fornecido um RatingOptionId nulo, deve lançar um HttpStatusException
+        [Fact]
+        public async Task GetRatingOptionTranslationsByRatingOptionId_RatingOptionIdIsNull_ShouldThrowHttpStatusException()
+        {
+            //Arrange
+            Guid? ratingOptionId = null;
 
-        //            //Act
-        //            Func<Task> action = async () => await _translationsGetterService.GetRatingOptionTranslationsByRatingOptionId(ratingOptionId);
+            //Act
+            Func<Task> action = async () => await _translationsGetterService.GetRatingOptionTranslationsByRatingOptionId(ratingOptionId);
 
-        //            //Assert
-        //            await action.Should().ThrowAsync<HttpStatusException>();
-        //        }
+            //Assert
+            await action.Should().ThrowAsync<HttpStatusException>();
+        }
 
         //        //TESTE: Fornecido um RatingOptionId válido, mas sem traduções associadas, deve retornar uma lista vazia de RatingOptionTranslationDTOResponse
         //        [Fact]
