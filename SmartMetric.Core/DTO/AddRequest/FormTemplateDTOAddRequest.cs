@@ -10,19 +10,35 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.AddRequest
 {
+    /// <summary>
+    /// DTO para adicionar um novo modelo de formulário.
+    /// </summary>
     public class FormTemplateDTOAddRequest
     {
+        /// <summary>
+        /// Obtém ou define a data de criação.
+        /// </summary>
         [DataType(DataType.Date)]
         [JsonIgnore]
         public DateTime? CreatedDate { get; set; }
-        [Required(ErrorMessage = "CreatedByUserId is Required")]
+
+        /// <summary>
+        /// Obtém ou define o ID do usuário que criou o formulário. Este campo é obrigatório.
+        /// </summary>
+        [Required(ErrorMessage = "The field CreatedByUserId is required.")]
         public int? CreatedByUserId { get; set; }
 
-        [MinLength(1, ErrorMessage = "Need atleast one language")]
-        [Required(ErrorMessage ="Need atleast one language")]
+        /// <summary>
+        /// Obtém ou define as traduções do modelo de formulário. Deve conter pelo menos uma tradução.
+        /// </summary>
+        [MinLength(1, ErrorMessage = "Need at least one language.")]
+        [Required(ErrorMessage = "The field Translations is required and must contain at least one language.")]
         public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
 
-
+        /// <summary>
+        /// Converte o DTO para um objeto FormTemplate.
+        /// </summary>
+        /// <returns>Um objeto FormTemplate populado com os dados do DTO.</returns>
         public FormTemplate ToFormTemplate()
         {
             return new FormTemplate()
@@ -33,4 +49,5 @@ namespace SmartMetric.Core.DTO.AddRequest
             };
         }
     }
+
 }
