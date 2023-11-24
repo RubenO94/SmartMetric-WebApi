@@ -19,6 +19,8 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using SmartMetric.WebAPI.Filters.ActionFilters;
+using SmartMetric.WebAPI.Filters.ExceptionFilter;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -101,6 +103,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             services.AddControllers(options =>
             {
+                options.Filters.Add(typeof(ValidationErrorHandlingAttribute));
+                options.Filters.Add(typeof(RequestValidationAttribute));
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
                 options.Filters.Add<TokenValidationActionFilter>();
@@ -110,6 +114,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
                 options.Filters.Add(new AuthorizeFilter(policy));
             })
+             .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; })
              .AddXmlSerializerFormatters()
              .AddJsonOptions(options =>
              {
@@ -156,7 +161,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             #region CORS
 
-            services.AddCors(options => {
+            services.AddCors(options =>
+            {
                 options.AddDefaultPolicy(policyBuilder =>
                 {
                     policyBuilder

@@ -41,7 +41,7 @@ namespace SmartMetric.Core.Services.Adders
 
             if (request.CreatedDate == null)
             {
-                throw new ArgumentNullException(nameof(request.CreatedDate));
+                throw new ArgumentException(nameof(request.CreatedDate));
             }
 
             if (request.SubjectType == null)

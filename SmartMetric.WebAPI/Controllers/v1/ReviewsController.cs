@@ -6,10 +6,12 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Infrastructure.DatabaseContext;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
+    [RequestValidation]
     public class ReviewsController : CustomBaseController
     {
         private readonly ISmartTimeService _smartTimeService;

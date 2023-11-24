@@ -10,11 +10,13 @@ using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
 using SmartMetric.Infrastructure.DatabaseContext;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 using System.Net;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
+    [RequestValidation]
     public class FormTemplatesController : CustomBaseController
     {
         private readonly IFormTemplatesGetterService _formTemplateGetterService;

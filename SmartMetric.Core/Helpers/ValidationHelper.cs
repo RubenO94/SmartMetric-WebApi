@@ -26,10 +26,15 @@ namespace SmartMetric.Core.Helpers
             List<ValidationResult> validationResults = new List<ValidationResult>();
             bool isValid = Validator.TryValidateObject(obj, validationContext, validationResults, true);
 
-            // Lança uma exceção se a validação falhar, contendo a primeira mensagem de erro encontrada.
+            // Lança uma exceção se a validação falhar, contendo as mensagens de erro encontradas.
             if (!isValid)
             {
-                throw new HttpStatusException(HttpStatusCode.BadRequest,validationResults.FirstOrDefault()?.ErrorMessage!);
+                IDictionary<string, string> failures = validationResults
+                    .ToDictionary(
+                        validationResult => validationResult.MemberNames.FirstOrDefault() ?? string.Empty,
+                        validationResult => validationResult.ErrorMessage!);
+
+                throw new Exceptions.ValidationException(failures);
             }
         }
     }
