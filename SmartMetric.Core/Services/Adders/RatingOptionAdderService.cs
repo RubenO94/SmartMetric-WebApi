@@ -54,18 +54,7 @@ namespace SmartMetric.Core.Services.Adders
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
             }
 
-<<<<<<< HEAD
             if (question.ResponseType != ResponseType.Rating.ToString())
-=======
-            var question = await _questionGetterService.GetQuestionById(request.QuestionId);
-
-            if (question.Data == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
-            }
-
-            if (question.Data.ResponseType != ResponseType.Rating.ToString())
->>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.Rating}");
             }

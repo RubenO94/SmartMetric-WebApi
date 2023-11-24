@@ -29,8 +29,8 @@ namespace SmartMetric.ServiceTests
         private readonly IFormTemplatesGetterService _formTemplatesGetterService;
         private readonly IFormTemplatesDeleterService _formTemplatesDeleterService;
 
-        private readonly Mock<IFormTemplatesRepository> _formTemplatesRepositoryMock;
-        private readonly IFormTemplatesRepository _formTemplatesRepository;
+        private readonly Mock<IFormTemplateRepository> _formTemplatesRepositoryMock;
+        private readonly IFormTemplateRepository _formTemplatesRepository;
 
         private readonly ITestOutputHelper _testOutputHelper;
         private readonly IFixture _fixture;
@@ -40,7 +40,7 @@ namespace SmartMetric.ServiceTests
             _fixture = new Fixture();
             _testOutputHelper = testOutputHelper;
 
-            _formTemplatesRepositoryMock = new Mock<IFormTemplatesRepository>();
+            _formTemplatesRepositoryMock = new Mock<IFormTemplateRepository>();
             _formTemplatesRepository = _formTemplatesRepositoryMock.Object;
 
             var AdderloggerMock = new Mock<ILogger<FormTemplatesAdderService>>();

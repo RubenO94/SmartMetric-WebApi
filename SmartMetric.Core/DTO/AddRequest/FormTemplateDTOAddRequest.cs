@@ -12,22 +12,12 @@ namespace SmartMetric.Core.DTO.AddRequest
 {
     public class FormTemplateDTOAddRequest
     {
-<<<<<<< HEAD
         [JsonIgnore]
         [DataType(DataType.Date)]
         public DateTime? CreatedDate { get; set; }
 
         public int? CreatedByUserId { get; set; }
 
-=======
-        [Required(ErrorMessage ="Created Date is required")]
-        [DataType(DataType.Date)]
-        public DateTime? CreatedDate { get; set; }
-        [Required(ErrorMessage = "Please select a user")]
-        public int? CreatedByUserId { get; set; }
-        [Required(ErrorMessage = "Please ensure that the form is inserted in at least one language.")]
-        [MinLength(1, ErrorMessage = "Please ensure that the form is inserted in at least one language.")]
->>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
         public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
 
 
