@@ -34,12 +34,12 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 else if(exception is ArgumentNullException argumentNullException)
                 {
                     code = HttpStatusCode.BadRequest;
-                    message = $"{exception.Message} can't be null";
+                    message = exception.Message;
                 }
                 else if(exception is ArgumentException argumentException)
                 {
                     code = HttpStatusCode.BadRequest;
-                    message = "Invalid Request";
+                    message = $"Invalid argument ({exception.Message})";
                 }
                 else if (exception is SecurityTokenSignatureKeyNotFoundException securityTokenSignatureKeyNotFoundException)
                 {
@@ -57,7 +57,6 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 {
                     StatusCode = (int)code,
                     ErrorMessage = message,
-                    TraceId = Activity.Current?.Id
                 };
 
                 context.Response.StatusCode = (int)code;
