@@ -44,18 +44,11 @@ namespace SmartMetric.Core.Services.Getters
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetFormTemplateById)} foi iniciado");
 
-            if(formTemplateId == null )
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
-            }
+            if(formTemplateId == null ) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
 
             var formTemplate = await _formTemplateRepository.GetFormTemplateById(formTemplateId.Value);
 
-            if(formTemplate == null )
-            {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found.The provided ID does not exist.");
-                
-            }
+            if(formTemplate == null ) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
 
             return new ApiResponse<FormTemplateDTOResponse?>()
             {

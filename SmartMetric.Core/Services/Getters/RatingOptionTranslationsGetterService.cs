@@ -16,13 +16,11 @@ namespace SmartMetric.Core.Services.Getters
     public class RatingOptionTranslationsGetterService : IRatingOptionTranslationGetterService
     {
         private readonly IRatingOptionTranslationsRepository _translationsRepository;
-        private readonly IRatingOptionGetterService _ratingOptionGetterService;
         private readonly ILogger<RatingOptionTranslationsGetterService> _logger;
 
-        public RatingOptionTranslationsGetterService(IRatingOptionTranslationsRepository translationsRepository, IRatingOptionGetterService ratingOptionGetterService, ILogger<RatingOptionTranslationsGetterService> logger)
+        public RatingOptionTranslationsGetterService(IRatingOptionTranslationsRepository translationsRepository, ILogger<RatingOptionTranslationsGetterService> logger)
         {
             _translationsRepository = translationsRepository;
-            _ratingOptionGetterService = ratingOptionGetterService;
             _logger = logger;
         }
 
@@ -69,20 +67,11 @@ namespace SmartMetric.Core.Services.Getters
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptionTranslationsByRatingOptionId)} foi iniciado");
 
-            if (ratingOptionId == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
-            }
-
-            var rto = _ratingOptionGetterService.GetRatingOptionById(ratingOptionId.Value);
-
-            if (rto == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
-            }
+            if (ratingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
 
             var translations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(ratingOptionId.Value);
 
+            if (translations == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
             return new ApiResponse<List<RatingOptionTranslationDTOResponse>?>()
             {

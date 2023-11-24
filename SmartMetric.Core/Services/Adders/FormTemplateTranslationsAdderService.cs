@@ -17,13 +17,22 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class FormTemplateTranslationsAdderService : IFormTemplateTranslationsAdderService
     {
+<<<<<<< HEAD
+        private readonly IFormTemplateTranslationsRepository _translationsRepository;
+        private readonly IFormTemplatesRepository _formTemplatesRepository;
+        private readonly ILogger<FormTemplateTranslationsAdderService> _logger;
+
+        public FormTemplateTranslationsAdderService(IFormTemplateTranslationsRepository translationsRepository, IFormTemplatesRepository formTemplatesRepository, ILogger<FormTemplateTranslationsAdderService> logger)
+=======
 
         private readonly IFormTemplateTranslationRepository _translationsRepository;
         private readonly ILogger<FormTemplateTranslationsAdderService> _logger;
 
         public FormTemplateTranslationsAdderService(IFormTemplateTranslationRepository translationsRepository, ILogger<FormTemplateTranslationsAdderService> logger)
+>>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
         {
             _translationsRepository = translationsRepository;
+            _formTemplatesRepository = formTemplatesRepository;
             _logger = logger;
         }
 
@@ -31,17 +40,17 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
-            }
+            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            if (request.FormTemplateId == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
-            }
+            if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The FormTemplateTranslation must have a 'language' field.");
 
-            ValidationHelper.ModelValidation(request);
+            if (request.Title == null || request.Title == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The FormTemplateTranslation must have a 'title' field.");
+
+            if (request.FormTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
+
+            var existenceFormTemplate = await _formTemplatesRepository.GetFormTemplateById(request.FormTemplateId);
+
+            if (existenceFormTemplate == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
             var existenceTranslations = await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
 

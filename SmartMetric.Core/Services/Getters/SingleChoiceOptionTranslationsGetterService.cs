@@ -72,7 +72,7 @@ namespace SmartMetric.Core.Services.Getters
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "SingleChoiceOptionId can't be null");
             }
 
-            var singleChoiceOptionExist = await _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist");
+            var singleChoiceOptionExist = await _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId.Value) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist");
 
             var translations = await _translationsRepository.GetTranslationsBySingleChoiceOptionId(singleChoiceOptionExist.Data!.SingleChoiceOptionId);
             return new ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>?>()

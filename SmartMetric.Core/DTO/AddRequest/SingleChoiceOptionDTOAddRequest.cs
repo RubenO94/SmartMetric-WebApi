@@ -23,8 +23,13 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define as traduções para a opção de escolha única, pelo menos uma tradução é necessária.
         /// </summary>
+<<<<<<< HEAD
+        [Required(ErrorMessage = "At least one title and description translation is required.")]
+        [MinLength(1, ErrorMessage = "Please enter data in at least one language.")]
+=======
         [Required(ErrorMessage = "Please ensure that the single choice option is inserted in at least one language.")]
         [MinLength(1, ErrorMessage = "Please ensure that the single choice option is inserted in at least one language.")]
+>>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
         public List<SingleChoiceOptionTranslationDTOAddRequest>? Translations { get; set; }
 
         /// <summary>

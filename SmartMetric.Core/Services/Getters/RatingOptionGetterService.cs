@@ -75,6 +75,8 @@ namespace SmartMetric.Core.Services.Getters
 
             var ratingOption = await _ratingOptionRepository.GetRatingOptionByQuestionId(questionId.Value);
 
+            if (ratingOption == null || ratingOption.Count == 0) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+
             return new ApiResponse<List<RatingOptionDTOResponse>?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,

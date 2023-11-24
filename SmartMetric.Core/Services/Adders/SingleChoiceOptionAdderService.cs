@@ -57,6 +57,11 @@ namespace SmartMetric.Core.Services.Adders
                 throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.SingleChoice}");
             }
 
+            if (request.Translations!.Count == 0)
+            {
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The singleChoice must have at least one translation.");
+            }
+
             var singleChoiceOptionId = Guid.NewGuid();
 
             foreach (var translationRequest in request.Translations!)

@@ -20,13 +20,13 @@ namespace SmartMetric.Core.Services.Adders
     public class RatingOptionAdderService : IRatingOptionAdderService
     {
         private readonly IRatingOptionRepository _ratingOptionRepository;
-        private readonly IQuestionGetterService _questionGetterService;
+        private readonly IQuestionRepository _questionRepository;
         private readonly ILogger<RatingOptionAdderService> _logger;
 
-        public RatingOptionAdderService(IRatingOptionRepository ratingOptionRepository, IQuestionGetterService questionGetterService, ILogger<RatingOptionAdderService> logger)
+        public RatingOptionAdderService(IRatingOptionRepository ratingOptionRepository, IQuestionRepository questionRepository, ILogger<RatingOptionAdderService> logger)
         {
             _ratingOptionRepository = ratingOptionRepository;
-            _questionGetterService = questionGetterService;
+            _questionRepository = questionRepository;
             _logger = logger;
         }
 
@@ -34,18 +34,29 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(RatingOptionAdderService)}.{nameof(AddRatingOption)} foi iniciado");
 
-            if (request == null)
+            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The ratingOption to add can't be a null object.");
+
+            if (request.QuestionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
+
+            if (request.NumericValue == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'numericValue' parameter is required and must be a valid number.");
+
+            if (request.Translations == null || request.Translations.Count == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'translation' parameter is required and must have at least one translation.");
+
+            foreach(var item in request.Translations) 
             {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
+                if (item.Language == null || item.Description == null || item.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'translation' parameter needs to have valid language and description parameters.");
             }
 
-            ValidationHelper.ModelValidation(request);
+            var question = await _questionRepository.GetQuestionById(request.QuestionId);
 
-            if (request.QuestionId == null)
+            if (question == null)
             {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
+                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
             }
 
+<<<<<<< HEAD
+            if (question.ResponseType != ResponseType.Rating.ToString())
+=======
             var question = await _questionGetterService.GetQuestionById(request.QuestionId);
 
             if (question.Data == null)
@@ -54,33 +65,28 @@ namespace SmartMetric.Core.Services.Adders
             }
 
             if (question.Data.ResponseType != ResponseType.Rating.ToString())
+>>>>>>> 3efbc32826497b6845c45329a5c68902f50dfa33
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.Rating}");
             }
 
             var ratingOptionId = Guid.NewGuid();
-
-            foreach (var translationRequest in request.Translations!)
-            {
-                translationRequest.RatingOptionId = ratingOptionId;
-
-            }
-
             RatingOption ratingOption = request.ToRatingOption();
             ratingOption.RatingOptionId = ratingOptionId;
 
             foreach (var translation in ratingOption.Translations!)
             {
                 translation.RatingOptionTranslationId = Guid.NewGuid();
+                translation.RatingOptionId = ratingOptionId;
             }
 
-            var result = await _ratingOptionRepository.AddRatingOption(ratingOption);
+            await _ratingOptionRepository.AddRatingOption(ratingOption);
 
             return new ApiResponse<RatingOptionDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "RatingOption added successfully to the Question.",
-                Data = result.ToRatingOptionDTOResponse()
+                Data = ratingOption.ToRatingOptionDTOResponse()
             };
         }
     }

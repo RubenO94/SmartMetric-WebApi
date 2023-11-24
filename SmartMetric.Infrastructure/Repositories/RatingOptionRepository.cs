@@ -6,6 +6,7 @@ using SmartMetric.Infrastructure.DatabaseContext;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,12 +44,10 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _dbContext.RatingOptions.ToListAsync();
         }
 
-        public async Task<RatingOption?> GetRatingOptionById(Guid ratingOptionId)
+        public async Task<RatingOption?> GetRatingOptionById(Guid? ratingOptionId)
         {
             _logger.LogInformation($"{nameof(RatingOptionRepository)}.{nameof(GetRatingOptionById)} foi iniciado.");
-
-            var response = await _dbContext.RatingOptions.Include(temp => temp.Translations).FirstOrDefaultAsync(rto => rto.RatingOptionId == ratingOptionId);
-            return response;
+            return await _dbContext.RatingOptions.Include(temp => temp.Translations).FirstOrDefaultAsync(rto => rto.RatingOptionId == ratingOptionId);
         }
 
         public async Task<List<RatingOption>?> GetRatingOptionByQuestionId(Guid questionId)
