@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Domain.RepositoryContracts
 {
-    public interface ISingleChoiceOptionTranslationsRepository
+    public interface ISingleChoiceOptionTranslationRepository
     {
         #region Adders
 

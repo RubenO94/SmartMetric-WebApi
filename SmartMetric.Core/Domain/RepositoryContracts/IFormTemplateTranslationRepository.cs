@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Domain.RepositoryContracts
 {
-    public interface IFormTemplateTranslationsRepository
+    public interface IFormTemplateTranslationRepository
     {
         #region Adders
         

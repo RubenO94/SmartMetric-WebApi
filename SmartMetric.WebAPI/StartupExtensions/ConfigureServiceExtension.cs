@@ -11,6 +11,14 @@ using SmartMetric.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.Services.Deleters;
+using SmartMetric.Core.ServicesContracts;
+using SmartMetric.Core.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Authorization;
+using SmartMetric.WebAPI.Filters.ActionFilters;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -21,19 +29,32 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             #region Repositories
 
-            services.AddScoped<IFormTemplatesRepository, FormTemplatesRepository>();
-            services.AddScoped<IFormTemplateTranslationsRepository, FormTemplateTranslationsRepository>();
+            //SmartTime
+            services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
+
+            //Metrics
+            services.AddScoped<IFormTemplateRepository, FormTemplateRepository>();
+            services.AddScoped<IFormTemplateTranslationRepository, FormTemplateTranslationRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
-            services.AddScoped<IQuestionTranslationsRepository, QuestionTranslationsRepository>();
+            services.AddScoped<IQuestionTranslationRepository, QuestionTranslationRepository>();
             services.AddScoped<IRatingOptionRepository, RatingOptionRepository>();
-            services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationsRepository>();
+            services.AddScoped<IRatingOptionTranslationsRepository, RatingOptionTranslationRepository>();
             services.AddScoped<ISingleChoiceOptionRepository, SingleChoiceOptionRepository>();
-            services.AddScoped<ISingleChoiceOptionTranslationsRepository, SingleChoiceOptionTranslationsRepository>();
+            services.AddScoped<ISingleChoiceOptionTranslationRepository, SingleChoiceOptionTranslationRepository>();
+            services.AddScoped<IReviewRepository, ReviewRepository>();
+            services.AddScoped<ISubmissionRepository, SubmissionRepository>();
 
             #endregion
 
             #region Services
 
+            //SmartTime
+            services.AddScoped<ISmartTimeService, SmartTimeService>();
+
+            //JWT
+            services.AddTransient<IJwtService, JwtService>();
+
+            //Metrics Services:
             services.AddScoped<IFormTemplatesGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplatesAdderService, FormTemplatesAdderService>();
             services.AddScoped<IFormTemplatesDeleterService, FormTemplatesDeleterService>();
@@ -54,6 +75,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<ISingleChoiceOptionDeleterService, SingleChoiceOptionDeleterService>();
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
+            services.AddScoped<IReviewAdderService, ReviewAdderService>();
 
             #endregion
 
@@ -81,6 +103,12 @@ namespace SmartMetric.WebAPI.StartupExtensions
             {
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
+                options.Filters.Add<TokenValidationActionFilter>();
+
+                //Authorization policy
+                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+                options.Filters.Add(new AuthorizeFilter(policy));
             })
              .AddXmlSerializerFormatters()
              .AddJsonOptions(options =>
@@ -123,6 +151,47 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 options.GroupNameFormat = "'v'VVV"; //v1
                 options.SubstituteApiVersionInUrl = true;
             });
+
+            #endregion
+
+            #region CORS
+
+            services.AddCors(options => {
+                options.AddDefaultPolicy(policyBuilder =>
+                {
+                    policyBuilder
+                    .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!)
+                    .WithHeaders("Authorization", "origin", "accept", "content-type")
+                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    ;
+                });
+            });
+
+            #endregion
+
+            #region JWT
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateAudience = true,
+                        ValidAudience = configuration["Jwt:Audience"],
+                        ValidateIssuer = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                    };
+                });
+
+            services.AddAuthorization();
 
             #endregion
 

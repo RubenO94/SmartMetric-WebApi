@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Domain.RepositoryContracts
 {
-    public interface IQuestionTranslationsRepository
+    public interface IQuestionTranslationRepository
     {
         #region Adders
 

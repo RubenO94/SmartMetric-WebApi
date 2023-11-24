@@ -22,6 +22,58 @@ namespace SmartMetric.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Departamento", b =>
+                {
+                    b.Property<int>("Iddepartamento")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("IDDepartamento");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Iddepartamento"));
+
+                    b.Property<string>("Codigo")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EmailChefia")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("IddepartamentoPai")
+                        .HasColumnType("int")
+                        .HasColumnName("IDDepartamentoPai");
+
+                    b.Property<int?>("Identidade")
+                        .HasColumnType("int")
+                        .HasColumnName("IDEntidade");
+
+                    b.Property<int?>("MaximoFuncionariosFerias")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("NaoValidarDocumentos")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Notas")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int?>("NumeroFuncionariosFerias")
+                        .HasColumnType("int");
+
+                    b.HasKey("Iddepartamento")
+                        .HasName("IDDepartamento");
+
+                    b.HasIndex(new[] { "Identidade" }, "IX_Departamentos_IDEntidade");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "Identidade" }, "IX_Departamentos_IDEntidade"), 90);
+
+                    b.ToTable("Departamentos");
+                });
+
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplate", b =>
                 {
                     b.Property<Guid>("FormTemplateId")
@@ -39,7 +91,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasKey("FormTemplateId");
 
-                    b.ToTable("FormTemplates");
+                    b.ToTable("Metrics_FormTemplates");
 
                     b.HasData(
                         new
@@ -76,7 +128,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("FormTemplateId");
 
-                    b.ToTable("FormTemplateTranslations");
+                    b.ToTable("Metrics_FormTemplateTranslations");
 
                     b.HasData(
                         new
@@ -87,6 +139,383 @@ namespace SmartMetric.Infrastructure.Migrations
                             Language = "en",
                             Title = "Employee Satisfaction Survey"
                         });
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Funcionario", b =>
+                {
+                    b.Property<int>("Idfuncionario")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("IDFuncionario");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Idfuncionario"));
+
+                    b.Property<bool?>("AcessoPortalWeb")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("AdministradorTerminais")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Alarme")
+                        .HasColumnType("bit");
+
+                    b.Property<byte[]>("Assinatura")
+                        .HasColumnType("image");
+
+                    b.Property<bool?>("CartaConducao")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Cartao")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("CartaoAlternativo")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("CartaoAlternativo1")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("CentroCusto")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("CodigoPostal")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("CstFullControl")
+                        .HasColumnType("bit")
+                        .HasColumnName("CST_FullControl");
+
+                    b.Property<DateTime?>("DataAdmissao")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DataDemissao")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DataExpiracao")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("DataNascimento")
+                        .HasColumnType("datetime");
+
+                    b.Property<string>("DeviceId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("DeviceID");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("EmailEquipa")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("EnviarOffline")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("EstadoCivil")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<string>("Folha")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<byte[]>("Fotografia")
+                        .HasColumnType("image");
+
+                    b.Property<bool?>("Gdpr")
+                        .HasColumnType("bit")
+                        .HasColumnName("GDPR");
+
+                    b.Property<DateTime?>("HorasMensais")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("HorasSemanais")
+                        .HasColumnType("datetime");
+
+                    b.Property<int?>("Iddepartamento")
+                        .HasColumnType("int")
+                        .HasColumnName("IDDepartamento");
+
+                    b.Property<int?>("Identidade")
+                        .HasColumnType("int")
+                        .HasColumnName("IDEntidade");
+
+                    b.Property<int?>("Idgrupo")
+                        .HasColumnType("int")
+                        .HasColumnName("IDGrupo");
+
+                    b.Property<string>("Idioma")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int?>("Idmunicipio")
+                        .HasColumnType("int")
+                        .HasColumnName("IDMunicipio");
+
+                    b.Property<int?>("Idperfil")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfil");
+
+                    b.Property<int?>("IdperfilEquipa")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfilEquipa");
+
+                    b.Property<int?>("IdperfilEquipaAcesso")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfilEquipaAcesso");
+
+                    b.Property<int?>("IdperfilSuperiorHierarquico")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfilSuperiorHierarquico");
+
+                    b.Property<Guid?>("IdpersonApp")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("IDPersonAPP");
+
+                    b.Property<int?>("IdplanoHorarios")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPlanoHorarios");
+
+                    b.Property<bool?>("IgnorarLimites")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("IgnorarPrazoAntecedenciaExtras")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Local")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("Localidade")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("LoginLdap")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("LoginLDAP");
+
+                    b.Property<bool?>("MarcarSemBiometria")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Morada")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("Morada2")
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<bool?>("NaoExportar")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NaoGerarSubAlimentacao")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NaoGerarSubTurno")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("NaoValidarDocumentos")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("NomeAbreviado")
+                        .HasMaxLength(16)
+                        .HasColumnType("nvarchar(16)");
+
+                    b.Property<string>("Notas")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Numero")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<int?>("NumeroFilhos")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("OcultarBh")
+                        .HasColumnType("bit")
+                        .HasColumnName("OcultarBH");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("PerfilAcesso")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("PermitirFeriasAnoAnterior")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Pin")
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
+
+                    b.Property<string>("Pinapk")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("PINAPK");
+
+                    b.Property<string>("Pinapp")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)")
+                        .HasColumnName("PINAPP");
+
+                    b.Property<int?>("PlanosHorariosLinha")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("PrimeiroAcesso")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool?>("Seguranca")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Sexo")
+                        .HasMaxLength(1)
+                        .HasColumnType("nvarchar(1)");
+
+                    b.Property<bool?>("SoAcessos")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("SubAlimentacao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<bool?>("SuperiorHierarquico")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("SuperiorHierarquicoPorDelegacao")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Telefone")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<string>("Telemovel")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<bool?>("Temporario")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("TentativasAcesso")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UltimoAcessoSmartTime")
+                        .HasColumnType("datetime");
+
+                    b.Property<decimal?>("ValorBase")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("ValorDiario")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("ValorHora")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("ValorHoraFds")
+                        .HasColumnType("decimal(18, 2)")
+                        .HasColumnName("ValorHoraFDS");
+
+                    b.Property<decimal?>("ValorPremioAssiduidade")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<decimal?>("ValorSubsidio")
+                        .HasColumnType("decimal(18, 2)");
+
+                    b.Property<bool?>("Visitado")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Idfuncionario")
+                        .HasName("IDFuncionario");
+
+                    b.HasIndex(new[] { "DeviceId" }, "IX_Funcionarios_DeviceID");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "DeviceId" }, "IX_Funcionarios_DeviceID"), 90);
+
+                    b.HasIndex(new[] { "Identidade" }, "IX_Funcionarios_IDEntidade");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "Identidade" }, "IX_Funcionarios_IDEntidade"), 90);
+
+                    b.HasIndex(new[] { "Idfuncionario" }, "_dta_index_Funcionarios_7_962102468__K1");
+
+                    b.ToTable("Funcionarios");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FuncionariosChefia", b =>
+                {
+                    b.Property<int?>("Iddepartamento")
+                        .HasColumnType("int")
+                        .HasColumnName("IDDepartamento");
+
+                    b.Property<int?>("Idfuncionario")
+                        .HasColumnType("int")
+                        .HasColumnName("IDFuncionario");
+
+                    b.Property<int?>("IdfuncionarioSuperior")
+                        .HasColumnType("int")
+                        .HasColumnName("IDFuncionarioSuperior");
+
+                    b.Property<string>("Nivel")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelAusencias")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelAusenciasServico")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<int?>("NivelBh")
+                        .HasColumnType("int")
+                        .HasColumnName("NivelBH");
+
+                    b.Property<string>("NivelExtras")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelFerias")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelFuncionariosMarcacoes")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.HasIndex(new[] { "Iddepartamento" }, "IX_FuncionariosChefias_IDDepartamento");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "Iddepartamento" }, "IX_FuncionariosChefias_IDDepartamento"), 100);
+
+                    b.HasIndex(new[] { "Idfuncionario" }, "IX_FuncionariosChefias_IDFuncionario");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "Idfuncionario" }, "IX_FuncionariosChefias_IDFuncionario"), 100);
+
+                    b.HasIndex(new[] { "IdfuncionarioSuperior" }, "IX_FuncionariosChefias_IDFuncionarioSuperior");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "IdfuncionarioSuperior" }, "IX_FuncionariosChefias_IDFuncionarioSuperior"), 100);
+
+                    b.ToTable("FuncionariosChefias");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
@@ -117,7 +546,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Metrics_Questions");
 
                     b.HasData(
                         new
@@ -161,7 +590,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("QuestionTranslations");
+                    b.ToTable("Metrics_QuestionTranslations");
 
                     b.HasData(
                         new
@@ -198,7 +627,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("RatingOptions");
+                    b.ToTable("Metrics_RatingOptions");
 
                     b.HasData(
                         new
@@ -242,7 +671,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("RatingOptionId");
 
-                    b.ToTable("RatingOptionTranslations");
+                    b.ToTable("Metrics_RatingOptionTranslations");
 
                     b.HasData(
                         new
@@ -300,7 +729,51 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasKey("ReviewId");
 
-                    b.ToTable("Reviews");
+                    b.HasIndex("CreatedByUserId");
+
+                    b.ToTable("Metrics_Reviews");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewDepartment", b =>
+                {
+                    b.Property<Guid>("ReviewDepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("DepartmentId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReviewDepartmentId");
+
+                    b.HasIndex("DepartmentId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Metrics_ReviewDepartments");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewEmployee", b =>
+                {
+                    b.Property<Guid>("ReviewEmployeeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EmployeeId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ReviewEmployeeId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Metrics_ReviewEmployees");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
@@ -310,14 +783,10 @@ namespace SmartMetric.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("QuestionId")
-                        .IsRequired()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int?>("RatingValue")
+                    b.Property<int?>("RatingValueResponse")
                         .HasColumnType("int");
-
-                    b.Property<Guid?>("SingleChoiceOptionId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("SubmissionId")
                         .IsRequired()
@@ -329,13 +798,37 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasKey("ReviewResponseId");
 
-                    b.HasIndex("QuestionId");
-
-                    b.HasIndex("SingleChoiceOptionId");
-
                     b.HasIndex("SubmissionId");
 
-                    b.ToTable("ReviewResponses");
+                    b.ToTable("Metrics_ReviewResponses");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewTranslation", b =>
+                {
+                    b.Property<Guid>("ReviewTranslationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(300)
+                        .HasColumnType("nvarchar(300)");
+
+                    b.Property<string>("Language")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<Guid?>("ReviewId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Title")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("ReviewTranslationId");
+
+                    b.HasIndex("ReviewId");
+
+                    b.ToTable("Metrics_ReviewTranslation");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.SingleChoiceOption", b =>
@@ -351,7 +844,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.ToTable("SingleChoiceOptions");
+                    b.ToTable("Metrics_SingleChoiceOptions");
 
                     b.HasData(
                         new
@@ -392,7 +885,7 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasIndex("SingleChoiceOptionId");
 
-                    b.ToTable("SingleChoiceOptionTranslations");
+                    b.ToTable("Metrics_SingleChoiceOptionTranslations");
 
                     b.HasData(
                         new
@@ -438,9 +931,165 @@ namespace SmartMetric.Infrastructure.Migrations
 
                     b.HasKey("SubmissionId");
 
+                    b.HasIndex("EvaluatedEmployeeId");
+
+                    b.HasIndex("EvaluatorEmployeeId");
+
                     b.HasIndex("ReviewId");
 
-                    b.ToTable("Submissions");
+                    b.ToTable("Metrics_Submissions");
+                });
+
+            modelBuilder.Entity("SmartMetric.Infrastructure.Models.Perfis", b =>
+                {
+                    b.Property<int>("Idperfil")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfil");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Idperfil"));
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
+
+                    b.Property<int?>("PortalColaborador")
+                        .HasColumnType("int");
+
+                    b.HasKey("Idperfil")
+                        .HasName("IDPerfil");
+
+                    b.ToTable("Perfis");
+                });
+
+            modelBuilder.Entity("SmartMetric.Infrastructure.Models.PerfisDepartamento", b =>
+                {
+                    b.Property<int?>("Iddepartamento")
+                        .HasColumnType("int")
+                        .HasColumnName("IDDepartamento");
+
+                    b.Property<int?>("Idperfil")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfil");
+
+                    b.Property<string>("Nivel")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelAusencias")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelAusenciasServico")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelExtras")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelFerias")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.Property<string>("NivelFuncionariosMarcacoes")
+                        .HasMaxLength(2)
+                        .HasColumnType("nvarchar(2)");
+
+                    b.HasIndex(new[] { "Idperfil" }, "IX_PerfisDepartamentos_IDPerfil");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "Idperfil" }, "IX_PerfisDepartamentos_IDPerfil"), 90);
+
+                    b.ToTable("PerfisDepartamentos");
+                });
+
+            modelBuilder.Entity("SmartMetric.Infrastructure.Models.PerfisJanela", b =>
+                {
+                    b.Property<string>("Aplicacao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("Idjanela")
+                        .HasColumnType("int")
+                        .HasColumnName("IDJanela");
+
+                    b.Property<int?>("Idperfil")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfil");
+
+                    b.Property<string>("Modulo")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasIndex(new[] { "Idperfil", "Aplicacao" }, "IX_PerfisJanelas_IDPerfil_Aplicacao");
+
+                    SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "Idperfil", "Aplicacao" }, "IX_PerfisJanelas_IDPerfil_Aplicacao"), 90);
+
+                    b.ToTable("PerfisJanelas");
+                });
+
+            modelBuilder.Entity("SmartMetric.Infrastructure.Models.Utilizador", b =>
+                {
+                    b.Property<int>("Idutilizador")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("IDUtilizador");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Idutilizador"));
+
+                    b.Property<bool?>("Activo")
+                        .HasColumnType("bit");
+
+                    b.Property<bool?>("Ativo")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("Idfuncionario")
+                        .HasColumnType("int")
+                        .HasColumnName("IDFuncionario");
+
+                    b.Property<int?>("Idperfil")
+                        .HasColumnType("int")
+                        .HasColumnName("IDPerfil");
+
+                    b.Property<string>("Nome")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RefreshTokenExpiration")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("TentativasAcesso")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("UltimoAcessoSmartAccess")
+                        .HasColumnType("datetime");
+
+                    b.Property<DateTime?>("UltimoAcessoSmartTime")
+                        .HasColumnType("datetime");
+
+                    b.HasKey("Idutilizador")
+                        .HasName("IDUtilizador");
+
+                    b.ToTable("Utilizadores");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.FormTemplateTranslation", b =>
@@ -500,29 +1149,72 @@ namespace SmartMetric.Infrastructure.Migrations
                     b.Navigation("RatingOption");
                 });
 
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Review", b =>
                 {
-                    b.HasOne("SmartMetric.Core.Domain.Entities.Question", "Question")
+                    b.HasOne("SmartMetric.Infrastructure.Models.Utilizador", "Utilizador")
                         .WithMany()
-                        .HasForeignKey("QuestionId")
+                        .HasForeignKey("CreatedByUserId");
+
+                    b.Navigation("Utilizador");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewDepartment", b =>
+                {
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Departamento", "Department")
+                        .WithMany()
+                        .HasForeignKey("DepartmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SmartMetric.Core.Domain.Entities.SingleChoiceOption", "SingleChoiceOption")
-                        .WithMany()
-                        .HasForeignKey("SingleChoiceOptionId");
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Review", "Review")
+                        .WithMany("Departments")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
+                    b.Navigation("Department");
+
+                    b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewEmployee", b =>
+                {
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Funcionario", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Review", "Review")
+                        .WithMany("Employees")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Review");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewResponse", b =>
+                {
                     b.HasOne("SmartMetric.Core.Domain.Entities.Submission", "Submission")
                         .WithMany("ReviewResponses")
                         .HasForeignKey("SubmissionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Question");
-
-                    b.Navigation("SingleChoiceOption");
-
                     b.Navigation("Submission");
+                });
+
+            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ReviewTranslation", b =>
+                {
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Review", "Review")
+                        .WithMany("Translations")
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Review");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.SingleChoiceOption", b =>
@@ -547,9 +1239,22 @@ namespace SmartMetric.Infrastructure.Migrations
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Submission", b =>
                 {
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Funcionario", "EvaluatedEmployee")
+                        .WithMany()
+                        .HasForeignKey("EvaluatedEmployeeId");
+
+                    b.HasOne("SmartMetric.Core.Domain.Entities.Funcionario", "EvaluatorEmployee")
+                        .WithMany()
+                        .HasForeignKey("EvaluatorEmployeeId");
+
                     b.HasOne("SmartMetric.Core.Domain.Entities.Review", "Review")
                         .WithMany("Submissions")
-                        .HasForeignKey("ReviewId");
+                        .HasForeignKey("ReviewId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("EvaluatedEmployee");
+
+                    b.Navigation("EvaluatorEmployee");
 
                     b.Navigation("Review");
                 });
@@ -577,9 +1282,15 @@ namespace SmartMetric.Infrastructure.Migrations
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Review", b =>
                 {
+                    b.Navigation("Departments");
+
+                    b.Navigation("Employees");
+
                     b.Navigation("Questions");
 
                     b.Navigation("Submissions");
+
+                    b.Navigation("Translations");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.SingleChoiceOption", b =>

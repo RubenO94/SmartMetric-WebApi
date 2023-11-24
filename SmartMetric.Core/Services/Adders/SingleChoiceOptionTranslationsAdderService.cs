@@ -16,10 +16,10 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class SingleChoiceOptionTranslationsAdderService : ISingleChoiceOptionTranslationsAdderService
     {
-        private readonly ISingleChoiceOptionTranslationsRepository _translationsRepository;
+        private readonly ISingleChoiceOptionTranslationRepository _translationsRepository;
         private readonly ILogger<SingleChoiceOptionTranslationsAdderService> _logger;
 
-        public SingleChoiceOptionTranslationsAdderService(ISingleChoiceOptionTranslationsRepository translationsRepository, ILogger<SingleChoiceOptionTranslationsAdderService> logger)
+        public SingleChoiceOptionTranslationsAdderService(ISingleChoiceOptionTranslationRepository translationsRepository, ILogger<SingleChoiceOptionTranslationsAdderService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;

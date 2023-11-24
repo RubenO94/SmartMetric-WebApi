@@ -7,11 +7,11 @@ using SmartMetric.Infrastructure.DatabaseContext;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class FormTemplatesRepository : IFormTemplatesRepository
+    public class FormTemplateRepository : IFormTemplateRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly ILogger<FormTemplatesRepository> _logger;
-        public FormTemplatesRepository(ApplicationDbContext dbContext, ILogger<FormTemplatesRepository> logger)
+        private readonly ILogger<FormTemplateRepository> _logger;
+        public FormTemplateRepository(ApplicationDbContext dbContext, ILogger<FormTemplateRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
@@ -19,7 +19,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate)
         {
-            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(AddFormTemplate)} foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(AddFormTemplate)} foi iniciado");
 
             _dbContext.FormTemplates.Add(formTemplate);
             await _dbContext.SaveChangesAsync();
@@ -32,14 +32,6 @@ namespace SmartMetric.Infrastructure.Repositories
            var  formTemplateToDelete = await _dbContext.FormTemplates.FindAsync(formTemplateId);
             if (formTemplateToDelete != null)
             {
-                //// Excluir traduções relacionadas manualmente
-                //var translationsToDelete = await _dbContext.FormTemplateTranslations
-                //    .Where(t => t.FormTemplateId == formTemplateId)
-                //    .ToListAsync();
-
-                //_dbContext.FormTemplateTranslations.RemoveRange(translationsToDelete);
-
-                // Agora, você pode excluir o FormTemplate
                 _dbContext.FormTemplates.Remove(formTemplateToDelete);
 
                 var rowsDeleted = await _dbContext.SaveChangesAsync();
@@ -53,7 +45,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<FormTemplate>> GetAllFormTemplates()
         {
-            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
 
             return await _dbContext.FormTemplates
@@ -67,7 +59,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId)
         {
-            _logger.LogInformation($"{nameof(FormTemplatesRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
+            _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
 
 
 

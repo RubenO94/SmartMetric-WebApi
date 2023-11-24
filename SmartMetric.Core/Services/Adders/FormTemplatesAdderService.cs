@@ -18,9 +18,9 @@ namespace SmartMetric.Core.Services.Adders
 {
     public class FormTemplatesAdderService : IFormTemplatesAdderService
     {
-        private readonly IFormTemplatesRepository _formTemplateRepository;
+        private readonly IFormTemplateRepository _formTemplateRepository;
         private readonly ILogger<FormTemplatesAdderService> _logger;
-        public FormTemplatesAdderService(IFormTemplatesRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
+        public FormTemplatesAdderService(IFormTemplateRepository formTemplateRepository, ILogger<FormTemplatesAdderService> logger)
         {
             _formTemplateRepository = formTemplateRepository;
             _logger = logger;

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.Exceptions;
 using System.Diagnostics;
 using System.Net;
@@ -21,22 +22,45 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
 
                 HttpStatusCode code;
+                string message;
+
+                var type = exception?.GetType();
 
                 if (exception is HttpStatusException errorResponse)
                 {
                     code = errorResponse.Status;
+                    message = errorResponse.Message;
+                }
+                else if(exception is ArgumentNullException argumentNullException)
+                {
+                    code = HttpStatusCode.BadRequest;
+                    message = $"{exception.Message} can't be null";
+                }
+                else if(exception is ArgumentException argumentException)
+                {
+                    code = HttpStatusCode.BadRequest;
+                    message = "Invalid Request";
+                }
+                else if (exception is SecurityTokenSignatureKeyNotFoundException securityTokenSignatureKeyNotFoundException)
+                {
+                    code = HttpStatusCode.Unauthorized;
+                    message = "Access Token invalid";
                 }
                 else
                 {
                     code = HttpStatusCode.InternalServerError;
+                    message = "An unexpected error occurred. Please try again later or contact support.";
+
                 }
 
                 var response = new
                 {
-                    code = (int)code,
-                    error = exception?.Message,
+                    StatusCode = (int)code,
+                    ErrorMessage = message,
+                    TraceId = Activity.Current?.Id
                 };
 
+                context.Response.StatusCode = (int)code;
                 await context.Response.WriteAsJsonAsync(response);
 
             });

@@ -17,10 +17,10 @@ namespace SmartMetric.Core.Services.Getters
 {
     public class FormTemplateTranslationsGetterService : IFormTemplateTranslationsGetterService
     {
-        private readonly IFormTemplateTranslationsRepository _translationsRepository;
+        private readonly IFormTemplateTranslationRepository _translationsRepository;
         private readonly ILogger<FormTemplateTranslationsGetterService> _logger;
 
-        public FormTemplateTranslationsGetterService(IFormTemplateTranslationsRepository translationsRepository, ILogger<FormTemplateTranslationsGetterService> logger)
+        public FormTemplateTranslationsGetterService(IFormTemplateTranslationRepository translationsRepository, ILogger<FormTemplateTranslationsGetterService> logger)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;
