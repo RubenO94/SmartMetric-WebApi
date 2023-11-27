@@ -22,22 +22,21 @@ namespace SmartMetric.Core.DTO.AddRequest
         public Guid? QuestionId { get; set; }
 
         /// <summary>
-        /// Obtém ou define o idioma para a tradução.
+        /// Obtém ou define o idioma para a tradução. Este campo é obrigatório.
         /// </summary>
-        [Required(ErrorMessage = "Please select a language")]
+        [Required(ErrorMessage = "Please select a language.")]
         public Language? Language { get; set; }
 
         /// <summary>
-        /// Obtém ou define o título da tradução.
+        /// Obtém ou define o título da tradução. Este campo não pode estar em branco.
         /// </summary>
-        [Required(ErrorMessage = "Title can't be blank")]
+        [Required(ErrorMessage = "Title can't be blank.")]
         public string? Title { get; set; }
 
         /// <summary>
         /// Obtém ou define a descrição da tradução.
         /// </summary>
         public string? Description { get; set; }
-
 
         /// <summary>
         /// Converte o DTO de solicitação para a entidade correspondente de tradução da questão.
@@ -48,10 +47,11 @@ namespace SmartMetric.Core.DTO.AddRequest
             return new QuestionTranslation()
             {
                 QuestionId = QuestionId,
-                Language = Language.ToString(),
+                Language = Language?.ToString(),
                 Title = Title,
                 Description = Description
             };
         }
     }
+
 }

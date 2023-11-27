@@ -18,17 +18,17 @@ namespace SmartMetric.Core.DTO.AddRequest
         public Guid? FormTemplateId { get; set; }
 
         /// <summary>
-        /// Obtém ou define o idioma para a tradução.
+        /// Obtém ou define o idioma para a tradução. Este campo é obrigatório.
         /// </summary>
-        [Required(ErrorMessage ="Language is required")]
         [EnumDataType(typeof(Language), ErrorMessage ="Language inserted is a invalid option")]
+        [Required(ErrorMessage = "The field Language is required.")]
         public Language? Language { get; set; }
 
         /// <summary>
-        /// Obtém ou define o título da tradução.
+        /// Obtém ou define o título da tradução. Deve ter pelo menos 10 caracteres.
         /// </summary>
-        [MinLength(10, ErrorMessage ="Minimum length is 10 caracters")]
-        [Required(ErrorMessage = "Title is required")]
+        [MinLength(10, ErrorMessage = "The title must have a minimum length of 10 characters.")]
+        [Required(ErrorMessage = "The field Title is required.")]
         public string? Title { get; set; }
 
         /// <summary>
@@ -45,11 +45,12 @@ namespace SmartMetric.Core.DTO.AddRequest
             return new FormTemplateTranslation()
             {
                 FormTemplateId = FormTemplateId,
-                Language = Language.ToString(),
+                Language = Language?.ToString(),
                 Title = Title,
                 Description = Description
             };
         }
     }
+
 
 }
