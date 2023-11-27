@@ -39,7 +39,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 else if(exception is ArgumentException argumentException)
                 {
                     code = HttpStatusCode.BadRequest;
-                    message = $"Invalid argument ({exception.Message})";
+                    message = $"Invalid argument";
                 }
                 else if (exception is SecurityTokenSignatureKeyNotFoundException securityTokenSignatureKeyNotFoundException)
                 {

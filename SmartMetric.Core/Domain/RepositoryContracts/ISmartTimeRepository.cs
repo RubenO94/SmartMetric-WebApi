@@ -85,11 +85,13 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
 
         #region Departamentos
         Task<List<Departamento>> GetAllDepartaments();
-        Task<List<Departamento>> GetSelectedDepartments(List<int> departmentIds);
+        Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId);
         #endregion
 
         #region FuncionariosChefia
-        Task<List<FuncionariosChefia>> GetAllFuncionariosChefia(int page, int pageSize);
+        Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId);
+        Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId);
+        Task<List<FuncionariosChefia>> GetAllChiefsEmployee(int page, int pageSize);
         #endregion
     }
 

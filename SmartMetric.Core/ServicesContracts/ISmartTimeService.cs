@@ -14,6 +14,22 @@ namespace SmartMetric.Core.ServicesContracts
     /// </summary>
     public interface ISmartTimeService
     {
+        #region FuncionarioChefia
+        //TODO: Serviço para FuncionarioChefia
+        #endregion
+
+        #region Departamento
+        //TODO: Serviço para Departamento
+        #endregion
+
+        #region PerfilDepartamento
+        //TODO: Serviço para PerfilDepartamento
+        #endregion
+
+        #region Perfil
+        //TODO: Serviço para Perfil
+        #endregion
+
         #region Utilizador
 
         /// <summary>
@@ -66,7 +82,7 @@ namespace SmartMetric.Core.ServicesContracts
         #region Geral
 
         /// <summary>
-        /// Atualiza as informações do utilizador na aplicação.
+        /// Atualiza as informações do utilizador na aplicação, verificando pelo o ApplicationUserType, (Utilizador ou Funcionário).
         /// </summary>
         /// <param name="userDTO">As informações atualizadas do utilizador.</param>
         /// <returns>Um objeto UserDTO atualizado ou null se não encontrado.</returns>

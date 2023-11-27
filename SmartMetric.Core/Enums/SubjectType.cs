@@ -12,7 +12,7 @@ namespace SmartMetric.Core.Enums
     public enum SubjectType
     {
         /// <summary>
-        /// Revisão de toda a empresa, envolvendo todos os colaboradores.
+        /// Revisão de toda a empresa, envolvendo todos os departamentos.
         /// </summary>
         WholeCompany,
 

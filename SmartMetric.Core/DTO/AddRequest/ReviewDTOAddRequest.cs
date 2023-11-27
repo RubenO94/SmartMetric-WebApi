@@ -63,12 +63,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         public List<QuestionDTOAddRequest>? Questions { get; set; }
 
         /// <summary>
-        /// Obtém ou define os IDs dos funcionários associados à revisão. Este campo é obrigatório.
-        /// </summary>
-        [Required(ErrorMessage = "ReviewEmployeeIds is required.")]
-        public List<int>? ReviewEmployeeIds { get; set; }
-
-        /// <summary>
         /// Obtém ou define os IDs dos departamentos associados à revisão. Este campo é obrigatório.
         /// </summary>
         [Required(ErrorMessage = "ReviewDepartmentsIds is required.")]

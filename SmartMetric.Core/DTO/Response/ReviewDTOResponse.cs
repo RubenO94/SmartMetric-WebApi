@@ -1,11 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Query.Internal;
-using SmartMetric.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SmartMetric.Core.Domain.Entities;
 
 namespace SmartMetric.Core.DTO.Response
 {
@@ -21,7 +14,6 @@ namespace SmartMetric.Core.DTO.Response
         public string? ReviewStatus { get; set; }
         public List<ReviewTranslationDTOResponse>? Translations { get; set; }
         public List<QuestionDTOResponse>? Questions { get; set; }
-        public List<EmployeeDTOResponse>? Employees { get; set; }
         public List<DepartmentDTOResponse>? Departments { get; set; }
 
 
@@ -66,6 +58,7 @@ namespace SmartMetric.Core.DTO.Response
                 SubjectType = review.SubjectType,
                 Questions = review.Questions?.Select(temp => temp.ToQuestionDTOResponse()).ToList() ?? null,
                 Translations = review.Translations?.Select(temp => temp.ToReviewTranslationDTOResponse()).ToList() ?? null,
+                //Departments = review.Departments.Select(temp => temp.To()).ToList() ?? null,
 
             };
         }
