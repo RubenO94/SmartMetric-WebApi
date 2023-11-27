@@ -20,7 +20,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         public Language? Language { get; set; }
 
         [Required(ErrorMessage = "Description can't be blank")]
-        [MinLength(10, ErrorMessage = "Description must have at least 10 caracters.")]
         public string? Description { get; set; }
 
 
