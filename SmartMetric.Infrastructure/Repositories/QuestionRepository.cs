@@ -47,7 +47,9 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Translations)
                 .Include(temp => temp.SingleChoiceOptions)!.ThenInclude(temp =>  temp.Translations)
                 .Include(temp => temp.RatingOptions)!.ThenInclude(temp => temp.Translations)
-                .Where(temp => temp.FormTemplateId == formTemplateId).ToListAsync();
+                .Where(temp => temp.FormTemplateId == formTemplateId)
+                .OrderBy(temp => temp.Position)
+                .ToListAsync();
         }
 
         public async Task<Question?> GetQuestionById(Guid? questionId)

@@ -37,7 +37,9 @@ namespace SmartMetric.Core.Services.Deleters
 
             if (singleChoiceOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "SingleChoiceOption can't be null!");
 
-            var singleChoiceOptionExist = await _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist");
+            var singleChoiceOptionExist = await _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId);
+                
+            if (singleChoiceOptionExist == null) throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist");
 
             if (singleChoiceOptionExist.Data!.Translations == null || singleChoiceOptionExist.Data.Translations.Count < 2)
             {
