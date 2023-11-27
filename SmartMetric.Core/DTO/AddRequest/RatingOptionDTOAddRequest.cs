@@ -13,17 +13,20 @@ namespace SmartMetric.Core.DTO.AddRequest
 {
     public class RatingOptionDTOAddRequest
     {
-
         [JsonIgnore]
         public Guid? QuestionId { get; set; }
+
         [Required(ErrorMessage = "Please select a value for this rating option")]
+        [Range(1, int.MaxValue, ErrorMessage = "NumericValue must be equal or higher than 1")]
         public int NumericValue { get; set; }
+
         [Required(ErrorMessage = "Please select a response type for this rating option")]
         [MinLength(1, ErrorMessage = "Please enter data in at least one language.")]
         public List<RatingOptionTranslationDTOAddRequest>? Translations { get; set; }
 
 
         public RatingOption ToRatingOption()
+        
         {
             return new RatingOption()
             {

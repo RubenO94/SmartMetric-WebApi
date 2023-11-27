@@ -16,6 +16,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         public Guid? RatingOptionId { get; set; }
 
         [Required(ErrorMessage = "Please select a Language")]
+        [EnumDataType(typeof(Language), ErrorMessage = "Language inserted is a invalid option")]
         public Language? Language { get; set; }
 
         [Required(ErrorMessage = "Description can't be blank")]

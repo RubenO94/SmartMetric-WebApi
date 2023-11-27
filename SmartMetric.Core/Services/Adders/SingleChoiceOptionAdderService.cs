@@ -35,53 +35,32 @@ namespace SmartMetric.Core.Services.Adders
 
             if (request == null) throw new ArgumentNullException(nameof(SingleChoiceOption));
 
-            ValidationHelper.ModelValidation(request);
-
-            if (request.QuestionId == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
-            }
-
             var question = await _questionGetterService.GetQuestionById(request.QuestionId);
 
-            if (question.Data == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
-            }
+            if (question.Data == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
 
             if (question.Data.ResponseType != ResponseType.SingleChoice.ToString())
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.SingleChoice}");
             }
 
-            if (request.Translations!.Count == 0)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The singleChoice must have at least one translation.");
-            }
-
             var singleChoiceOptionId = Guid.NewGuid();
-
-            foreach (var translationRequest in request.Translations!)
-            {
-                translationRequest.SingleChoiceOptionId = singleChoiceOptionId;
-
-            }
-
             SingleChoiceOption singleChoiceOption = request.ToSingleChoiceOption();
             singleChoiceOption.SingleChoiceOptionId = singleChoiceOptionId;
 
             foreach (var translation in singleChoiceOption.Translations!)
             {
                 translation.SingleChoiceOptionTranslationId = Guid.NewGuid();
+                translation.SingleChoiceOptionId = singleChoiceOptionId;
             }
 
-            var result = await _singleChoiceOptionRepository.AddSingleChoiceOption(singleChoiceOption);
+            await _singleChoiceOptionRepository.AddSingleChoiceOption(singleChoiceOption);
 
             return new ApiResponse<SingleChoiceOptionDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "SingleChoiceOption added successfully to the Question.",
-                Data = result.ToSingleChoiceOptionDTOResponse()
+                Data = singleChoiceOption.ToSingleChoiceOptionDTOResponse()
             };
         }
 
