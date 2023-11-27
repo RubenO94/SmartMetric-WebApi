@@ -30,28 +30,33 @@ namespace SmartMetric.Core.Services.Adders
 
             if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
 
-            ValidationHelper.ModelValidation(request);
-
             if (request.FormTemplateId == null)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "The question does not have a FormTemplateId to associate.");
             }
 
-            var formTemplate = _formTemplatesGetterService.GetFormTemplateById(request.FormTemplateId);
-
-            if(formTemplate == null)
+            if (request.ResponseType == Enums.ResponseType.SingleChoice)
             {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
+                request.RatingOptions = new();
+            }
+            if (request.ResponseType == Enums.ResponseType.Rating)
+            {
+                request.SingleChoiceOptions = new();
+            }
+            if (request.ResponseType == Enums.ResponseType.Text)
+            {
+                request.SingleChoiceOptions = new();
+                request.RatingOptions = new();
             }
 
-            //ValidationHelper.ModelValidation(request);
+            var formTemplate = _formTemplatesGetterService.GetFormTemplateById(request.FormTemplateId);
+
+            if(formTemplate == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
             if (request.ReviewId != null)
             {
                 request.ReviewId = null;
             }
-
-            //ValidationHelper.ModelValidation(request);
 
             Guid questionId = Guid.NewGuid();
 
