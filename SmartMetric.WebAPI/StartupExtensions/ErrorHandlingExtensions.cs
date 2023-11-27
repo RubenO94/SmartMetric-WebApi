@@ -56,7 +56,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
                 var response = new
                 {
                     StatusCode = (int)code,
-                    ErrorMessage = message,
+                    Message = message,
                 };
 
                 context.Response.StatusCode = (int)code;

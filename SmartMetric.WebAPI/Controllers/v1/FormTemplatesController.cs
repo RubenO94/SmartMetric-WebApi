@@ -1,22 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SmartMetric.Core.Domain.Entities;
-using SmartMetric.Core.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
-using SmartMetric.Core.Services.Adders;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
-using SmartMetric.Infrastructure.DatabaseContext;
-using SmartMetric.WebAPI.Filters.ActionFilter;
-using System.Net;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
-    [RequestValidation]
+    //[RequestValidation]
     public class FormTemplatesController : CustomBaseController
     {
         private readonly IFormTemplatesGetterService _formTemplateGetterService;

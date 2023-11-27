@@ -174,7 +174,7 @@ namespace SmartMetric.ServiceTests
                     new RatingOptionTranslationDTOAddRequest
                     {
                         Language = null,
-                        Description = "descricao"
+                        Description = "descricaosssssss"
                     }
                 }
             };
@@ -183,7 +183,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um ratingOptionDTOAddRequest com campo Translations com campo Description nulo, deve lançar exceção

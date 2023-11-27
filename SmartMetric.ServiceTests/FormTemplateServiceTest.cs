@@ -56,7 +56,7 @@ namespace SmartMetric.ServiceTests
 
         //TESTE: fornecido um formTemplateDTOAddRequest nulo, deve lançar exceção
         [Fact]
-        public async Task AddFormTemplate_ObjectIsNull_ShouldThrowHttpStatusException()
+        public async Task AddFormTemplate_ObjectIsNull_ShouldThrowException()
         {
             //Arrange
             FormTemplateDTOAddRequest? request = null;
@@ -65,12 +65,12 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ArgumentNullException>();
         }
 
         //TESTE: fornecido um formTemplateDTOAddRequest com campo createdByUserId nulo, deve lançar exceção
         [Fact]
-        public async Task AddFormTemplate_CreatedByUserIdIsNull_ShouldThrowHttpStatusException()
+        public async Task AddFormTemplate_CreatedByUserIdIsNull_ShouldThrowException()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -97,12 +97,12 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um formTemplateDTOAddRequest com campo Translation nulo, deve lançar exceção
         [Fact]
-        public async Task AddFormTemplate_TranslationIsNull_ShouldThrowHttpStatusException()
+        public async Task AddFormTemplate_TranslationIsNull_ShouldThrowException()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -121,12 +121,12 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um formTemplateDTOAddRequest com campo Translation vazio, deve lançar exceção
         [Fact]
-        public async Task AddFormTemplate_TranslationIsEmpty_ShouldThrowHttpStatusException()
+        public async Task AddFormTemplate_TranslationIsEmpty_ShouldThrowException()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -146,12 +146,12 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um formTemplateDTOAddRequest com campo Translation sem o campo Language, deve lançar exceção
         [Fact]
-        public async Task AddFormTemplate_LanguageIsNull_ShouldThrowHttpStatusException()
+        public async Task AddFormTemplate_LanguageIsNull_ShouldThrowException()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -163,7 +163,7 @@ namespace SmartMetric.ServiceTests
                 {
                     new FormTemplateTranslationDTOAddRequest
                     {
-                        Title = "Title",
+                        Title = "Example of Title",
                         Description = "Description",
                     }
                 }
@@ -178,12 +178,12 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>().WithMessage("Language");
         }
 
         //TESTE: fornecido um formTemplateDTOAddRequest com campo Translation sem o campo Title, deve lançar exceção
         [Fact]
-        public async Task AddFormTemplate_TitleIsNull_ShouldThrowHttpStatusException()
+        public async Task AddFormTemplate_TitleIsNull_ShouldThrowException()
         {
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
@@ -210,7 +210,7 @@ namespace SmartMetric.ServiceTests
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
 
             //Assert
-            await action.Should().ThrowAsync<HttpStatusException>();
+            await action.Should().ThrowAsync<ValidationException>();
         }
 
         //TESTE: fornecido um formTemplateDTOAddRequest válido, adiciona com sucesso, retorna mensagem

@@ -33,7 +33,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="singleChoiceOptionId">O Id da opção de escolha única a ser procurada.</param>
         /// <returns>Retorna um objeto do tipo SingleChoiceOption.</returns>
-        Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid singleChoiceOptionId);
+        Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid? singleChoiceOptionId);
 
         /// <summary>
         /// Procura todas as opções de escolha única associadas à questão passada no parâmetro através do seu Id.

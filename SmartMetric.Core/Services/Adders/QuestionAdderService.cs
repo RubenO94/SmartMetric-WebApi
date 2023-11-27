@@ -28,34 +28,30 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(QuestionAdderService)}.{nameof(AddQuestionToFormTemplate)} foi iniciado");
 
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
-            }
+            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null.");
+
+            ValidationHelper.ModelValidation(request);
 
             if (request.FormTemplateId == null)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "The question does not have a FormTemplateId to associate.");
             }
 
-            var formTempalte = _formTemplatesGetterService.GetFormTemplateById(request.FormTemplateId);
+            var formTemplate = _formTemplatesGetterService.GetFormTemplateById(request.FormTemplateId);
 
-            if(formTempalte == null)
+            if(formTemplate == null)
             {
                 throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
             }
 
-            ValidationHelper.ModelValidation(request);
-
+            //ValidationHelper.ModelValidation(request);
 
             if (request.ReviewId != null)
             {
                 request.ReviewId = null;
             }
 
-           
-
-            ValidationHelper.ModelValidation(request);
+            //ValidationHelper.ModelValidation(request);
 
             Guid questionId = Guid.NewGuid();
 

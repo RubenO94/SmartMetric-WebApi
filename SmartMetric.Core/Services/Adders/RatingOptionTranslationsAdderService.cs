@@ -34,14 +34,6 @@ namespace SmartMetric.Core.Services.Adders
 
             if (request == null) throw new ArgumentNullException(nameof(RatingOptionTranslation));
 
-            //if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'language' field.");
-
-            //if (request.Description == null || request.Description == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The RatingOptionTranslation must have a 'description' field.");
-
-            //if (request.RatingOptionId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'ratingOptionId' parameter is required and must be a valid GUID.");
-
-            ValidationHelper.ModelValidation(request);
-
             var ratingOptionExist = await _ratingOptionRepository.GetRatingOptionById(request.RatingOptionId);
 
             if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");

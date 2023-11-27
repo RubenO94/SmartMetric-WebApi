@@ -31,6 +31,7 @@ namespace SmartMetric.Core.Services.Adders
             _logger.LogInformation($"{nameof(FormTemplatesAdderService)}.{nameof(AddFormTemplate)} foi iniciado");
 
             if (addFormTemplateRequest == null) throw new ArgumentNullException(nameof(FormTemplate));
+
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
             //if (addFormTemplateRequest.CreatedByUserId == null || addFormTemplateRequest.CreatedByUserId == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The formTemplate needs a User to be created.");
@@ -45,7 +46,7 @@ namespace SmartMetric.Core.Services.Adders
             addFormTemplateRequest.CreatedDate = DateTime.Now;
             var formTemplateId = Guid.NewGuid();
 
-            foreach (var translation in addFormTemplateRequest.Translations)
+            foreach (var translation in addFormTemplateRequest.Translations!)
             {
                 translation.FormTemplateId = formTemplateId;
             }

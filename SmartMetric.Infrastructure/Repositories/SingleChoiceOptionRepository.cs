@@ -43,7 +43,7 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _dbContext.SingleChoiceOptions.ToListAsync();
         }
 
-        public async Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid singleChoiceOptionId)
+        public async Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid? singleChoiceOptionId)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionRepository)}.{nameof(GetSingleChoiceOptionById)} foi iniciado");
 

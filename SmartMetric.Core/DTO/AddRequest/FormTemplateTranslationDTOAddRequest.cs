@@ -20,6 +20,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// <summary>
         /// Obtém ou define o idioma para a tradução. Este campo é obrigatório.
         /// </summary>
+        [EnumDataType(typeof(Language), ErrorMessage ="Language inserted is a invalid option")]
         [Required(ErrorMessage = "The field Language is required.")]
         public Language? Language { get; set; }
 

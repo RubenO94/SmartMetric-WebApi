@@ -25,6 +25,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// Obtém ou define o idioma para a tradução.
         /// </summary>
         [Required(ErrorMessage = "Please select a language")]
+        [EnumDataType(typeof(Language), ErrorMessage = "Language inserted is a invalid option")]
         public Language? Language { get; set; }
 
         /// <summary>
