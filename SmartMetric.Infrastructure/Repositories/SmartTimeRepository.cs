@@ -117,6 +117,11 @@ namespace SmartMetric.Infrastructure.Repositories
             return user;
         }
 
+
+        #endregion
+
+        #region Departamentos
+
         public async Task<List<Departamento>> GetAllDepartaments()
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllDepartaments)} foi iniciado");
@@ -125,9 +130,28 @@ namespace SmartMetric.Infrastructure.Repositories
 
         }
 
-        public async Task<List<FuncionariosChefia>> GetAllFuncionariosChefia(int page = 1, int pageSize = 20)
+
+        public async Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllFuncionariosChefia)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
+
+           var departamentoIds =  await _context.PerfisDepartamentos.Where(temp => temp.Idperfil == perfilId).Select(pd => pd.Iddepartamento).ToListAsync();
+
+            var departamentosAssociados =  await _context.Departamentos
+            .Where(departamento => departamentoIds.Contains(departamento.Iddepartamento))
+            .ToListAsync();
+
+            return departamentosAssociados;
+
+        }
+
+        #endregion
+
+        #region FuncionariosCHefias
+
+        public async Task<List<FuncionariosChefia>> GetAllChiefsEmployee(int page = 1, int pageSize = 20)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllChiefsEmployee)} foi iniciado");
 
             return await _context.FuncionariosChefias
                 .Skip((page - 1) * pageSize)
@@ -135,10 +159,30 @@ namespace SmartMetric.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<Departamento>> GetSelectedDepartments(List<int> departmentIds)
+
+
+        public async Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByChiefId)} foi iniciado");
+
+           var funcionarioIds = await _context.FuncionariosChefias.Where(temp => temp.IdfuncionarioSuperior == chiefId).Select(fc => fc.Idfuncionario).ToListAsync();
+
+            var funcionariosAssociados = await _context.Funcionarios.Where(temp => funcionarioIds.Contains(temp.Idfuncionario)).ToListAsync();
+
+            return funcionariosAssociados;
         }
+
+        public async Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByChiefId)} foi iniciado");
+
+            var departamentIds = await _context.FuncionariosChefias.Where(temp => temp.IdfuncionarioSuperior == chiefId).Select(fc => fc.Iddepartamento).ToListAsync();
+
+            var departamentosAssociados = await _context.Departamentos.Where(temp => departamentIds.Contains(temp.Iddepartamento)).ToListAsync();
+
+            return departamentosAssociados;
+        }
+
 
         #endregion
 

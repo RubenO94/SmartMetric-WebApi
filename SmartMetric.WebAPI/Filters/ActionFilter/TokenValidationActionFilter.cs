@@ -41,7 +41,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
                     ClaimsPrincipal? claimsPrincipal = _jwtService.GetPrincipalFromJwtToken(token);
                     if (claimsPrincipal == null)
                     {
-                        context.Result = new UnauthorizedObjectResult("Invalid Access");
+                        context.Result = new UnauthorizedObjectResult(new { Error = "Invalid Access" });
                         return;
                     }
                     else
@@ -54,13 +54,13 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
 
                             if (expirationDateTime <= DateTime.UtcNow)
                             {
-                                context.Result = new UnauthorizedObjectResult("Token has expired");
+                                context.Result = new UnauthorizedObjectResult(new { Error = "Token has expired" });
                                 return;
                             }
                         }
                         else
                         {
-                            context.Result = new UnauthorizedObjectResult("Token is invalid");
+                            context.Result = new UnauthorizedObjectResult(new { Error = "Token is invalid" });
                             return;
                         }
 
@@ -72,7 +72,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
 
                             if (applicationUserType == null)
                             {
-                                context.Result = new UnauthorizedObjectResult("Invalid access token");
+                                context.Result = new UnauthorizedObjectResult(new { Error = "Invalid access token" });
                             }
 
                             string? id = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -82,7 +82,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
 
                             if (user == null || user.RefreshTokenExpiration <= DateTime.Now)
                             {
-                                context.Result = new UnauthorizedObjectResult("Invalid Access, login time-out");
+                                context.Result = new UnauthorizedObjectResult(new { Error = "Invalid Access, login time-out" });
                             }
                             else
                             {
@@ -106,7 +106,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
 
                 }
             }
-            await next(); // Continue a execução da ação
+            await next(); // Continua a execução da ação
         }
     }
 }

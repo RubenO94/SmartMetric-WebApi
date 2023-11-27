@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartMetric.Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,22 @@ namespace SmartMetric.Core.DTO.Response
 {
     public class DepartmentDTOResponse
     {
+        public int DepartmentId { get; set; }
+        public int? DepartmentFatherId { get; set; }
+        public string? DepartmentDescription { get; set; }
+    }
+
+
+    public static class DepartmentExtensions
+    {
+        public static DepartmentDTOResponse ToDepartamentDTOResponse(Departamento departamento)
+        {
+            return new DepartmentDTOResponse()
+            {
+                DepartmentId = departamento.Iddepartamento,
+                DepartmentFatherId = departamento.IddepartamentoPai,
+                DepartmentDescription = departamento.Descricao
+            };
+        }
     }
 }

@@ -59,8 +59,8 @@ namespace SmartMetric.Core.DTO.Response
                 CreatedByUserId = formTemplate.CreatedByUserId,
                 CreatedDate = formTemplate.CreatedDate,
                 ModifiedDate = formTemplate.ModifiedDate,
-                Translations = formTemplate.Translations?.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList() ?? new List<FormTemplateTranslationDTOResponse>(),
-                Questions = formTemplate.Questions?.Select(q => q.ToQuestionDTOResponse()).ToList() ?? new List<QuestionDTOResponse>(),//Convertendo ICollection para List
+                Translations = formTemplate.Translations?.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList() ?? null,
+                Questions = formTemplate.Questions?.Select(q => q.ToQuestionDTOResponse()).ToList() ?? null,//Convertendo ICollection para List
             };
         }
     }

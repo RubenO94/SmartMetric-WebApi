@@ -6,6 +6,7 @@ using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.WebAPI.Filters.ActionFilters;
 using SmartMetric.WebAPI.Filters.AutorizationFilter;
+using System.Net;
 using System.Security.Claims;
 
 namespace SmartMetric.WebAPI.Controllers.v1
@@ -51,7 +52,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
             user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
             var result = await _smartTimeService.UpdateApplicationUser(user);
 
-            return Ok(authenticationResponse);
+            return Ok(new ApiResponse<object>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Token created sucessfuly",
+                Data = authenticationResponse
+            });
         }
 
 
@@ -85,7 +91,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 int userId = Convert.ToInt32(id);
 
                 UserDTO? user = applicationUserType == ApplicationUserType.User ? await _smartTimeService.GetUserById(userId) : await _smartTimeService.GetEmployeeById(userId);
-                
+
 
 
 
