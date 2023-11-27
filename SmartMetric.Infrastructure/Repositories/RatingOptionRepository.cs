@@ -53,7 +53,11 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<List<RatingOption>?> GetRatingOptionByQuestionId(Guid questionId)
         {
             _logger.LogInformation($"{nameof(RatingOptionRepository)}.{nameof(GetRatingOptionByQuestionId)} foi iniciado.");
-            return await _dbContext.RatingOptions.Where(temp => temp.QuestionId == questionId).ToListAsync();
+            return await _dbContext.RatingOptions
+                .Where(temp => temp.QuestionId == questionId)
+                .Include(temp => temp.Translations)
+                .OrderBy(temp => temp.NumericValue)
+                .ToListAsync();
         }
 
         #endregion

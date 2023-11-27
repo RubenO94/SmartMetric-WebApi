@@ -18,33 +18,27 @@ namespace SmartMetric.Core.Services.Adders
     public class QuestionTranslationAdderService : IQuestionTranslationAdderService
     {
         private readonly IQuestionTranslationRepository _translationsRepository;
+        private readonly IQuestionRepository _questionRepository;
         private readonly ILogger<QuestionTranslationAdderService> _logger;
 
-        public QuestionTranslationAdderService(IQuestionTranslationRepository translationsRepository, ILogger<QuestionTranslationAdderService> logger)
+        public QuestionTranslationAdderService(IQuestionTranslationRepository translationsRepository, ILogger<QuestionTranslationAdderService> logger, IQuestionRepository questionRepository)
         {
             _translationsRepository = translationsRepository;
             _logger = logger;
+            _questionRepository = questionRepository;
         }
 
         public async Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(QuestionTranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(QuestionTranslationAdderService)}.{nameof(AddQuestionTranslation)} foi iniciado");
 
-            if (request == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
-            }
+            if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            ValidationHelper.ModelValidation(request);
+            var questionExist = await _questionRepository.GetQuestionById(request.QuestionId);
 
-            if (request.QuestionId == null)
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' parameter is required and must be a valid GUID.");
-            }
+            if (questionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            ValidationHelper.ModelValidation(request);
-
-            var existenceTranslations = await _translationsRepository.GetQuestionTranslationsByQuestionId(request.QuestionId.Value);
+            var existenceTranslations = await _translationsRepository.GetQuestionTranslationsByQuestionId(request.QuestionId!.Value);
 
             if (existenceTranslations.Any())
             {

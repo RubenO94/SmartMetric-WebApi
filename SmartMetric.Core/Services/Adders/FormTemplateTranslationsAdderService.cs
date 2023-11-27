@@ -34,12 +34,6 @@ namespace SmartMetric.Core.Services.Adders
 
             if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            if (request.Language == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The FormTemplateTranslation must have a 'language' field.");
-
-            if (request.Title == null || request.Title == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The FormTemplateTranslation must have a 'title' field.");
-
-            if (request.FormTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
-
             var existenceFormTemplate = await _formTemplatesRepository.GetFormTemplateById(request.FormTemplateId);
 
             if (existenceFormTemplate == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");

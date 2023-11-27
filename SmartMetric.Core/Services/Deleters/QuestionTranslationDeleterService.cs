@@ -35,8 +35,10 @@ namespace SmartMetric.Core.Services.Deleters
             _logger.LogInformation($"{nameof(QuestionTranslationDeleterService)}.{nameof(DeleteQuestionTranslationById)} foi iniciado");
 
             if (questionId == null || language == null || language.ToString() == "") { throw new HttpStatusException(HttpStatusCode.BadRequest, "QuestionId can't be null!"); }
-            
-            var questionExist = await _questionGetterService.GetQuestionById(questionId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "Question doesn't exist");
+
+            var questionExist = await _questionGetterService.GetQuestionById(questionId);
+                
+            if (questionExist == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Question doesn't exist");
 
             if (questionExist.Data!.Translations == null || questionExist.Data!.Translations.Count < 2)
             {
