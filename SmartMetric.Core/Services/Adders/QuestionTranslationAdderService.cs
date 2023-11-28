@@ -28,17 +28,19 @@ namespace SmartMetric.Core.Services.Adders
             _questionRepository = questionRepository;
         }
 
-        public async Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(QuestionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(Guid? questionId, QuestionTranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(QuestionTranslationAdderService)}.{nameof(AddQuestionTranslation)} foi iniciado");
 
+            if(questionId == null) throw new ArgumentNullException(nameof(questionId));
+
             if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            var questionExist = await _questionRepository.GetQuestionById(request.QuestionId);
+            var questionExist = await _questionRepository.GetQuestionById(questionId.Value);
 
             if (questionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            var existenceTranslations = await _translationsRepository.GetQuestionTranslationsByQuestionId(request.QuestionId!.Value);
+            var existenceTranslations = await _translationsRepository.GetQuestionTranslationsByQuestionId(questionId!.Value);
 
             if (existenceTranslations.Any())
             {

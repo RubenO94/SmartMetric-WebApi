@@ -16,12 +16,6 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class QuestionTranslationDTOAddRequest
     {
         /// <summary>
-        /// Obtém ou define o identificador da questão a ser traduzida.
-        /// </summary>
-        [JsonIgnore]
-        public Guid? QuestionId { get; set; }
-
-        /// <summary>
         /// Obtém ou define o idioma para a tradução. Este campo é obrigatório.
         /// </summary>
         [Required(ErrorMessage = "Please select a language.")]
@@ -46,7 +40,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new QuestionTranslation()
             {
-                QuestionId = QuestionId,
                 Language = Language?.ToString(),
                 Title = Title,
                 Description = Description

@@ -16,12 +16,6 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class SingleChoiceOptionTranslationDTOAddRequest
     {
         /// <summary>
-        /// Obtém ou define o identificador da opção de escolha única a ser traduzida.
-        /// </summary>
-        [JsonIgnore]
-        public Guid? SingleChoiceOptionId { get; set; }
-
-        /// <summary>
         /// Obtém ou define o idioma para a tradução.
         /// </summary>
         [Required(ErrorMessage = "Please select a language")]
@@ -42,7 +36,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new SingleChoiceOptionTranslation()
             {
-                SingleChoiceOptionId = SingleChoiceOptionId,
                 Language = Language.ToString(),
                 Description = Description
             };

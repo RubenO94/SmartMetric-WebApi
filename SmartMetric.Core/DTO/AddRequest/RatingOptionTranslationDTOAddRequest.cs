@@ -12,8 +12,6 @@ namespace SmartMetric.Core.DTO.AddRequest
 {
     public class RatingOptionTranslationDTOAddRequest
     {
-        [JsonIgnore]
-        public Guid? RatingOptionId { get; set; }
 
         [Required(ErrorMessage = "Please select a Language")]
         [EnumDataType(typeof(Language), ErrorMessage = "Language inserted is a invalid option")]
@@ -27,7 +25,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new RatingOptionTranslation()
             {
-                RatingOptionId = RatingOptionId,
                 Language = Language.ToString(),
                 Description = Description
             };

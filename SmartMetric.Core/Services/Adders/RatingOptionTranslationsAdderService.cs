@@ -28,17 +28,19 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(RatingOptionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(Guid? ratingOptionId, RatingOptionTranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");
 
+            if(ratingOptionId == null) throw new ArgumentNullException(nameof(ratingOptionId));
+            
             if (request == null) throw new ArgumentNullException(nameof(RatingOptionTranslation));
 
-            var ratingOptionExist = await _ratingOptionRepository.GetRatingOptionById(request.RatingOptionId);
+            var ratingOptionExist = await _ratingOptionRepository.GetRatingOptionById(ratingOptionId.Value);
 
             if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            var existingTranslations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(request.RatingOptionId!.Value);
+            var existingTranslations = await _translationsRepository.GetRatingOptionTranslationByRatingOptionId(ratingOptionId!.Value);
 
             if (existingTranslations.Any())
             {
@@ -53,7 +55,7 @@ namespace SmartMetric.Core.Services.Adders
 
             RatingOptionTranslation translation = request.ToRatingOptionTranslation();
 
-            translation.RatingOptionTranslationId = Guid.NewGuid();
+            translation.RatingOptionId = ratingOptionId;
 
             await _translationsRepository.AddRatingOptionTranslation(translation);
 

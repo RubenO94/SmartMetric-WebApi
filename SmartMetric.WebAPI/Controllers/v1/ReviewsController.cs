@@ -40,7 +40,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddReview(ReviewDTOAddRequest request)
+        public async Task<IActionResult> AddReview(ReviewDTOAddRequest? request)
         {
            var response = await _reviewAdderService.AddReview(request); 
             if(response.Data != null)

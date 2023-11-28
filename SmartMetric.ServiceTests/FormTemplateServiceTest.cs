@@ -14,11 +14,6 @@ using SmartMetric.Core.Services.Getters;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 
 namespace SmartMetric.ServiceTests
@@ -29,7 +24,7 @@ namespace SmartMetric.ServiceTests
         private readonly IFormTemplatesGetterService _formTemplatesGetterService;
         private readonly IFormTemplatesDeleterService _formTemplatesDeleterService;
 
-        private readonly Mock<IFormTemplateRepository> _formTemplatesRepositoryMock;
+        private readonly Mock<IFormTemplateRepository> _formTemplateRepositoryMock;
         private readonly IFormTemplateRepository _formTemplatesRepository;
 
         private readonly ITestOutputHelper _testOutputHelper;
@@ -40,8 +35,8 @@ namespace SmartMetric.ServiceTests
             _fixture = new Fixture();
             _testOutputHelper = testOutputHelper;
 
-            _formTemplatesRepositoryMock = new Mock<IFormTemplateRepository>();
-            _formTemplatesRepository = _formTemplatesRepositoryMock.Object;
+            _formTemplateRepositoryMock = new Mock<IFormTemplateRepository>();
+            _formTemplatesRepository = _formTemplateRepositoryMock.Object;
 
             var AdderloggerMock = new Mock<ILogger<FormTemplatesAdderService>>();
             var GetterloggerMock = new Mock<ILogger<FormTemplatesGetterService>>();
@@ -91,7 +86,7 @@ namespace SmartMetric.ServiceTests
             var formTemplate = request.ToFormTemplate();
             var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+            _formTemplateRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
 
             //Act
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
@@ -115,7 +110,7 @@ namespace SmartMetric.ServiceTests
             var formTemplate = request.ToFormTemplate();
             var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+            _formTemplateRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
 
             //Act
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
@@ -140,7 +135,7 @@ namespace SmartMetric.ServiceTests
             var formTemplate = request.ToFormTemplate();
             var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+            _formTemplateRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
 
             //Act
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
@@ -172,7 +167,7 @@ namespace SmartMetric.ServiceTests
             var formTemplate = request.ToFormTemplate();
             var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+            _formTemplateRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
 
             //Act
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
@@ -204,7 +199,7 @@ namespace SmartMetric.ServiceTests
             var formTemplate = request.ToFormTemplate();
             var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+            _formTemplateRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
 
             //Act
             Func<Task> action = async () => await _formTemplatesAdderService.AddFormTemplate(request);
@@ -237,7 +232,7 @@ namespace SmartMetric.ServiceTests
             var formTemplate = request.ToFormTemplate();
             var formTemplateExpected = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
+            _formTemplateRepositoryMock.Setup(temp => temp.AddFormTemplate(formTemplate)).ReturnsAsync(new FormTemplate { FormTemplateId = formTemplateId });
 
             //Act
             var result = await _formTemplatesAdderService.AddFormTemplate(request);
@@ -259,7 +254,7 @@ namespace SmartMetric.ServiceTests
             //Arrange
             var request = new List<FormTemplate>();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(request);
+            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(request);
 
             //Act
             ApiResponse<List<FormTemplateDTOResponse?>> responseFromGet = await _formTemplatesGetterService.GetAllFormTemplates();
@@ -306,7 +301,7 @@ namespace SmartMetric.ServiceTests
             List<FormTemplate> formTemplatesList = formTemplatesRequest.Select(temp => temp.ToFormTemplate()).ToList();
             List<FormTemplateDTOResponse> expectedResponse = formTemplatesList.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(formTemplatesList);
+            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(formTemplatesList);
 
             //Act
             ApiResponse<List<FormTemplateDTOResponse?>> actualResponse = await _formTemplatesGetterService.GetAllFormTemplates();
@@ -377,7 +372,7 @@ namespace SmartMetric.ServiceTests
 
             FormTemplateDTOResponse expectedResponse = formTemplate.ToFormTemplateDTOResponse();
 
-            _formTemplatesRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplate.FormTemplateId)).ReturnsAsync(formTemplate);
+            _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplate.FormTemplateId)).ReturnsAsync(formTemplate);
 
             //Act
             ApiResponse<FormTemplateDTOResponse?> actualResponse = await _formTemplatesGetterService.GetFormTemplateById(formTemplateId);
@@ -411,7 +406,7 @@ namespace SmartMetric.ServiceTests
             //Arrange
             Guid formTemplateId = Guid.NewGuid();
 
-            _formTemplatesRepositoryMock
+            _formTemplateRepositoryMock
                 .Setup(temp => temp.GetFormTemplateById(formTemplateId))
                 .ReturnsAsync(null as FormTemplate);
 
@@ -447,11 +442,11 @@ namespace SmartMetric.ServiceTests
                 }
             };
 
-            _formTemplatesRepositoryMock
+            _formTemplateRepositoryMock
                 .Setup(temp => temp.GetFormTemplateById(formTemplate.FormTemplateId))
                 .ReturnsAsync(formTemplate);
 
-            _formTemplatesRepositoryMock
+            _formTemplateRepositoryMock
                 .Setup(temp => temp.DeleteFormTemplateById(formTemplate.FormTemplateId))
                 .ReturnsAsync(true);
 

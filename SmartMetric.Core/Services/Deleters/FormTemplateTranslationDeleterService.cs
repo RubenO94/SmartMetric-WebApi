@@ -30,7 +30,7 @@ namespace SmartMetric.Core.Services.Deleters
         }
 
         //DELETERS
-        public async Task<ApiResponse<bool>> DeleteFormTemplateTranslationById(Guid? formTemplateId, Language language)
+        public async Task<ApiResponse<bool>> DeleteFormTemplateTranslationById(Guid? formTemplateId, Language? language)
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationDeleterService)}.{nameof(DeleteFormTemplateTranslationById)} foi iniciado");
 

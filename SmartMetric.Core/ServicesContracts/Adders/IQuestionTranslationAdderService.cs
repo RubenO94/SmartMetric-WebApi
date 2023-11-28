@@ -19,7 +19,7 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">A Tradução a ser adicionada.</param>
         /// <returns>Uma ApiResponse contendo o objeto QuestionTranslationDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
-        Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(QuestionTranslationDTOAddRequest? request);
+        Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(Guid? questionId, QuestionTranslationDTOAddRequest? request);
     }
 
 }

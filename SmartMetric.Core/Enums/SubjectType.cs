@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,24 +13,17 @@ namespace SmartMetric.Core.Enums
     public enum SubjectType
     {
         /// <summary>
-        /// Revisão de toda a empresa, envolvendo todos os departamentos.
-        /// </summary>
-        WholeCompany,
-
-        /// <summary>
         /// Revisão por departamento, focada em colaboradores de um departamento específico.
         /// </summary>
+        [Description("Intradepartamento: Avaliação interna entre os colaboradores de um mesmo departamento.")]
         Department,
 
         /// <summary>
-        /// Revisão por equipa, envolvendo colaboradores de uma equipa específica.
+        /// Revisão entre departamentos, envolvendo colaboradores de diferentes setores.
         /// </summary>
-        Team,
-
-        /// <summary>
-        /// Revisão individual, onde cada colaborador é avaliado separadamente.
-        /// </summary>
-        Employee
+        [Description("Interdepartamento: O supervisor avalia o supervisor de outro departamento e vice-versa.")]
+        InterDepartment
     }
+
 
 }

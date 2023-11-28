@@ -2,15 +2,10 @@
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Exceptions;
-using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Core.Services
 {
@@ -25,17 +20,41 @@ namespace SmartMetric.Core.Services
             _logger = logger;
         }
 
+        #region Departamentos
+
+        public Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? prefilId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
+
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Perfis
+
+        public Task<PerfilDTOResponse> GetPerfilByUserId(int userId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetPerfilByUserId)} foi iniciado");
+
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
         #region Funcionarios
 
-        public Task<List<Funcionario>> GetAllEmployees()
+        public Task<List<UserDTO>> GetAllEmployeesBySelectedDepartments()
         {
-            //TODO: Parte de Funcionários
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetAllEmployeesBySelectedDepartments)} foi iniciado");
+
             throw new NotImplementedException();
         }
 
         public async Task<UserDTO?> GetEmployeeByEmail(string? email)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetEmployeeByEmail)} foi iniciado");
+           
             if (email == null)
             {
                 throw new ArgumentNullException(nameof(email));
@@ -68,9 +87,6 @@ namespace SmartMetric.Core.Services
 
             return funcionario.ToUserDTO();
         }
-
-
-
 
         #endregion
 
@@ -174,6 +190,7 @@ namespace SmartMetric.Core.Services
 
 
         }
+
 
         #endregion
 

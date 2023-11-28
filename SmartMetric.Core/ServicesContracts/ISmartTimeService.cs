@@ -1,5 +1,6 @@
 ﻿using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -14,20 +15,22 @@ namespace SmartMetric.Core.ServicesContracts
     /// </summary>
     public interface ISmartTimeService
     {
-        #region FuncionarioChefia
-        //TODO: Serviço para FuncionarioChefia
-        #endregion
-
         #region Departamento
-        //TODO: Serviço para Departamento
-        #endregion
-
-        #region PerfilDepartamento
-        //TODO: Serviço para PerfilDepartamento
+        /// <summary>
+        /// Obtém a lista de departamentos associados a um perfil.
+        /// </summary>
+        /// <param name="prefilId">O ID do perfil.</param>
+        /// <returns>Uma lista de objetos DepartmentDTOResponse representando os departamentos.</returns>
+        Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? prefilId);
         #endregion
 
         #region Perfil
-        //TODO: Serviço para Perfil
+        /// <summary>
+        /// Obtém as informações de perfil pelo userId.
+        /// </summary>
+        /// <param name="userId">O ID do user.</param>
+        /// <returns>Um objeto PerfilDTOResponse representando as informações do perfil.</returns>
+        Task<PerfilDTOResponse> GetPerfilByUserId(int userId);
         #endregion
 
         #region Utilizador
@@ -72,10 +75,11 @@ namespace SmartMetric.Core.ServicesContracts
         Task<UserDTO?> GetEmployeeById(int employeeId);
 
         /// <summary>
-        /// Obtém uma lista de todos os funcionários.
+        /// Obtém uma lista de todos os funcionários associados aos departamentos selecionados.
         /// </summary>
-        /// <returns>Uma lista de objetos Funcionario representando todos os funcionários.</returns>
-        Task<List<Funcionario>> GetAllEmployees();
+        /// <returns>Uma lista de objetos Funcionario representando os funcionários associados aos departamentos selecionados.</returns>
+        Task<List<UserDTO>> GetAllEmployeesBySelectedDepartments();
+
 
         #endregion
 

@@ -17,18 +17,6 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class QuestionDTOAddRequest
     {
         /// <summary>
-        /// Obtém ou define o identificador único do modelo de formulário ao qual a pergunta será associada.
-        /// </summary>
-        [JsonIgnore]
-        public Guid? FormTemplateId { get; set; }
-
-        /// <summary>
-        /// Obtém ou define o identificador único da revisão ao qual a pergunta será associada.
-        /// </summary>
-        [JsonIgnore]
-        public Guid? ReviewId { get; set; }
-
-        /// <summary>
         /// Obtém ou define se a resposta a esta pergunta é obrigatória.
         /// </summary>
         [Required(ErrorMessage ="Please select a option for IsRequired")]
@@ -71,14 +59,12 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new Question()
             {
-                FormTemplateId = FormTemplateId,
-                ReviewId = ReviewId,
                 Position = Position,
                 IsRequired = this.IsRequired,
                 ResponseType = this.ResponseType.ToString(),
-                Translations = this.Translations?.Select(temp => temp.ToQuestionTranslation()).ToList() ?? new List<QuestionTranslation>(),
-                SingleChoiceOptions = this.SingleChoiceOptions?.Select(temp => temp.ToSingleChoiceOption()).ToList() ?? new List<SingleChoiceOption>(),
-                RatingOptions = this.RatingOptions?.Select(temp => temp.ToRatingOption()).ToList() ?? new List<RatingOption>(),
+                Translations = this.Translations?.Select(temp => temp.ToQuestionTranslation()).ToList() ?? null,
+                SingleChoiceOptions = this.SingleChoiceOptions?.Select(temp => temp.ToSingleChoiceOption()).ToList() ?? null,
+                RatingOptions = this.RatingOptions?.Select(temp => temp.ToRatingOption()).ToList() ?? null,
             };
         }
     }

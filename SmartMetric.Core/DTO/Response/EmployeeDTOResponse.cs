@@ -45,7 +45,7 @@ namespace SmartMetric.Core.DTO.Response
         /// <summary>
         /// Um método de extensão que converte um objeto Funcionario em um objeto EmployeeDTOResponse.
         /// </summary>
-        /// <param name="formTemplate">O objeto Funcionario a ser convertido.</param>
+        /// <param name="funcionario">O objeto Funcionario a ser convertido.</param>
         /// <returns>Retorna o EmployeeDTOResponse convertido.</returns>
         public static EmployeeDTOResponse ToFormTemplateDTOResponse(this Funcionario funcionario)
         {

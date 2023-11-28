@@ -13,14 +13,14 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">A questão a ser adicionada.</param>
         /// <returns>Uma ApiResponse contendo o objeto QuestionDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
-        Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToFormTemplate(QuestionDTOAddRequest? request);
+        Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToFormTemplate(Guid? formTemplateId, QuestionDTOAddRequest? request);
 
         /// <summary>
         /// Adiciona uma questão com associação a uma revisão.
         /// </summary>
         /// <param name="request">A questão a ser adicionada.</param>
         /// <returns>Uma ApiResponse contendo o objeto QuestionDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
-        Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToReview(QuestionDTOAddRequest? request);
+        Task<ApiResponse<QuestionDTOResponse?>> AddQuestionToReview(Guid? reviewId, QuestionDTOAddRequest? request);
     }
 
 }

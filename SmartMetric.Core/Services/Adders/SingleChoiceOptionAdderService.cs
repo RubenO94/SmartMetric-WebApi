@@ -29,13 +29,15 @@ namespace SmartMetric.Core.Services.Adders
             _questionGetterService = questionGetterService;
             _logger = logger;
         }
-        public async Task<ApiResponse<SingleChoiceOptionDTOResponse?>> AddSingleChoiceOption(SingleChoiceOptionDTOAddRequest? request)
+        public async Task<ApiResponse<SingleChoiceOptionDTOResponse?>> AddSingleChoiceOption(Guid? questionId, SingleChoiceOptionDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionAdderService)}.{nameof(AddSingleChoiceOption)} foi iniciado");
 
+            if(questionId == null) throw new ArgumentNullException(nameof(questionId));
+
             if (request == null) throw new ArgumentNullException(nameof(SingleChoiceOption));
 
-            var question = await _questionGetterService.GetQuestionById(request.QuestionId);
+            var question = await _questionGetterService.GetQuestionById(questionId.Value);
 
             if (question.Data == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
 
@@ -44,15 +46,15 @@ namespace SmartMetric.Core.Services.Adders
                 throw new HttpStatusException(HttpStatusCode.BadRequest, $"The question provided isn't of type {ResponseType.SingleChoice}");
             }
 
-            var singleChoiceOptionId = Guid.NewGuid();
+            //var singleChoiceOptionId = Guid.NewGuid();
             SingleChoiceOption singleChoiceOption = request.ToSingleChoiceOption();
-            singleChoiceOption.SingleChoiceOptionId = singleChoiceOptionId;
+            singleChoiceOption.QuestionId = questionId;
 
-            foreach (var translation in singleChoiceOption.Translations!)
-            {
-                translation.SingleChoiceOptionTranslationId = Guid.NewGuid();
-                translation.SingleChoiceOptionId = singleChoiceOptionId;
-            }
+            //foreach (var translation in singleChoiceOption.Translations!)
+            //{
+            //    translation.SingleChoiceOptionTranslationId = Guid.NewGuid();
+            //    translation.SingleChoiceOptionId = singleChoiceOptionId;
+            //}
 
             await _singleChoiceOptionRepository.AddSingleChoiceOption(singleChoiceOption);
 
