@@ -15,7 +15,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
     public class SingleChoiceOptionsController : CustomBaseController
     {
         //VARIABLES
-        private readonly ISingleChoiceOptionsAdderService _singleChoiceOptionsAdderService;
         private readonly ISingleChoiceOptionDeleterService _singleChoiceOptionsDeleterService;
         private readonly ISingleChoiceOptionGetterService _singleChoiceOptionsGetterService;
         private readonly ISingleChoiceOptionTranslationsAdderService _singleChoiceOptionTranslationsAdderService;
@@ -24,7 +23,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         //CONSTRUCTOR
         public SingleChoiceOptionsController(
-            ISingleChoiceOptionsAdderService singleChoiceOptionsAdderService,
             ISingleChoiceOptionDeleterService singleChoiceOptionDeleterService,
             ISingleChoiceOptionGetterService singleChoiceOptionGetterService,
             ISingleChoiceOptionTranslationsAdderService singleChoiceOptionTranslationsAdderService,
@@ -32,7 +30,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
             IQuestionGetterService questionGetterService
         )
         {
-            _singleChoiceOptionsAdderService = singleChoiceOptionsAdderService;
             _singleChoiceOptionsDeleterService = singleChoiceOptionDeleterService;
             _singleChoiceOptionsGetterService = singleChoiceOptionGetterService;
             _singleChoiceOptionTranslationsAdderService = singleChoiceOptionTranslationsAdderService;
@@ -41,27 +38,14 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         //ENDPOINTS
-        #region Post to add new SingleChoiceOption
-
-        [HttpPost]
-        public async Task<IActionResult> AddSingleChoiceOption([FromQuery] Guid questionId, [FromBody] SingleChoiceOptionDTOAddRequest singleChoiceOptionDTOAddRequest)
-        {
-            singleChoiceOptionDTOAddRequest.QuestionId = questionId;
-            var response = await _singleChoiceOptionsAdderService.AddSingleChoiceOption(singleChoiceOptionDTOAddRequest);
-
-            return CreatedAtAction(nameof(AddSingleChoiceOption), response);
-        }
-
-        #endregion
 
         #region Post to add new Translation to existing SingleChoiceOption
 
         [HttpPost]
-        [Route("Translation")]
+        [Route("Translations")]
         public async Task<IActionResult> AddSingleChoiceOptionTranslation([FromQuery] Guid singleChoiceOptionId, [FromBody] SingleChoiceOptionTranslationDTOAddRequest singleChoiceOptionTranslationDTOAddRequest)
         {
-            singleChoiceOptionTranslationDTOAddRequest.SingleChoiceOptionId = singleChoiceOptionId;
-            var response = await _singleChoiceOptionTranslationsAdderService.AddSingleChoiceOptionTranslation(singleChoiceOptionTranslationDTOAddRequest);
+            var response = await _singleChoiceOptionTranslationsAdderService.AddSingleChoiceOptionTranslation(singleChoiceOptionId, singleChoiceOptionTranslationDTOAddRequest);
 
             return CreatedAtAction(nameof(AddSingleChoiceOptionTranslation), response);
         }
@@ -70,8 +54,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         #region Delete to remove existing SingleChoiceQuestion
 
-        [HttpDelete]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionById ([FromQuery] Guid singleChoiceOptionId)
+        [HttpDelete("{singleChoiceOptionId}")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionById (Guid? singleChoiceOptionId)
         {
             var response = await _singleChoiceOptionsDeleterService.DeleteSingleChoiceOptionById(singleChoiceOptionId);
             return response;
@@ -82,8 +66,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete to remove existing Translation from existing Translation
 
         [HttpDelete]
-        [Route("Translation")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById([FromQuery] Language language, [FromQuery] Guid singleChoiceOptionId)
+        [Route("{singleChoiceOptionId}/Translations/{language}")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById(Language language, Guid? singleChoiceOptionId)
         {
             var response = await _singleChoiceOptionTranslationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionId, language);
             return response;

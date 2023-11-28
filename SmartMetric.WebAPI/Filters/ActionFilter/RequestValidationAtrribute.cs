@@ -17,8 +17,15 @@ namespace SmartMetric.WebAPI.Filters.ActionFilter
                         e => e.Key,
                         e => e.Value.Errors.Select(x => x.ErrorMessage).FirstOrDefault()
                     );
-
-                throw new ValidationException(failures);
+                if( failures != null )
+                {
+                    throw new ValidationException(failures);
+                }
+                else
+                {
+                    throw new ArgumentException();
+                }
+                
             }
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Services.Adders;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Core.ServicesContracts.Getters;
@@ -17,51 +18,53 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IQuestionGetterService _questionGetterService;
         private readonly IQuestionTranslationAdderService _questionTranslationsAdderService;
         private readonly IQuestionTranslationDeleterService _questionTranslationDeleterService;
+        private readonly IRatingOptionAdderService _ratingOptionAdderService;
+        private readonly ISingleChoiceOptionsAdderService _singleChoiceOptionsAdderService;
 
-        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService, IQuestionTranslationAdderService questionTranslationsAdderService, IQuestionTranslationDeleterService questionTranslationDeleterService)
+
+        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService, IQuestionTranslationAdderService questionTranslationsAdderService, IQuestionTranslationDeleterService questionTranslationDeleterService, IRatingOptionAdderService ratingOptionAdderService, ISingleChoiceOptionsAdderService singleChoiceOptionsAdderService)
         {
             _questionAdderService = questionAdderService;
             _questionGetterService = questionGetterService;
             _questionTranslationsAdderService = questionTranslationsAdderService;
             _questionTranslationDeleterService = questionTranslationDeleterService;
-        }
-
-
-        [HttpGet]
-        [Route("FormTemplateQuestions")]
-        public async Task<IActionResult> GetAllQuestionsByFormTemplateId([FromQuery] Guid formTemplateId)
-        {
-            var questions = await _questionGetterService.GetQuestionsByFormTemplateId(formTemplateId);
-            return Ok(questions);
+            _ratingOptionAdderService = ratingOptionAdderService;
+            _singleChoiceOptionsAdderService = singleChoiceOptionsAdderService;
         }
 
 
         [HttpPost]
-        [Route("FormTemplateQuestions")]
-        public async Task<IActionResult> AddQuestionToFormTemplate([FromQuery] Guid formTemplateId, [FromBody] QuestionDTOAddRequest questionDTOAddRequest)
+        [Route("{questionId}/Translations")]
+        public async Task<IActionResult> AddQuestionTranslation(Guid? questionId, [FromBody] QuestionTranslationDTOAddRequest questionTranslationDTOAddRequest)
         {
-            questionDTOAddRequest.FormTemplateId = formTemplateId;
 
-            var response = await _questionAdderService.AddQuestionToFormTemplate(questionDTOAddRequest);
-            return Ok(response);
-        }
-
-        [HttpPost]
-        [Route("Translation")]
-        public async Task<IActionResult> AddQuestionTranslation([FromQuery] Guid questionId, [FromBody] QuestionTranslationDTOAddRequest questionTranslationDTOAddRequest)
-        {
-            questionTranslationDTOAddRequest.QuestionId = questionId;
-
-            var response = await _questionTranslationsAdderService.AddQuestionTranslation(questionTranslationDTOAddRequest);
+            var response = await _questionTranslationsAdderService.AddQuestionTranslation(questionId, questionTranslationDTOAddRequest);
             return CreatedAtAction(nameof(AddQuestionTranslation), response);
         }
 
         [HttpDelete]
-        [Route("Translation")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteQuestionTranslationById([FromQuery] Guid questionId, [FromQuery] Language language)
+        [Route("{questionId}/Translations/{language}")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteQuestionTranslationById(Guid? questionId, Language language)
         {
             var response = await _questionTranslationDeleterService.DeleteQuestionTranslationById(questionId, language);
             return response;
+        }
+
+        [HttpPost("{questionId}/RatingOption")]
+        public async Task<IActionResult> AddRatingOption(Guid? questionId, [FromBody] RatingOptionDTOAddRequest ratingOptionDTOAddRequest)
+        {
+
+            var response = await _ratingOptionAdderService.AddRatingOption(questionId, ratingOptionDTOAddRequest);
+
+            return CreatedAtAction(nameof(AddRatingOption), response);
+        }
+
+        [HttpPost("{questionId}/SingleChoiceOption")]
+        public async Task<IActionResult> AddSingleChoiceOption(Guid? questionId, [FromBody] SingleChoiceOptionDTOAddRequest singleChoiceOptionDTOAddRequest)
+        {
+            var response = await _singleChoiceOptionsAdderService.AddSingleChoiceOption(questionId, singleChoiceOptionDTOAddRequest);
+
+            return CreatedAtAction(nameof(AddSingleChoiceOption), response);
         }
     }
 }

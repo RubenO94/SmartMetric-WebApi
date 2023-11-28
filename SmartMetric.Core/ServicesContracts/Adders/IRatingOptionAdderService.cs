@@ -18,7 +18,7 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">Os detalhes da opção de resposta de classificação a ser adicionada.</param>
         /// <returns>Uma ApiResponse contendo o objeto RatingOptionDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
-        Task<ApiResponse<RatingOptionDTOResponse?>> AddRatingOption(RatingOptionDTOAddRequest? request);
+        Task<ApiResponse<RatingOptionDTOResponse?>> AddRatingOption(Guid? questionId, RatingOptionDTOAddRequest? request);
     }
 
 }

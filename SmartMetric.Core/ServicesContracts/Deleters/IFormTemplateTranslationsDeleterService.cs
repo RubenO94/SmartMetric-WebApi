@@ -16,7 +16,7 @@ namespace SmartMetric.Core.ServicesContracts.Deleters
         /// <param name="formTemplateId">O GUID do modelo de formulário a ser pesquisado.</param>
         /// <param name="language">O idioma da tradução a ser excluída.</param>
         /// <returns>Retorna true se a exclusão for bem-sucedida; caso contrário, retorna false.</returns>
-        Task<ApiResponse<bool>> DeleteFormTemplateTranslationById(Guid? formTemplateId, Language language);
+        Task<ApiResponse<bool>> DeleteFormTemplateTranslationById(Guid? formTemplateId, Language? language);
 
     }
 }

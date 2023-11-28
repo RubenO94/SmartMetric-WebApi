@@ -14,20 +14,20 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _smartTimeRepository = smartTimeRepository;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GeDepartmentsByPerfilId(int perfilID)
-        {
-            var result = await _smartTimeRepository.GetDepartmentsByPerfilId(perfilID);
+        //[HttpGet]
+        //public async Task<IActionResult> GetDepartmentsByPerfilId([FromQuery] int perfilID)
+        //{
+        //    var result = await _smartTimeRepository.GetDepartmentsByPerfilId(perfilID);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
 
-        [HttpGet("bychief")]
-        public async Task<IActionResult> GeDepartmentsByChiefId(int chiefId)
-        {
-            var result = await _smartTimeRepository.GetDepartmentsByChiefId(chiefId);
+        //[HttpGet]
+        //public async Task<IActionResult> GetDepartmentsByChiefId([FromQuery] int chiefId)
+        //{
+        //    var result = await _smartTimeRepository.GetDepartmentsByChiefId(chiefId);
 
-            return Ok(result);
-        }
+        //    return Ok(result);
+        //}
     }
 }

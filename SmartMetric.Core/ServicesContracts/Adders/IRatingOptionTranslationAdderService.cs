@@ -18,7 +18,7 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">Os detalhes da tradução a ser adicionada.</param>
         /// <returns>Uma ApiResponse contendo o objeto RatingOptionTranslationDTOResponse em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
-        Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(RatingOptionTranslationDTOAddRequest? request);
+        Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(Guid? ratingOptionId, RatingOptionTranslationDTOAddRequest? request);
     }
 
 }

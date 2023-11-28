@@ -79,19 +79,19 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// Obtém uma lista de todos os funcionários.
         /// </summary>
         /// <returns>Uma lista de objetos Funcionario representando todos os funcionários.</returns>
-        Task<List<Funcionario>> GetAllEmployees();
+        Task<List<Funcionario>> GetAllEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20);
 
         #endregion
 
         #region Departamentos
-        Task<List<Departamento>> GetAllDepartaments();
-        Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId);
+        Task<List<Departamento>> GetAllDepartaments(int page = 1, int pageSize = 20);
+        Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId, int page = 1, int pageSize = 20);
         #endregion
 
         #region FuncionariosChefia
-        Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId);
-        Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId);
-        Task<List<FuncionariosChefia>> GetAllChiefsEmployee(int page, int pageSize);
+        Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId, int page = 1, int pageSize = 20);
+        Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId, int page = 1, int pageSize = 20);
+        Task<List<FuncionariosChefia>> GetAllChiefsEmployee(int page = 1, int pageSize = 20);
         #endregion
     }
 

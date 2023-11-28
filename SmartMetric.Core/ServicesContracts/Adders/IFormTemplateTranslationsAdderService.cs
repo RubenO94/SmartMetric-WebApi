@@ -18,7 +18,7 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">A tradução a ser adicionada.</param>
         /// <returns>Uma ApiResponse contendo o objeto FormTemplateTranslationDTOResponse (incluindo o novo FormTemplateTranslationId gerado) em caso de sucesso, ou uma mensagem de erro em caso de falha.</returns>
-        Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request);
+        Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(Guid? formTemplateId, FormTemplateTranslationDTOAddRequest? request);
     }
 
 }

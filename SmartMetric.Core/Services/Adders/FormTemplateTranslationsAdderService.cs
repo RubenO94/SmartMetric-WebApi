@@ -28,17 +28,19 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(FormTemplateTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(Guid? formTemplateId, FormTemplateTranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
+            if(formTemplateId == null) throw new ArgumentNullException(nameof(formTemplateId));
+
             if (request == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Request can't be null");
 
-            var existenceFormTemplate = await _formTemplatesRepository.GetFormTemplateById(request.FormTemplateId);
+            var existenceFormTemplate = await _formTemplatesRepository.GetFormTemplateById(formTemplateId.Value);
 
             if (existenceFormTemplate == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            var existenceTranslations = await _translationsRepository.GetTranslationsByFormTemplateId(request.FormTemplateId.Value);
+            var existenceTranslations = await _translationsRepository.GetTranslationsByFormTemplateId(formTemplateId.Value);
 
             if (existenceTranslations.Any())
             {
@@ -52,8 +54,9 @@ namespace SmartMetric.Core.Services.Adders
             }
 
             FormTemplateTranslation translation = request.ToFormTemplateTranslation();
+            translation.FormTemplateId = formTemplateId.Value;
 
-            translation.FormTemplateTranslationId = Guid.NewGuid();
+            //translation.FormTemplateTranslationId = Guid.NewGuid();
 
             await _translationsRepository.AddFormTemplateTranslation(translation);
 

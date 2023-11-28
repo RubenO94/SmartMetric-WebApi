@@ -31,15 +31,17 @@ namespace SmartMetric.Core.Services.Adders
             _singleChoiceOptionRepository = singleChoiceOptionRepository;
         }
 
-        public async Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> AddSingleChoiceOptionTranslation(SingleChoiceOptionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> AddSingleChoiceOptionTranslation(Guid? singleChoiceOptionId, SingleChoiceOptionTranslationDTOAddRequest? request)
         {
+            if(singleChoiceOptionId == null) throw new ArgumentNullException(nameof(singleChoiceOptionId));
+
             if (request == null) throw new ArgumentNullException(nameof(request));
 
-            var ratingOptionExist = await _singleChoiceOptionRepository.GetSingleChoiceOptionById(request.SingleChoiceOptionId);
+            var ratingOptionExist = await _singleChoiceOptionRepository.GetSingleChoiceOptionById(singleChoiceOptionId.Value);
 
             if (ratingOptionExist == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            var existingTranslations = await _translationsRepository.GetTranslationsBySingleChoiceOptionId(request.SingleChoiceOptionId!.Value);
+            var existingTranslations = await _translationsRepository.GetTranslationsBySingleChoiceOptionId(singleChoiceOptionId!.Value);
 
             if (existingTranslations.Any())
             {
@@ -53,7 +55,7 @@ namespace SmartMetric.Core.Services.Adders
             }
 
             SingleChoiceOptionTranslation translation = request.ToSingleChoiceOptionTranslation();
-            translation.SingleChoiceOptionTranslationId = Guid.NewGuid();
+            translation.SingleChoiceOptionId = singleChoiceOptionId;
 
             await _translationsRepository.AddSingleChoiceOptionTranslation(translation);
 

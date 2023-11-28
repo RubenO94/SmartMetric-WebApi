@@ -18,7 +18,7 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">Os detalhes da opção de resposta única a ser adicionada.</param>
         /// <returns>Retorna o objeto SingleChoiceOptionDTOResponse em caso de sucesso, ou null em caso de falha.</returns>
-        Task<ApiResponse<SingleChoiceOptionDTOResponse?>> AddSingleChoiceOption(SingleChoiceOptionDTOAddRequest? request);
+        Task<ApiResponse<SingleChoiceOptionDTOResponse?>> AddSingleChoiceOption(Guid? questionId, SingleChoiceOptionDTOAddRequest? request);
     }
 
 }

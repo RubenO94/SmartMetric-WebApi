@@ -34,25 +34,7 @@ namespace SmartMetric.Core.Services.Adders
 
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
-            //if (addFormTemplateRequest.CreatedByUserId == null || addFormTemplateRequest.CreatedByUserId == 0) throw new HttpStatusException(HttpStatusCode.BadRequest, "The formTemplate needs a User to be created.");
-
-            //if (addFormTemplateRequest.Translations == null || addFormTemplateRequest.Translations.Count < 1) throw new HttpStatusException(HttpStatusCode.BadRequest, "The formTemplate needs at least one translation.");
-
-            //foreach (var translation in addFormTemplateRequest.Translations)
-            //{
-            //    if (translation.Language == null || translation.Title == null || translation.Title == "") throw new HttpStatusException(HttpStatusCode.BadRequest, "The Translations field are missing values.");
-            //}
-
-            addFormTemplateRequest.CreatedDate = DateTime.Now;
-            var formTemplateId = Guid.NewGuid();
-
-            foreach (var translation in addFormTemplateRequest.Translations!)
-            {
-                translation.FormTemplateId = formTemplateId;
-            }
-
             FormTemplate formTemplate = addFormTemplateRequest.ToFormTemplate();
-            formTemplate.FormTemplateId = formTemplateId;
 
             await _formTemplateRepository.AddFormTemplate(formTemplate);
 

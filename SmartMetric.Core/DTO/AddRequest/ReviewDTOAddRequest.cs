@@ -11,7 +11,7 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class ReviewDTOAddRequest
     {
         /// <summary>
-        /// Obtém ou define o identificador do usuário que criou a revisão. Este campo é obrigatório.
+        /// Obtém ou define o identificador do utilizador que criou a revisão. Este campo é obrigatório.
         /// </summary>
         [Required(ErrorMessage = "CreatedByUserId is required.")]
         public int? CreatedByUserId { get; set; }

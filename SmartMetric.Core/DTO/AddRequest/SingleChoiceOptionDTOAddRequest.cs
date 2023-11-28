@@ -15,12 +15,6 @@ namespace SmartMetric.Core.DTO.AddRequest
     public class SingleChoiceOptionDTOAddRequest
     {
         /// <summary>
-        /// Obtém ou define o identificador único da pergunta à qual a opção de escolha única será associada.
-        /// </summary>
-        [JsonIgnore]
-        public Guid? QuestionId { get; set; }
-
-        /// <summary>
         /// Obtém ou define as traduções para a opção de escolha única, pelo menos uma tradução é necessária.
         /// </summary>
         [Required(ErrorMessage = "At least one title and description translation is required.")]
@@ -35,7 +29,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         {
             return new SingleChoiceOption()
             {
-                QuestionId = QuestionId,
                 Translations = Translations?.Select(temp => temp.ToSingleChoiceOptionTranslation()).ToList() ?? new List<SingleChoiceOptionTranslation>(),
             };
         }

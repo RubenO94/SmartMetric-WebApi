@@ -17,6 +17,11 @@ namespace SmartMetric.Core.DTO.Response
 
     public static class DepartmentExtensions
     {
+        /// <summary>
+        /// Um método de extensão que converte um objeto Departamento em um objeto DepartmentDTOResponse.
+        /// </summary>
+        /// <param name="departamento">O objeto Departamento a ser convertido.</param>
+        /// <returns>Retorna o DepartmentDTOResponse convertido.</returns>
         public static DepartmentDTOResponse ToDepartamentDTOResponse(Departamento departamento)
         {
             return new DepartmentDTOResponse()

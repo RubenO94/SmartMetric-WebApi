@@ -22,11 +22,6 @@ namespace SmartMetric.Core.Enums
         Active,
 
         /// <summary>
-        /// Revisão inativa.
-        /// </summary>
-        Inactive,
-
-        /// <summary>
         /// Revisão cancelada.
         /// </summary>
         Canceled,

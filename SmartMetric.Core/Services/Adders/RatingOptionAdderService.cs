@@ -30,13 +30,14 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<ApiResponse<RatingOptionDTOResponse?>> AddRatingOption(RatingOptionDTOAddRequest? request)
+        public async Task<ApiResponse<RatingOptionDTOResponse?>> AddRatingOption(Guid? questionId, RatingOptionDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(RatingOptionAdderService)}.{nameof(AddRatingOption)} foi iniciado");
 
+            if(questionId  == null) throw new ArgumentNullException(nameof(questionId));
             if (request == null) throw new ArgumentNullException(nameof(RatingOption));
 
-            var question = await _questionRepository.GetQuestionById(request.QuestionId);
+            var question = await _questionRepository.GetQuestionById(questionId.Value);
 
             if (question == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'questionId' provided does not exist.");
 
@@ -49,11 +50,11 @@ namespace SmartMetric.Core.Services.Adders
             RatingOption ratingOption = request.ToRatingOption();
             ratingOption.RatingOptionId = ratingOptionId;
 
-            foreach (var translation in ratingOption.Translations!)
-            {
-                translation.RatingOptionTranslationId = Guid.NewGuid();
-                translation.RatingOptionId = ratingOptionId;
-            }
+            //foreach (var translation in ratingOption.Translations!)
+            //{
+            //    translation.RatingOptionTranslationId = Guid.NewGuid();
+            //    translation.RatingOptionId = ratingOptionId;
+            //}
 
             await _ratingOptionRepository.AddRatingOption(ratingOption);
 

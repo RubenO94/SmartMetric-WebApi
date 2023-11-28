@@ -47,31 +47,34 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             var authenticationResponse = _jwtService.CreateJwtToken(user);
 
-            user.RefreshToken = authenticationResponse.RefreshToken;
+            user.Token  = authenticationResponse.Token;
+            user.Expiration = authenticationResponse.Expiration;
 
+            user.RefreshToken = authenticationResponse.RefreshToken;
             user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+            
             var result = await _smartTimeService.UpdateApplicationUser(user);
 
             return Ok(new ApiResponse<object>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Token created sucessfuly",
-                Data = authenticationResponse
+                Data = user
             });
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> GenerateNewAccessToken(TokenDTO tokenDTO)
+        public async Task<IActionResult> GenerateNewAccessToken(TokenDTO? token)
         {
             //TODO: ApplicationUserType
 
-            if (tokenDTO == null)
+            if (token == null)
             {
                 return BadRequest("Invalid client request");
             }
 
-            ClaimsPrincipal? principal = _jwtService.GetPrincipalFromJwtToken(tokenDTO.Token);
+            ClaimsPrincipal? principal = _jwtService.GetPrincipalFromJwtToken(token.Token);
             if (principal == null)
             {
                 return BadRequest("Invalid access token");
@@ -95,7 +98,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
 
 
-                if (user == null || user.RefreshToken != tokenDTO.RefreshToken || user.RefreshTokenExpiration <= DateTime.Now)
+                if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiration <= DateTime.Now)
                 {
                     return BadRequest("Invalid refresh token");
                 }

@@ -26,12 +26,20 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Funcionarios
 
-        public async Task<List<Funcionario>> GetAllEmployees()
+        public async Task<List<Funcionario>> GetAllEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllEmployees)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllEmployeesByDepartmentsSelected)} foi iniciado");
 
-            return await _context.Funcionarios.ToListAsync();
+            // Filtrar os funcionários pelos IDs dos departamentos selecionados
+            var employees = await _context.Funcionarios
+                .Where(funcionario => departmentIds.Contains(funcionario.Iddepartamento))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return employees;
         }
+
 
         public async Task<Funcionario?> GetEmployeeByEmail(string email)
         {
@@ -122,28 +130,39 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Departamentos
 
-        public async Task<List<Departamento>> GetAllDepartaments()
+        public async Task<List<Departamento>> GetAllDepartaments(int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllDepartaments)} foi iniciado");
 
-            return await _context.Departamentos.ToListAsync();
+            // Aplica a funcionalidade de paginação
+            var departments = await _context.Departamentos
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
+            return departments;
         }
 
-
-        public async Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId)
+        public async Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId, int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
 
-           var departamentoIds =  await _context.PerfisDepartamentos.Where(temp => temp.Idperfil == perfilId).Select(pd => pd.Iddepartamento).ToListAsync();
+            // Obtém os IDs dos departamentos associados ao perfil
+            var departamentoIds = await _context.PerfisDepartamentos
+                .Where(temp => temp.Idperfil == perfilId)
+                .Select(pd => pd.Iddepartamento)
+                .ToListAsync();
 
-            var departamentosAssociados =  await _context.Departamentos
-            .Where(departamento => departamentoIds.Contains(departamento.Iddepartamento))
-            .ToListAsync();
+            // Filtra os departamentos com base nos IDs obtidos e aplica a funcionalidade de paginação
+            var departamentosAssociados = await _context.Departamentos
+                .Where(departamento => departamentoIds.Contains(departamento.Iddepartamento))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return departamentosAssociados;
-
         }
+
 
         #endregion
 
@@ -161,28 +180,46 @@ namespace SmartMetric.Infrastructure.Repositories
 
 
 
-        public async Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId)
+        public async Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId, int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByChiefId)} foi iniciado");
 
-           var funcionarioIds = await _context.FuncionariosChefias.Where(temp => temp.IdfuncionarioSuperior == chiefId).Select(fc => fc.Idfuncionario).ToListAsync();
+            // Obtém os IDs dos funcionários associados ao supervisor
+            var funcionarioIds = await _context.FuncionariosChefias
+                .Where(temp => temp.IdfuncionarioSuperior == chiefId)
+                .Select(fc => fc.Idfuncionario)
+                .ToListAsync();
 
-            var funcionariosAssociados = await _context.Funcionarios.Where(temp => funcionarioIds.Contains(temp.Idfuncionario)).ToListAsync();
+            // Filtra os funcionários com base nos IDs obtidos e aplica a funcionalidade de paginação
+            var funcionariosAssociados = await _context.Funcionarios
+                .Where(temp => funcionarioIds.Contains(temp.Idfuncionario))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return funcionariosAssociados;
         }
 
-        public async Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId)
+
+        public async Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId, int page = 1, int pageSize = 20)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByChiefId)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetDepartmentsByChiefId)} foi iniciado");
 
-            var departamentIds = await _context.FuncionariosChefias.Where(temp => temp.IdfuncionarioSuperior == chiefId).Select(fc => fc.Iddepartamento).ToListAsync();
+            // Obtém os IDs dos departamentos associados ao supervisor
+            var departamentoIds = await _context.FuncionariosChefias
+                .Where(temp => temp.IdfuncionarioSuperior == chiefId)
+                .Select(fc => fc.Iddepartamento)
+                .ToListAsync();
 
-            var departamentosAssociados = await _context.Departamentos.Where(temp => departamentIds.Contains(temp.Iddepartamento)).ToListAsync();
+            // Filtra os departamentos com base nos IDs obtidos e aplica a funcionalidade de paginação
+            var departamentosAssociados = await _context.Departamentos
+                .Where(temp => departamentoIds.Contains(temp.Iddepartamento))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
 
             return departamentosAssociados;
         }
-
 
         #endregion
 
