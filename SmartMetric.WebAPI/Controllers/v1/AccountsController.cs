@@ -11,7 +11,7 @@ using System.Security.Claims;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
-    //[AllowAnonymous]
+    [AllowAnonymous]
     [ApiVersion("1.0")]
     [SkipTokenValidation]
     public class AccountsController : CustomBaseController

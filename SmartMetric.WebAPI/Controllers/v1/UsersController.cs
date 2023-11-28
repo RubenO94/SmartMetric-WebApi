@@ -7,11 +7,11 @@ using SmartMetric.Infrastructure.Models;
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class UserController : CustomBaseController
+    public class UsersController : CustomBaseController
     {
         private readonly ISmartTimeService _smartTimeService;
 
-        public UserController(ISmartTimeService smartTimeService)
+        public UsersController(ISmartTimeService smartTimeService)
         {
             _smartTimeService = smartTimeService;
         }
@@ -30,7 +30,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             if (departamentos == null || departamentos.Count == 0)
             {
-                return NotFound("Departamentos não encontrados para o usuário");
+                return NotFound("Departamentos não encontrados para o utilizador");
             }
 
             return Ok(departamentos);
