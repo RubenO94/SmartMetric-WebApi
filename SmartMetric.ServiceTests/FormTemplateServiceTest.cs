@@ -72,9 +72,9 @@ namespace SmartMetric.ServiceTests
 
             FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
             {
-                Translations = new List<FormTemplateTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new FormTemplateTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.EN,
                         Title = "Title",
@@ -129,7 +129,7 @@ namespace SmartMetric.ServiceTests
             FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
             {
                 CreatedByUserId = 12345,
-                Translations = new List<FormTemplateTranslationDTOAddRequest>()
+                Translations = new List<TranslationDTOAddRequest>()
             };
 
             var formTemplate = request.ToFormTemplate();
@@ -154,9 +154,9 @@ namespace SmartMetric.ServiceTests
             FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
             {
                 CreatedByUserId = 123,
-                Translations = new List<FormTemplateTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new FormTemplateTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Title = "Example of Title",
                         Description = "Description",
@@ -186,9 +186,9 @@ namespace SmartMetric.ServiceTests
             FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
             {
                 CreatedByUserId = 123,
-                Translations = new List<FormTemplateTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new FormTemplateTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.EN,
                         Description = "Description",
@@ -218,9 +218,9 @@ namespace SmartMetric.ServiceTests
             FormTemplateDTOAddRequest request = new FormTemplateDTOAddRequest
             {
                 CreatedByUserId = 123,
-                Translations = new List<FormTemplateTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new FormTemplateTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.EN,
                         Title = "Title",
@@ -273,9 +273,9 @@ namespace SmartMetric.ServiceTests
                 new FormTemplateDTOAddRequest
                 {
                     CreatedByUserId = 123,
-                    Translations = new List<FormTemplateTranslationDTOAddRequest>
+                    Translations = new List<TranslationDTOAddRequest>
                     {
-                        new FormTemplateTranslationDTOAddRequest
+                        new TranslationDTOAddRequest
                         {
                             Language = Language.EN,
                             Title = "Title",
@@ -286,9 +286,9 @@ namespace SmartMetric.ServiceTests
                 new FormTemplateDTOAddRequest
                 {
                     CreatedByUserId = 12345,
-                    Translations = new List<FormTemplateTranslationDTOAddRequest>
+                    Translations = new List<TranslationDTOAddRequest>
                     {
-                        new FormTemplateTranslationDTOAddRequest
+                        new TranslationDTOAddRequest
                         {
                             Language = Language.EN,
                             Title = "Title2",

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SmartMetric.Infrastructure.Models;
 
 [Table("Perfis")]
-public partial class Perfis
+public partial class Perfil
 {
     public int Idperfil { get; set; }
 

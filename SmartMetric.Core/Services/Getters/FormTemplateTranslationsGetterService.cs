@@ -27,20 +27,20 @@ namespace SmartMetric.Core.Services.Getters
         }
 
         #region FormTemplateTranslation Getters
-        public async Task<ApiResponse<List<FormTemplateTranslationDTOResponse>>> GetAllFormTemplateTranslations()
+        public async Task<ApiResponse<List<TranslationDTOResponse>>> GetAllFormTemplateTranslations()
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetAllFormTemplateTranslations)} foi iniciado");
             var translations = await _translationsRepository.GetAllFormTemplateTranslations();
 
-            return new ApiResponse<List<FormTemplateTranslationDTOResponse>>()
+            return new ApiResponse<List<TranslationDTOResponse>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
         }
 
-        public async Task<ApiResponse<List<FormTemplateTranslationDTOResponse>?>> GetTranslationsByFormTemplateId(Guid? formTemplateId)
+        public async Task<ApiResponse<List<TranslationDTOResponse>?>> GetTranslationsByFormTemplateId(Guid? formTemplateId)
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetTranslationsByFormTemplateId)} foi iniciado");
 
@@ -53,16 +53,16 @@ namespace SmartMetric.Core.Services.Getters
 
             if (translations == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            return new ApiResponse<List<FormTemplateTranslationDTOResponse>?>()
+            return new ApiResponse<List<TranslationDTOResponse>?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
 
         }
 
-        public async Task<ApiResponse<FormTemplateTranslationDTOResponse?>> GetFormTemplateTranslationById(Guid? formTemplateTranslationId)
+        public async Task<ApiResponse<TranslationDTOResponse?>> GetFormTemplateTranslationById(Guid? formTemplateTranslationId)
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsGetterService)}.{nameof(GetFormTemplateTranslationById)} foi iniciado");
 
@@ -78,11 +78,11 @@ namespace SmartMetric.Core.Services.Getters
                 throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
             }
 
-            return new ApiResponse<FormTemplateTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translation.ToFormTemplateTranslationDTOResponse()
+                Data = translation.ToTranslationDTOResponse()
             };
         }
         #endregion

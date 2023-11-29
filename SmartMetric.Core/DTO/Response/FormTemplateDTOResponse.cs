@@ -13,7 +13,7 @@ namespace SmartMetric.Core.DTO.Response
         public DateTime? CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }
         public int? CreatedByUserId { get; set; }
-        public List<FormTemplateTranslationDTOResponse>? Translations { get; set; }
+        public List<TranslationDTOResponse>? Translations { get; set; }
         public List<QuestionDTOResponse>? Questions { get; set; }
 
 
@@ -59,7 +59,7 @@ namespace SmartMetric.Core.DTO.Response
                 CreatedByUserId = formTemplate.CreatedByUserId,
                 CreatedDate = formTemplate.CreatedDate,
                 ModifiedDate = formTemplate.ModifiedDate,
-                Translations = formTemplate.Translations?.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList() ?? null,
+                Translations = formTemplate.Translations?.Select(temp => temp.ToTranslationDTOResponse()).ToList() ?? null,
                 Questions = formTemplate.Questions?.Select(q => q.ToQuestionDTOResponse()).ToList() ?? null
             };
         }

@@ -18,6 +18,6 @@ namespace SmartMetric.Core.ServicesContracts.Adders
         /// </summary>
         /// <param name="request">A Tradução a ser adicionada.</param>
         /// <returns>Retorna o objeto SingleChoiceOptionTranslationDTOResponse em caso de sucesso, ou null em caso de falha.</returns>
-        Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> AddSingleChoiceOptionTranslation(Guid? singleCHoiceOption, SingleChoiceOptionTranslationDTOAddRequest? request);
+        Task<ApiResponse<TranslationDTOResponse?>> AddSingleChoiceOptionTranslation(Guid? singleCHoiceOption, TranslationDTOAddRequest? request);
     }
 }

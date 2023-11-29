@@ -26,20 +26,20 @@ namespace SmartMetric.Core.Services.Getters
 
         #region RatingOptionTranslation Getters
 
-        public async Task<ApiResponse<List<RatingOptionTranslationDTOResponse>>> GetAllRatingOptionTranslations()
+        public async Task<ApiResponse<List<TranslationDTOResponse>>> GetAllRatingOptionTranslations()
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetAllRatingOptionTranslations)} foi iniciado");
             var translations = await _translationsRepository.GetAllRatingOptionTranslations();
 
-            return new ApiResponse<List<RatingOptionTranslationDTOResponse>>()
+            return new ApiResponse<List<TranslationDTOResponse>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
         }
 
-        public async Task<ApiResponse<RatingOptionTranslationDTOResponse?>> GetRatingOptionTranslationById(Guid? ratingOptionTranslationId)
+        public async Task<ApiResponse<TranslationDTOResponse?>> GetRatingOptionTranslationById(Guid? ratingOptionTranslationId)
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptionTranslationById)} foi iniciado");
 
@@ -55,15 +55,15 @@ namespace SmartMetric.Core.Services.Getters
                 throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
             }
 
-            return new ApiResponse<RatingOptionTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translation.ToRatingOptionTranslationDTOResponse()
+                Data = translation.ToTranslationDTOResponse()
             };
         }
 
-        public async Task<ApiResponse<List<RatingOptionTranslationDTOResponse>?>> GetRatingOptionTranslationsByRatingOptionId(Guid? ratingOptionId)
+        public async Task<ApiResponse<List<TranslationDTOResponse>?>> GetRatingOptionTranslationsByRatingOptionId(Guid? ratingOptionId)
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsGetterService)}.{nameof(GetRatingOptionTranslationsByRatingOptionId)} foi iniciado");
 
@@ -73,11 +73,11 @@ namespace SmartMetric.Core.Services.Getters
 
             if (translations == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "Resource not found. The provided ID does not exist.");
 
-            return new ApiResponse<List<RatingOptionTranslationDTOResponse>?>()
+            return new ApiResponse<List<TranslationDTOResponse>?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
         }
 

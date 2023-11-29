@@ -22,6 +22,8 @@ namespace SmartMetric.Core.ServicesContracts
         /// <param name="prefilId">O ID do perfil.</param>
         /// <returns>Uma lista de objetos DepartmentDTOResponse representando os departamentos.</returns>
         Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? prefilId);
+
+        Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds);
         #endregion
 
         #region Perfil

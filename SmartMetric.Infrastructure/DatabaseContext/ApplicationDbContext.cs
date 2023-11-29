@@ -37,7 +37,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public virtual DbSet<Departamento> Departamentos { get; set; }
         public virtual DbSet<Funcionario> Funcionarios { get; set; }
         public virtual DbSet<FuncionariosChefia> FuncionariosChefias { get; set; }
-        public virtual DbSet<Perfis> Perfis { get; set; }
+        public virtual DbSet<Perfil> Perfis { get; set; }
         public virtual DbSet<PerfisDepartamento> PerfisDepartamentos { get; set; }
         public virtual DbSet<PerfisJanela> PerfisJanelas { get; set; }
         public virtual DbSet<Utilizador> Utilizadores { get; set; }
@@ -177,7 +177,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                 entity.Property(e => e.NivelFuncionariosMarcacoes).HasMaxLength(2);
             });
 
-            modelBuilder.Entity<Perfis>(entity =>
+            modelBuilder.Entity<Perfil>(entity =>
             {
                 entity.HasKey(e => e.Idperfil).HasName("IDPerfil");
 

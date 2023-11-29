@@ -28,7 +28,7 @@ namespace SmartMetric.Core.DTO.Response
         /// <summary>
         /// Obtém ou define as traduções associadas a esta opção de escolha única.
         /// </summary>
-        public List<SingleChoiceOptionTranslationDTOResponse>? Translations { get; set; }
+        public List<TranslationDTOResponse>? Translations { get; set; }
 
         /// <summary>
         /// Compara os dados atuais desta opção de escolha única com outro objeto.
@@ -79,7 +79,7 @@ namespace SmartMetric.Core.DTO.Response
             {
                 SingleChoiceOptionId = singleChoiceOption.SingleChoiceOptionId,
                 QuestionId = singleChoiceOption.QuestionId,
-                Translations = singleChoiceOption.Translations?.Select(temp => temp.ToSingleChoiceOptionTranslationDTOResponse()).ToList(),
+                Translations = singleChoiceOption.Translations?.Select(temp => temp.ToTranslationDTOResponse()).ToList(),
             };
         }
     }

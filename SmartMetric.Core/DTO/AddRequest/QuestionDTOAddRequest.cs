@@ -39,7 +39,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// </summary>
         [Required(ErrorMessage = "Please ensure that the question is inserted in at least one language.")]
         [MinLength(1, ErrorMessage = "Please ensure that the question is inserted in at least one language.")]
-        public List<QuestionTranslationDTOAddRequest>? Translations { get; set; }
+        public List<TranslationDTOAddRequest>? Translations { get; set; }
 
         /// <summary>
         /// Obtém ou define as opções de escolha única associadas a esta pergunta.

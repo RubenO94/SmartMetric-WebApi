@@ -24,6 +24,15 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
+        #region Perfis
+        public async Task<Perfil?> GetPerfilById(int perfilId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetPerfilById)} foi iniciado");
+
+            return await _context.Perfis.FirstOrDefaultAsync(temp => temp.Idperfil == perfilId);
+        }
+        #endregion
+
         #region Funcionarios
 
         public async Task<List<Funcionario>> GetAllEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20)
@@ -163,6 +172,19 @@ namespace SmartMetric.Infrastructure.Repositories
             return departamentosAssociados;
         }
 
+        public async Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
+
+            // Filtra os departamentos com base nos IDs fornecidos
+            var departments = await _context.Departamentos
+                .Where(d => departmentIds.Contains(d.Iddepartamento))
+                .ToListAsync();
+
+            return departments;
+
+        }
+
 
         #endregion
 
@@ -220,6 +242,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
             return departamentosAssociados;
         }
+
 
         #endregion
 

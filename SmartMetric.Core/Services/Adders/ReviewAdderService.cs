@@ -4,6 +4,8 @@ using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Exceptions;
+using SmartMetric.Core.Helpers;
+using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.ServicesContracts.Adders;
 using System;
 using System.Collections.Generic;
@@ -17,11 +19,13 @@ namespace SmartMetric.Core.Services.Adders
     public class ReviewAdderService : IReviewAdderService
     {
         private readonly IReviewRepository _reviewRepository;
+        private readonly ISmartTimeRepository _smartTimeRepository;
         private ILogger<ReviewAdderService> _logger;
 
-        public ReviewAdderService(IReviewRepository reviewRepository, ILogger<ReviewAdderService> logger)
+        public ReviewAdderService(IReviewRepository reviewRepository, ISmartTimeRepository smartTimeRepository, ILogger<ReviewAdderService> logger)
         {
             _reviewRepository = reviewRepository;
+            _smartTimeRepository = smartTimeRepository;
             _logger = logger;
         }
 
@@ -29,50 +33,28 @@ namespace SmartMetric.Core.Services.Adders
         {
             _logger.LogInformation($"{nameof(ReviewAdderService)}.{nameof(AddReview)} foi iniciado");
 
-            if(request == null)
-            {
-                throw new ArgumentNullException(nameof(request));
-            }
+            if (request == null) throw new ArgumentNullException(nameof(request));
 
-            if(request.CreatedByUserId == null)
-            {
-                throw new ArgumentNullException(nameof(request.CreatedByUserId));
-            }
+            ValidationHelper.ModelValidation(request);
 
-            if (request.CreatedDate == null)
-            {
-                throw new ArgumentException(nameof(request.CreatedDate));
-            }
+            var userResult = await _smartTimeRepository.GetUserById(request.CreatedByUserId!.Value);
 
-            if (request.SubjectType == null)
-            {
-                throw new ArgumentNullException(nameof(request.SubjectType));
-            }
+            if (userResult == null) throw new ArgumentException("User does not exist.", nameof(request.CreatedByUserId));
 
-            if (request.ReviewType == null)
-            {
-                throw new ArgumentNullException(nameof(request.ReviewType));
-            }
+            if (request.StartDate >= request.EndDate) throw new ArgumentException("Start date must be before the end date.", nameof(request.StartDate));
 
-            if (request.Translations == null)
-            {
-                throw new ArgumentNullException(nameof(request.Translations));
-            }
+            var departments = await _smartTimeRepository.GetDepartmentsByListIds(request.ReviewDepartmentsIds!);
 
-            if (!request.Translations.Any())
-            {
-                throw new HttpStatusException(HttpStatusCode.BadRequest, "Review should atleast have one translation");
-            }
+            var departmentsNotExisting = request.ReviewDepartmentsIds!.Except(departments.Select(temp => temp.Iddepartamento).ToList()).ToList();
 
-            var reviewId = Guid.NewGuid();
-
-            foreach (var translation in request.Translations)
-            {
-                translation.ReviewId = reviewId;
-            }
+            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist", nameof(request.ReviewDepartmentsIds));
 
             Review review = request.ToReview();
-            review.ReviewId = reviewId;
+
+            foreach (var department in departments)
+            {
+                review.Departments?.Add(new ReviewDepartment() { Department = department, Review = review });
+            }
 
             var result = await _reviewRepository.AddReview(review);
 

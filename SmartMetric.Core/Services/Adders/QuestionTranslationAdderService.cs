@@ -28,7 +28,7 @@ namespace SmartMetric.Core.Services.Adders
             _questionRepository = questionRepository;
         }
 
-        public async Task<ApiResponse<QuestionTranslationDTOResponse?>> AddQuestionTranslation(Guid? questionId, QuestionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<TranslationDTOResponse?>> AddQuestionTranslation(Guid? questionId, TranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(QuestionTranslationAdderService)}.{nameof(AddQuestionTranslation)} foi iniciado");
 
@@ -59,11 +59,11 @@ namespace SmartMetric.Core.Services.Adders
 
             await _translationsRepository.AddQuestionTranslation(translation);
 
-            return new ApiResponse<QuestionTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.Created,
                 Message = "Translation added successfully to the Question.",
-                Data = translation.ToQuestionTranslationDTOResponse(),
+                Data = translation.ToTranslationDTOResponse(),
             };
         }
     }

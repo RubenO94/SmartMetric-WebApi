@@ -48,7 +48,7 @@ namespace SmartMetric.Core.Services.Deleters
 
             var translationToBeDeleted = singleChoiceOptionExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"SingleChoiceOption doesn't have a {language} translation!");
 
-            var response = await _translationRepository.DeleteSingleChoiceOptionTranslationById(translationToBeDeleted.SingleChoiceOptionTranslationId);
+            var response = await _translationRepository.DeleteSingleChoiceOptionTranslationById(translationToBeDeleted.TranslationId);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,

@@ -61,10 +61,11 @@ namespace SmartMetric.ServiceTests
         public async Task AddFormTemplateTranslation_ObjectIsNull_ShouldThrowHttpStatusException()
         {
             //Arrange
-            FormTemplateTranslationDTOAddRequest? request = null;
+            Guid formTemplateId = Guid.NewGuid();
+            TranslationDTOAddRequest? request = null;
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -75,9 +76,10 @@ namespace SmartMetric.ServiceTests
         public async Task AddFormTemplateTranslation_FormTemplateIdIsNull_ShouldThrowHttpStatusException()
         {
             //Arrange
+            Guid formTemplateId = Guid.NewGuid();
             Guid formTemplateTranslationId = Guid.NewGuid();
 
-            FormTemplateTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
                 Language = Language.EN,
                 Title = "Title",
@@ -85,12 +87,12 @@ namespace SmartMetric.ServiceTests
             };
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
-            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+            var response = formTemplateTranslation.ToTranslationDTOResponse();
 
             _translationsRepositoryMock.Setup(temp => temp.AddFormTemplateTranslation(formTemplateTranslation)).ReturnsAsync(new FormTemplateTranslation { FormTemplateTranslationId = formTemplateTranslationId});
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -124,21 +126,20 @@ namespace SmartMetric.ServiceTests
                 Translations = formTemplateTranslationExists
             };
 
-            FormTemplateTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                FormTemplateId = formTemplateId,
                 Language = Language.EN,
                 Title = "Title",
                 Description = "Description",
             };
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
-            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+            var response = formTemplateTranslation.ToTranslationDTOResponse();
 
             _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateNonExistingId)).ReturnsAsync(null as FormTemplate);
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -152,20 +153,19 @@ namespace SmartMetric.ServiceTests
             Guid formTemplateTranslationId = Guid.NewGuid();
             Guid formTemplateId = Guid.NewGuid();
 
-            FormTemplateTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                FormTemplateId = formTemplateId,
                 Title = "Title",
                 Description = "Description",
             };
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
-            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+            var response = formTemplateTranslation.ToTranslationDTOResponse();
 
             _translationsRepositoryMock.Setup(temp => temp.AddFormTemplateTranslation(formTemplateTranslation)).ReturnsAsync(new FormTemplateTranslation { FormTemplateTranslationId = formTemplateTranslationId });
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -179,20 +179,19 @@ namespace SmartMetric.ServiceTests
             Guid formTemplateTranslationId = Guid.NewGuid();
             Guid formTemplateId = Guid.NewGuid();
 
-            FormTemplateTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                FormTemplateId = formTemplateId,
                 Language = Language.EN,
                 Description = "Description",
             };
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
-            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+            var response = formTemplateTranslation.ToTranslationDTOResponse();
 
             _translationsRepositoryMock.Setup(temp => temp.AddFormTemplateTranslation(formTemplateTranslation)).ReturnsAsync(new FormTemplateTranslation { FormTemplateTranslationId = formTemplateTranslationId });
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -225,16 +224,15 @@ namespace SmartMetric.ServiceTests
                 Translations = formTemplateTranslationExists
             };
 
-            FormTemplateTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                FormTemplateId = formTemplateId,
                 Language = Language.EN,
                 Title = "Title",
                 Description = "Description",
             };
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
-            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+            var response = formTemplateTranslation.ToTranslationDTOResponse();
 
             _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateId)).ReturnsAsync(formTemplate);
 
@@ -243,7 +241,7 @@ namespace SmartMetric.ServiceTests
             _translationsRepositoryMock.Setup(temp => temp.AddFormTemplateTranslation(formTemplateTranslation)).ReturnsAsync(formTemplateTranslation);
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -276,16 +274,15 @@ namespace SmartMetric.ServiceTests
                 Translations = formTemplateTranslationExists
             };
 
-            FormTemplateTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                FormTemplateId = formTemplateId,
                 Language = Language.EN,
                 Title = "Title",
                 Description = "Description",
             };
 
             var formTemplateTranslation = request.ToFormTemplateTranslation();
-            var response = formTemplateTranslation.ToFormTemplateTranslationDTOResponse();
+            var response = formTemplateTranslation.ToTranslationDTOResponse();
 
             _formTemplateRepositoryMock.Setup(temp => temp.GetFormTemplateById(formTemplateId)).ReturnsAsync(formTemplate);
 
@@ -294,8 +291,8 @@ namespace SmartMetric.ServiceTests
             _translationsRepositoryMock.Setup(temp => temp.AddFormTemplateTranslation(formTemplateTranslation)).ReturnsAsync(formTemplateTranslation);
 
             //Act
-            var result = await _translationsAdderService.AddFormTemplateTranslation(request);
-            response.FormTemplateTranslationId = result.Data!.FormTemplateTranslationId;
+            var result = await _translationsAdderService.AddFormTemplateTranslation(formTemplateId, request);
+            response.TranslationId = result.Data!.TranslationId;
 
             //Assert
             result.Data.Should().Be(response);
@@ -315,7 +312,7 @@ namespace SmartMetric.ServiceTests
             _translationsRepositoryMock.Setup(temp => temp.GetAllFormTemplateTranslations()).ReturnsAsync(translations);
 
             //Act
-            ApiResponse<List<FormTemplateTranslationDTOResponse>> responseFromGet = await _translationsGetterService.GetAllFormTemplateTranslations();
+            ApiResponse<List<TranslationDTOResponse>> responseFromGet = await _translationsGetterService.GetAllFormTemplateTranslations();
 
             //Assert
             responseFromGet.Data.Should().BeEmpty();
@@ -333,12 +330,12 @@ namespace SmartMetric.ServiceTests
                 _fixture.Build<FormTemplateTranslation>().With(temp => temp.FormTemplate, null as FormTemplate).Create(),
             };
 
-            List<FormTemplateTranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
+            List<TranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList();
 
             _translationsRepositoryMock.Setup(temp => temp.GetAllFormTemplateTranslations()).ReturnsAsync(translations);
 
             //Act
-            ApiResponse<List<FormTemplateTranslationDTOResponse>> actualResponse = await _translationsGetterService.GetAllFormTemplateTranslations();
+            ApiResponse<List<TranslationDTOResponse>> actualResponse = await _translationsGetterService.GetAllFormTemplateTranslations();
 
             //Assert
             actualResponse.Data!.Equals(expectedResponse);
@@ -391,12 +388,12 @@ namespace SmartMetric.ServiceTests
                 Title = "Title",
             };
 
-            FormTemplateTranslationDTOResponse expectedResponse = translation.ToFormTemplateTranslationDTOResponse();
+            TranslationDTOResponse expectedResponse = translation.ToTranslationDTOResponse();
 
             _translationsRepositoryMock.Setup(temp => temp.GetFormTemplateTranslationById(formTemplateTranslationId)).ReturnsAsync(translation);
 
             //Act
-            ApiResponse<FormTemplateTranslationDTOResponse?> actualResponse = await _translationsGetterService.GetFormTemplateTranslationById(translation.FormTemplateTranslationId);
+            ApiResponse<TranslationDTOResponse?> actualResponse = await _translationsGetterService.GetFormTemplateTranslationById(translation.FormTemplateTranslationId);
 
             //Assert
             actualResponse.Data!.Equals(expectedResponse);
@@ -478,12 +475,12 @@ namespace SmartMetric.ServiceTests
                 },
             };
 
-            List<FormTemplateTranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToFormTemplateTranslationDTOResponse()).ToList();
+            List<TranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList();
 
             _translationsRepositoryMock.Setup(temp => temp.GetTranslationsByFormTemplateId(formTemplateId)).ReturnsAsync(translations);
 
             //Act
-            ApiResponse<List<FormTemplateTranslationDTOResponse>?> actualResponse = await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
+            ApiResponse<List<TranslationDTOResponse>?> actualResponse = await _translationsGetterService.GetTranslationsByFormTemplateId(formTemplateId);
 
             //Assert
             actualResponse.Data!.Equals(expectedResponse);

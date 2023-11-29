@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.ServicesContracts.Adders;
+using SmartMetric.Core.ServicesContracts.Deleters;
 using SmartMetric.Infrastructure.DatabaseContext;
 
 namespace SmartMetric.WebAPI.Controllers.v1
@@ -13,40 +15,39 @@ namespace SmartMetric.WebAPI.Controllers.v1
     {
         private readonly ISmartTimeService _smartTimeService;
         private readonly IReviewAdderService _reviewAdderService;
-        private readonly ApplicationDbContext _context;
+        private readonly IReviewDeleterService _reviewDeleterService;
 
-        public ReviewsController(ISmartTimeService smartTimeService, ApplicationDbContext context, IReviewAdderService reviewAdderService)
+        public ReviewsController(ISmartTimeService smartTimeService, IReviewAdderService reviewAdderService, IReviewDeleterService reviewDeleterService)
         {
             _smartTimeService = smartTimeService;
-            _context = context;
             _reviewAdderService = reviewAdderService;
-        }
-
-
-        //TESTE de paginação
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Funcionario>>> GetAllEmployees([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
-        {
-            var totalCount = await _context.Funcionarios.CountAsync();
-
-            var employees = await _context.Funcionarios
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
-
-            Response.Headers.Add("X-Total-Count", totalCount.ToString());
-
-            return employees;
+            _reviewDeleterService = reviewDeleterService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddReview(ReviewDTOAddRequest? request)
+        public async Task<IActionResult> AddReview([FromBody] ReviewDTOAddRequest? request)
         {
-           var response = await _reviewAdderService.AddReview(request); 
-            if(response.Data != null)
-            return Ok(response);
+            var response = await _reviewAdderService.AddReview(request);
+            if (response.Data != null)
+                return Ok(response);
 
             return BadRequest(response);
+        }
+
+        [HttpDelete("{reviewId}")]
+        public async Task<IActionResult> DeleteReview(Guid? reviewId)
+        {
+            var response = await _reviewDeleterService.DeleteReviewById(reviewId);
+
+            if (response.Data == true) return NoContent();
+            return BadRequest();
+        }
+
+        [HttpPut("{reviewId}")]
+        public async Task<IActionResult> UpdateReview(Guid? reviewId, [FromBody] ReviewDTOUpdate? reviewDTOUpdate)
+        {
+            //TODO: Review Update Endpoint
+            throw new NotImplementedException();
         }
     }
 }

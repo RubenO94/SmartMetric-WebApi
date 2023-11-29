@@ -13,6 +13,10 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
     /// </summary>
     public interface ISmartTimeRepository
     {
+        #region Perfis
+        Task<Perfil?> GetPerfilById(int perfilId);
+        #endregion
+
         #region Utilizadores
 
         /// <summary>
@@ -86,6 +90,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         #region Departamentos
         Task<List<Departamento>> GetAllDepartaments(int page = 1, int pageSize = 20);
         Task<List<Departamento>> GetDepartmentsByPerfilId(int perfilId, int page = 1, int pageSize = 20);
+        Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds);
         #endregion
 
         #region FuncionariosChefia

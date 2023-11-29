@@ -9,8 +9,6 @@ builder.Services.ConfigureServices(builder.Configuration);
 
 var app = builder.Build();
 
-app.UseExceptionHandler(exceptionHandlerApp => exceptionHandlerApp.ConfigureExceptionHandler());
-
 app.UseHsts();
 app.UseHttpsRedirection();
 

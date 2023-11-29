@@ -26,20 +26,20 @@ namespace SmartMetric.Core.Services.Getters
             _logger = logger;
         }
 
-        public async Task<ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>>> GetAllSingleChoiceOptionTranslations()
+        public async Task<ApiResponse<List<TranslationDTOResponse>>> GetAllSingleChoiceOptionTranslations()
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsGetterService)}.{nameof(GetAllSingleChoiceOptionTranslations)} foi iniciado");
 
             var translations = await _translationsRepository.GetAllSingleChoiceOptionTranslations();
-            return new ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>>()
+            return new ApiResponse<List<TranslationDTOResponse>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Get of all Translations of all SingleChoiceOption was made with success!",
-                Data = translations.Select(temp => temp.ToSingleChoiceOptionTranslationDTOResponse()).ToList(),
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList(),
             };
         }
 
-        public async Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> GetSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId)
+        public async Task<ApiResponse<TranslationDTOResponse?>> GetSingleChoiceOptionTranslationById(Guid? singleChoiceOptionTranslationId)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsGetterService)}.{nameof(GetSingleChoiceOptionTranslationById)} foi iniciado");
 
@@ -55,15 +55,15 @@ namespace SmartMetric.Core.Services.Getters
                 throw new HttpStatusException(HttpStatusCode.NotFound, "A Translation with this Id doesn't exist");
             }
 
-            return new ApiResponse<SingleChoiceOptionTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Get of the Translation request was made with success!",
-                Data = translation.ToSingleChoiceOptionTranslationDTOResponse()
+                Data = translation.ToTranslationDTOResponse()
             };
         }
 
-        public async Task<ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>?>> GetTranslationsBySingleChoiceOptionId(Guid? singleChoiceOptionId)
+        public async Task<ApiResponse<List<TranslationDTOResponse>?>> GetTranslationsBySingleChoiceOptionId(Guid? singleChoiceOptionId)
         {
             _logger.LogInformation($"{nameof(SingleChoiceOptionTranslationsGetterService)}.{nameof(GetTranslationsBySingleChoiceOptionId)} foi iniciado");
 
@@ -75,11 +75,11 @@ namespace SmartMetric.Core.Services.Getters
             var singleChoiceOptionExist = await _singleChoiceOptionGetterService.GetSingleChoiceOptionById(singleChoiceOptionId.Value) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "SingleChoiceOption doesn't exist");
 
             var translations = await _translationsRepository.GetTranslationsBySingleChoiceOptionId(singleChoiceOptionExist.Data!.SingleChoiceOptionId);
-            return new ApiResponse<List<SingleChoiceOptionTranslationDTOResponse>?>()
+            return new ApiResponse<List<TranslationDTOResponse>?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Get of the Translations of the SingleChoiceOption requested, was made with success!",
-                Data = translations.Select(temp => temp.ToSingleChoiceOptionTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
         }
     }

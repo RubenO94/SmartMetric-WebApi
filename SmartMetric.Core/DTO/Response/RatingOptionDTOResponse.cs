@@ -16,7 +16,7 @@ namespace SmartMetric.Core.DTO.Response
         public Guid? QuestionId { get; set; }
         public int? NumericValue { get; set; }
 
-        public List<RatingOptionTranslationDTOResponse>? Translations { get; set; }
+        public List<TranslationDTOResponse>? Translations { get; set; }
 
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace SmartMetric.Core.DTO.Response
                 RatingOptionId = ratingOption.RatingOptionId,
                 QuestionId = ratingOption.QuestionId,
                 NumericValue = ratingOption.NumericValue,
-                Translations = ratingOption.Translations?.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList(),
+                Translations = ratingOption.Translations?.Select(temp => temp.ToTranslationDTOResponse()).ToList(),
             };
         }
     }

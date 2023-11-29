@@ -31,7 +31,7 @@ namespace SmartMetric.Core.Services.Adders
             _singleChoiceOptionRepository = singleChoiceOptionRepository;
         }
 
-        public async Task<ApiResponse<SingleChoiceOptionTranslationDTOResponse?>> AddSingleChoiceOptionTranslation(Guid? singleChoiceOptionId, SingleChoiceOptionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<TranslationDTOResponse?>> AddSingleChoiceOptionTranslation(Guid? singleChoiceOptionId, TranslationDTOAddRequest? request)
         {
             if(singleChoiceOptionId == null) throw new ArgumentNullException(nameof(singleChoiceOptionId));
 
@@ -59,11 +59,11 @@ namespace SmartMetric.Core.Services.Adders
 
             await _translationsRepository.AddSingleChoiceOptionTranslation(translation);
 
-            return new ApiResponse<SingleChoiceOptionTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.Created,
                 Message = "Translation added successfully to the SingleChoiceOption.",
-                Data = translation.ToSingleChoiceOptionTranslationDTOResponse()
+                Data = translation.ToTranslationDTOResponse()
             };
         }
     }
