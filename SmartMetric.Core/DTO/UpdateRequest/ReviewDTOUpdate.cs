@@ -14,9 +14,9 @@ namespace SmartMetric.Core.DTO.UpdateRequest
         public string? ReviewType { get; set; }
         public string? ReviewStatus { get; set; }
 
-        public ICollection<ReviewTranslation>? Translations { get; set; }
-        public ICollection<Question>? Questions { get; set; }
-        public ICollection<ReviewEmployee>? Employees { get; set; }
-        public ICollection<ReviewDepartment>? Departments { get; set; }
+        public ICollection<TranslationDTOUpdate>? Translations { get; set; }
+        public ICollection<QuestionDTOUpdate>? Questions { get; set; }
+        public ICollection<int>? EmployeeIds { get; set; }
+        public ICollection<int>? DepartmentIds { get; set; }
     }
 }

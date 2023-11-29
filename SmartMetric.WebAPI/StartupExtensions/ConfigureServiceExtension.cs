@@ -21,6 +21,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using SmartMetric.WebAPI.Filters.ActionFilters;
 using SmartMetric.WebAPI.Filters.ExceptionFilter;
 using SmartMetric.WebAPI.Filters.ActionFilter;
+using SmartMetric.Core.ServicesContracts.Updaters;
+using SmartMetric.Core.Services.Updaters;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -77,8 +79,10 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<ISingleChoiceOptionDeleterService, SingleChoiceOptionDeleterService>();
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
+            services.AddScoped<IReviewGetterService, ReviewGetterService>();  
             services.AddScoped<IReviewAdderService, ReviewAdderService>();
             services.AddScoped<IReviewDeleterService, ReviewDeleterService>();
+            services.AddScoped<IReviewUpdaterService, ReviewUpdaterService>();
 
             #endregion
 

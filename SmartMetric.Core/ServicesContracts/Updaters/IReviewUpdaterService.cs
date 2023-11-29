@@ -10,6 +10,6 @@ namespace SmartMetric.Core.ServicesContracts.Updaters
 {
     public interface IReviewUpdaterService
     {
-        Task<ApiResponse<ReviewDTOResponse>> UpdateReview(ReviewDTOUpdate? reviewDTOUpdate);
+        Task<ApiResponse<ReviewDTOResponse>> UpdateReview(Guid? reviewId, ReviewDTOUpdate? reviewDTOUpdate);
     }
 }

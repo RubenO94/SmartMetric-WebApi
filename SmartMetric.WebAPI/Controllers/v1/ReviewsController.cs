@@ -6,6 +6,8 @@ using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.ServicesContracts.Adders;
 using SmartMetric.Core.ServicesContracts.Deleters;
+using SmartMetric.Core.ServicesContracts.Getters;
+using SmartMetric.Core.ServicesContracts.Updaters;
 using SmartMetric.Infrastructure.DatabaseContext;
 
 namespace SmartMetric.WebAPI.Controllers.v1
@@ -13,15 +15,24 @@ namespace SmartMetric.WebAPI.Controllers.v1
     [ApiVersion("1.0")]
     public class ReviewsController : CustomBaseController
     {
-        private readonly ISmartTimeService _smartTimeService;
+        private readonly IReviewGetterService _reviewGetterService;
         private readonly IReviewAdderService _reviewAdderService;
         private readonly IReviewDeleterService _reviewDeleterService;
+        private readonly IReviewUpdaterService _reviewUpdaterService;
 
-        public ReviewsController(ISmartTimeService smartTimeService, IReviewAdderService reviewAdderService, IReviewDeleterService reviewDeleterService)
+        public ReviewsController(IReviewGetterService reviewGetterService, IReviewAdderService reviewAdderService, IReviewDeleterService reviewDeleterService, IReviewUpdaterService reviewUpdaterService)
         {
-            _smartTimeService = smartTimeService;
+            _reviewGetterService = reviewGetterService;
             _reviewAdderService = reviewAdderService;
             _reviewDeleterService = reviewDeleterService;
+            _reviewUpdaterService = reviewUpdaterService;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20) 
+        {
+            var response = await _reviewGetterService.GetReviews(page, pageSize);
+            return Ok(response);
         }
 
         [HttpPost]
@@ -47,7 +58,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
         public async Task<IActionResult> UpdateReview(Guid? reviewId, [FromBody] ReviewDTOUpdate? reviewDTOUpdate)
         {
             //TODO: Review Update Endpoint
-            throw new NotImplementedException();
+            var response = await _reviewUpdaterService.UpdateReview(reviewId, reviewDTOUpdate);
+
+            return Ok(response);
         }
     }
 }
