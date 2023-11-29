@@ -47,7 +47,7 @@ namespace SmartMetric.Core.Services.Deleters
 
             var translationToBeDeleted = questionExist.Data.Translations.FirstOrDefault(temp => temp.Language == language.ToString()) ?? throw new HttpStatusException(HttpStatusCode.BadRequest, $"Question doesn't have a {language} translation");
 
-            var response = await _questionTranslationsRepository.DeleteQuestionTranslationById(translationToBeDeleted.QuestionTranslationId);
+            var response = await _questionTranslationsRepository.DeleteQuestionTranslationById(translationToBeDeleted.TranslationId);
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,

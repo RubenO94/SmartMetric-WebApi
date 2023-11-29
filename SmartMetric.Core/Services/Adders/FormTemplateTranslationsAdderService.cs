@@ -28,7 +28,7 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<ApiResponse<FormTemplateTranslationDTOResponse?>> AddFormTemplateTranslation(Guid? formTemplateId, FormTemplateTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<TranslationDTOResponse?>> AddFormTemplateTranslation(Guid? formTemplateId, TranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(FormTemplateTranslationsAdderService)}.{nameof(AddFormTemplateTranslation)} foi iniciado");
 
@@ -60,11 +60,11 @@ namespace SmartMetric.Core.Services.Adders
 
             await _translationsRepository.AddFormTemplateTranslation(translation);
 
-            return new ApiResponse<FormTemplateTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.Created,
                 Message = "Translation added successfully to the FormTemplate.",
-                Data = translation.ToFormTemplateTranslationDTOResponse(),
+                Data = translation.ToTranslationDTOResponse(),
             };
         }
     }

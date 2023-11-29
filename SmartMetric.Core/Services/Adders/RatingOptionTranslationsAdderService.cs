@@ -28,7 +28,7 @@ namespace SmartMetric.Core.Services.Adders
             _logger = logger;
         }
 
-        public async Task<ApiResponse<RatingOptionTranslationDTOResponse?>> AddRatingOptionTranslation(Guid? ratingOptionId, RatingOptionTranslationDTOAddRequest? request)
+        public async Task<ApiResponse<TranslationDTOResponse?>> AddRatingOptionTranslation(Guid? ratingOptionId, TranslationDTOAddRequest? request)
         {
             _logger.LogInformation($"{nameof(RatingOptionTranslationsAdderService)}.{nameof(AddRatingOptionTranslation)} foi iniciado");
 
@@ -59,11 +59,11 @@ namespace SmartMetric.Core.Services.Adders
 
             await _translationsRepository.AddRatingOptionTranslation(translation);
 
-            return new ApiResponse<RatingOptionTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.Created,
                 Message = "Translation added successfully to the RatingOption.",
-                Data = translation.ToRatingOptionTranslationDTOResponse()
+                Data = translation.ToTranslationDTOResponse()
             };
         }
     }

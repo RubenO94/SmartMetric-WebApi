@@ -42,12 +42,6 @@ namespace SmartMetric.Core.Domain.Entities
         public string? ReviewType { get; set; }
 
         /// <summary>
-        /// Obtém ou define o tipo de sujeito de avaliação associado à revisão.
-        /// </summary>
-        [StringLength(20)]
-        public string? SubjectType { get; set; }
-
-        /// <summary>
         /// Obtém ou define o status da revisão.
         /// </summary>
         [StringLength(20)]

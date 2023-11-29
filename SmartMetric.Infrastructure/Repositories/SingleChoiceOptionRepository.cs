@@ -69,6 +69,11 @@ namespace SmartMetric.Infrastructure.Repositories
             return rowsDeleted > 0;
         }
 
+        public Task<SingleChoiceOption?> GetSingleChoiceOptionById(Guid singleChoiceOptionId)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

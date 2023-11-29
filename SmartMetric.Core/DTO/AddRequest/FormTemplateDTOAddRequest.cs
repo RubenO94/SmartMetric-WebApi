@@ -27,7 +27,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// </summary>
         [MinLength(1, ErrorMessage = "Need at least one language.")]
         [Required(ErrorMessage = "The field Translations is required and must contain at least one language.")]
-        public List<FormTemplateTranslationDTOAddRequest>? Translations { get; set; }
+        public List<TranslationDTOAddRequest>? Translations { get; set; }
 
         /// <summary>
         /// Obtém ou define as questões do modelo de formulário. Deve conter pelo menos uma questão.

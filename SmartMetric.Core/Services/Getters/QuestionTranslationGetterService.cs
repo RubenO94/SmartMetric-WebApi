@@ -26,21 +26,21 @@ namespace SmartMetric.Core.Services.Getters
 
         #region Getters
 
-        public async Task<ApiResponse<List<QuestionTranslationDTOResponse>>> GetAllQuestionTranslations()
+        public async Task<ApiResponse<List<TranslationDTOResponse>>> GetAllQuestionTranslations()
         {
             _logger.LogInformation($"{nameof(QuestionTranslationGetterService)}.{nameof(GetAllQuestionTranslations)} foi iniciado");
 
             var translations = await _translationsRepository.GetAllQuestionTranslations();
 
-            return new ApiResponse<List<QuestionTranslationDTOResponse>>()
+            return new ApiResponse<List<TranslationDTOResponse>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translations.Select(temp => temp.ToQuestionTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
         }
 
-        public async Task<ApiResponse<QuestionTranslationDTOResponse?>> GetQuestionTranslationById(Guid? questionTranslationId)
+        public async Task<ApiResponse<TranslationDTOResponse?>> GetQuestionTranslationById(Guid? questionTranslationId)
         {
             _logger.LogInformation($"{nameof(QuestionTranslationGetterService)}.{nameof(GetQuestionTranslationById)} foi iniciado");
 
@@ -56,16 +56,16 @@ namespace SmartMetric.Core.Services.Getters
                 throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
             }
 
-            return new ApiResponse<QuestionTranslationDTOResponse?>()
+            return new ApiResponse<TranslationDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translation.ToQuestionTranslationDTOResponse()
+                Data = translation.ToTranslationDTOResponse()
             };
 
         }
 
-        public async Task<ApiResponse<List<QuestionTranslationDTOResponse>?>> GetQuestionTranslationsByQuestionId(Guid? questionId)
+        public async Task<ApiResponse<List<TranslationDTOResponse>?>> GetQuestionTranslationsByQuestionId(Guid? questionId)
         {
             _logger.LogInformation($"{nameof(QuestionTranslationGetterService)}.{nameof(GetQuestionTranslationsByQuestionId)} foi iniciado");
 
@@ -76,11 +76,11 @@ namespace SmartMetric.Core.Services.Getters
 
             var translations = await _translationsRepository.GetQuestionTranslationsByQuestionId(questionId.Value);
 
-            return new ApiResponse<List<QuestionTranslationDTOResponse>?>()
+            return new ApiResponse<List<TranslationDTOResponse>?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = translations.Select(temp => temp.ToQuestionTranslationDTOResponse()).ToList()
+                Data = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList()
             };
         }
 

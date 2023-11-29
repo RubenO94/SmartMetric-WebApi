@@ -14,7 +14,7 @@ namespace SmartMetric.Core.DTO.Response
         public bool? IsRequired { get; set; }
         public int? Position { get; set; }
         public string? ResponseType { get; set; }
-        public List<QuestionTranslationDTOResponse>? Translations { get; set; }
+        public List<TranslationDTOResponse>? Translations { get; set; }
         public List<SingleChoiceOptionDTOResponse>? SingleChoiceOptions { get; set; }
         public List<RatingOptionDTOResponse>? RatingOptions { get; set; }
     }
@@ -29,7 +29,7 @@ namespace SmartMetric.Core.DTO.Response
                 IsRequired = question.IsRequired,
                 Position = question.Position,
                 ResponseType = question.ResponseType,
-                Translations = question.Translations?.Select(translation => translation.ToQuestionTranslationDTOResponse()).ToList(),
+                Translations = question.Translations?.Select(translation => translation.ToTranslationDTOResponse()).ToList(),
                 SingleChoiceOptions = question.SingleChoiceOptions?.Select(sco => sco.ToSingleChoiceOptionDTOResponse()).ToList(),
                 RatingOptions = question.RatingOptions?.Select(rto => rto.ToRatingOptionDTOResponse()).ToList(),
             };

@@ -35,7 +35,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpPost]
         [Route("{questionId}/Translations")]
-        public async Task<IActionResult> AddQuestionTranslation(Guid? questionId, [FromBody] QuestionTranslationDTOAddRequest questionTranslationDTOAddRequest)
+        public async Task<IActionResult> AddQuestionTranslation(Guid? questionId, [FromBody] TranslationDTOAddRequest questionTranslationDTOAddRequest)
         {
 
             var response = await _questionTranslationsAdderService.AddQuestionTranslation(questionId, questionTranslationDTOAddRequest);
@@ -43,8 +43,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpDelete]
-        [Route("{questionId}/Translations/{language}")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteQuestionTranslationById(Guid? questionId, Language language)
+        [Route("{questionId}/Translations")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteQuestionTranslationById(Guid? questionId, [FromQuery] Language language)
         {
             var response = await _questionTranslationDeleterService.DeleteQuestionTranslationById(questionId, language);
             return response;

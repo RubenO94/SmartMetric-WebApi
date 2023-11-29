@@ -78,6 +78,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
             services.AddScoped<IReviewAdderService, ReviewAdderService>();
+            services.AddScoped<IReviewDeleterService, ReviewDeleterService>();
 
             #endregion
 

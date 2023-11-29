@@ -76,7 +76,6 @@ namespace SmartMetric.Infrastructure.Repositories
             matchingReview.Translations = review.Translations;
             matchingReview.ReviewStatus = review.ReviewStatus;
             matchingReview.ReviewType = review.ReviewType;
-            matchingReview.SubjectType = review.SubjectType;
             matchingReview.Questions = review.Questions;
 
             var result = await _context.SaveChangesAsync();

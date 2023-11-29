@@ -62,10 +62,11 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_ObjectIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest? request = null;
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ArgumentNullException>();
@@ -76,13 +77,13 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_QuestionIdIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = null,
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = "descricao"
@@ -91,7 +92,7 @@ namespace SmartMetric.ServiceTests
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -102,12 +103,12 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_NumericValueIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = Guid.NewGuid(),
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = "descricao"
@@ -116,7 +117,7 @@ namespace SmartMetric.ServiceTests
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -127,15 +128,16 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_TranslationIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = Guid.NewGuid(),
+
                 NumericValue = 1,
                 Translations = null
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
@@ -146,15 +148,15 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_TranslationIsEmpty_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = Guid.NewGuid(),
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>()
+                Translations = new List<TranslationDTOAddRequest>()
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
@@ -165,13 +167,13 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_TranslationLanguageIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = Guid.NewGuid(),
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = null,
                         Description = "descricaosssssss"
@@ -180,7 +182,7 @@ namespace SmartMetric.ServiceTests
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
@@ -191,13 +193,13 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_TranslationDescriptionIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = Guid.NewGuid(),
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = null
@@ -206,7 +208,7 @@ namespace SmartMetric.ServiceTests
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -217,13 +219,13 @@ namespace SmartMetric.ServiceTests
         public async Task AddRatingOption_TranslationDescriptionIsEmpty_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = Guid.NewGuid(),
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = ""
@@ -232,7 +234,7 @@ namespace SmartMetric.ServiceTests
             };
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -247,11 +249,10 @@ namespace SmartMetric.ServiceTests
 
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = questionId,
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = "descricao"
@@ -262,7 +263,7 @@ namespace SmartMetric.ServiceTests
             _questionRepositoryMock.Setup(temp => temp.GetQuestionById(questionId)).ReturnsAsync(null as Question);
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -295,11 +296,10 @@ namespace SmartMetric.ServiceTests
 
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = questionId,
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = "descricao"
@@ -310,7 +310,7 @@ namespace SmartMetric.ServiceTests
             _questionRepositoryMock.Setup(temp => temp.GetQuestionById(questionId)).ReturnsAsync(question);
 
             //Act
-            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(request);
+            Func<Task> action = async () => await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
@@ -344,11 +344,10 @@ namespace SmartMetric.ServiceTests
 
             RatingOptionDTOAddRequest request = new()
             {
-                QuestionId = questionId,
                 NumericValue = 1,
-                Translations = new List<RatingOptionTranslationDTOAddRequest>
+                Translations = new List<TranslationDTOAddRequest>
                 {
-                    new RatingOptionTranslationDTOAddRequest
+                    new TranslationDTOAddRequest
                     {
                         Language = Language.PT,
                         Description = "descricao"
@@ -361,10 +360,10 @@ namespace SmartMetric.ServiceTests
 
             _questionRepositoryMock.Setup(temp => temp.GetQuestionById(questionId)).ReturnsAsync(question);
 
-            _ratingOptionRepositoryMock.Setup(temp => temp.AddRatingOption(ratingOption)).ReturnsAsync(new RatingOption { RatingOptionId = ratingOptionId});
+            _ratingOptionRepositoryMock.Setup(temp => temp.AddRatingOption(ratingOption)).ReturnsAsync(new RatingOption { RatingOptionId = ratingOptionId });
 
             //Act
-            var result = await _ratingOptionAdderService.AddRatingOption(request);
+            var result = await _ratingOptionAdderService.AddRatingOption(questionId, request);
 
             //Assert
             Assert.NotNull(result.Data);

@@ -70,7 +70,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpPost]
         [Route("{formTemplateId}/Translations")]
-        public async Task<IActionResult> AddFormTemplateTranslation(Guid? formTemplateId, [FromBody] FormTemplateTranslationDTOAddRequest? formTemplateTranslationDTOAddRequest)
+        public async Task<IActionResult> AddFormTemplateTranslation(Guid? formTemplateId, [FromBody] TranslationDTOAddRequest? formTemplateTranslationDTOAddRequest)
         {
             var translation = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateId, formTemplateTranslationDTOAddRequest);
 
@@ -93,8 +93,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return response;
         }
 
-        [HttpDelete("{formTemplateId}/Translations/{language}")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateTranslation(Guid? formTemplateId, Language language)
+        [HttpDelete("{formTemplateId}/Translations")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateTranslation(Guid? formTemplateId, [FromQuery] Language language)
         {
             var response = await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(formTemplateId, language);
             return response;

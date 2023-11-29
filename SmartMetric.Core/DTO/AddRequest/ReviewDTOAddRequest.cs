@@ -39,12 +39,6 @@ namespace SmartMetric.Core.DTO.AddRequest
         public ReviewType? ReviewType { get; set; }
 
         /// <summary>
-        /// Obtém ou define o tipo de assunto da revisão. Este campo é obrigatório.
-        /// </summary>
-        [Required(ErrorMessage = "SubjectType is required.")]
-        public SubjectType? SubjectType { get; set; }
-
-        /// <summary>
         /// Obtém ou define o status da revisão. Este campo é obrigatório e tem um valor padrão de "NotStarted".
         /// </summary>
         [Required(ErrorMessage = "ReviewStatus is required.")]
@@ -55,17 +49,20 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// </summary>
         [Required(ErrorMessage = "At least one translation is required.")]
         [MinLength(1, ErrorMessage = "At least one translation is required.")]
-        public List<ReviewTranslationDTOAddRequest>? Translations { get; set; }
+        public List<TranslationDTOAddRequest>? Translations { get; set; }
 
         /// <summary>
-        /// Obtém ou define as perguntas associadas à revisão.
+        /// Obtém ou define as perguntas associadas à revisão. Deve haver pelo menos uma questão.
         /// </summary>
+        [Required(ErrorMessage = "At least one question is required.")]
+        [MinLength(1, ErrorMessage = "At least one question is required.")]
         public List<QuestionDTOAddRequest>? Questions { get; set; }
 
         /// <summary>
         /// Obtém ou define os IDs dos departamentos associados à revisão. Este campo é obrigatório.
         /// </summary>
         [Required(ErrorMessage = "ReviewDepartmentsIds is required.")]
+        [MinLength(1, ErrorMessage = "At least one departmentId is required.")]
         public List<int>? ReviewDepartmentsIds { get; set; }
 
         /// <summary>
@@ -77,13 +74,14 @@ namespace SmartMetric.Core.DTO.AddRequest
             return new Review()
             {
                 CreatedByUserId = CreatedByUserId,
-                CreatedDate = CreatedDate,
+                CreatedDate = DateTime.UtcNow,
                 StartDate = StartDate,
                 EndDate = EndDate,
                 ReviewStatus = ReviewStatus.ToString(),
                 ReviewType = ReviewType.ToString(),
-                SubjectType = SubjectType.ToString(),
-                Translations = Translations?.Select(temp => temp.ToReviewTranslation()).ToList() ?? null
+                Translations = Translations?.Select(temp => temp.ToReviewTranslation()).ToList() ?? null,
+                Questions = Questions?.Select(temp => temp.ToQuestion()).ToList() ?? null,
+                Departments = new List<ReviewDepartment>(),
             };
         }
     }

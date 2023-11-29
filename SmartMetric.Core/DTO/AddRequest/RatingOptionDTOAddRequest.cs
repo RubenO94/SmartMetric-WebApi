@@ -20,7 +20,7 @@ namespace SmartMetric.Core.DTO.AddRequest
 
         [Required(ErrorMessage = "Please select a response type for this rating option")]
         [MinLength(1, ErrorMessage = "Please enter data in at least one language.")]
-        public List<RatingOptionTranslationDTOAddRequest>? Translations { get; set; }
+        public List<TranslationDTOAddRequest>? Translations { get; set; }
 
 
         public RatingOption ToRatingOption()

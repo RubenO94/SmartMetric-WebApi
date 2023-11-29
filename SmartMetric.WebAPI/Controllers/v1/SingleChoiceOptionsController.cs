@@ -43,7 +43,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpPost]
         [Route("Translations")]
-        public async Task<IActionResult> AddSingleChoiceOptionTranslation([FromQuery] Guid singleChoiceOptionId, [FromBody] SingleChoiceOptionTranslationDTOAddRequest singleChoiceOptionTranslationDTOAddRequest)
+        public async Task<IActionResult> AddSingleChoiceOptionTranslation([FromQuery] Guid singleChoiceOptionId, [FromBody] TranslationDTOAddRequest singleChoiceOptionTranslationDTOAddRequest)
         {
             var response = await _singleChoiceOptionTranslationsAdderService.AddSingleChoiceOptionTranslation(singleChoiceOptionId, singleChoiceOptionTranslationDTOAddRequest);
 
@@ -66,8 +66,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete to remove existing Translation from existing Translation
 
         [HttpDelete]
-        [Route("{singleChoiceOptionId}/Translations/{language}")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById(Language language, Guid? singleChoiceOptionId)
+        [Route("{singleChoiceOptionId}/Translations")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionId, [FromQuery] Language language)
         {
             var response = await _singleChoiceOptionTranslationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionId, language);
             return response;

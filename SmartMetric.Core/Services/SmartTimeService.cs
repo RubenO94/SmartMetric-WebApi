@@ -22,12 +22,43 @@ namespace SmartMetric.Core.Services
 
         #region Departamentos
 
-        public Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? prefilId)
+        public async Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? perfilId)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
 
-            throw new NotImplementedException();
+            if (perfilId == null) throw new ArgumentNullException(nameof(perfilId));
+
+            var perfilResult = await _smartTimeRepository.GetPerfilById(perfilId.Value);
+
+            if (perfilResult == null) throw new ArgumentNullException("Perfil does not exist");
+
+            var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(perfilId.Value);
+
+            return departments.Select(temp =>
+            {
+                return new DepartmentDTOResponse()
+                {
+                    DepartmentId = temp.Iddepartamento,
+                    DepartmentFatherId = temp.IddepartamentoPai,
+                    DepartmentDescription = temp.Descricao
+                };
+
+            }).ToList();
         }
+
+        public async Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds)
+        {
+            if (!departmentIds.Any()) throw new ArgumentException("List of Departments can't be empty");
+
+            var departmentsResult = await _smartTimeRepository.GetDepartmentsByListIds(departmentIds);
+
+            var departmentsNotExisting = departmentIds.Except(departmentsResult.Select(temp => temp.Iddepartamento).ToList()).ToList();
+
+            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist");
+
+           return departmentsResult;
+        }
+
 
         #endregion
 
@@ -54,7 +85,7 @@ namespace SmartMetric.Core.Services
         public async Task<UserDTO?> GetEmployeeByEmail(string? email)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetEmployeeByEmail)} foi iniciado");
-           
+
             if (email == null)
             {
                 throw new ArgumentNullException(nameof(email));
@@ -168,7 +199,7 @@ namespace SmartMetric.Core.Services
 
                 return utilizador.ToUserDTO();
             }
-            else if(user.ApplicationUserType == Enums.ApplicationUserType.Employee)
+            else if (user.ApplicationUserType == Enums.ApplicationUserType.Employee)
             {
                 Funcionario? funcionario = await _smartTimeRepository.GetEmployeeById(user.UserId);
                 if (funcionario == null)
@@ -190,7 +221,6 @@ namespace SmartMetric.Core.Services
 
 
         }
-
 
         #endregion
 
