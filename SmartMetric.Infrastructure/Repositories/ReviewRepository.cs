@@ -47,6 +47,11 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(GetAllReviews)} foi iniciado.");
 
             return await _context.Reviews
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
