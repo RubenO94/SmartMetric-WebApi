@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Enums;
@@ -7,8 +8,11 @@ using SmartMetric.Infrastructure.Models;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
+    [AllowAnonymous]
     [ApiVersion("1.0")]
-    public class UsersController : CustomBaseController
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiController]
+    public class UsersController : ControllerBase
     {
         private readonly ISmartTimeService _smartTimeService;
 
@@ -16,7 +20,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
             _smartTimeService = smartTimeService;
         }
-
         [HttpGet("Me")]
         public async Task<IActionResult> GetPerfil()
         {
