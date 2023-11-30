@@ -1,6 +1,7 @@
 ﻿using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
 using SmartMetric.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
@@ -31,8 +32,8 @@ namespace SmartMetric.Core.ServicesContracts
         /// Obtém as informações de perfil pelo userId.
         /// </summary>
         /// <param name="userId">O ID do user.</param>
-        /// <returns>Um objeto PerfilDTOResponse representando as informações do perfil.</returns>
-        Task<PerfilDTOResponse> GetPerfilByUserId(int userId);
+        /// <returns>Um objeto UserProfileDTOResponse representando as informações do perfil.</returns>
+        Task<UserProfileDTOResponse> GetProfileByUserId(ApplicationUserType applicationUserType, int userId);
         #endregion
 
         #region Utilizador

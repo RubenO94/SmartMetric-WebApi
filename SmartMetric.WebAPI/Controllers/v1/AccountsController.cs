@@ -4,6 +4,7 @@ using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts;
+using SmartMetric.Infrastructure.Models;
 using SmartMetric.WebAPI.Filters.ActionFilters;
 using SmartMetric.WebAPI.Filters.AutorizationFilter;
 using System.Net;
@@ -27,40 +28,53 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpGet]
         [TokenAuthorizationFilter]
-        public async Task<IActionResult> GetToken()
+        public async Task<IActionResult> SignIn([FromQuery] string? token)
         {
-            bool? isUtilizador = HttpContext.Items["IsUtilizador"] as bool?;
-            string? valueToSearch = HttpContext.Items["Identifier"] as string;
-            if (isUtilizador == null || valueToSearch == null)
+
+            if (HttpContext.Items.TryGetValue("ApplicationUserType", out var userTypeObj) && userTypeObj is ApplicationUserType applicationUserType)
             {
-                return Unauthorized();
+                string? valueToSearch = HttpContext.Items["ToSearchBy"] as string;
+
+                UserDTO? user = applicationUserType == ApplicationUserType.User ? await _smartTimeService.GetUserByName(valueToSearch) : await _smartTimeService.GetEmployeeByEmail(valueToSearch);
+
+                if (user == null)
+                {
+                    return NoContent();
+                }
+
+                user.ApplicationUserType = applicationUserType;
+
+                var authenticationResponse = _jwtService.CreateJwtToken(user);
+
+                user.Token = authenticationResponse.Token;
+                user.Expiration = authenticationResponse.Expiration;
+
+                user.RefreshToken = authenticationResponse.RefreshToken;
+                user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
+
+                await _smartTimeService.UpdateApplicationUser(user);
+
+                return Ok(new ApiResponse<object>()
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Message = "Token created sucessfuly",
+                    Data = new
+                    {
+                        token = authenticationResponse.Token,
+                        refreshToken = authenticationResponse.RefreshToken,
+                    }
+                });
+
+            }
+            else
+            {
+                return Unauthorized(new
+                {
+                    error = "Unidentified user"
+                });
             }
 
-            UserDTO? user = (bool)isUtilizador ? await _smartTimeService.GetUserByName(valueToSearch) : await _smartTimeService.GetEmployeeByEmail(valueToSearch);
-
-            if (user == null)
-            {
-                return NoContent();
-            }
-
-            user.ApplicationUserType = (bool)isUtilizador ? ApplicationUserType.User : ApplicationUserType.Employee;
-
-            var authenticationResponse = _jwtService.CreateJwtToken(user);
-
-            user.Token  = authenticationResponse.Token;
-            user.Expiration = authenticationResponse.Expiration;
-
-            user.RefreshToken = authenticationResponse.RefreshToken;
-            user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
             
-            var result = await _smartTimeService.UpdateApplicationUser(user);
-
-            return Ok(new ApiResponse<object>()
-            {
-                StatusCode = (int)HttpStatusCode.OK,
-                Message = "Token created sucessfuly",
-                Data = user
-            });
         }
 
 
@@ -71,13 +85,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             if (token == null)
             {
-                return BadRequest("Invalid client request");
+                throw new ArgumentNullException(nameof(token), "Invalid client request");
             }
 
             ClaimsPrincipal? principal = _jwtService.GetPrincipalFromJwtToken(token.Token);
             if (principal == null)
             {
-                return BadRequest("Invalid access token");
+                throw new ArgumentException("Access Token", "Invalid access token");
             }
 
 
@@ -87,7 +101,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
                 if (applicationUserType == null)
                 {
-                    return BadRequest("Invalid access token");
+                    throw new ArgumentException("Access Token", "Invalid access token");
                 }
 
                 string? id = principal.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -100,7 +114,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
                 if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiration <= DateTime.Now)
                 {
-                    return BadRequest("Invalid refresh token");
+                    throw new ArgumentException("Refresh Token", "Invalid refresh token");
                 }
 
                 AuthenticationResponse authenticationResponse = _jwtService.CreateJwtToken(user);
@@ -109,12 +123,21 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 user.RefreshToken = authenticationResponse.RefreshToken;
                 user.RefreshTokenExpiration = authenticationResponse.RefreshTokenExpiration;
 
-                var result = await _smartTimeService.UpdateApplicationUser(user);
+                await _smartTimeService.UpdateApplicationUser(user);
 
-                return Ok(authenticationResponse);
+                return Ok(new ApiResponse<object>()
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Message = "New Token created sucessfuly",
+                    Data = new
+                    {
+                        token = authenticationResponse.Token,
+                        refreshToken = authenticationResponse.RefreshToken,
+                    }
+                });
             }
 
-            return BadRequest("Invalid access token");
+            throw new ArgumentException("Access Token", "Invalid access token");
         }
     }
 }

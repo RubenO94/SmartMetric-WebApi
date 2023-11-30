@@ -25,9 +25,9 @@ namespace SmartMetric.Infrastructure.Repositories
         }
 
         #region Perfis
-        public async Task<Perfil?> GetPerfilById(int perfilId)
+        public async Task<Perfil?> GetProfileById(int perfilId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetPerfilById)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfileById)} foi iniciado");
 
             return await _context.Perfis.FirstOrDefaultAsync(temp => temp.Idperfil == perfilId);
         }

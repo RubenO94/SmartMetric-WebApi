@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
 
@@ -16,24 +17,20 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _smartTimeService = smartTimeService;
         }
 
-        [HttpGet("{userId}/Perfil")]
-        public async Task<IActionResult> GetPerfil(int userId)
+        [HttpGet("Me")]
+        public async Task<IActionResult> GetPerfil()
         {
-            var perfil = await _smartTimeService.GetPerfilByUserId(userId);
-            return Ok(perfil);
-        }
-
-        [HttpGet("{userId}/Departaments")]
-        public async Task<IActionResult> GetDepartamentosByPerfilId([FromQuery] int perfilId)
-        {
-            var departamentos = await _smartTimeService.GetDepartmentsByPerfilId(perfilId);
-
-            if (departamentos == null || departamentos.Count == 0)
+            if (HttpContext.Items.TryGetValue("ApplicationUserType", out var userTypeObj) && userTypeObj is ApplicationUserType applicationUserType)
             {
-                return NotFound("Departamentos não encontrados para o utilizador");
+                if(HttpContext.Items.TryGetValue("UserId", out var userIdObj) && userIdObj is int userId)
+                {
+                    var perfil = await _smartTimeService.GetProfileByUserId(applicationUserType, userId);
+                    return Ok(perfil);
+                }
             }
 
-            return Ok(departamentos);
+            throw new ArgumentException("Unidentified user", "Application User");
+           
         }
     }
 }

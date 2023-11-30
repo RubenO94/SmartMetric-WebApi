@@ -14,7 +14,6 @@ using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;

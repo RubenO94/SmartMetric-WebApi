@@ -9,7 +9,7 @@ namespace SmartMetric.Core.Enums
     /// <summary>
     /// Enumeração que define os tipos de perfil no módulo de desempenho, como Backoffice e Frontoffice.
     /// </summary>
-    public enum PerfilType
+    public enum ProfileType
     {
         /// <summary>
         /// Representa o tipo de perfil Backoffice, que concede acesso ao dashboard de administração do módulo.

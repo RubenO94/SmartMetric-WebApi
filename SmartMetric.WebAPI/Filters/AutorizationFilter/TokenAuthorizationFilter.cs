@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using Microsoft.AspNetCore.WebUtilities;
 using Azure.Core;
 using System.Text.RegularExpressions;
+using SmartMetric.Core.Enums;
 
 namespace SmartMetric.WebAPI.Filters.AutorizationFilter
 {
@@ -16,7 +17,7 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            byte[] encbuff = Encoding.UTF8.GetBytes("Pedro.Maia" + "§" + DateTime.Now.Ticks + "§" + "508268800");
+            byte[] encbuff = Encoding.UTF8.GetBytes("123" + "§" + DateTime.Now.Ticks + "§" + "508268800");
 
             string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
 
@@ -25,7 +26,7 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
             //// Verificar o token recebido da aplicação principal (SmartTime)
             //var token = context.HttpContext.Request.Query["token"].ToString();
 
-            string token = base64UrlEncoded;
+            string? token = context.HttpContext.Request.Query["token"];
 
             if (!string.IsNullOrEmpty(token))
             {
@@ -38,16 +39,18 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
 
                 if (!bTokenValido || strDados.Length < 3)
                 {
-                    context.Result = new UnauthorizedResult();
+                    context.Result = new UnauthorizedObjectResult(new { Error = "Authorization token is invalid" });
                     return;
                 }
 
-                context.HttpContext.Items["IsUtilizador"] = !IsEmail(strDados[0]);
-                context.HttpContext.Items["Identifier"] = strDados[0];
+                ApplicationUserType applicationUserType = IsEmail(strDados[0]) ? ApplicationUserType.Employee : ApplicationUserType.User;
+
+                context.HttpContext.Items["ApplicationUserType"] = applicationUserType;
+                context.HttpContext.Items["ToSearchBy"] = strDados[0];
             }
             else
             {
-                context.Result = new UnauthorizedResult();
+                context.Result = new UnauthorizedObjectResult(new { Error = "Authorization token is missing" });
             }
         }
 

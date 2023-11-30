@@ -44,11 +44,27 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
                 context.Result = new BadRequestObjectResult(new { Error = "Error processing JSON" });
                 context.ExceptionHandled = true;
             }
+            else if(context.Exception is NotImplementedException notImplementedException)
+            {
+                HandleNotImplementedException(context, notImplementedException);
+            }
             else
             {
                 // Lógica de tratamento para outras exceções
                 HandleGenericException(context);
             }
+        }
+
+        private void HandleNotImplementedException(ExceptionContext context, NotImplementedException notImplementedException)
+        {
+            context.Result = new ObjectResult(new
+            {
+                Error = "The functionality has not been implemented.",
+                StatusCode = StatusCodes.Status501NotImplemented
+            })
+            {
+                StatusCode = StatusCodes.Status501NotImplemented
+            };
         }
 
         // Métodos privados para tratamento específico de cada tipo de exceção...

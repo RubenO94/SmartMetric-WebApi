@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
@@ -28,7 +29,7 @@ namespace SmartMetric.Core.Services
 
             if (perfilId == null) throw new ArgumentNullException(nameof(perfilId));
 
-            var perfilResult = await _smartTimeRepository.GetPerfilById(perfilId.Value);
+            var perfilResult = await _smartTimeRepository.GetProfileById(perfilId.Value);
 
             if (perfilResult == null) throw new ArgumentNullException("Perfil does not exist");
 
@@ -56,7 +57,7 @@ namespace SmartMetric.Core.Services
 
             if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist");
 
-           return departmentsResult;
+            return departmentsResult;
         }
 
 
@@ -64,11 +65,125 @@ namespace SmartMetric.Core.Services
 
         #region Perfis
 
-        public Task<PerfilDTOResponse> GetPerfilByUserId(int userId)
+        public async Task<UserProfileDTOResponse> GetProfileByUserId(ApplicationUserType applicationUserType, int userId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetPerfilByUserId)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetProfileByUserId)} foi iniciado");
 
-            throw new NotImplementedException();
+            if (applicationUserType == ApplicationUserType.User)
+            {
+                var user = await _smartTimeRepository.GetUserById(userId);
+
+                if (user == null) throw new ArgumentException("Unidentified user", "User");
+
+                if (user.Idperfil == null) throw new ArgumentException("The user does not have an associated profile", "User");
+
+                var profile = await _smartTimeRepository.GetProfileById(user.Idperfil.Value);
+
+                var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(user.Idperfil.Value, 1, int.MaxValue);
+
+                //TODO: Recever as janelas do prefil associado ao utlizador
+
+                return new UserProfileDTOResponse()
+                {
+                    UserId = user.Idutilizador,
+                    UserName = user.Nome,
+                    UserEmail = user.Email,
+                    EmployeeId = user.Idfuncionario,
+                    ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
+                    ProfileDescription = profile.Nome,
+                    Departments = departments.Select(temp => temp.ToDepartamentDTOResponse()).ToList(),
+                    Permissions = new List<WindowPermissionDTO>() //TODO: Alterar de estático para dinamico
+                    {
+                        new WindowPermissionDTO()
+                        {
+                            WindowId = 2312100,
+                            WindowName = "Forms",
+                            CanRead = true,
+                            CanCreate = true,
+                            CanDelete = true,
+                            CanUpdate = true,
+                            CanChangeSettings = true,
+                            CanAccessAdvancedSettings = true,
+                        },
+                        new WindowPermissionDTO()
+                        {
+                            WindowId = 2312101,
+                            WindowName = "Reviews",
+                            CanRead = true,
+                            CanCreate = true,
+                            CanDelete = true,
+                            CanUpdate = true,
+                            CanChangeSettings = true,
+                            CanAccessAdvancedSettings = true,
+                        },
+                        new WindowPermissionDTO()
+                        {
+                            WindowId = 2312102,
+                            WindowName = "Statistics",
+                            CanRead = true,
+                            CanCreate = true,
+                            CanDelete = true,
+                            CanUpdate = true,
+                            CanChangeSettings = true,
+                            CanAccessAdvancedSettings = true,
+                        },
+                        new WindowPermissionDTO()
+                        {
+                            WindowId = 2312103,
+                            WindowName = "Admin Settings",
+                            CanRead = true,
+                            CanCreate = true,
+                            CanDelete = true,
+                            CanUpdate = true,
+                            CanChangeSettings = true,
+                            CanAccessAdvancedSettings = true,
+                        },
+                    },
+                };
+
+            }
+
+            if (applicationUserType == ApplicationUserType.Employee)
+            {
+                var user = await _smartTimeRepository.GetEmployeeById(userId);
+
+                if (user == null) throw new ArgumentException("Unidentified employee", "Employee");
+
+                if (user.Idperfil == null) throw new ArgumentException("The employee does not have an associated profile", "Employee");
+
+                var profile = await _smartTimeRepository.GetProfileById(user.Idperfil.Value);
+
+                var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(user.Idperfil.Value);
+
+                //TODO: Recever as janelas do prefil associado ao utlizador
+
+                return new UserProfileDTOResponse()
+                {
+                    UserName = user.Nome,
+                    UserEmail = user.Email,
+                    EmployeeId = user.Idfuncionario,
+                    ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
+                    ProfileDescription = profile.Nome,
+                    Departments = departments.Select(temp => temp.ToDepartamentDTOResponse()).ToList(),
+                    Permissions = new List<WindowPermissionDTO>()
+                    {
+                        new WindowPermissionDTO()
+                        {
+                            WindowId = 2312100,
+                            WindowName = "Forms",
+                            CanRead = true,
+                            CanCreate = true,
+                            CanDelete = true,
+                            CanUpdate = true,
+                            CanChangeSettings = true,
+                            CanAccessAdvancedSettings = true,
+                        },
+                    },
+
+                };
+            }
+
+            throw new ArgumentException("Unidentified application user", "Application User");
         }
 
         #endregion

@@ -40,7 +40,7 @@ namespace SmartMetric.Core.DTO.Response
         /// </summary>
         /// <param name="departamento">O objeto Departamento a ser convertido.</param>
         /// <returns>Retorna o DepartmentDTOResponse convertido.</returns>
-        public static DepartmentDTOResponse ToDepartamentDTOResponse(Departamento departamento)
+        public static DepartmentDTOResponse ToDepartamentDTOResponse(this Departamento departamento)
         {
             return new DepartmentDTOResponse()
             {
