@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace SmartMetric.Core.Domain.Entities
 {
     /// <summary>
-    /// Representa a resposta a uma questão de revisão submetida por um usuário.
+    /// Representa a resposta a uma questão de revisão submetida por um utilizador.
     /// </summary>
     public class ReviewResponse
     {

@@ -108,7 +108,6 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             services.AddControllers(options =>
             {
-                options.Filters.Add<JsonExceptionFilter>();
                 options.Filters.Add(typeof(ValidationErrorHandlingAttribute));
                 options.Filters.Add(typeof(RequestValidationAttribute));
                 options.Filters.Add(new ProducesAttribute("application/json"));

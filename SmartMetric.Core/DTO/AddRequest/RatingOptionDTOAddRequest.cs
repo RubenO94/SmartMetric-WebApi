@@ -15,7 +15,7 @@ namespace SmartMetric.Core.DTO.AddRequest
     {
 
         [Required(ErrorMessage = "Please select a value for this rating option")]
-        [Range(1, int.MaxValue, ErrorMessage = "NumericValue must be equal or higher than 1")]
+        [Range(0, 100, ErrorMessage = "NumericValue must be between 0 and 100.")]
         public int NumericValue { get; set; }
 
         [Required(ErrorMessage = "Please select a response type for this rating option")]

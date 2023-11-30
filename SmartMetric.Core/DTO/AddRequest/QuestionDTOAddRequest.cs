@@ -26,6 +26,7 @@ namespace SmartMetric.Core.DTO.AddRequest
         /// Obtém ou define o posicionamento desta pergunta na sua lista.
         /// </summary>
         [Required(ErrorMessage ="Please select a position number for this  question")]
+        [Range(0, 100, ErrorMessage = "Position must be between 0 and 100.")]
         public int Position { get; set; }
 
         /// <summary>

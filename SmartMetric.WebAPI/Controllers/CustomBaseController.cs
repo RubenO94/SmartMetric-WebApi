@@ -9,7 +9,7 @@ namespace SmartMetric.WebAPI.Controllers
     [AllowAnonymous] // TODO: Retirar apos adicionar Autenticação de Utilizadores
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [SkipTokenValidation]
+    //[SkipTokenValidation]
     //[RequestValidation]
     public class CustomBaseController : ControllerBase
     {

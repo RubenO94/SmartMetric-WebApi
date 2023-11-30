@@ -2,12 +2,19 @@
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.Exceptions;
-using System;
+using System.Text.Json;
 
 namespace SmartMetric.WebAPI.Filters.ExceptionFilter
 {
+    /// <summary>
+    /// Atributo para tratamento de exceções específicas.
+    /// </summary>
     public class ValidationErrorHandlingAttribute : ExceptionFilterAttribute
     {
+        /// <summary>
+        /// Método chamado ao ocorrer uma exceção, realiza o tratamento específico para diferentes tipos de exceções.
+        /// </summary>
+        /// <param name="context">O contexto da exceção.</param>
         public override void OnException(ExceptionContext context)
         {
             var type = context.Exception.GetType();
@@ -19,7 +26,6 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
             else if (context.Exception is HttpStatusException httpStatusException)
             {
                 HandleHttpStatusException(context, httpStatusException);
-
             }
             else if (context.Exception is SecurityTokenSignatureKeyNotFoundException signatureKeyNotFoundException)
             {
@@ -33,20 +39,25 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
             {
                 HandleArgumentException(context, argumentException);
             }
+            else if (context.Exception is JsonException)
+            {
+                context.Result = new BadRequestObjectResult(new { Error = "Error processing JSON" });
+                context.ExceptionHandled = true;
+            }
             else
             {
                 // Lógica de tratamento para outras exceções
                 HandleGenericException(context);
             }
-
-
         }
+
+        // Métodos privados para tratamento específico de cada tipo de exceção...
 
         private void HandleSecurityTokenSignatureKeyNotFoundException(ExceptionContext context, SecurityTokenSignatureKeyNotFoundException signatureKeyNotFoundException)
         {
             context.Result = new UnauthorizedObjectResult(new
             {
-                Message = "Security token signature key not found."
+                Error = "Invalid token."
             });
             context.ExceptionHandled = true;
         }
@@ -55,7 +66,7 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
         {
             context.Result = new BadRequestObjectResult(new
             {
-                Message = "The request contains an error.",
+                Error = "The request contains an error.",
                 Details = httpStatusException.Message
             });
 
@@ -64,16 +75,11 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
 
         private void HandleValidationException(ExceptionContext context, ValidationException validationException)
         {
-            var errors = validationException.Failures.Select(failure => new
-            {
-                Field = failure.Key,
-                Message = failure.Value
-            }).ToList();
+            var firstError = validationException.Failures.FirstOrDefault();
 
             context.Result = new BadRequestObjectResult(new
             {
-                Message = "The request contains validation errors.",
-                Errors = errors
+                Error = firstError.Value
             });
 
             context.ExceptionHandled = true;
@@ -83,9 +89,8 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
         {
             context.Result = new BadRequestObjectResult(new
             {
-                Message = "One or more arguments are null.",
-                Details = argumentNullException.Message,
-                ArgumentName = argumentNullException.ParamName
+                Error = "One or more arguments are null.",
+                Details = argumentNullException.Message
             });
 
             context.ExceptionHandled = true;
@@ -95,9 +100,8 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
         {
             context.Result = new BadRequestObjectResult(new
             {
-                Message = "Invalid argument.",
-                Details = argumentException.Message.Contains("JWT") ? "Invalid token format" : argumentException.Message,
-                ArgumentName = argumentException.ParamName
+                Error = "Invalid argument.",
+                Details = argumentException.Message.Contains("JWT") ? "Invalid token format" : argumentException.Message
             });
 
             context.ExceptionHandled = true;
@@ -107,7 +111,7 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
         {
             context.Result = new ObjectResult(new
             {
-                Message = "An unexpected error occurred.",
+                Error = "An unexpected error occurred.",
                 StatusCode = StatusCodes.Status500InternalServerError
             })
             {
@@ -117,4 +121,6 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
             context.ExceptionHandled = true;
         }
     }
+
+
 }
