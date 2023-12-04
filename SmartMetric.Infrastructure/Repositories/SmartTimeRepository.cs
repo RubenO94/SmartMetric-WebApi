@@ -25,12 +25,35 @@ namespace SmartMetric.Infrastructure.Repositories
         }
 
         #region Perfis
+
         public async Task<Perfil?> GetProfileById(int perfilId)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfileById)} foi iniciado");
 
             return await _context.Perfis.FirstOrDefaultAsync(temp => temp.Idperfil == perfilId);
         }
+
+        public async Task<List<int>> GetProfileWindowsByProfileId(int profileId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfileWindowsByProfileId)} foi iniciado");
+
+           var result =await _context.ProfilePermissions.Where(temp => temp.ProfileId == profileId).ToListAsync();
+
+            return result.Select(temp => temp.PermissionId).ToList();
+        }
+
+        public async Task<ProfilePermission?> AddProfilePermission(ProfilePermission profilePermission)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(AddProfilePermission)} foi iniciado");
+            
+            if (profilePermission == null) return null;
+
+            _context.ProfilePermissions.Add(profilePermission);
+            await _context.SaveChangesAsync();
+
+            return profilePermission;
+        }
+
         #endregion
 
         #region Funcionarios
@@ -242,7 +265,6 @@ namespace SmartMetric.Infrastructure.Repositories
 
             return departamentosAssociados;
         }
-
 
         #endregion
 

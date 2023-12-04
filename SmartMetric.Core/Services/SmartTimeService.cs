@@ -5,8 +5,10 @@ using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.Exceptions;
+using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
+using System.Net;
 
 namespace SmartMetric.Core.Services
 {
@@ -23,17 +25,17 @@ namespace SmartMetric.Core.Services
 
         #region Departamentos
 
-        public async Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? perfilId)
+        public async Task<List<DepartmentDTOResponse>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20)
         {
-            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByProfileId)} foi iniciado");
 
-            if (perfilId == null) throw new ArgumentNullException(nameof(perfilId));
+            if (profileId == null) throw new ArgumentNullException(nameof(profileId));
 
-            var perfilResult = await _smartTimeRepository.GetProfileById(perfilId.Value);
+            var perfilResult = await _smartTimeRepository.GetProfileById(profileId.Value);
 
-            if (perfilResult == null) throw new ArgumentNullException("Perfil does not exist");
+            if (perfilResult == null) throw new ArgumentException("Perfil does not exist", nameof(Perfil));
 
-            var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(perfilId.Value);
+            var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(profileId.Value, page, pageSize);
 
             return departments.Select(temp =>
             {
@@ -49,13 +51,13 @@ namespace SmartMetric.Core.Services
 
         public async Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds)
         {
-            if (!departmentIds.Any()) throw new ArgumentException("List of Departments can't be empty");
+            if (!departmentIds.Any()) throw new ArgumentException("List of Departments can't be empty", nameof(departmentIds));
 
             var departmentsResult = await _smartTimeRepository.GetDepartmentsByListIds(departmentIds);
 
             var departmentsNotExisting = departmentIds.Except(departmentsResult.Select(temp => temp.Iddepartamento).ToList()).ToList();
 
-            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist");
+            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist", nameof(departmentIds));
 
             return departmentsResult;
         }
@@ -79,9 +81,9 @@ namespace SmartMetric.Core.Services
 
                 var profile = await _smartTimeRepository.GetProfileById(user.Idperfil.Value);
 
-                var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(user.Idperfil.Value, 1, int.MaxValue);
+                var profileWindowPermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(user.Idperfil.Value);
 
-                //TODO: Recever as janelas do prefil associado ao utlizador
+                var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
 
                 return new UserProfileDTOResponse()
                 {
@@ -91,53 +93,7 @@ namespace SmartMetric.Core.Services
                     EmployeeId = user.Idfuncionario,
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
-                    Permissions = new List<WindowPermissionDTO>() //TODO: Alterar de estático para dinamico
-                    {
-                        new WindowPermissionDTO()
-                        {
-                            WindowId = 2312100,
-                            WindowName = "Forms",
-                            CanRead = true,
-                            CanCreate = true,
-                            CanDelete = true,
-                            CanUpdate = true,
-                            CanChangeSettings = true,
-                            CanAccessAdvancedSettings = true,
-                        },
-                        new WindowPermissionDTO()
-                        {
-                            WindowId = 2312101,
-                            WindowName = "Reviews",
-                            CanRead = true,
-                            CanCreate = true,
-                            CanDelete = true,
-                            CanUpdate = true,
-                            CanChangeSettings = true,
-                            CanAccessAdvancedSettings = true,
-                        },
-                        new WindowPermissionDTO()
-                        {
-                            WindowId = 2312102,
-                            WindowName = "Statistics",
-                            CanRead = true,
-                            CanCreate = true,
-                            CanDelete = true,
-                            CanUpdate = true,
-                            CanChangeSettings = true,
-                            CanAccessAdvancedSettings = true,
-                        },
-                        new WindowPermissionDTO()
-                        {
-                            WindowId = 2312103,
-                            WindowName = "Admin Settings",
-                            CanRead = true,
-                            CanCreate = true,
-                            CanDelete = true,
-                            CanUpdate = true,
-                            CanChangeSettings = true,
-                            CanAccessAdvancedSettings = true,
-                        },
-                    },
+                    Permissions = windowPermissionsDTO
                 };
 
             }
@@ -152,9 +108,10 @@ namespace SmartMetric.Core.Services
 
                 var profile = await _smartTimeRepository.GetProfileById(user.Idperfil.Value);
 
-                var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(user.Idperfil.Value);
+                var profileWindowPermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(user.Idperfil.Value);
 
-                //TODO: Recever as janelas do prefil associado ao utlizador
+                var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
+
 
                 return new UserProfileDTOResponse()
                 {
@@ -163,25 +120,44 @@ namespace SmartMetric.Core.Services
                     EmployeeId = user.Idfuncionario,
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
-                    Permissions = new List<WindowPermissionDTO>()
-                    {
-                        new WindowPermissionDTO()
-                        {
-                            WindowId = 2312100,
-                            WindowName = "Forms",
-                            CanRead = true,
-                            CanCreate = true,
-                            CanDelete = true,
-                            CanUpdate = true,
-                            CanChangeSettings = true,
-                            CanAccessAdvancedSettings = true,
-                        },
-                    },
+                    Permissions = windowPermissionsDTO
 
                 };
             }
 
             throw new ArgumentException("Unidentified application user", "Application User");
+        }
+
+        public async Task<ApiResponse<PermissionDTO?>> AddWindowPermissionToProfile(int profileId, int permissionID)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(AddWindowPermissionToProfile)} foi iniciado");
+
+            if (profileId == 0) throw new ArgumentException("Invalid profile id", nameof(profileId));
+            if (permissionID == default) throw new ArgumentException("Permission Id can't be null or zero", nameof(permissionID));
+
+            var profile = await _smartTimeRepository.GetProfileById(profileId);
+
+            if (profile == null) throw new ArgumentException($"Profile with id ${profileId} don't exist", nameof(profileId));
+            if (!WindowPermissionHelper.PermissionIdExists(permissionID)) throw new ArgumentException($"Permission with id ${permissionID} don't exist", nameof(permissionID));
+
+            var permission = new ProfilePermission()
+            {
+                PermissionId = permissionID,
+                ProfileId = profileId,
+            };
+            await _smartTimeRepository.AddProfilePermission(permission);
+
+            return new ApiResponse<PermissionDTO?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = $"Permission added with success to profile {profile.Nome}",
+                Data = new PermissionDTO()
+                {
+                    PermissionId = permissionID,
+                    HasPermission = true,
+                },
+            };
+
         }
 
         #endregion
@@ -334,6 +310,7 @@ namespace SmartMetric.Core.Services
 
 
         }
+
 
         #endregion
 

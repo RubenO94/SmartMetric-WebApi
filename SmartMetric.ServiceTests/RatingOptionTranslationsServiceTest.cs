@@ -8,11 +8,8 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.Exceptions;
-using SmartMetric.Core.Services.RatingOptionTranslation;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
-using SmartMetric.Core.ServicesContracts.RatingOptionTranslation;
-using System;
+using SmartMetric.Core.Services.RatingOptionTranslations;
+using SmartMetric.Core.ServicesContracts.RatingOptionTranslations;
 using Xunit.Abstractions;
 
 namespace SmartMetric.ServiceTests
@@ -56,105 +53,105 @@ namespace SmartMetric.ServiceTests
 
         #region AddRatingOptionTranslation Tests
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest nulo, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest nulo, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_ObjectIsNull_ShouldThrowException()
         {
             //Arrange
-            RatingOptionTranslationDTOAddRequest? request = null;
+            Guid questionId = Guid.NewGuid();
+            TranslationDTOAddRequest? request = null;
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ArgumentNullException>();
         }
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo Language nulo, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest com campo Language nulo, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_LanguageIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             Guid ratingOptionId = Guid.NewGuid();
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = ratingOptionId,
                 Language = null,
                 Description = "description",
             };
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
         }
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo Description nulo, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest com campo Description nulo, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_DescriptionIsNull_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             Guid ratingOptionId = Guid.NewGuid();
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = ratingOptionId,
                 Language = Language.PT,
                 Description = null,
             };
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
         }
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo Description vazio, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest com campo Description vazio, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_DescriptionIsEmpty_ShouldThrowException()
         {
             //Arrange
+            Guid questionId = Guid.NewGuid();
             Guid ratingOptionId = Guid.NewGuid();
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = ratingOptionId,
                 Language = Language.EN,
                 Description = "",
             };
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(questionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
         }
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo RatingOptionId nulo, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest com campo RatingOptionId nulo, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_RatingOptionIdIsNull_ShouldThrowException()
         {
             //Arrange
             Guid ratingOptionId = Guid.NewGuid();
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = null,
                 Language = Language.EN,
                 Description = "descricao",
             };
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(ratingOptionId, request);
 
             //Assert
             await action.Should().ThrowAsync<ValidationException>();
 
         }
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest com campo RatingOptionId válido mas que não existe, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest com campo RatingOptionId válido mas que não existe, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_RatingOptionIdIsValidButDoesntExist_ShouldThrowException()
         {
@@ -181,9 +178,8 @@ namespace SmartMetric.ServiceTests
                 Translations = ratingOptionTranslationExists
             };
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = ratingOptionNonExistingId,
                 Language = Language.PT,
                 Description= "description"
             };
@@ -191,13 +187,13 @@ namespace SmartMetric.ServiceTests
             _ratingOptionRepositoryMock.Setup(temp => temp.GetRatingOptionById(ratingOptionNonExistingId)).ReturnsAsync(null as RatingOption);
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(ratingOptionNonExistingId, request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
         }
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest válido mas idioma já existe, deve lançar exceção
+        //TESTE: fornecido um TranslationDTOAddRequest válido mas idioma já existe, deve lançar exceção
         [Fact]
         public async Task AddRatingOptionTranslation_LanguageAlreadyExists_ShouldThrowException()
         {
@@ -223,15 +219,14 @@ namespace SmartMetric.ServiceTests
                 Translations = ratingOptionTranslationExists
             };
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = ratingOptionId,
                 Language = Language.EN,
                 Description = "description"
             };
 
             var ratingOptionTranslation = request.ToRatingOptionTranslation();
-            var response = ratingOptionTranslation.ToRatingOptionTranslationDTOResponse();
+            var response = ratingOptionTranslation.ToTranslationDTOResponse();
 
             _ratingOptionRepositoryMock
                 .Setup(temp => temp.GetRatingOptionById(ratingOptionId))
@@ -246,13 +241,13 @@ namespace SmartMetric.ServiceTests
                 .ReturnsAsync(ratingOptionTranslation);
 
             //Act
-            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(request);
+            Func<Task> action = async () => await _translationsAdderService.AddRatingOptionTranslation(ratingOptionId,request);
 
             //Assert
             await action.Should().ThrowAsync<HttpStatusException>();
         }
 
-        //TESTE: fornecido um ratingOptionTranslationDTOAddRequest válido, adiciona com sucesso, retorna mensagem
+        //TESTE: fornecido um TranslationDTOAddRequest válido, adiciona com sucesso, retorna mensagem
         [Fact]
         public async Task AddRatingOptionTranslation_ShouldBeSuccessful()
         {
@@ -278,15 +273,14 @@ namespace SmartMetric.ServiceTests
                 Translations = ratingOptionTranslationExists
             };
 
-            RatingOptionTranslationDTOAddRequest request = new()
+            TranslationDTOAddRequest request = new()
             {
-                RatingOptionId = ratingOptionId,
                 Language = Language.PT,
                 Description = "descricao exemplo"
             };
 
             var ratingOptionTranslation = request.ToRatingOptionTranslation();
-            var response = ratingOptionTranslation.ToRatingOptionTranslationDTOResponse();
+            var response = ratingOptionTranslation.ToTranslationDTOResponse();
 
             _ratingOptionRepositoryMock
                 .Setup(temp => temp.GetRatingOptionById(ratingOptionId))
@@ -301,8 +295,7 @@ namespace SmartMetric.ServiceTests
                 .ReturnsAsync(ratingOptionTranslation);
 
             //Act
-            var result = await _translationsAdderService.AddRatingOptionTranslation(request);
-            response.RatingOptionTranslationId = result.Data!.RatingOptionTranslationId;
+            var result = await _translationsAdderService.AddRatingOptionTranslation(ratingOptionId, request);
 
             //Assert
             result.Data.Should().Be(response);
@@ -322,7 +315,7 @@ namespace SmartMetric.ServiceTests
             _translationsRepositoryMock.Setup(temp => temp.GetAllRatingOptionTranslations()).ReturnsAsync(translations);
 
             //Act
-            ApiResponse<List<RatingOptionTranslationDTOResponse>> responseFromGet = await _translationsGetterService.GetAllRatingOptionTranslations();
+            ApiResponse<List<TranslationDTOResponse>> responseFromGet = await _translationsGetterService.GetAllRatingOptionTranslations();
 
             //Assert
             responseFromGet.Data.Should().BeEmpty();
@@ -339,12 +332,12 @@ namespace SmartMetric.ServiceTests
                 _fixture.Build<RatingOptionTranslation>().With(temp => temp.RatingOption, null as RatingOption).Create(),
             };
 
-            List<RatingOptionTranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList();
+            List<TranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList();
 
             _translationsRepositoryMock.Setup(temp => temp.GetAllRatingOptionTranslations()).ReturnsAsync(translations);
 
             //Act
-            ApiResponse<List<RatingOptionTranslationDTOResponse>> actualResponse = await _translationsGetterService.GetAllRatingOptionTranslations();
+            ApiResponse<List<TranslationDTOResponse>> actualResponse = await _translationsGetterService.GetAllRatingOptionTranslations();
 
             //Assert
             actualResponse.Data!.Equals(expectedResponse);
@@ -399,12 +392,12 @@ namespace SmartMetric.ServiceTests
                 Description = "Description",
             };
 
-            RatingOptionTranslationDTOResponse expectedResponse = ratingOptionTranslation.ToRatingOptionTranslationDTOResponse();
+            TranslationDTOResponse expectedResponse = ratingOptionTranslation.ToTranslationDTOResponse();
 
             _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationById(ratingOptionTranslationId)).ReturnsAsync(ratingOptionTranslation);
 
             //Act
-            ApiResponse<RatingOptionTranslationDTOResponse?> actualResponse = await _translationsGetterService.GetRatingOptionTranslationById(ratingOptionTranslationId);
+            ApiResponse<TranslationDTOResponse?> actualResponse = await _translationsGetterService.GetRatingOptionTranslationById(ratingOptionTranslationId);
 
             //Assert
             actualResponse.Data!.Equals(expectedResponse);
@@ -444,7 +437,7 @@ namespace SmartMetric.ServiceTests
             await action.Should().ThrowAsync<HttpStatusException>();
         }
 
-        //TESTE: Fornecido um RatingOptionId válido, mas sem traduções associadas, deve retornar uma lista vazia de RatingOptionTranslationDTOResponse
+        //TESTE: Fornecido um RatingOptionId válido, mas sem traduções associadas, deve retornar uma lista vazia de TranslationDTOResponse
         [Fact]
         public async Task GetRatingOptionTranslationsByRatingOptionId_RatingOptionIdIsValidWithNoTranslations_ToBeEmptyList()
         {
@@ -474,12 +467,12 @@ namespace SmartMetric.ServiceTests
                 _fixture.Build<RatingOptionTranslation>().With(temp => temp.RatingOptionId, ratingOptionId).With(temp => temp.RatingOption, null as RatingOption).Create(),
             };
 
-            List<RatingOptionTranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToRatingOptionTranslationDTOResponse()).ToList();
+            List<TranslationDTOResponse> expectedResponse = translations.Select(temp => temp.ToTranslationDTOResponse()).ToList();
 
             _translationsRepositoryMock.Setup(temp => temp.GetRatingOptionTranslationByRatingOptionId(It.IsAny<Guid>())).ReturnsAsync(translations);
 
             //Act
-            ApiResponse<List<RatingOptionTranslationDTOResponse>?> actualResponse = await _translationsGetterService.GetRatingOptionTranslationsByRatingOptionId(ratingOptionId);
+            ApiResponse<List<TranslationDTOResponse>?> actualResponse = await _translationsGetterService.GetRatingOptionTranslationsByRatingOptionId(ratingOptionId);
 
             //Assert
             actualResponse.Data.Should().BeEquivalentTo(expectedResponse);

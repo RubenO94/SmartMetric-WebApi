@@ -34,6 +34,7 @@ namespace SmartMetric.Infrastructure.DatabaseContext
         public DbSet<ReviewEmployee> ReviewEmployees { get; set; }
         public DbSet<ReviewDepartment> ReviewDepartments { get; set; }
         public DbSet<Submission> Submissions { get; set; }
+        public DbSet<ProfilePermission> ProfilePermissions { get; set; }
         public virtual DbSet<Departamento> Departamentos { get; set; }
         public virtual DbSet<Funcionario> Funcionarios { get; set; }
         public virtual DbSet<FuncionariosChefia> FuncionariosChefias { get; set; }
@@ -208,11 +209,16 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
                 entity.HasIndex(e => new { e.Idperfil, e.Aplicacao }, "IX_PerfisJanelas_IDPerfil_Aplicacao").HasFillFactor(90);
 
-                entity.Property(e => e.Aplicacao).HasMaxLength(50);
-                entity.Property(e => e.Idjanela).HasColumnName("IDJanela");
-                entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");
-                entity.Property(e => e.Modulo).HasMaxLength(50);
+                // Adicionando uma chave alternativa
+                entity.Property(e => e.Idperfil);
+                entity.Property(e => e.Idjanela);
+                entity.Property(e => e.Aplicacao);
+                entity.Property(e => e.Modulo);
+
+                // O índice alternativo pode ser usado para buscar eficientemente, mas não impõe uma restrição de chave primária.
+                entity.HasIndex(e => new { e.Idperfil, e.Idjanela, e.Aplicacao, e.Modulo }).IsUnique(false);
             });
+
 
             modelBuilder.Entity<Utilizador>(entity =>
             {
@@ -312,6 +318,18 @@ namespace SmartMetric.Infrastructure.DatabaseContext
                .HasOne(q => q.Review)
                .WithMany(rv => rv.Questions)
                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProfilePermission>()
+            .HasKey(pp => new { pp.ProfileId, pp.PermissionId });
+
+            modelBuilder.Entity<ProfilePermission>()
+                .HasOne(pp => pp.Profile)
+                .WithMany()
+                .HasForeignKey(pp => pp.ProfileId);
+
+            modelBuilder.Entity<ProfilePermission>()
+            .HasKey(pp => new { pp.ProfileId, pp.PermissionId });
+
             #endregion
 
             #region Seeds

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SmartMetric.Infrastructure.DatabaseContext;
 
@@ -11,9 +12,11 @@ using SmartMetric.Infrastructure.DatabaseContext;
 namespace SmartMetric.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231204164611_AddedAlternateKeyToPerfisJanelas")]
+    partial class AddedAlternateKeyToPerfisJanelas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -516,19 +519,6 @@ namespace SmartMetric.Infrastructure.Migrations
                     SqlServerIndexBuilderExtensions.HasFillFactor(b.HasIndex(new[] { "IdfuncionarioSuperior" }, "IX_FuncionariosChefias_IDFuncionarioSuperior"), 100);
 
                     b.ToTable("FuncionariosChefias");
-                });
-
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ProfilePermission", b =>
-                {
-                    b.Property<int>("ProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProfileId", "PermissionId");
-
-                    b.ToTable("Metrics_ProfilePermissions");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
@@ -1107,17 +1097,6 @@ namespace SmartMetric.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("FormTemplate");
-                });
-
-            modelBuilder.Entity("SmartMetric.Core.Domain.Entities.ProfilePermission", b =>
-                {
-                    b.HasOne("SmartMetric.Infrastructure.Models.Perfil", "Profile")
-                        .WithMany()
-                        .HasForeignKey("ProfileId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("SmartMetric.Core.Domain.Entities.Question", b =>
