@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.UpdateRequest;
-using SmartMetric.Core.ServicesContracts;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
-using SmartMetric.Core.ServicesContracts.Updaters;
-using SmartMetric.Infrastructure.DatabaseContext;
+using SmartMetric.Core.ServicesContracts.Reviews;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {

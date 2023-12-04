@@ -1,13 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
-using SmartMetric.Core.Services.Adders;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
-using System.Net;
+using SmartMetric.Core.ServicesContracts.Questions;
+using SmartMetric.Core.ServicesContracts.QuestionTranslations;
+using SmartMetric.Core.ServicesContracts.RatingOptions;
+using SmartMetric.Core.ServicesContracts.SingleChoiceOptions;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -19,10 +17,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IQuestionTranslationAdderService _questionTranslationsAdderService;
         private readonly IQuestionTranslationDeleterService _questionTranslationDeleterService;
         private readonly IRatingOptionAdderService _ratingOptionAdderService;
-        private readonly ISingleChoiceOptionsAdderService _singleChoiceOptionsAdderService;
+        private readonly ISingleChoiceOptionAdderService _singleChoiceOptionsAdderService;
 
 
-        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService, IQuestionTranslationAdderService questionTranslationsAdderService, IQuestionTranslationDeleterService questionTranslationDeleterService, IRatingOptionAdderService ratingOptionAdderService, ISingleChoiceOptionsAdderService singleChoiceOptionsAdderService)
+        public QuestionsController(IQuestionAdderService questionAdderService, IQuestionGetterService questionGetterService, IQuestionTranslationAdderService questionTranslationsAdderService, IQuestionTranslationDeleterService questionTranslationDeleterService, IRatingOptionAdderService ratingOptionAdderService, ISingleChoiceOptionAdderService singleChoiceOptionsAdderService)
         {
             _questionAdderService = questionAdderService;
             _questionGetterService = questionGetterService;

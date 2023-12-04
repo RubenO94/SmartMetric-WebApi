@@ -1,14 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SmartMetric.Core.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
-using SmartMetric.Core.Services.Deleters;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
-using System.Net;
+using SmartMetric.Core.ServicesContracts.RatingOptions;
+using SmartMetric.Core.ServicesContracts.RatingOptionTranslations;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -54,7 +49,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete method to delete existing RatingOption
 
         [HttpDelete("{ratingOptionId}")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById(Guid? ratingOptionId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById (Guid? ratingOptionId)
         {
             var response = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
             return response;
@@ -65,8 +60,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete method to delete existing Translation from existing RatingOption
 
         [HttpDelete]
-        [Route("{ratingOptionId}/Translations")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionTranslationById(Guid? ratingOptionId, [FromQuery] Language language)
+        [Route("{ratingOptionId}/Translations/{language}")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionTranslationById(Language language, Guid? ratingOptionId)
         {
             var response = await _ratingOptionTranslationDeleterService.DeleteRatingOptionTranslationById(ratingOptionId, language);
             return response;

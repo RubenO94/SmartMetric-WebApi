@@ -91,7 +91,6 @@ namespace SmartMetric.Core.Services
                     EmployeeId = user.Idfuncionario,
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
-                    Departments = departments.Select(temp => temp.ToDepartamentDTOResponse()).ToList(),
                     Permissions = new List<WindowPermissionDTO>() //TODO: Alterar de estático para dinamico
                     {
                         new WindowPermissionDTO()
@@ -164,7 +163,6 @@ namespace SmartMetric.Core.Services
                     EmployeeId = user.Idfuncionario,
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
-                    Departments = departments.Select(temp => temp.ToDepartamentDTOResponse()).ToList(),
                     Permissions = new List<WindowPermissionDTO>()
                     {
                         new WindowPermissionDTO()

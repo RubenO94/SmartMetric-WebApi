@@ -2,10 +2,9 @@
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
-using SmartMetric.Core.Services.Adders;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
+using SmartMetric.Core.ServicesContracts.FormTemplates;
+using SmartMetric.Core.ServicesContracts.FormTemplateTranslations;
+using SmartMetric.Core.ServicesContracts.Questions;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {

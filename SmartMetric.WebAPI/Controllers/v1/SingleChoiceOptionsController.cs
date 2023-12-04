@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
-using SmartMetric.Core.Services.Deleters;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.ServicesContracts.Getters;
-using System.Net;
+using SmartMetric.Core.ServicesContracts.Questions;
+using SmartMetric.Core.ServicesContracts.SingleChoiceOptions;
+using SmartMetric.Core.ServicesContracts.SingleChoiceOptionTranslations;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -66,8 +63,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete to remove existing Translation from existing Translation
 
         [HttpDelete]
-        [Route("{singleChoiceOptionId}/Translations")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById(Guid? singleChoiceOptionId, [FromQuery] Language language)
+        [Route("{singleChoiceOptionId}/Translations/{language}")]
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionTranslationById(Language language, Guid? singleChoiceOptionId)
         {
             var response = await _singleChoiceOptionTranslationsDeleterService.DeleteSingleChoiceOptionTranslationById(singleChoiceOptionId, language);
             return response;

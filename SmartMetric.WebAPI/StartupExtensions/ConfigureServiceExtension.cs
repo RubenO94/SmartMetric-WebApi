@@ -2,15 +2,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMetric.Core.Domain.RepositoryContracts;
-using SmartMetric.Core.Services.Adders;
-using SmartMetric.Core.Services.Getters;
-using SmartMetric.Core.ServicesContracts.Adders;
-using SmartMetric.Core.ServicesContracts.Getters;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories;
 using System.Text.Json.Serialization;
-using SmartMetric.Core.ServicesContracts.Deleters;
-using SmartMetric.Core.Services.Deleters;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Core.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,8 +14,24 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using SmartMetric.WebAPI.Filters.ActionFilters;
 using SmartMetric.WebAPI.Filters.ExceptionFilter;
 using SmartMetric.WebAPI.Filters.ActionFilter;
-using SmartMetric.Core.ServicesContracts.Updaters;
-using SmartMetric.Core.Services.Updaters;
+using SmartMetric.Core.ServicesContracts.FormTemplates;
+using SmartMetric.Core.Services.FormTemplates;
+using SmartMetric.Core.ServicesContracts.FormTemplateTranslations;
+using SmartMetric.Core.Services.FormTemplateTranslations;
+using SmartMetric.Core.ServicesContracts.Questions;
+using SmartMetric.Core.Services.Questions;
+using SmartMetric.Core.ServicesContracts.QuestionTranslations;
+using SmartMetric.Core.Services.QuestionTranslations;
+using SmartMetric.Core.ServicesContracts.RatingOptions;
+using SmartMetric.Core.Services.RatingOptions;
+using SmartMetric.Core.ServicesContracts.RatingOptionTranslations;
+using SmartMetric.Core.Services.RatingOptionTranslations;
+using SmartMetric.Core.ServicesContracts.SingleChoiceOptions;
+using SmartMetric.Core.Services.SingleChoiceOptions;
+using SmartMetric.Core.ServicesContracts.SingleChoiceOptionTranslations;
+using SmartMetric.Core.ServicesContracts.Reviews;
+using SmartMetric.Core.Services.Reviews;
+using SmartMetric.Core.Services.SingleChoiceOptionTranslations;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -73,15 +83,12 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IRatingOptionDeleterService, RatingOptionDeleterService>();
             services.AddScoped<IRatingOptionTranslationAdderService, RatingOptionTranslationsAdderService>();
             services.AddScoped<IRatingOptionTranslationDeleterService, RatingOptionTranslationDeleterService>();
-            services.AddScoped<ISingleChoiceOptionsAdderService, SingleChoiceOptionAdderService>();
+            services.AddScoped<ISingleChoiceOptionAdderService, SingleChoiceOptionAdderService>();
             services.AddScoped<ISingleChoiceOptionGetterService, SingleChoiceOptionGetterService>();
             services.AddScoped<ISingleChoiceOptionDeleterService, SingleChoiceOptionDeleterService>();
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
-            services.AddScoped<IReviewGetterService, ReviewGetterService>();  
             services.AddScoped<IReviewAdderService, ReviewAdderService>();
-            services.AddScoped<IReviewDeleterService, ReviewDeleterService>();
-            services.AddScoped<IReviewUpdaterService, ReviewUpdaterService>();
 
             #endregion
 

@@ -15,7 +15,6 @@ namespace SmartMetric.Core.DTO.Response
         public int? EmployeeId { get; set; }
         public string? ProfileDescription { get; set;}
         public ProfileType ProfileType { get; set; }
-        public List<DepartmentDTOResponse>? Departments { get; set; }
         public List<WindowPermissionDTO>? Permissions { get; set; }
     }
 }
