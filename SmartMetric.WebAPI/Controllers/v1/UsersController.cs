@@ -34,6 +34,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             throw new ArgumentException("Unidentified user", "Application User");
            
-        }
+        } 
     }
 }

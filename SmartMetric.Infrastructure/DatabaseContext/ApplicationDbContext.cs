@@ -208,6 +208,9 @@ namespace SmartMetric.Infrastructure.DatabaseContext
 
                 entity.HasIndex(e => new { e.Idperfil, e.Aplicacao }, "IX_PerfisJanelas_IDPerfil_Aplicacao").HasFillFactor(90);
 
+                // Adicionando uma chave alternativa
+                entity.HasAlternateKey(e => new { e.Idperfil, e.Idjanela, e.Aplicacao, e.Modulo });
+
                 entity.Property(e => e.Aplicacao).HasMaxLength(50);
                 entity.Property(e => e.Idjanela).HasColumnName("IDJanela");
                 entity.Property(e => e.Idperfil).HasColumnName("IDPerfil");

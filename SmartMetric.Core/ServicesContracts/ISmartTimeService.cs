@@ -34,6 +34,8 @@ namespace SmartMetric.Core.ServicesContracts
         /// <param name="userId">O ID do user.</param>
         /// <returns>Um objeto UserProfileDTOResponse representando as informações do perfil.</returns>
         Task<UserProfileDTOResponse> GetProfileByUserId(ApplicationUserType applicationUserType, int userId);
+
+        Task<ApiResponse<PermissionDTO?>> AddWindowPermissionToProfile(int profileId, int permissionDTO);
         #endregion
 
         #region Utilizador
