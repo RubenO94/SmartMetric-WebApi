@@ -62,7 +62,7 @@ namespace SmartMetric.Core.Helpers
                     }
                 }
             };
-        public static List<WindowPermissionDTO> CheckProfilePermissions(List<int?> profilePermissionIds)
+        public static List<WindowPermissionDTO> CheckProfilePermissions(List<int> profilePermissionIds)
         {
 
 

@@ -15,6 +15,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _smartTimeService = smartTimeService;
         }
 
+        [HttpGet("{profileId}/Departments")]
+        public async Task<IActionResult> GetDepartmentsByProfileId(int profileId, [FromQuery] int page = 1, int pageSize = 20)
+        {
+            var response = await _smartTimeService.GetDepartmentsByProfileId(profileId, page, pageSize);
+            return Ok(response);
+        }
+
         [HttpPost("{profileId}/Permissions")]
         public async Task<IActionResult> AddPermisssion(int profileId, [FromBody] int permissionId)
         {

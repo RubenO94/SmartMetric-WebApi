@@ -33,25 +33,25 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _context.Perfis.FirstOrDefaultAsync(temp => temp.Idperfil == perfilId);
         }
 
-        public async Task<List<int?>> GetProfileWindowsByProfileId(int profileId)
+        public async Task<List<int>> GetProfileWindowsByProfileId(int profileId)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfileWindowsByProfileId)} foi iniciado");
 
-           var result =await _context.PerfisJanelas.Where(temp => temp.Idperfil == profileId).ToListAsync();
+           var result =await _context.ProfilePermissions.Where(temp => temp.ProfileId == profileId).ToListAsync();
 
-            return result.Select(temp => temp.Idjanela).ToList();
+            return result.Select(temp => temp.PermissionId).ToList();
         }
 
-        public async Task<PerfisJanela?> AddProfilePermission(PerfisJanela perfilJanela)
+        public async Task<ProfilePermission?> AddProfilePermission(ProfilePermission profilePermission)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(AddProfilePermission)} foi iniciado");
             
-            if (perfilJanela == null) return null;
+            if (profilePermission == null) return null;
 
-            _context.PerfisJanelas.Add(perfilJanela);
+            _context.ProfilePermissions.Add(profilePermission);
             await _context.SaveChangesAsync();
 
-            return perfilJanela;
+            return profilePermission;
         }
 
         #endregion

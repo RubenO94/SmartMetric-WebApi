@@ -25,17 +25,17 @@ namespace SmartMetric.Core.Services
 
         #region Departamentos
 
-        public async Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? perfilId)
+        public async Task<List<DepartmentDTOResponse>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20)
         {
-            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByPerfilId)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByProfileId)} foi iniciado");
 
-            if (perfilId == null) throw new ArgumentNullException(nameof(perfilId));
+            if (profileId == null) throw new ArgumentNullException(nameof(profileId));
 
-            var perfilResult = await _smartTimeRepository.GetProfileById(perfilId.Value);
+            var perfilResult = await _smartTimeRepository.GetProfileById(profileId.Value);
 
-            if (perfilResult == null) throw new ArgumentNullException("Perfil does not exist");
+            if (perfilResult == null) throw new ArgumentException("Perfil does not exist", nameof(Perfil));
 
-            var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(perfilId.Value);
+            var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(profileId.Value, page, pageSize);
 
             return departments.Select(temp =>
             {
@@ -51,13 +51,13 @@ namespace SmartMetric.Core.Services
 
         public async Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds)
         {
-            if (!departmentIds.Any()) throw new ArgumentException("List of Departments can't be empty");
+            if (!departmentIds.Any()) throw new ArgumentException("List of Departments can't be empty", nameof(departmentIds));
 
             var departmentsResult = await _smartTimeRepository.GetDepartmentsByListIds(departmentIds);
 
             var departmentsNotExisting = departmentIds.Except(departmentsResult.Select(temp => temp.Iddepartamento).ToList()).ToList();
 
-            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist");
+            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist", nameof(departmentIds));
 
             return departmentsResult;
         }
@@ -84,8 +84,6 @@ namespace SmartMetric.Core.Services
                 var profileWindowPermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(user.Idperfil.Value);
 
                 var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
-
-                //TODO: Recever as janelas do prefil associado ao utlizador
 
                 return new UserProfileDTOResponse()
                 {
@@ -114,7 +112,6 @@ namespace SmartMetric.Core.Services
 
                 var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
 
-                //TODO: Recever as janelas do prefil associado ao utlizador
 
                 return new UserProfileDTOResponse()
                 {
@@ -143,12 +140,10 @@ namespace SmartMetric.Core.Services
             if (profile == null) throw new ArgumentException($"Profile with id ${profileId} don't exist", nameof(profileId));
             if (!WindowPermissionHelper.PermissionIdExists(permissionID)) throw new ArgumentException($"Permission with id ${permissionID} don't exist", nameof(permissionID));
 
-            var permission = new PerfisJanela()
+            var permission = new ProfilePermission()
             {
-                Idjanela = permissionID,
-                Idperfil = profileId,
-                Aplicacao = "SmartTime",
-                Modulo = "Desempenho"
+                PermissionId = permissionID,
+                ProfileId = profileId,
             };
             await _smartTimeRepository.AddProfilePermission(permission);
 
@@ -164,7 +159,6 @@ namespace SmartMetric.Core.Services
             };
 
         }
-
 
         #endregion
 

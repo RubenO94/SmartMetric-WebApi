@@ -20,9 +20,9 @@ namespace SmartMetric.Core.ServicesContracts
         /// <summary>
         /// Obtém a lista de departamentos associados a um perfil.
         /// </summary>
-        /// <param name="prefilId">O ID do perfil.</param>
+        /// <param name="profileId">O ID do perfil.</param>
         /// <returns>Uma lista de objetos DepartmentDTOResponse representando os departamentos.</returns>
-        Task<List<DepartmentDTOResponse>> GetDepartmentsByPerfilId(int? prefilId);
+        Task<List<DepartmentDTOResponse>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20);
 
         Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds);
         #endregion
