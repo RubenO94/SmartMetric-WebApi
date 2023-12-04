@@ -17,15 +17,6 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            byte[] encbuff = Encoding.UTF8.GetBytes("123" + "§" + DateTime.Now.Ticks + "§" + "508268800");
-
-            string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
-
-            //string strEndereco = "https://smartstep.pt" + "/Default.aspx?token=" + convertedString;
-
-            //// Verificar o token recebido da aplicação principal (SmartTime)
-            //var token = context.HttpContext.Request.Query["token"].ToString();
-
             string? token = context.HttpContext.Request.Query["token"];
 
             if (!string.IsNullOrEmpty(token))
@@ -95,22 +86,6 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
             // Esta é uma verificação básica e pode não cobrir todos os casos
             string emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
             return Regex.IsMatch(input, emailPattern);
-        }
-
-
-        private byte[] Encrypt(byte[] input)
-        {
-            PasswordDeriveBytes pdb =
-              new PasswordDeriveBytes("Smart12qazxswSt3p",
-              new byte[] { 0x16, 0x29, 0x81, 0x91 });
-            MemoryStream ms = new MemoryStream();
-            Aes aes = new AesManaged();
-            aes.Key = pdb.GetBytes(aes.KeySize / 8);
-            aes.IV = pdb.GetBytes(aes.BlockSize / 8);
-            CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
-            cs.Write(input, 0, input.Length);
-            cs.Close();
-            return ms.ToArray();
         }
     }
 

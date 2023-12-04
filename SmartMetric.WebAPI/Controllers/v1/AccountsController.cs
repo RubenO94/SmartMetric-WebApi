@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
@@ -9,6 +10,8 @@ using SmartMetric.WebAPI.Filters.ActionFilters;
 using SmartMetric.WebAPI.Filters.AutorizationFilter;
 using System.Net;
 using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -24,6 +27,20 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
             _jwtService = jwtService;
             _smartTimeService = smartTimeService;
+        }
+
+        /// <summary>
+        /// DEV TOOL: Apenas para uso em ambiente de desenvolvimento.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("Dev/AuthToken")]
+        public IActionResult GenerateAuthToken()
+        {
+            byte[] encbuff = Encoding.UTF8.GetBytes("123" + "§" + DateTime.Now.Ticks + "§" + "508268800");
+
+            string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
+
+            return Ok(base64UrlEncoded);
         }
 
         [HttpGet]
@@ -138,6 +155,26 @@ namespace SmartMetric.WebAPI.Controllers.v1
             }
 
             throw new ArgumentException("Access Token", "Invalid access token");
+        }
+
+        /// <summary>
+        /// DEV TOOL: Apenas para uso em ambiente de desenvolvimento
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        private byte[] Encrypt(byte[] input)
+        {
+            PasswordDeriveBytes pdb =
+              new PasswordDeriveBytes("Smart12qazxswSt3p",
+              new byte[] { 0x16, 0x29, 0x81, 0x91 });
+            MemoryStream ms = new MemoryStream();
+            Aes aes = new AesManaged();
+            aes.Key = pdb.GetBytes(aes.KeySize / 8);
+            aes.IV = pdb.GetBytes(aes.BlockSize / 8);
+            CryptoStream cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write);
+            cs.Write(input, 0, input.Length);
+            cs.Close();
+            return ms.ToArray();
         }
     }
 }
