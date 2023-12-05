@@ -4,14 +4,14 @@ using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Services.FormTemplates;
-using SmartMetric.Core.ServicesContracts.FormTemplate;
+using SmartMetric.Core.ServicesContracts.FormTemplates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartMetric.Core.Services.FormTemplate
+namespace SmartMetric.Core.Services.FormTemplates
 {
     public class FormTemplateUpdaterService : IFormTemplateUpdaterService
     {

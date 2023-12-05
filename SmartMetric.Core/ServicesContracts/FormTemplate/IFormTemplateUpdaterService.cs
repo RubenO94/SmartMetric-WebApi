@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SmartMetric.Core.ServicesContracts.FormTemplate
+namespace SmartMetric.Core.ServicesContracts.FormTemplates
 {
     public interface IFormTemplateUpdaterService
     {
