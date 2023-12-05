@@ -56,6 +56,10 @@ namespace SmartMetric.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20)
+        {
+            throw new NotImplementedException();
+        }
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId)
         {
@@ -72,6 +76,21 @@ namespace SmartMetric.Infrastructure.Repositories
 
             return response;
         }
+
+        public async Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate)
+        {
+            var matchingFormTemplate = await _dbContext.FormTemplates.FirstOrDefaultAsync(temp => temp.FormTemplateId == formTemplate.FormTemplateId);
             
+            if (matchingFormTemplate == null) return formTemplate;
+
+            matchingFormTemplate.ModifiedDate = formTemplate.ModifiedDate;
+            matchingFormTemplate.Questions = formTemplate.Questions;
+            matchingFormTemplate.Translations = formTemplate.Translations;
+            
+            await _dbContext.SaveChangesAsync();    
+            
+            return matchingFormTemplate;
+        
+        }
     }
 }

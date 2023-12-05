@@ -6,11 +6,11 @@ using SmartMetric.Core.ServicesContracts;
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     [ApiVersion("1.0")]
-    public class ProfileController : CustomBaseController
+    public class ProfilesController : CustomBaseController
     {
         private readonly ISmartTimeService _smartTimeService;
 
-        public ProfileController(ISmartTimeService smartTimeService)
+        public ProfilesController(ISmartTimeService smartTimeService)
         {
             _smartTimeService = smartTimeService;
         }

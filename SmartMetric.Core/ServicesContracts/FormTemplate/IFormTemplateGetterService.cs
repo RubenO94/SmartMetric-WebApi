@@ -5,7 +5,7 @@ namespace SmartMetric.Core.ServicesContracts.FormTemplates
     /// <summary>
     /// Define os métodos para a obtenção de modelos de formulário.
     /// </summary>
-    public interface IFormTemplatesGetterService
+    public interface IFormTemplateGetterService
     {
         /// <summary>
         /// Obtém todos os modelos de formulário existentes.

@@ -62,7 +62,6 @@ namespace SmartMetric.Core.DTO.Response
                     return new DepartmentDTOResponse()
                     {
                         DepartmentId = temp.DepartmentId,
-                        DepartmentFatherId = temp.Department!.IddepartamentoPai,
                         DepartmentDescription = temp.Department!.Descricao
                     };
                 }).ToList() ?? null,

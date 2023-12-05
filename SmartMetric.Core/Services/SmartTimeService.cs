@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO;
@@ -25,7 +26,7 @@ namespace SmartMetric.Core.Services
 
         #region Departamentos
 
-        public async Task<List<DepartmentDTOResponse>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20)
+        public async Task<ApiResponse<List<DepartmentDTOResponse>>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByProfileId)} foi iniciado");
 
@@ -37,16 +38,15 @@ namespace SmartMetric.Core.Services
 
             var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(profileId.Value, page, pageSize);
 
-            return departments.Select(temp =>
-            {
-                return new DepartmentDTOResponse()
-                {
-                    DepartmentId = temp.Iddepartamento,
-                    DepartmentFatherId = temp.IddepartamentoPai,
-                    DepartmentDescription = temp.Descricao
-                };
+            var totalCount = await _smartTimeRepository.CountRecords<Departamento>();
 
-            }).ToList();
+            return new ApiResponse<List<DepartmentDTOResponse>>()
+            {
+                StatusCode = 200,
+                Message = "Data retrive with success!",
+                Data = departments.Select(temp => temp.ToDepartamentDTOResponse()).ToList(),
+                TotalCount = totalCount,
+            };
         }
 
         public async Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds)
@@ -163,6 +163,23 @@ namespace SmartMetric.Core.Services
         #endregion
 
         #region Funcionarios
+
+        public async Task<ApiResponse<List<EmployeeDTOResponse>>> GetEmployeesByDepartmentId(int departmentId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetEmployeesByDepartmentId)} foi iniciado");
+
+            if (departmentId == 0) throw new ArgumentException("Invalid department Id", nameof(departmentId));
+
+            var result = await _smartTimeRepository.GetEmployeesByDepartmentId(departmentId);
+
+            return new ApiResponse<List<EmployeeDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrive with success",
+                Data = result.Select(temp => temp.ToEmployeeDTOResponse()).ToList(),
+            };
+        }
+
 
         public Task<List<UserDTO>> GetAllEmployeesBySelectedDepartments()
         {
@@ -310,6 +327,7 @@ namespace SmartMetric.Core.Services
 
 
         }
+
 
 
         #endregion

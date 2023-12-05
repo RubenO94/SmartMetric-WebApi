@@ -12,9 +12,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
     //[RequestValidation]
     public class FormTemplatesController : CustomBaseController
     {
-        private readonly IFormTemplatesGetterService _formTemplateGetterService;
-        private readonly IFormTemplatesAdderService _formTemplateAdderService;
-        private readonly IFormTemplatesDeleterService _formTemplatesDeleterService;
+        private readonly IFormTemplateGetterService _formTemplateGetterService;
+        private readonly IFormTemplateAdderService _formTemplateAdderService;
+        private readonly IFormTemplateDeleterService _formTemplatesDeleterService;
 
         private readonly IQuestionAdderService _questionAdderService;
 
@@ -22,9 +22,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplateTranslationsDeleterService _formTemplateTranslationsDeleterService;
 
         public FormTemplatesController(
-            IFormTemplatesGetterService formTemplateGetterService,
-            IFormTemplatesAdderService formTemplatesAdderService,
-            IFormTemplatesDeleterService formTemplatesDeleterService,
+            IFormTemplateGetterService formTemplateGetterService,
+            IFormTemplateAdderService formTemplatesAdderService,
+            IFormTemplateDeleterService formTemplatesDeleterService,
             IQuestionAdderService questionAdderService,
             IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService,
             IFormTemplateTranslationsDeleterService formTemplateTranslationsDeleterService

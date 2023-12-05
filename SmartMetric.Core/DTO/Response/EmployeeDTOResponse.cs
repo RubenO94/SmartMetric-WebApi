@@ -10,7 +10,6 @@ namespace SmartMetric.Core.DTO.Response
     public class EmployeeDTOResponse
     {
         public int EmployeeId { get; set; }
-        public int? DepartmentId { get; set; }
         public string? EmployeeName { get; set; }
         public string? EmployeeEmail { get; set; }
         public byte[]? EmployeePhoto { get; set; }
@@ -47,13 +46,12 @@ namespace SmartMetric.Core.DTO.Response
         /// </summary>
         /// <param name="funcionario">O objeto Funcionario a ser convertido.</param>
         /// <returns>Retorna o EmployeeDTOResponse convertido.</returns>
-        public static EmployeeDTOResponse ToFormTemplateDTOResponse(this Funcionario funcionario)
+        public static EmployeeDTOResponse ToEmployeeDTOResponse(this Funcionario funcionario)
         {
 
             return new EmployeeDTOResponse()
             {
                 EmployeeId = funcionario.Idfuncionario,
-                DepartmentId = funcionario.Iddepartamento,
                 EmployeeName = funcionario.Nome,
                 EmployeeEmail = funcionario.Email,
                 EmployeePhoto = funcionario.Fotografia,

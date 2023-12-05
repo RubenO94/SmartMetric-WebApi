@@ -13,6 +13,16 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
     /// </summary>
     public interface ISmartTimeRepository
     {
+
+        #region Geral
+        /// <summary>
+        /// Conta o número total de registos na tabela associada à entidade especificada.
+        /// </summary>
+        /// <typeparam name="TEntity">O tipo da entidade cuja tabela será contada.</typeparam>
+        /// <returns>O número total de registros na tabela.</returns>
+        Task<int> CountRecords<TEntity>() where TEntity : class;
+        #endregion
+
         #region Perfis
         Task<Perfil?> GetProfileById(int profileId);
         Task<List<int>> GetProfileWindowsByProfileId(int profileId);
@@ -83,10 +93,17 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<Funcionario?> UpdateEmployee(Funcionario funcionario);
 
         /// <summary>
-        /// Obtém uma lista de todos os funcionários.
+        /// Obtém uma lista de todos os funcionários associados ao departamentos selecionados.
         /// </summary>
         /// <returns>Uma lista de objetos Funcionario representando todos os funcionários.</returns>
-        Task<List<Funcionario>> GetAllEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20);
+        Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds);
+
+        /// <summary>
+        /// Obtém uma lista de todos os funcionários associados ao id do departamento no parametro
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
+        Task<List<Funcionario>> GetEmployeesByDepartmentId(int departmentId);
 
         #endregion
 

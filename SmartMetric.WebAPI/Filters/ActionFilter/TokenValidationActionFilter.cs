@@ -69,6 +69,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
                     //Aplicar o tipo de utilizador ao scope do request para futura validação.
                     context.HttpContext.Items["ApplicationUserType"] = user.ApplicationUserType;
                     context.HttpContext.Items["UserId"] = user.UserId;
+                    context.HttpContext.Items["UserProfileId"] = user.UserProfileId;
 
                     await UpdateUserToken(user);
                 }

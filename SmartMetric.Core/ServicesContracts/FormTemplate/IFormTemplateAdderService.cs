@@ -6,7 +6,7 @@ namespace SmartMetric.Core.ServicesContracts.FormTemplates
     /// <summary>
     /// Define o serviço para adição de novos modelos de formulário.
     /// </summary>
-    public interface IFormTemplatesAdderService
+    public interface IFormTemplateAdderService
     {
         /// <summary>
         /// Adiciona um novo modelo de formulário à base de dados.

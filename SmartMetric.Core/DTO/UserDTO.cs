@@ -14,6 +14,7 @@ namespace SmartMetric.Core.DTO
         public int UserId { get; set; }
         public string? UserName { get; set; }
         public string? UserEmail { get; set; }
+        public int? UserProfileId { get; set; }
         public string? UserPhoto { get; set; } = string.Empty;
         public string? Token { get; set; } = string.Empty;
         public DateTime? Expiration { get; set; }
@@ -31,6 +32,7 @@ namespace SmartMetric.Core.DTO
                 UserId = utilizador.Idutilizador,
                 UserEmail = utilizador.Email,
                 UserName = utilizador.Nome,
+                UserProfileId = utilizador.Idperfil,
                 UserPhoto = string.Empty, //TODO: User Photo. Será preciso??
                 RefreshToken = utilizador.RefreshToken,
                 RefreshTokenExpiration = utilizador.RefreshTokenExpiration
@@ -44,6 +46,7 @@ namespace SmartMetric.Core.DTO
                 UserId = funcionario.Idfuncionario,
                 UserEmail = funcionario.Email,
                 UserName = funcionario.Nome,
+                UserProfileId = funcionario.Idperfil,
                 UserPhoto = string.Empty, //TODO: User Photo. Será preciso??
                 RefreshToken = funcionario.RefreshToken,
                 RefreshTokenExpiration = funcionario.RefreshTokenExpiration

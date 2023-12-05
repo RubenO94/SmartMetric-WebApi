@@ -13,10 +13,10 @@ namespace SmartMetric.Core.Services.Questions
     public class QuestionAdderService : IQuestionAdderService 
     {
         private readonly IQuestionRepository _questionRepository;
-        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
+        private readonly IFormTemplateGetterService _formTemplatesGetterService;
         private readonly ILogger<QuestionAdderService> _logger;
 
-        public QuestionAdderService(IQuestionRepository questionRepository, IFormTemplatesGetterService formTemplatesGetterService, ILogger<QuestionAdderService> logger)
+        public QuestionAdderService(IQuestionRepository questionRepository, IFormTemplateGetterService formTemplatesGetterService, ILogger<QuestionAdderService> logger)
         {
             _questionRepository = questionRepository;
             _formTemplatesGetterService = formTemplatesGetterService;

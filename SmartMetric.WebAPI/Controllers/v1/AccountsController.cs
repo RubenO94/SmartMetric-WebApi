@@ -36,7 +36,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         [HttpGet("Dev/AuthToken")]
         public IActionResult GenerateAuthToken()
         {
-            byte[] encbuff = Encoding.UTF8.GetBytes("123" + "§" + DateTime.Now.Ticks + "§" + "508268800");
+            byte[] encbuff = Encoding.UTF8.GetBytes("Viagens" + "§" + DateTime.Now.Ticks + "§" + "508268800");
 
             string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
 

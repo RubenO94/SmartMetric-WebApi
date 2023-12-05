@@ -5,7 +5,7 @@ namespace SmartMetric.Core.ServicesContracts.FormTemplates
     /// <summary>
     /// Define o serviço para a exclusão de modelos de formulário.
     /// </summary>
-    public interface IFormTemplatesDeleterService
+    public interface IFormTemplateDeleterService
     {
         /// <summary>
         /// Exclui um modelo de formulário com base no ID.
