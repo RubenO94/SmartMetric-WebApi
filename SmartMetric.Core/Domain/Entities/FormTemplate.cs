@@ -1,6 +1,8 @@
 ﻿using SmartMetric.Core.DTO;
 using SmartMetric.Core.Enums;
+using SmartMetric.Infrastructure.Models;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Runtime.CompilerServices;
 
 namespace SmartMetric.Core.Domain.Entities
@@ -40,6 +42,10 @@ namespace SmartMetric.Core.Domain.Entities
         /// Obtém ou define as perguntas associadas ao modelo de formulário.
         /// </summary>
         public virtual ICollection<Question>? Questions { get; set; }
+
+
+        [ForeignKey(nameof(CreatedByUserId))]
+        public virtual Utilizador? Utilizador { get; set; }
 
     }
 

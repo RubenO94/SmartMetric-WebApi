@@ -24,6 +24,16 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
+        #region Geral
+
+        public async Task<int> CountRecords<TEntity>() where TEntity : class
+        {
+            return await _context.Set<TEntity>().CountAsync();
+        }
+
+
+        #endregion
+
         #region Perfis
 
         public async Task<Perfil?> GetProfileById(int perfilId)
@@ -58,15 +68,26 @@ namespace SmartMetric.Infrastructure.Repositories
 
         #region Funcionarios
 
-        public async Task<List<Funcionario>> GetAllEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20)
+        public async Task<List<Funcionario>> GetEmployeesByDepartmentId(int departmentId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetAllEmployeesByDepartmentsSelected)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByDepartmentsSelected)} foi iniciado");
+
+            // Filtrar os funcionários pelos IDs dos departamentos selecionados
+            var employees = await _context.Funcionarios
+                .Where(funcionario => funcionario.Iddepartamento == departmentId)
+                .ToListAsync();
+
+            return employees;
+        }
+
+
+        public async Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByDepartmentsSelected)} foi iniciado");
 
             // Filtrar os funcionários pelos IDs dos departamentos selecionados
             var employees = await _context.Funcionarios
                 .Where(funcionario => departmentIds.Contains(funcionario.Iddepartamento))
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
 
             return employees;

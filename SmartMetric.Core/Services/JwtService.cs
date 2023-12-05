@@ -44,9 +44,9 @@ namespace SmartMetric.Core.Services
             new Claim(JwtRegisteredClaimNames.Name, user.UserName!.ToString()), // Nome do utilizador (Opcional)
             new Claim(JwtRegisteredClaimNames.UniqueName, user.UserId!.ToString()), // Id do utilizador (Opcional)
             new Claim(JwtRegisteredClaimNames.Email, user.UserEmail?.ToString() ?? string.Empty),// Email do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.GivenName, user.ApplicationUserType!.ToString()!),// Email do utilizador (Opcional),
+            new Claim(JwtRegisteredClaimNames.GivenName, user.ApplicationUserType!.ToString()!),// tipo de utilizador da aplicação (Opcional),
+            new Claim(JwtRegisteredClaimNames.FamilyName, user.UserProfileId!.ToString() ?? string.Empty),// id do perfil do utilizador,
             new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(expiration).ToUnixTimeSeconds().ToString()) // Tempo de expiração (Obrigatório)
-
             };
 
             // Configura a chave de segurança e as credenciais de assinatura

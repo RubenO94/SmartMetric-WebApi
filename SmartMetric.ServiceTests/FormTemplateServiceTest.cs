@@ -16,9 +16,9 @@ namespace SmartMetric.ServiceTests
 {
     public class FormTemplateServiceTest
     {
-        private readonly IFormTemplatesAdderService _formTemplatesAdderService;
-        private readonly IFormTemplatesGetterService _formTemplatesGetterService;
-        private readonly IFormTemplatesDeleterService _formTemplatesDeleterService;
+        private readonly IFormTemplateAdderService _formTemplatesAdderService;
+        private readonly IFormTemplateGetterService _formTemplatesGetterService;
+        private readonly IFormTemplateDeleterService _formTemplatesDeleterService;
 
         private readonly Mock<IFormTemplateRepository> _formTemplateRepositoryMock;
         private readonly IFormTemplateRepository _formTemplatesRepository;

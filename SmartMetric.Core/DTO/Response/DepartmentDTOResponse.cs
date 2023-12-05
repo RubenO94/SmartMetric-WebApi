@@ -1,17 +1,12 @@
 ﻿using SmartMetric.Core.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Core.DTO.Response
 {
     public class DepartmentDTOResponse
     {
         public int DepartmentId { get; set; }
-        public int? DepartmentFatherId { get; set; }
         public string? DepartmentDescription { get; set; }
+        public List<EmployeeDTOResponse>? Employees { get; set; }
 
         /// <summary>
         /// Compara os dados atuais deste objeto com o parâmetro.
@@ -24,7 +19,7 @@ namespace SmartMetric.Core.DTO.Response
             if (obj.GetType() != typeof(DepartmentDTOResponse)) return false;
 
             DepartmentDTOResponse department = (DepartmentDTOResponse)obj;
-            return DepartmentId == department.DepartmentId && DepartmentFatherId == department.DepartmentFatherId && DepartmentDescription == department.DepartmentDescription;
+            return DepartmentId == department.DepartmentId && DepartmentDescription == department.DepartmentDescription;
         }
         public override int GetHashCode()
         {
@@ -45,8 +40,7 @@ namespace SmartMetric.Core.DTO.Response
             return new DepartmentDTOResponse()
             {
                 DepartmentId = departamento.Iddepartamento,
-                DepartmentFatherId = departamento.IddepartamentoPai,
-                DepartmentDescription = departamento.Descricao
+                DepartmentDescription = departamento.Descricao,
             };
         }
     }

@@ -8,7 +8,7 @@ using System.Net;
 
 namespace SmartMetric.Core.Services.FormTemplates
 {
-    public class FormTemplatesDeleterService : IFormTemplatesDeleterService
+    public class FormTemplatesDeleterService : IFormTemplateDeleterService
     {
         private readonly IFormTemplateRepository _formTemplateRepository;
         private readonly ILogger<FormTemplatesDeleterService> _logger;

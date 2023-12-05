@@ -9,7 +9,7 @@ using System.Net;
 
 namespace SmartMetric.Core.Services.FormTemplates
 {
-    public class FormTemplatesAdderService : IFormTemplatesAdderService
+    public class FormTemplatesAdderService : IFormTemplateAdderService
     {
         private readonly IFormTemplateRepository _formTemplateRepository;
         private readonly ILogger<FormTemplatesAdderService> _logger;

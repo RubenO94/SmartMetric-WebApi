@@ -1,4 +1,5 @@
-﻿using SmartMetric.Core.Domain.Entities;
+﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.DTO;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// Obtém todos os modelos de formulário existentes.
         /// </summary>
         /// <returns>Uma lista de modelos de formulário.</returns>
-        Task<List<FormTemplate>> GetAllFormTemplates();
+        Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20);
 
         /// <summary>
         /// Obtém um modelo de formulário pelo seu identificador único (GUID).
@@ -35,6 +36,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="formTemplate">O modelo de formulário a ser adicionado.</param>
         /// <returns>O modelo de formulário inserido.</returns>
         Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate);
+        #endregion
 
         /// <summary>
         /// Elimina um FormTemplate através do GUID fornecido
@@ -42,8 +44,8 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="formTemplateId">GUID para pesquisar</param>
         /// <returns>Retorna True em caso de sucesso, caso contrário retorna False</returns>
         Task<bool> DeleteFormTemplateById (Guid formTemplateId);
-        #endregion
 
+        Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate);
     }
 
 

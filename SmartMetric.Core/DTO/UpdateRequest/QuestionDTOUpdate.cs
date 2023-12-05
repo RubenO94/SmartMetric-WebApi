@@ -14,7 +14,9 @@ namespace SmartMetric.Core.DTO.UpdateRequest
         public Guid QuestionId { get; set; }
 
         public bool IsRequired { get; set; }
-        public ResponseType? ResponseType { get; set; }
         public int? Position { get; set; }
+        public List<TranslationDTOUpdate>? Translations { get; set; }
+        public List<RatingOptionDTOUpdate>? RatingOptions { get; set; }
+        public List<SingleChoiceDTOUpdate>? SingleChoiceOptions { get; set; }
     }
 }

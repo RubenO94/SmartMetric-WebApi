@@ -22,7 +22,7 @@ namespace SmartMetric.Core.ServicesContracts
         /// </summary>
         /// <param name="profileId">O ID do perfil.</param>
         /// <returns>Uma lista de objetos DepartmentDTOResponse representando os departamentos.</returns>
-        Task<List<DepartmentDTOResponse>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20);
+        Task<ApiResponse<List<DepartmentDTOResponse>>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20);
 
         Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds);
         #endregion
@@ -85,6 +85,12 @@ namespace SmartMetric.Core.ServicesContracts
         /// <returns>Uma lista de objetos Funcionario representando os funcionários associados aos departamentos selecionados.</returns>
         Task<List<UserDTO>> GetAllEmployeesBySelectedDepartments();
 
+        /// <summary>
+        /// Obtém uma lista de todos os funcionários associados ao id departamento no parametro.
+        /// </summary>
+        /// <param name="departmentId"></param>
+        /// <returns></returns>
+        Task<ApiResponse<List<EmployeeDTOResponse>>> GetEmployeesByDepartmentId(int departmentId);
 
         #endregion
 
