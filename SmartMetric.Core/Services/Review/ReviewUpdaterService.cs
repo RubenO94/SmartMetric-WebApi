@@ -59,7 +59,6 @@ namespace SmartMetric.Core.Services.Reviews
             foreach (var question in matchingReview.Questions! )
             {
                 question.Position = reviewDTOUpdate.Questions?.FirstOrDefault(temp => temp.QuestionId == question.QuestionId)?.Position ?? question.Position;
-                question.ResponseType = reviewDTOUpdate.Questions?.FirstOrDefault(temp => temp.QuestionId == question.QuestionId)?.ResponseType.ToString() ?? question.ResponseType;
                 question.IsRequired = reviewDTOUpdate.Questions?.FirstOrDefault(temp => temp.QuestionId == question.QuestionId)?.IsRequired ?? question.IsRequired;
             }
 
