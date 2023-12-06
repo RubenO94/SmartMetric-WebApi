@@ -29,7 +29,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<bool> DeleteFormTemplateById(Guid formTemplateId)
         {
-           var  formTemplateToDelete = await _dbContext.FormTemplates.FindAsync(formTemplateId);
+            var formTemplateToDelete = await _dbContext.FormTemplates.FindAsync(formTemplateId);
             if (formTemplateToDelete != null)
             {
                 _dbContext.FormTemplates.Remove(formTemplateToDelete);
@@ -40,10 +40,10 @@ namespace SmartMetric.Infrastructure.Repositories
             }
 
             return false;
-            
+
         }
 
-        public async Task<List<FormTemplate>> GetAllFormTemplates()
+        public async Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
@@ -54,11 +54,6 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
                 .ToListAsync();
-        }
-
-        public Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId)
@@ -80,17 +75,17 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate)
         {
             var matchingFormTemplate = await _dbContext.FormTemplates.FirstOrDefaultAsync(temp => temp.FormTemplateId == formTemplate.FormTemplateId);
-            
+
             if (matchingFormTemplate == null) return formTemplate;
 
             matchingFormTemplate.ModifiedDate = formTemplate.ModifiedDate;
             matchingFormTemplate.Questions = formTemplate.Questions;
             matchingFormTemplate.Translations = formTemplate.Translations;
-            
-            await _dbContext.SaveChangesAsync();    
-            
+
+            await _dbContext.SaveChangesAsync();
+
             return matchingFormTemplate;
-        
+
         }
     }
 }

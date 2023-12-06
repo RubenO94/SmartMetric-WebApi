@@ -1,4 +1,5 @@
 ﻿using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Core.Domain.Entities.Common;
 using SmartMetric.Core.Enums;
 using System;
 using System.Collections.Generic;
@@ -33,6 +34,7 @@ namespace SmartMetric.Core.DTO.UpdateRequest
         /// Obtém ou define a descrição da tradução.
         /// </summary>
         public string? Description { get; set; }
+
 
 
         /// <summary>

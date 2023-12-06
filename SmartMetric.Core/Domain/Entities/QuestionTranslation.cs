@@ -1,4 +1,5 @@
-﻿using SmartMetric.Core.Enums;
+﻿using SmartMetric.Core.Domain.Entities.Common;
+using SmartMetric.Core.Enums;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -7,7 +8,7 @@ namespace SmartMetric.Core.Domain.Entities
     /// <summary>
     /// Representa uma tradução associada a uma questão para um determinado idioma.
     /// </summary>
-    public class QuestionTranslation
+    public class QuestionTranslation : BaseTranslation
     {
         /// <summary>
         /// Obtém ou define o identificador único da tradução da questão.
@@ -20,22 +21,10 @@ namespace SmartMetric.Core.Domain.Entities
         public Guid? QuestionId { get; set; }
 
         /// <summary>
-        /// Obtém ou define o código do idioma para o qual esta tradução está associada.
-        /// </summary>
-        [StringLength(10)]
-        public string? Language { get; set; }
-
-        /// <summary>
         /// Obtém ou define o título da questão traduzido para o idioma especificado.
         /// </summary>
         [StringLength(100)]
         public string? Title { get; set; }
-
-        /// <summary>
-        /// Obtém ou define a descrição da questão traduzida para o idioma especificado.
-        /// </summary>
-        [StringLength(300)]
-        public string? Description { get; set; }
 
         /// <summary>
         /// Obtém ou define a associação com a questão relacionada a esta tradução.

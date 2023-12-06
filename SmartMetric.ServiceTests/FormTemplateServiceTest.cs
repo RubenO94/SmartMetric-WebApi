@@ -250,7 +250,7 @@ namespace SmartMetric.ServiceTests
             //Arrange
             var request = new List<FormTemplate>();
 
-            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(request);
+            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates(1, 20)).ReturnsAsync(request);
 
             //Act
             ApiResponse<List<FormTemplateDTOResponse?>> responseFromGet = await _formTemplatesGetterService.GetAllFormTemplates();
@@ -297,7 +297,7 @@ namespace SmartMetric.ServiceTests
             List<FormTemplate> formTemplatesList = formTemplatesRequest.Select(temp => temp.ToFormTemplate()).ToList();
             List<FormTemplateDTOResponse> expectedResponse = formTemplatesList.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
-            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates()).ReturnsAsync(formTemplatesList);
+            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates(1, 20)).ReturnsAsync(formTemplatesList);
 
             //Act
             ApiResponse<List<FormTemplateDTOResponse?>> actualResponse = await _formTemplatesGetterService.GetAllFormTemplates();

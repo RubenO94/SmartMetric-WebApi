@@ -17,11 +17,11 @@ namespace SmartMetric.Core.Services.FormTemplates
             _logger = logger;
         }
 
-        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates()
+        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates(int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
-            var formTemplates = await _formTemplateRepository.GetAllFormTemplates();
+            var formTemplates = await _formTemplateRepository.GetAllFormTemplates(page, pageSize);
 
             var response = formTemplates.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 

@@ -26,6 +26,11 @@ namespace SmartMetric.Core.Domain.Entities
         public DateTime? CreatedDate { get; set; }
 
         /// <summary>
+        /// Obtém ou define a data de modificação da revisão.
+        /// </summary>
+        public DateTime? ModifiedDate { get; set; }
+
+        /// <summary>
         /// Obtém ou define a data de início da revisão.
         /// </summary>
         public DateTime? StartDate { get; set; }

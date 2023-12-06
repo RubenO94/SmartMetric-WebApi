@@ -71,6 +71,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplateGetterService, FormTemplatesGetterService>();
             services.AddScoped<IFormTemplateAdderService, FormTemplatesAdderService>();
             services.AddScoped<IFormTemplateDeleterService, FormTemplatesDeleterService>();
+            services.AddScoped<IFormTemplateUpdaterService, FormTemplateUpdaterService>();
+
             services.AddScoped<IFormTemplateTranslationsGetterService, FormTemplateTranslationsGetterService>();
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
             services.AddScoped<IFormTemplateTranslationsDeleterService, FormTemplateTranslationDeleterService>();
@@ -89,9 +91,6 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
             services.AddScoped<IReviewAdderService, ReviewAdderService>();
-            services.AddScoped<IReviewGetterService, ReviewGetterService>();
-            services.AddScoped<IReviewDeleterService, ReviewDeleterService>();
-            services.AddScoped<IReviewUpdaterService, ReviewUpdaterService>();
 
             #endregion
 
