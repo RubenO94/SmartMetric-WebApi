@@ -47,7 +47,7 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfileWindowsByProfileId)} foi iniciado");
 
-           var result =await _context.ProfilePermissions.Where(temp => temp.ProfileId == profileId).ToListAsync();
+            var result = await _context.ProfilePermissions.Where(temp => temp.ProfileId == profileId).ToListAsync();
 
             return result.Select(temp => temp.PermissionId).ToList();
         }
@@ -55,7 +55,7 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<ProfilePermission?> AddProfilePermission(ProfilePermission profilePermission)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(AddProfilePermission)} foi iniciado");
-            
+
             if (profilePermission == null) return null;
 
             _context.ProfilePermissions.Add(profilePermission);
@@ -81,7 +81,7 @@ namespace SmartMetric.Infrastructure.Repositories
         }
 
 
-        public async Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds)
+        public async Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByDepartmentsSelected)} foi iniciado");
 
@@ -285,6 +285,16 @@ namespace SmartMetric.Infrastructure.Repositories
                 .ToListAsync();
 
             return departamentosAssociados;
+        }
+
+        public Task<List<Funcionario>> GetAllEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

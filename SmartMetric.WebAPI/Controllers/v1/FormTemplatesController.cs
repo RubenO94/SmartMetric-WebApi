@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.FormTemplates;
 using SmartMetric.Core.ServicesContracts.FormTemplateTranslations;
@@ -15,6 +16,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplateGetterService _formTemplateGetterService;
         private readonly IFormTemplateAdderService _formTemplateAdderService;
         private readonly IFormTemplateDeleterService _formTemplatesDeleterService;
+        private readonly IFormTemplateUpdaterService _formTemplatesUpdaterService;
 
         private readonly IQuestionAdderService _questionAdderService;
 
@@ -25,6 +27,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             IFormTemplateGetterService formTemplateGetterService,
             IFormTemplateAdderService formTemplatesAdderService,
             IFormTemplateDeleterService formTemplatesDeleterService,
+            IFormTemplateUpdaterService formTemplatesUpdaterService,
             IQuestionAdderService questionAdderService,
             IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService,
             IFormTemplateTranslationsDeleterService formTemplateTranslationsDeleterService
@@ -33,6 +36,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _formTemplateGetterService = formTemplateGetterService;
             _formTemplateAdderService = formTemplatesAdderService;
             _formTemplatesDeleterService = formTemplatesDeleterService;
+            _formTemplatesUpdaterService = formTemplatesUpdaterService;
 
             _questionAdderService = questionAdderService;
 
@@ -46,9 +50,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates()
+        public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20)
         {
-            var formTemplates = await _formTemplateGetterService.GetAllFormTemplates();
+            var formTemplates = await _formTemplateGetterService.GetAllFormTemplates(page, pageSize);
 
             return Ok(formTemplates);
         }
@@ -98,5 +102,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
             var response = await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(formTemplateId, language);
             return response;
         }
+
+        [HttpPut("{formTemplateId}")]
+        public async Task<IActionResult> UpdateFormTemplate(Guid? formTemplateId, [FromBody] FormTemplateDTOUpdate formTemplate)
+        {
+            var response = await _formTemplatesUpdaterService.UpdateFormTemplate(formTemplateId, formTemplate);
+            return Ok(response);
+        }
+
     }
 }

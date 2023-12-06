@@ -10,6 +10,6 @@ namespace SmartMetric.Core.ServicesContracts.FormTemplates
 {
     public interface IFormTemplateUpdaterService
     {
-        Task<FormTemplateDTOResponse> UpdateFormTemplate(Guid? formtemplateId, FormTemplateDTOUpdate? formTemplateUpdate);
+        Task<ApiResponse<FormTemplateDTOResponse>> UpdateFormTemplate(Guid? formtemplateId, FormTemplateDTOUpdate? formTemplateUpdate);
     }
 }
