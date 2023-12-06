@@ -73,7 +73,8 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
         {
             context.Result = new UnauthorizedObjectResult(new
             {
-                Error = "Invalid token."
+                Error = "Authorization error",
+                Details = "Invalid token"
             });
             context.ExceptionHandled = true;
         }
@@ -95,7 +96,8 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
 
             context.Result = new BadRequestObjectResult(new
             {
-                Error = firstError.Value
+                Error = firstError.Key,
+                Details = firstError.Value
             });
 
             context.ExceptionHandled = true;

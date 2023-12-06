@@ -3,6 +3,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
+using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using System.Net;
 
@@ -42,33 +43,18 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (matchingReview == null) throw new ArgumentException("Review does not exist.", nameof(Review));
 
+            matchingReview.ModifiedDate = DateTime.UtcNow;
 
-            matchingReview.StartDate = reviewDTOUpdate.StartDate;
-            matchingReview.EndDate = reviewDTOUpdate.EndDate;
-            matchingReview.Departments = departments.Select(temp =>
-            {
-                return new ReviewDepartment() { Department = temp, Review = matchingReview };
-            }).ToList();
+            // Atualizar revisão usando o helper
+            UpdateHelper.UpdateReview(matchingReview, reviewDTOUpdate);
 
-            foreach (var translation in matchingReview.Translations!)
-            {
-                translation.Title = reviewDTOUpdate.Translations?.FirstOrDefault(temp => temp.TranslationId == translation.ReviewTranslationId && temp.Language.ToString() == translation.Language)?.Title;
-                translation.Description = reviewDTOUpdate.Translations?.FirstOrDefault(temp => temp.TranslationId == translation.ReviewTranslationId && temp.Language.ToString() == translation.Language)?.Description;
-            }
-
-            foreach (var question in matchingReview.Questions! )
-            {
-                question.Position = reviewDTOUpdate.Questions?.FirstOrDefault(temp => temp.QuestionId == question.QuestionId)?.Position ?? question.Position;
-                question.IsRequired = reviewDTOUpdate.Questions?.FirstOrDefault(temp => temp.QuestionId == question.QuestionId)?.IsRequired ?? question.IsRequired;
-            }
-
-           var response =  await _reviewRepository.UpdateReview(matchingReview);
+            var response = await _reviewRepository.UpdateReview(matchingReview);
 
             return new ApiResponse<ReviewDTOResponse>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                 Message = "Review updated succesfuly",
-                 Data = matchingReview.ToReviewDTOResponse()
+                Message = "Review updated successfully",
+                Data = matchingReview.ToReviewDTOResponse()
             };
         }
     }

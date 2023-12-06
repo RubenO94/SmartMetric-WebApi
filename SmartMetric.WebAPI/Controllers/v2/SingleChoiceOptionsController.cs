@@ -6,9 +6,9 @@ using SmartMetric.Core.ServicesContracts.Questions;
 using SmartMetric.Core.ServicesContracts.SingleChoiceOptions;
 using SmartMetric.Core.ServicesContracts.SingleChoiceOptionTranslations;
 
-namespace SmartMetric.WebAPI.Controllers.v1
+namespace SmartMetric.WebAPI.Controllers.v2
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class SingleChoiceOptionsController : CustomBaseController
     {
         //VARIABLES
@@ -52,7 +52,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete to remove existing SingleChoiceQuestion
 
         [HttpDelete("{singleChoiceOptionId}")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionById (Guid? singleChoiceOptionId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteSingleChoiceOptionById(Guid? singleChoiceOptionId)
         {
             var response = await _singleChoiceOptionsDeleterService.DeleteSingleChoiceOptionById(singleChoiceOptionId);
             return response;

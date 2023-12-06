@@ -47,6 +47,8 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="review">A revisão atualizada.</param>
         /// <returns>True se a atualização for bem-sucedida; False, caso contrário.</returns>
         Task<bool> UpdateReview(Review review);
+
+        Task<int> GetTotalRecords();
     }
 
 }

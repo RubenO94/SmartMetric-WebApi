@@ -31,11 +31,14 @@ namespace SmartMetric.Core.Services.Reviews
         {
             var result =  await _repository.GetAllReviews(page, pageSize);
 
+            var totalCount = await _repository.GetTotalRecords();
+
             return new ApiResponse<List<ReviewDTOResponse>>() 
             { 
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = result.Select(temp => temp.ToReviewDTOResponse()).ToList()
+                Data = result.Select(temp => temp.ToReviewDTOResponse()).ToList(),
+                TotalCount = totalCount
             };
         }
 

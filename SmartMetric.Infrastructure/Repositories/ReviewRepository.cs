@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Infrastructure.DatabaseContext;
+using SmartMetric.Infrastructure.Repositories.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class ReviewRepository : IReviewRepository
+    public class ReviewRepository : BaseRepository, IReviewRepository
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<ReviewRepository> _logger;
 
-        public ReviewRepository(ApplicationDbContext context, ILogger<ReviewRepository> logger)
+        public ReviewRepository(ApplicationDbContext context, ILogger<ReviewRepository> logger) : base(context)
         {
             _context = context;
             _logger = logger;
@@ -60,7 +61,18 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<Review?> GetReviewById(Guid reviewId)
         {
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(GetReviewById)} foi iniciado.");
-            return await _context.Reviews.FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
+            return await _context.Reviews
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
+                .FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
+        }
+
+        public async Task<int> GetTotalRecords()
+        {
+            return await base.CountRecords<Review>();
         }
 
         public async Task<bool> UpdateReview(Review review)

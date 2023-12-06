@@ -1,14 +1,112 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0"?>
 <doc>
-	<assembly>
-		<name>SmartMetric.WebAPI</name>
-	</assembly>
-	<members>
-		<member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplates.GetAllFormTemplates">
-			<summary>
-				Return all FormTemplates
-			</summary>
-			<returns></returns>
-		</member>
-	</members>
+    <assembly>
+        <name>SmartMetric.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.GenerateAuthToken">
+            <summary>
+            DEV TOOL: Apenas para uso em ambiente de desenvolvimento.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.Encrypt(System.Byte[])">
+            <summary>
+            DEV TOOL: Apenas para uso em ambiente de desenvolvimento
+            </summary>
+            <param name="input"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetAllFormTemplates(System.Int32,System.Int32)">
+            <summary>
+            Retorna todos os FormTemplates
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Filters.ActionFilter.RequestValidationAttribute">
+            <summary>
+            Custom attribute for request validation in ASP.NET MVC or ASP.NET Core.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilter.RequestValidationAttribute.OnActionExecuting(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Called before the action method, validates the model state, and throws a ValidationException if errors are found.
+            </summary>
+            <param name="context">The context in which the action is executed.</param>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter">
+            <summary>
+            Filtro de ação para validação de tokens de acesso.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.#ctor(SmartMetric.Core.ServicesContracts.IJwtService,SmartMetric.Core.ServicesContracts.ISmartTimeService)">
+            <summary>
+            Construtor que recebe instâncias de serviços necessários para a validação de tokens.
+            </summary>
+            <param name="jwtService">Serviço de manipulação de tokens JWT.</param>
+            <param name="smartTimeService">Serviço relacionado à aplicação SmartTime.</param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.OnActionExecutionAsync(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,Microsoft.AspNetCore.Mvc.Filters.ActionExecutionDelegate)">
+            <summary>
+            Método chamado durante a execução da ação para validar o token de acesso.
+            </summary>
+            <param name="context">O contexto da execução da ação.</param>
+            <param name="next">O próximo delegate na cadeia de execução da ação.</param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.ShouldSkipTokenValidation(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Verifica se a validação do token deve ser ignorada com base nos atributos aplicados.
+            </summary>
+            <param name="context">O contexto da execução da ação.</param>
+            <returns>True se a validação do token deve ser ignorada, false caso contrário.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.HandleUnauthorized(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext,System.String)">
+            <summary>
+            Manipula a resposta quando a autorização falha, retornando um resultado de não autorizado.
+            </summary>
+            <param name="context">O contexto da execução da ação.</param>
+            <param name="errorMessage">A mensagem de erro.</param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.IsTokenValid(System.Security.Claims.ClaimsPrincipal,Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Verifica se o token de acesso é válido.
+            </summary>
+            <param name="claimsPrincipal">O principal de reivindicações do token de acesso.</param>
+            <param name="context">O contexto da execução da ação.</param>
+            <returns>True se o token for válido, false caso contrário.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.TryGetUserFromToken(System.Security.Claims.ClaimsPrincipal,Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Tenta obter informações do utilizador a partir do token de acesso.
+            </summary>
+            <param name="claimsPrincipal">O principal de reivindicações do token de acesso.</param>
+            <param name="context">O contexto da execução da ação.</param>
+            <returns>As informações do utilizador em objeto UserDTO se bem-sucedido, null caso contrário.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.UpdateUserToken(SmartMetric.Core.DTO.UserDTO)">
+            <summary>
+            Atualiza o token de acesso e o token de atualização do utilizador.
+            </summary>
+            <param name="user">O objeto de transferência de dados do utilizador.</param>
+            <returns>Uma tarefa assíncrona.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ActionFilters.TokenValidationActionFilter.GetTokensFromRequest(Microsoft.AspNetCore.Mvc.Filters.ActionExecutingContext)">
+            <summary>
+            Obtém os tokens de acesso e atualização da solicitação HTTP.
+            </summary>
+            <param name="context">O contexto da execução da ação.</param>
+            <returns>Os tokens de acesso e atualização, se presentes.</returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Filters.ExceptionFilter.ValidationErrorHandlingAttribute">
+            <summary>
+            Atributo para tratamento de exceções específicas.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Filters.ExceptionFilter.ValidationErrorHandlingAttribute.OnException(Microsoft.AspNetCore.Mvc.Filters.ExceptionContext)">
+            <summary>
+            Método chamado ao ocorrer uma exceção, realiza o tratamento específico para diferentes tipos de exceções.
+            </summary>
+            <param name="context">O contexto da exceção.</param>
+        </member>
+    </members>
 </doc>

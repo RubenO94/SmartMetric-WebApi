@@ -5,9 +5,9 @@ using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.RatingOptions;
 using SmartMetric.Core.ServicesContracts.RatingOptionTranslations;
 
-namespace SmartMetric.WebAPI.Controllers.v1
+namespace SmartMetric.WebAPI.Controllers.v2
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class RatingOptionsController : CustomBaseController
     {
         //VARIABLES
@@ -49,7 +49,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         #region Delete method to delete existing RatingOption
 
         [HttpDelete("{ratingOptionId}")]
-        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById (Guid? ratingOptionId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteRatingOptionById(Guid? ratingOptionId)
         {
             var response = await _ratingOptionDeleterService.DeleteRatingOptionById(ratingOptionId);
             return response;
