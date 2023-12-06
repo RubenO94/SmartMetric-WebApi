@@ -10,7 +10,7 @@ namespace SmartMetric.WebAPI.Controllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [SkipTokenValidation]
-    //[RequestValidation]
+    [RequestValidation]
     public class CustomBaseController : ControllerBase
     {
     }

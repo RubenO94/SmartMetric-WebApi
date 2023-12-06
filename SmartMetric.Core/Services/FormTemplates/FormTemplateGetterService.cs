@@ -25,11 +25,14 @@ namespace SmartMetric.Core.Services.FormTemplates
 
             var response = formTemplates.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
+            var totalCount =  await _formTemplateRepository.GetTotalRecords();
+
             return new ApiResponse<List<FormTemplateDTOResponse?>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = response!
+                Data = response!,
+                TotalCount = totalCount
             };
         }
 

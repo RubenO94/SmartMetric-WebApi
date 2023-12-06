@@ -46,6 +46,8 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<bool> DeleteFormTemplateById (Guid formTemplateId);
 
         Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate);
+
+        Task<int> GetTotalRecords();
     }
 
 

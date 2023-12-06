@@ -30,8 +30,9 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
 
                 if (!bTokenValido || strDados.Length < 3)
                 {
-                    context.Result = new UnauthorizedObjectResult(new { Error = "Authorization token is invalid" });
-                    return;
+                    throw new ArgumentException("Authorization token is invalid");
+                    //context.Result = new UnauthorizedObjectResult(new { Error = "Authorization token is invalid" });
+                    //return;
                 }
 
                 ApplicationUserType applicationUserType = IsEmail(strDados[0]) ? ApplicationUserType.Employee : ApplicationUserType.User;
@@ -41,7 +42,8 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
             }
             else
             {
-                context.Result = new UnauthorizedObjectResult(new { Error = "Authorization token is missing" });
+                throw new ArgumentException("Authorization token is missing");
+                //context.Result = new UnauthorizedObjectResult(new { Error = "Authorization token is missing" });
             }
         }
 

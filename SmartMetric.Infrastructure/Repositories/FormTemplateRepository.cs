@@ -4,18 +4,21 @@ using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Infrastructure.DatabaseContext;
+using SmartMetric.Infrastructure.Repositories.Common;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class FormTemplateRepository : IFormTemplateRepository
+    public class FormTemplateRepository : BaseRepository, IFormTemplateRepository
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly ILogger<FormTemplateRepository> _logger;
-        public FormTemplateRepository(ApplicationDbContext dbContext, ILogger<FormTemplateRepository> logger)
+        public FormTemplateRepository(ApplicationDbContext dbContext, ILogger<FormTemplateRepository> logger) : base(dbContext)
         {
             _dbContext = dbContext;
             _logger = logger;
         }
+
+
 
         public async Task<FormTemplate> AddFormTemplate(FormTemplate formTemplate)
         {
@@ -70,6 +73,11 @@ namespace SmartMetric.Infrastructure.Repositories
                 .FirstOrDefaultAsync(template => template.FormTemplateId == formTemplateId);
 
             return response;
+        }
+
+        public async Task<int> GetTotalRecords()
+        {
+           return await base.CountRecords<FormTemplate>();
         }
 
         public async Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate)

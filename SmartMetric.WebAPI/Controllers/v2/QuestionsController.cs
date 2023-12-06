@@ -7,9 +7,9 @@ using SmartMetric.Core.ServicesContracts.QuestionTranslations;
 using SmartMetric.Core.ServicesContracts.RatingOptions;
 using SmartMetric.Core.ServicesContracts.SingleChoiceOptions;
 
-namespace SmartMetric.WebAPI.Controllers.v1
+namespace SmartMetric.WebAPI.Controllers.v2
 {
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class QuestionsController : CustomBaseController
     {
         private readonly IQuestionAdderService _questionAdderService;

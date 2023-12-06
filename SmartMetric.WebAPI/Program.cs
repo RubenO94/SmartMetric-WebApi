@@ -18,7 +18,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(options =>
     {
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "1.0");
-    }); //creates swagger UI for testing all Web API endpoints / action methods
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "2.0");
+    });
 }
 
 app.UseRouting();

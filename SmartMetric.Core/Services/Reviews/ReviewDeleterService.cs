@@ -25,7 +25,7 @@ namespace SmartMetric.Core.Services.Reviews
 
             var associatedReview = await _reviewRepository.GetReviewById(reviewId.Value);
 
-            if (associatedReview == null) throw new ArgumentNullException("Review doesn't exist");
+            if (associatedReview == null) throw new ArgumentException("Review doesn't exist", nameof(reviewId));
 
             var result = await _reviewRepository.DeleteReview(reviewId.Value);
 

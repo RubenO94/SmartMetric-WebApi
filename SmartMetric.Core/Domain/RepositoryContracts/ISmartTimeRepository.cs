@@ -14,14 +14,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
     public interface ISmartTimeRepository
     {
 
-        #region Geral
-        /// <summary>
-        /// Conta o número total de registos na tabela associada à entidade especificada.
-        /// </summary>
-        /// <typeparam name="TEntity">O tipo da entidade cuja tabela será contada.</typeparam>
-        /// <returns>O número total de registros na tabela.</returns>
-        Task<int> CountRecords<TEntity>() where TEntity : class;
-        #endregion
+        Task<int> GetTotalRecords();
 
         #region Perfis
         Task<Perfil?> GetProfileById(int profileId);

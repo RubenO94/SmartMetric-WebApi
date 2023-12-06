@@ -32,6 +32,8 @@ using SmartMetric.Core.ServicesContracts.SingleChoiceOptionTranslations;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using SmartMetric.Core.Services.Reviews;
 using SmartMetric.Core.Services.SingleChoiceOptionTranslations;
+using SmartMetric.Core.Domain.RepositoryContracts.Common;
+using SmartMetric.Infrastructure.Repositories.Common;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -46,6 +48,8 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
 
             //Metrics
+            services.AddScoped<IBaseRepository, BaseRepository>();
+
             services.AddScoped<IFormTemplateRepository, FormTemplateRepository>();
             services.AddScoped<IFormTemplateTranslationRepository, FormTemplateTranslationRepository>();
             services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -76,21 +80,30 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IFormTemplateTranslationsGetterService, FormTemplateTranslationsGetterService>();
             services.AddScoped<IFormTemplateTranslationsAdderService, FormTemplateTranslationsAdderService>();
             services.AddScoped<IFormTemplateTranslationsDeleterService, FormTemplateTranslationDeleterService>();
+
             services.AddScoped<IQuestionAdderService, QuestionAdderService>();
             services.AddScoped<IQuestionGetterService, QuestionGetterService>();
             services.AddScoped<IQuestionTranslationAdderService, QuestionTranslationAdderService>();
             services.AddScoped<IQuestionTranslationDeleterService, QuestionTranslationDeleterService>();
+
             services.AddScoped<IRatingOptionAdderService, RatingOptionAdderService>();
             services.AddScoped<IRatingOptionGetterService, RatingOptionGetterService>();
             services.AddScoped<IRatingOptionDeleterService, RatingOptionDeleterService>();
+
             services.AddScoped<IRatingOptionTranslationAdderService, RatingOptionTranslationsAdderService>();
             services.AddScoped<IRatingOptionTranslationDeleterService, RatingOptionTranslationDeleterService>();
+
             services.AddScoped<ISingleChoiceOptionAdderService, SingleChoiceOptionAdderService>();
             services.AddScoped<ISingleChoiceOptionGetterService, SingleChoiceOptionGetterService>();
             services.AddScoped<ISingleChoiceOptionDeleterService, SingleChoiceOptionDeleterService>();
+
             services.AddScoped<ISingleChoiceOptionTranslationsAdderService, SingleChoiceOptionTranslationsAdderService>();
             services.AddScoped<ISingleChoiceOptionTranslationDeleterService, SingleChoiceOptionTranslationDeleterService>();
+
             services.AddScoped<IReviewAdderService, ReviewAdderService>();
+            services.AddScoped<IReviewGetterService, ReviewGetterService>();
+            services.AddScoped<IReviewDeleterService, ReviewDeleterService>();
+            services.AddScoped<IReviewUpdaterService, ReviewUpdaterService>();
 
             #endregion
 
@@ -153,10 +166,13 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             services.AddEndpointsApiExplorer();
+
             services.AddSwaggerGen(options =>
             {
-                //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
-                //options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "SmartMetric Web API", Version = "1.0" });
+                options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
+
+                options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "SmartMetric Web API", Version = "1.0" });
+                options.SwaggerDoc("v2", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "SmartMetric Web API", Version = "2.0" });
 
                 //To add more versions here:
 
