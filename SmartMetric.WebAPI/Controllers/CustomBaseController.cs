@@ -6,10 +6,9 @@ using SmartMetric.WebAPI.Filters.ActionFilters;
 
 namespace SmartMetric.WebAPI.Controllers
 {
-    [AllowAnonymous] // TODO: Retirar apos adicionar Autenticação de Utilizadores
+    [AllowAnonymous]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
-    [SkipTokenValidation]
     [RequestValidation]
     public class CustomBaseController : ControllerBase
     {
