@@ -17,10 +17,80 @@
             <param name="input"></param>
             <returns></returns>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetAllFormTemplates(System.Int32,System.Int32)">
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.#ctor(SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateGetterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateAdderService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateDeleterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateUpdaterService,SmartMetric.Core.ServicesContracts.Questions.IQuestionAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsDeleterService)">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateGetterService"></param>
+            <param name="formTemplatesAdderService"></param>
+            <param name="formTemplatesDeleterService"></param>
+            <param name="formTemplatesUpdaterService"></param>
+            <param name="questionAdderService"></param>
+            <param name="formTemplateTranslationsAdderService"></param>
+            <param name="formTemplateTranslationsDeleterService"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetAllFormTemplates(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
             <summary>
             Retorna todos os FormTemplates
             </summary>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetFormTemplateById(System.Nullable{System.Guid})">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.AddFormTemplate(SmartMetric.Core.DTO.AddRequest.FormTemplateDTOAddRequest)">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateDTOAddRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.AddFormTemplateTranslation(System.Nullable{System.Guid},SmartMetric.Core.DTO.AddRequest.TranslationDTOAddRequest)">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateId"></param>
+            <param name="formTemplateTranslationDTOAddRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.AddQuestionToFormTemplate(System.Nullable{System.Guid},SmartMetric.Core.DTO.AddRequest.QuestionDTOAddRequest)">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateId"></param>
+            <param name="questionDTOAddRequest"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.DeleteFormTemplateById(System.Nullable{System.Guid})">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.DeleteFormTemplateTranslation(System.Nullable{System.Guid},SmartMetric.Core.Enums.Language)">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateId"></param>
+            <param name="language"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.UpdateFormTemplate(System.Nullable{System.Guid},SmartMetric.Core.DTO.UpdateRequest.FormTemplateDTOUpdate)">
+            <summary>
+            
+            </summary>
+            <param name="formTemplateId"></param>
+            <param name="formTemplate"></param>
             <returns></returns>
         </member>
         <member name="T:SmartMetric.WebAPI.Filters.ActionFilter.RequestValidationAttribute">

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="page">Número da página a ser recuperada.</param>
         /// <param name="pageSize">Número de revisões por página.</param>
         /// <returns>Uma lista de revisões.</returns>
-        Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20);
+        Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null);
 
         /// <summary>
         /// Obtém uma revisão com base no seu identificador único.
@@ -48,7 +49,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <returns>True se a atualização for bem-sucedida; False, caso contrário.</returns>
         Task<bool> UpdateReview(Review review);
 
-        Task<int> GetTotalRecords();
+        Task<int> GetTotalRecords(Expression<Func<Review, bool>>? filter = null);
     }
 
 }

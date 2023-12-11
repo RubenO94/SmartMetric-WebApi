@@ -5,6 +5,7 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories.Common;
+using System.Linq.Expressions;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
@@ -46,18 +47,28 @@ namespace SmartMetric.Infrastructure.Repositories
 
         }
 
-        public async Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20)
+        public async Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20, string? language = null)
         {
             _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
-
-            return await _dbContext.FormTemplates
+            IQueryable<FormTemplate> query = _dbContext.FormTemplates
                 .Include(temp => temp.Translations)
-                .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
-                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
-                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
-                .ToListAsync();
+                .Include(temp => temp.Questions).ThenInclude(q => q!.Translations)
+                .Include(temp => temp.Questions).ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations);
+
+            // Aplica a filtragem por idioma, se fornecido
+            if (!string.IsNullOrEmpty(language))
+            {
+                query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
+            }
+
+            // Aplica a paginação
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+            return await query.ToListAsync();
         }
+
 
         public async Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId)
         {
@@ -75,9 +86,9 @@ namespace SmartMetric.Infrastructure.Repositories
             return response;
         }
 
-        public async Task<int> GetTotalRecords()
+        public async Task<int> GetTotalRecords(Expression<Func<FormTemplate, bool>>? filter = null)
         {
-           return await base.CountRecords<FormTemplate>();
+            return await base.CountRecords<FormTemplate>(filter);
         }
 
         public async Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate)

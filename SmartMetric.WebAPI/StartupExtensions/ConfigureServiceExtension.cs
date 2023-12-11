@@ -34,6 +34,7 @@ using SmartMetric.Core.Services.Reviews;
 using SmartMetric.Core.Services.SingleChoiceOptionTranslations;
 using SmartMetric.Core.Domain.RepositoryContracts.Common;
 using SmartMetric.Infrastructure.Repositories.Common;
+using Microsoft.OpenApi.Models;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -169,6 +170,28 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             services.AddSwaggerGen(options =>
             {
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[] {}
+                    }
+                });
                 options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "api.xml"));
 
                 options.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() { Title = "SmartMetric Web API", Version = "1.0" });

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.FormTemplates;
 using System.Net;
@@ -17,15 +18,15 @@ namespace SmartMetric.Core.Services.FormTemplates
             _logger = logger;
         }
 
-        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates(int page = 1, int pageSize = 20)
+        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null)
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
-            var formTemplates = await _formTemplateRepository.GetAllFormTemplates(page, pageSize);
+            var formTemplates = await _formTemplateRepository.GetAllFormTemplates(page, pageSize, language.ToString());
 
             var response = formTemplates.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
-            var totalCount =  await _formTemplateRepository.GetTotalRecords();
+            var totalCount = await _formTemplateRepository.GetTotalRecords(temp => temp.Translations!.Any(tr => tr.Language == language.ToString()));
 
             return new ApiResponse<List<FormTemplateDTOResponse?>>()
             {
@@ -40,11 +41,11 @@ namespace SmartMetric.Core.Services.FormTemplates
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetFormTemplateById)} foi iniciado");
 
-            if(formTemplateId == null ) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
+            if (formTemplateId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'formTemplateId' parameter is required and must be a valid GUID.");
 
             var formTemplate = await _formTemplateRepository.GetFormTemplateById(formTemplateId.Value);
 
-            if(formTemplate == null ) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+            if (formTemplate == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
 
             return new ApiResponse<FormTemplateDTOResponse?>()
             {

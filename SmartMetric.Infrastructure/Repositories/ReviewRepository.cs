@@ -7,6 +7,7 @@ using SmartMetric.Infrastructure.Repositories.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,7 +44,7 @@ namespace SmartMetric.Infrastructure.Repositories
             return result > 0;
         }
 
-        public async Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20)
+        public async Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null)
         {
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(GetAllReviews)} foi iniciado.");
 
@@ -70,9 +71,9 @@ namespace SmartMetric.Infrastructure.Repositories
                 .FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
         }
 
-        public async Task<int> GetTotalRecords()
+        public async Task<int> GetTotalRecords(Expression<Func<Review, bool>>? filter = null)
         {
-            return await base.CountRecords<Review>();
+            return await base.CountRecords<Review>(filter);
         }
 
         public async Task<bool> UpdateReview(Review review)
