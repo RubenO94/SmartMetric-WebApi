@@ -9,6 +9,9 @@ using SmartMetric.Core.ServicesContracts.Questions;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [ApiVersion("1.0")]
     //[RequestValidation]
     public class FormTemplatesController : CustomBaseController
@@ -23,6 +26,16 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplateTranslationsAdderService _formTemplateTranslationsAdderService;
         private readonly IFormTemplateTranslationsDeleterService _formTemplateTranslationsDeleterService;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateGetterService"></param>
+        /// <param name="formTemplatesAdderService"></param>
+        /// <param name="formTemplatesDeleterService"></param>
+        /// <param name="formTemplatesUpdaterService"></param>
+        /// <param name="questionAdderService"></param>
+        /// <param name="formTemplateTranslationsAdderService"></param>
+        /// <param name="formTemplateTranslationsDeleterService"></param>
         public FormTemplatesController(
             IFormTemplateGetterService formTemplateGetterService,
             IFormTemplateAdderService formTemplatesAdderService,
@@ -50,13 +63,18 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20)
+        public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null)
         {
-            var formTemplates = await _formTemplateGetterService.GetAllFormTemplates(page, pageSize);
+            var formTemplates = await _formTemplateGetterService.GetAllFormTemplates(page, pageSize, language);
 
             return Ok(formTemplates);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateId"></param>
+        /// <returns></returns>
         [HttpGet("{formTemplateId}")]
         public async Task<ActionResult<FormTemplateDTOResponse>> GetFormTemplateById(Guid? formTemplateId)
         {
@@ -64,6 +82,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return Ok(formTemplate);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateDTOAddRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest? formTemplateDTOAddRequest)
         {
@@ -71,6 +94,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return CreatedAtAction(nameof(AddFormTemplate), response);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateId"></param>
+        /// <param name="formTemplateTranslationDTOAddRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("{formTemplateId}/Translations")]
         public async Task<IActionResult> AddFormTemplateTranslation(Guid? formTemplateId, [FromBody] TranslationDTOAddRequest? formTemplateTranslationDTOAddRequest)
@@ -80,6 +109,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return CreatedAtAction(nameof(AddFormTemplateTranslation), translation);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateId"></param>
+        /// <param name="questionDTOAddRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         [Route("{formTemplateId}/Questions")]
         public async Task<IActionResult> AddQuestionToFormTemplate(Guid? formTemplateId, [FromBody] QuestionDTOAddRequest questionDTOAddRequest)
@@ -89,6 +124,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return Ok(response);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateId"></param>
+        /// <returns></returns>
         [HttpDelete("{formTemplateId}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateById(Guid? formTemplateId)
         {
@@ -96,6 +136,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return response;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateId"></param>
+        /// <param name="language"></param>
+        /// <returns></returns>
         [HttpDelete("{formTemplateId}/Translations")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateTranslation(Guid? formTemplateId, [FromQuery] Language language)
         {
@@ -103,6 +149,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return response;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="formTemplateId"></param>
+        /// <param name="formTemplate"></param>
+        /// <returns></returns>
         [HttpPut("{formTemplateId}")]
         public async Task<IActionResult> UpdateFormTemplate(Guid? formTemplateId, [FromBody] FormTemplateDTOUpdate formTemplate)
         {

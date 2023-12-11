@@ -4,6 +4,7 @@ using SmartMetric.Core.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,7 +20,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// Obtém todos os modelos de formulário existentes.
         /// </summary>
         /// <returns>Uma lista de modelos de formulário.</returns>
-        Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20);
+        Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20, string? language = null);
 
         /// <summary>
         /// Obtém um modelo de formulário pelo seu identificador único (GUID).
@@ -47,7 +48,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
 
         Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate);
 
-        Task<int> GetTotalRecords();
+        Task<int> GetTotalRecords(Expression<Func<FormTemplate, bool>>? filter = null);
     }
 
 

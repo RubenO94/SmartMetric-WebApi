@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using System.Net;
 
@@ -27,11 +28,11 @@ namespace SmartMetric.Core.Services.Reviews
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<ReviewDTOResponse>>> GetReviews(int page = 1, int pageSize = 20)
+        public async Task<ApiResponse<List<ReviewDTOResponse>>> GetReviews(int page = 1, int pageSize = 2, Language? language = null)
         {
-            var result =  await _repository.GetAllReviews(page, pageSize);
+            var result =  await _repository.GetAllReviews(page, pageSize, language.ToString());
 
-            var totalCount = await _repository.GetTotalRecords();
+            var totalCount = await _repository.GetTotalRecords(temp => temp.Translations!.Any(tr => tr.Language == language.ToString())); ;
 
             return new ApiResponse<List<ReviewDTOResponse>>() 
             { 
