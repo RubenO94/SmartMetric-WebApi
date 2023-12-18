@@ -198,7 +198,7 @@ namespace SmartMetric.Core.Helpers
             {
                 var existingOption = existingOptions.FirstOrDefault(o => o.RatingOptionId == optionUpdate.RatingOptionId);
 
-                if (existingOption != null)
+                if (existingOption != null && existingOption.RatingOptionId != Guid.Empty)
                 {
                     // Update translations for RatingOption
                     UpdateTranslations(existingOption.Translations, optionUpdate.Translations);
@@ -243,7 +243,7 @@ namespace SmartMetric.Core.Helpers
             {
                 var existingOption = existingOptions.FirstOrDefault(o => o.SingleChoiceOptionId == optionUpdate.SingleChoiceOptionId);
 
-                if (existingOption != null)
+                if (existingOption != null && existingOption.SingleChoiceOptionId != Guid.Empty)
                 {
                     // Update translations for SingleChoiceOption
                     UpdateTranslations(existingOption.Translations, optionUpdate.Translations);
