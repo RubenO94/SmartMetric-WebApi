@@ -121,17 +121,15 @@ namespace SmartMetric.Core.Helpers
         {
             if (existingTranslations == null || newTranslations == null) return;
 
-            var existingTranslationsList = existingTranslations.ToList();
-
             // Encontrar traduções que não estão presentes nas traduções atualizadas e removê-las
-            var translationsToRemove = existingTranslationsList
+            var translationsToRemove = existingTranslations
                 .Where(existingTranslation =>
                     newTranslations.All(translationUpdate => translationUpdate.Language.ToString() != existingTranslation.Language!.ToUpper()))
                 .ToList();
 
             foreach (var translationUpdate in newTranslations)
             {
-                var existingTranslation = existingTranslationsList
+                var existingTranslation = existingTranslations
                     .FirstOrDefault(temp => temp.Language!.ToUpper() == translationUpdate.Language.ToString());
 
                 if (existingTranslation != null)
@@ -183,13 +181,6 @@ namespace SmartMetric.Core.Helpers
             {
                 existingTranslations.Remove(translationToRemove);
             }
-
-            //// Converter de volta para ICollection
-            //existingTranslations.Clear();
-            //foreach (var item in existingTranslationsList)
-            //{
-            //    existingTranslations.Add(item);
-            //}
         }
 
         /// <summary>
@@ -199,15 +190,13 @@ namespace SmartMetric.Core.Helpers
         {
             if (existingOptions == null || newOptions == null) return;
 
-            var existingOptionsList = existingOptions.ToList();
-
-            var optionsToRemove = existingOptionsList
+            var optionsToRemove = existingOptions
                 .Where(existingOption => newOptions.All(optionUpdate => optionUpdate.RatingOptionId != existingOption.RatingOptionId))
                 .ToList();
 
             foreach (var optionUpdate in newOptions)
             {
-                var existingOption = existingOptionsList.FirstOrDefault(o => o.RatingOptionId == optionUpdate.RatingOptionId);
+                var existingOption = existingOptions.FirstOrDefault(o => o.RatingOptionId == optionUpdate.RatingOptionId);
 
                 if (existingOption != null)
                 {
@@ -217,7 +206,7 @@ namespace SmartMetric.Core.Helpers
                 }
                 else
                 {
-                    existingOptionsList.Add(new RatingOption
+                    existingOptions.Add(new RatingOption
                     {
                         NumericValue = optionUpdate.NumericValue,
                         Translations = optionUpdate.Translations?.Select(t =>
@@ -233,15 +222,9 @@ namespace SmartMetric.Core.Helpers
             // Remover opções que não estão presentes nas opções atualizadas
             foreach (var optionToRemove in optionsToRemove)
             {
-                existingOptionsList.Remove(optionToRemove);
+                existingOptions.Remove(optionToRemove);
             }
 
-            // Converter de volta para ICollection
-            existingOptions.Clear();
-            foreach (var item in existingOptionsList)
-            {
-                existingOptions.Add(item);
-            }
         }
 
         /// <summary>
@@ -251,15 +234,14 @@ namespace SmartMetric.Core.Helpers
         {
             if (existingOptions == null || newOptions == null) return;
 
-            var existingOptionsList = existingOptions.ToList();
 
-            var optionsToRemove = existingOptionsList
+            var optionsToRemove = existingOptions
                 .Where(existingOption => newOptions.All(optionUpdate => optionUpdate.SingleChoiceOptionId != existingOption.SingleChoiceOptionId))
                 .ToList();
 
             foreach (var optionUpdate in newOptions)
             {
-                var existingOption = existingOptionsList.FirstOrDefault(o => o.SingleChoiceOptionId == optionUpdate.SingleChoiceOptionId);
+                var existingOption = existingOptions.FirstOrDefault(o => o.SingleChoiceOptionId == optionUpdate.SingleChoiceOptionId);
 
                 if (existingOption != null)
                 {
@@ -268,7 +250,7 @@ namespace SmartMetric.Core.Helpers
                 }
                 else
                 {
-                    existingOptionsList.Add(new SingleChoiceOption
+                    existingOptions.Add(new SingleChoiceOption
                     {
                         Translations = optionUpdate.Translations?.Select(t =>
                             new SingleChoiceOptionTranslation
@@ -283,15 +265,9 @@ namespace SmartMetric.Core.Helpers
             // Remover opções que não estão presentes nas opções atualizadas
             foreach (var optionToRemove in optionsToRemove)
             {
-                existingOptionsList.Remove(optionToRemove);
+                existingOptions.Remove(optionToRemove);
             }
 
-            // Converter de volta para ICollection
-            existingOptions.Clear();
-            foreach (var item in existingOptionsList)
-            {
-                existingOptions.Add(item);
-            }
         }
 
 
