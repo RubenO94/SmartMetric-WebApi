@@ -34,7 +34,7 @@ namespace SmartMetric.Core.Helpers
                 var existingQuestion = existingQuestions
                     .FirstOrDefault(q => q.QuestionId == questionUpdate.QuestionId);
 
-                if (existingQuestion != null)
+                if (existingQuestion != null && existingQuestion.QuestionId != Guid.Empty)
                 {
                     existingQuestion.Position = questionUpdate.Position;
                     existingQuestion.IsRequired = questionUpdate.IsRequired;
