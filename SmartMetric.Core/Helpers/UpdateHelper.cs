@@ -23,6 +23,12 @@ namespace SmartMetric.Core.Helpers
         {
             if (existingQuestions == null || newQuestions == null) return;
 
+            // Remover perguntas que não estão presentes nas perguntas atualizadas
+            var questionsToRemove = existingQuestions
+                .Where(existingQuestion =>
+                    newQuestions.All(questionUpdate => questionUpdate.QuestionId != existingQuestion.QuestionId))
+                .ToList();
+
             foreach (var questionUpdate in newQuestions)
             {
                 var existingQuestion = existingQuestions
@@ -47,6 +53,58 @@ namespace SmartMetric.Core.Helpers
                         UpdateSingleChoiceOptions(existingQuestion.SingleChoiceOptions, questionUpdate.SingleChoiceOptions);
                     }
                 }
+                else
+                {
+                    // Adicionar nova pergunta
+                    existingQuestions.Add(new Question
+                    {
+                        // Preencher propriedades da nova pergunta com base na DTO
+                        QuestionId = questionUpdate.QuestionId,
+                        Position = questionUpdate.Position,
+                        IsRequired = questionUpdate.IsRequired,
+
+                        // Question Translations
+                        Translations = questionUpdate.Translations?.Select(t =>
+                            new QuestionTranslation
+                            {
+                                Language = t.Language.ToString(),
+                                Description = t.Description,
+                                Title = t.Title
+                            }).ToList(),
+
+                        // Question Rating Options
+                        RatingOptions = questionUpdate.RatingOptions?.Select(o =>
+                            new RatingOption
+                            {
+                                NumericValue = o.NumericValue,
+                                Translations = o.Translations?.Select(t =>
+                                    new RatingOptionTranslation
+                                    {
+                                        Language = t.Language.ToString(),
+                                        Description = t.Description
+                                    }).ToList()
+                            }).ToList(),
+
+                        // Questions SingleChoice Options
+                        SingleChoiceOptions = questionUpdate.SingleChoiceOptions?.Select(o =>
+                            new SingleChoiceOption
+                            {
+                                Translations = o.Translations?.Select(t =>
+                                    new SingleChoiceOptionTranslation
+                                    {
+                                        Language = t.Language.ToString(),
+                                        Description = t.Description
+                                    }).ToList()
+                            }).ToList()
+                    });
+                }
+
+            }
+
+            // Remover perguntas que não estão presentes nas perguntas atualizadas
+            foreach (var questionToRemove in questionsToRemove)
+            {
+                existingQuestions.Remove(questionToRemove);
             }
         }
 
@@ -121,15 +179,15 @@ namespace SmartMetric.Core.Helpers
             // Remover traduções que não estão presentes nas traduções atualizadas
             foreach (var translationToRemove in translationsToRemove)
             {
-                existingTranslationsList.Remove(translationToRemove);
+                existingTranslations.Remove(translationToRemove);
             }
 
-            // Converter de volta para ICollection
-            existingTranslations.Clear();
-            foreach (var item in existingTranslationsList)
-            {
-                existingTranslations.Add(item);
-            }
+            //// Converter de volta para ICollection
+            //existingTranslations.Clear();
+            //foreach (var item in existingTranslationsList)
+            //{
+            //    existingTranslations.Add(item);
+            //}
         }
 
         /// <summary>
