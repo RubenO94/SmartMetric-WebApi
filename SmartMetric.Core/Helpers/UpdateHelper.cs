@@ -38,6 +38,7 @@ namespace SmartMetric.Core.Helpers
                 {
                     existingQuestion.Position = questionUpdate.Position;
                     existingQuestion.IsRequired = questionUpdate.IsRequired;
+                    existingQuestion.ResponseType = questionUpdate.ResponseType.ToString();
 
                     // Question Translations
                     UpdateTranslations(existingQuestion.Translations, questionUpdate.Translations);
@@ -60,6 +61,7 @@ namespace SmartMetric.Core.Helpers
                     {
                         // Preencher propriedades da nova pergunta com base na DTO
                         QuestionId = questionUpdate.QuestionId,
+                        ResponseType = questionUpdate.ResponseType.ToString(),
                         Position = questionUpdate.Position,
                         IsRequired = questionUpdate.IsRequired,
 
