@@ -12,7 +12,7 @@ namespace SmartMetric.Core.DTO.UpdateRequest
     {
         [Required(ErrorMessage ="Question Id is required")]
         public Guid QuestionId { get; set; }
-
+        public ResponseType ResponseType { get; set; }
         public bool IsRequired { get; set; }
         public int? Position { get; set; }
         public List<TranslationDTOUpdate>? Translations { get; set; }
