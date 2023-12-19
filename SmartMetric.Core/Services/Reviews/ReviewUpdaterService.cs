@@ -3,9 +3,12 @@ using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.Helpers;
 using SmartMetric.Core.ServicesContracts.Reviews;
+using System.Linq.Expressions;
 using System.Net;
+using System.Net.WebSockets;
 
 namespace SmartMetric.Core.Services.Reviews
 {
@@ -55,6 +58,29 @@ namespace SmartMetric.Core.Services.Reviews
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Review updated successfully",
                 Data = matchingReview.ToReviewDTOResponse()
+            };
+        }
+
+        public async Task<ApiResponse<bool>> UpdateReviewStatus(Guid? reviewId, ReviewDTOUpdateStatus review)
+        {
+            _logger.LogInformation($"{nameof(ReviewUpdaterService)}.{nameof(UpdateReviewStatus)} foi iniciado");
+
+            if (reviewId == null) throw new ArgumentNullException(nameof(reviewId));
+
+            var enumNames = Enum.GetNames(typeof(ReviewStatus));
+            if (!enumNames.Any(name => name == review.ReviewStatus.ToString())) throw new ArgumentException("Review Status doesn't exist");
+
+            var matchingReview = await _reviewRepository.GetReviewById(reviewId.Value);
+
+            if (matchingReview == null) throw new ArgumentNullException("Review doesn't exist", nameof(reviewId));
+
+            var result = await _reviewRepository.UpdateReviewStatus(reviewId.Value, review);
+
+            return new ApiResponse<bool>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Review Status updated successfully",
+                Data = result
             };
         }
     }

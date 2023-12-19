@@ -6,6 +6,7 @@ namespace SmartMetric.Core.DTO.Response
     {
         public int DepartmentId { get; set; }
         public string? DepartmentDescription { get; set; }
+        public int? DepartmentParentId { get; set; }
         public List<EmployeeDTOResponse>? Employees { get; set; }
 
         /// <summary>
@@ -19,7 +20,7 @@ namespace SmartMetric.Core.DTO.Response
             if (obj.GetType() != typeof(DepartmentDTOResponse)) return false;
 
             DepartmentDTOResponse department = (DepartmentDTOResponse)obj;
-            return DepartmentId == department.DepartmentId && DepartmentDescription == department.DepartmentDescription;
+            return DepartmentId == department.DepartmentId && DepartmentDescription == department.DepartmentDescription && DepartmentParentId == department.DepartmentParentId;
         }
         public override int GetHashCode()
         {
@@ -41,6 +42,7 @@ namespace SmartMetric.Core.DTO.Response
             {
                 DepartmentId = departamento.Iddepartamento,
                 DepartmentDescription = departamento.Descricao,
+                DepartmentParentId = departamento.IddepartamentoPai
             };
         }
     }

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
+using SmartMetric.Core.DTO.UpdateRequest;
+using SmartMetric.Core.Enums;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories.Common;
 using System;
@@ -48,15 +50,23 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(GetAllReviews)} foi iniciado.");
 
-            return await _context.Reviews
+            IQueryable<Review> query = _context.Reviews
                 .Include(temp => temp.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
-                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department);
+
+            // Aplica a filtragem por idioma, se fornecido
+            if (!string.IsNullOrEmpty(language))
+            {
+                query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
+            }
+
+            // Aplica a paginação
+            query = query.Skip((page - 1) * pageSize).Take(pageSize);
+
+            return await query.ToListAsync();
         }
 
         public async Task<Review?> GetReviewById(Guid reviewId)
@@ -96,6 +106,18 @@ namespace SmartMetric.Infrastructure.Repositories
             matchingReview.ReviewType = review.ReviewType;
             matchingReview.Questions = review.Questions;
 
+            var result = await _context.SaveChangesAsync();
+
+            return result > 0;
+        }
+
+        public async Task<bool> UpdateReviewStatus(Guid reviewId, ReviewDTOUpdateStatus review)
+        {
+            _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(UpdateReview)} foi iniciado.");
+
+            Review? matchingReview = await _context.Reviews.FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
+            if (matchingReview == null) return false;
+            matchingReview.ReviewStatus = review.ReviewStatus.ToString();
             var result = await _context.SaveChangesAsync();
 
             return result > 0;
