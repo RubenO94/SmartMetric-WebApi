@@ -1,4 +1,6 @@
 ﻿using SmartMetric.Core.Domain.Entities;
+using SmartMetric.Core.DTO.UpdateRequest;
+using SmartMetric.Core.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +52,8 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<bool> UpdateReview(Review review);
 
         Task<int> GetTotalRecords(Expression<Func<Review, bool>>? filter = null);
+
+        Task<bool> UpdateReviewStatus(Guid reviewId, ReviewDTOUpdateStatus reviewStatus);
     }
 
 }

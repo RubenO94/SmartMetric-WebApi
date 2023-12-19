@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.UpdateRequest;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
 
 namespace SmartMetric.WebAPI.Controllers.v1
@@ -54,6 +55,14 @@ namespace SmartMetric.WebAPI.Controllers.v1
             var response = await _reviewUpdaterService.UpdateReview(reviewId, reviewDTOUpdate);
 
             return Ok(response);
+        }
+
+        [HttpPatch("{reviewId}")]
+        public async Task<IActionResult> UpdateReviewStatus(Guid? reviewId, [FromBody] ReviewDTOUpdateStatus review)
+        {
+            var response = await _reviewUpdaterService.UpdateReviewStatus(reviewId, review);
+            return Ok(response);
+            
         }
     }
 }
