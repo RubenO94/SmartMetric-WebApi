@@ -74,6 +74,18 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (matchingReview == null) throw new ArgumentNullException("Review doesn't exist", nameof(reviewId));
 
+            switch (matchingReview.ReviewStatus)
+            {
+                case "NotStarted":
+                    if (review.ReviewStatus != "Active" && review.ReviewStatus != "Canceled") throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
+                    break;
+                case "Active":
+                    if (review.ReviewStatus != "Canceled" && review.ReviewStatus != "Completed") throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
+                    break;
+                default:
+                    throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
+            }
+
             var result = await _reviewRepository.UpdateReviewStatus(reviewId.Value, review);
 
             return new ApiResponse<bool>()
