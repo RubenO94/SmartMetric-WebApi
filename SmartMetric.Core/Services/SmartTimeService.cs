@@ -67,7 +67,7 @@ namespace SmartMetric.Core.Services
 
         #region Perfis
 
-        public async Task<UserProfileDTOResponse> GetProfileByUserId(ApplicationUserType applicationUserType, int userId)
+        public async Task<ApiResponse<UserProfileDTOResponse>> GetProfileByUserId(ApplicationUserType applicationUserType, int userId)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetProfileByUserId)} foi iniciado");
 
@@ -85,7 +85,7 @@ namespace SmartMetric.Core.Services
 
                 var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
 
-                return new UserProfileDTOResponse()
+                var userProfile = new UserProfileDTOResponse()
                 {
                     UserId = user.Idutilizador,
                     UserName = user.Nome,
@@ -94,6 +94,13 @@ namespace SmartMetric.Core.Services
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
                     Permissions = windowPermissionsDTO
+                };
+
+                return new ApiResponse<UserProfileDTOResponse>()
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Message = "User Profile",
+                    Data = userProfile
                 };
 
             }
@@ -112,8 +119,7 @@ namespace SmartMetric.Core.Services
 
                 var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
 
-
-                return new UserProfileDTOResponse()
+                var userProfile = new UserProfileDTOResponse()
                 {
                     UserName = user.Nome,
                     UserEmail = user.Email,
@@ -121,7 +127,13 @@ namespace SmartMetric.Core.Services
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
                     Permissions = windowPermissionsDTO
+                };
 
+                return new ApiResponse<UserProfileDTOResponse>()
+                {
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Message = "User Profile",
+                    Data = userProfile
                 };
             }
 

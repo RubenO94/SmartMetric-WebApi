@@ -20,6 +20,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         {
             _smartTimeService = smartTimeService;
         }
+
         [HttpGet("Me")]
         public async Task<IActionResult> GetPerfil()
         {
