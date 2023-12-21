@@ -29,6 +29,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return Ok(response);
         }
 
+        [HttpGet("{reviewId}")]
+        public async Task<IActionResult> GetReviewById(Guid? reviewId)
+        {
+            var review = await _reviewGetterService.GetReviewById(reviewId);
+            return Ok(review);
+        }
+
         [HttpPost]
         public async Task<IActionResult> AddReview([FromBody] ReviewDTOAddRequest? request)
         {

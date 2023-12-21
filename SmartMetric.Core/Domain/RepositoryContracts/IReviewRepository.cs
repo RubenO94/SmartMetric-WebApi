@@ -53,7 +53,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
 
         Task<int> GetTotalRecords(Expression<Func<Review, bool>>? filter = null);
 
-        Task<bool> UpdateReviewStatus(Guid reviewId, ReviewDTOUpdateStatus reviewStatus);
+        Task<bool> UpdateReviewStatus(Guid reviewId, ReviewDTOUpdateStatus review);
     }
 
 }
