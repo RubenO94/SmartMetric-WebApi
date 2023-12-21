@@ -70,6 +70,8 @@ namespace SmartMetric.Core.Services.Reviews
             var enumNames = Enum.GetNames(typeof(ReviewStatus));
             if (!enumNames.Any(name => name == review.ReviewStatus.ToString())) throw new ArgumentException("Review Status doesn't exist");
 
+            if (review.ReviewStatus == "Active" && (review.EndDate == null || review.EndDate.ToString() == "")) throw new ArgumentNullException("To Change reviewStatus to Active need an End Date for review.");
+
             var matchingReview = await _reviewRepository.GetReviewById(reviewId.Value);
 
             if (matchingReview == null) throw new ArgumentNullException("Review doesn't exist", nameof(reviewId));

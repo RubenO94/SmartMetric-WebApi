@@ -220,7 +220,7 @@ namespace SmartMetric.WebAPI.StartupExtensions
                     policyBuilder
                     .WithOrigins(configuration.GetSection("AllowedOrigins").Get<string[]>()!)
                     .WithHeaders("Authorization", "origin", "accept", "content-type")
-                    .WithMethods("GET", "POST", "PUT", "DELETE")
+                    .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
                     ;
                 });
             });

@@ -27,7 +27,6 @@ namespace SmartMetric.Core.DTO.UpdateRequest
         /// <summary>
         /// Obtém ou define o título da tradução. Deve ter pelo menos 10 caracteres.
         /// </summary>
-        [MinLength(10, ErrorMessage = "The title must have a minimum length of 10 characters.")]
         public string? Title { get; set; }
 
         /// <summary>

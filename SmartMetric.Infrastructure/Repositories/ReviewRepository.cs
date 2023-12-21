@@ -118,6 +118,12 @@ namespace SmartMetric.Infrastructure.Repositories
             Review? matchingReview = await _context.Reviews.FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
             if (matchingReview == null) return false;
             matchingReview.ReviewStatus = review.ReviewStatus.ToString();
+            if (review.ReviewStatus.ToString() == "Active")
+            {
+                matchingReview.EndDate = review.EndDate;
+                matchingReview.StartDate = DateTime.UtcNow;
+            }
+            
             var result = await _context.SaveChangesAsync();
 
             return result > 0;

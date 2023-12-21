@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.Exceptions;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using System.Net;
 
@@ -23,9 +25,22 @@ namespace SmartMetric.Core.Services.Reviews
             throw new NotImplementedException();
         }
 
-        public Task<ApiResponse<ReviewDTOResponse?>> GetReviewById(Guid? reviewId)
+        public async Task<ApiResponse<ReviewDTOResponse?>> GetReviewById(Guid? reviewId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(ReviewGetterService)}.{nameof(GetReviewById)} foi iniciado");
+
+            if (reviewId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'reviewId' parameter is required and must be a valid GUID.");
+
+            var review = await _repository.GetReviewById(reviewId.Value);
+
+            if (review == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+
+            return new ApiResponse<ReviewDTOResponse?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = review?.ToReviewDTOResponse()!
+            };
         }
 
         public async Task<ApiResponse<List<ReviewDTOResponse>>> GetReviews(int page = 1, int pageSize = 2, Language? language = null)
