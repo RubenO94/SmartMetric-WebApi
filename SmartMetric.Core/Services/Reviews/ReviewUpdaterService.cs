@@ -33,6 +33,8 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (reviewDTOUpdate == null) throw new ArgumentNullException(nameof(reviewDTOUpdate));
 
+            if (reviewDTOUpdate.ReviewStatus != "NotStarted") throw new ArgumentException("Review can't be edited when reviewStatus different than NotStarted", nameof(reviewDTOUpdate.ReviewStatus));
+
             if (reviewDTOUpdate.StartDate >= reviewDTOUpdate.EndDate) throw new ArgumentException("Start date must be before the end date.", nameof(reviewDTOUpdate.StartDate));
 
             var departments = await _smartTimeRepository.GetDepartmentsByListIds(reviewDTOUpdate.DepartmentIds!.ToList());
