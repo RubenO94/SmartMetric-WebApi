@@ -28,6 +28,7 @@ namespace SmartMetric.Core.Services.FormTemplates
             FormTemplate? formTemplateExist =  await _formTemplateRepository.GetFormTemplateById(formTemplateId) ?? throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
 
             var response = await _formTemplateRepository.DeleteFormTemplateById(formTemplateExist.FormTemplateId);
+
             return new ApiResponse<bool>()
             {
                 StatusCode = (int)HttpStatusCode.NoContent,

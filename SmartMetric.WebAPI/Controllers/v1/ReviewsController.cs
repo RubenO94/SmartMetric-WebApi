@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
@@ -47,12 +48,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpDelete("{reviewId}")]
-        public async Task<IActionResult> DeleteReview(Guid? reviewId)
+        public async Task<ActionResult<ApiResponse<bool>>> DeleteReview(Guid? reviewId)
         {
             var response = await _reviewDeleterService.DeleteReviewById(reviewId);
-
-            if (response.Data == true) return NoContent();
-            return BadRequest();
+            return response;
         }
 
         [HttpPut("{reviewId}")]
