@@ -40,10 +40,20 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(DeleteReview)} foi iniciado.");
 
-            _context.Reviews.RemoveRange(_context.Reviews.Where(temp => temp.ReviewId == reviewId));
-            var result = await _context.SaveChangesAsync();
+            //_context.Reviews.RemoveRange(_context.Reviews.Where(temp => temp.ReviewId == reviewId));
+            //var result = await _context.SaveChangesAsync();
 
-            return result > 0;
+            //return result > 0;
+
+            var reviewToDelete = await _context.Reviews.FindAsync(reviewId);
+            if (reviewToDelete != null )
+            {
+                _context.Reviews.Remove(reviewToDelete);
+                var rowsDeleted = await _context.SaveChangesAsync();
+                return rowsDeleted > 0;
+            }
+
+            return false;
         }
 
         public async Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null)
