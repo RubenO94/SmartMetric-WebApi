@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories.Common
 {
-    public class BaseRepository : IBaseRepository
+    public abstract class BaseRepository : IBaseRepository
     {
         private readonly ApplicationDbContext _dbContext;
 

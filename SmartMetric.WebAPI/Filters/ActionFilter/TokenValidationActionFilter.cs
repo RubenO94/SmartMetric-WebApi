@@ -141,7 +141,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
         /// <returns>As informações do utilizador em objeto UserDTO se bem-sucedido, null caso contrário.</returns>
         private async Task<UserDTO?> TryGetUserFromToken(ClaimsPrincipal claimsPrincipal, ActionExecutingContext context)
         {
-            if (Enum.TryParse(typeof(ApplicationUserType), claimsPrincipal.FindFirstValue(ClaimTypes.GivenName), out object? valorEnum))
+            if (Enum.TryParse(typeof(ApplicationUserType), claimsPrincipal.FindFirst("UserType")?.Value, out object? valorEnum))
             {
                 ApplicationUserType? applicationUserType = (ApplicationUserType)valorEnum;
 
@@ -151,7 +151,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
                     return null;
                 }
 
-                string? id = claimsPrincipal.FindFirstValue(ClaimTypes.NameIdentifier);
+                string? id = claimsPrincipal.FindFirst("UserId")?.Value;
 
                 if (int.TryParse(id, out int userId))
                 {

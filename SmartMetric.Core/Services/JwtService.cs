@@ -37,16 +37,16 @@ namespace SmartMetric.Core.Services
 
             // Define as claims a serem incluídas no token
             Claim[] claims = new Claim[]
-            {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()), // Assunto (id do utilizador)
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()), // ID único do JWT
-            new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()), // Emitido em (data e hora da geração do token)
-            new Claim(JwtRegisteredClaimNames.Name, user.UserName!.ToString()), // Nome do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.UserId!.ToString()), // Id do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.Email, user.UserEmail?.ToString() ?? string.Empty),// Email do utilizador (Opcional)
-            new Claim(JwtRegisteredClaimNames.GivenName, user.ApplicationUserType!.ToString()!),// tipo de utilizador da aplicação (Opcional),
-            new Claim(JwtRegisteredClaimNames.FamilyName, user.UserProfileId!.ToString() ?? string.Empty),// id do perfil do utilizador,
-            new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(expiration).ToUnixTimeSeconds().ToString()) // Tempo de expiração (Obrigatório)
+{
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, DateTime.Now.ToString()),
+                new Claim(JwtRegisteredClaimNames.Name, user.UserName?.ToString() ?? string.Empty),
+                new Claim("UserId", user.UserId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.UserEmail?.ToString() ?? string.Empty),
+                new Claim("UserType", user.ApplicationUserType.ToString()!), // Claim personalizada para o tipo de user
+                new Claim("UserProfileId", user.UserProfileId?.ToString() ?? string.Empty), // Claim personalizada para o ID do perfil do user
+                new Claim(JwtRegisteredClaimNames.Exp, new DateTimeOffset(expiration).ToUnixTimeSeconds().ToString())
             };
 
             // Configura a chave de segurança e as credenciais de assinatura

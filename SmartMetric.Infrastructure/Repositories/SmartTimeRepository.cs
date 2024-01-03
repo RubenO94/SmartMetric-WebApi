@@ -43,16 +43,16 @@ namespace SmartMetric.Infrastructure.Repositories
             return result.Select(temp => temp.PermissionId).ToList();
         }
 
-        public async Task<ProfilePermission?> AddProfilePermission(ProfilePermission profilePermission)
+        public async Task<List<ProfilePermission>?> AddProfilePermissions(List<ProfilePermission> profilePermissions)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(AddProfilePermission)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(AddProfilePermissions)} foi iniciado");
 
-            if (profilePermission == null) return null;
+            if (profilePermissions == null) return null;
 
-            _context.ProfilePermissions.Add(profilePermission);
+            _context.ProfilePermissions.AddRange(profilePermissions);
             await _context.SaveChangesAsync();
 
-            return profilePermission;
+            return profilePermissions;
         }
 
         #endregion

@@ -23,10 +23,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpPost("{profileId}/Permissions")]
-        public async Task<IActionResult> AddPermisssion(int profileId, [FromBody] int permissionId)
+        public async Task<IActionResult> AddPermissions(int profileId, [FromBody] List<int> permissionIds)
         {
-            var response = await _smartTimeService.AddWindowPermissionToProfile(profileId, permissionId);
+            var response = await _smartTimeService.AddWindowPermissionsToProfile(profileId, permissionIds);
+
             return Ok(response);
         }
+
     }
 }

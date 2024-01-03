@@ -35,6 +35,7 @@ using SmartMetric.Core.Services.SingleChoiceOptionTranslations;
 using SmartMetric.Core.Domain.RepositoryContracts.Common;
 using SmartMetric.Infrastructure.Repositories.Common;
 using Microsoft.OpenApi.Models;
+using SmartMetric.WebAPI.Filters.AutorizationFilter;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
@@ -44,12 +45,11 @@ namespace SmartMetric.WebAPI.StartupExtensions
         {
 
             #region Repositories
-
             //SmartTime
             services.AddScoped<ISmartTimeRepository, SmartTimeRepository>();
 
             //Metrics
-            services.AddScoped<IBaseRepository, BaseRepository>();
+            //services.AddScoped<IBaseRepository, BaseRepository>();
 
             services.AddScoped<IFormTemplateRepository, FormTemplateRepository>();
             services.AddScoped<IFormTemplateTranslationRepository, FormTemplateTranslationRepository>();
@@ -130,11 +130,12 @@ namespace SmartMetric.WebAPI.StartupExtensions
 
             services.AddControllers(options =>
             {
-                options.Filters.Add(typeof(ValidationErrorHandlingAttribute));
-                options.Filters.Add(typeof(RequestValidationAttribute));
+                options.Filters.Add<TokenValidationActionFilter>();
+                options.Filters.Add(typeof(PermissionFilter));
                 options.Filters.Add(new ProducesAttribute("application/json"));
                 options.Filters.Add(new ConsumesAttribute("application/json"));
-                options.Filters.Add<TokenValidationActionFilter>();
+                options.Filters.Add(typeof(RequestValidationAttribute));
+                options.Filters.Add(typeof(ValidationErrorHandlingAttribute));
 
                 //Authorization policy
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();

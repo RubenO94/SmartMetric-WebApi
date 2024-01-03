@@ -140,34 +140,52 @@ namespace SmartMetric.Core.Services
             throw new ArgumentException("Unidentified application user", "Application User");
         }
 
-        public async Task<ApiResponse<PermissionDTO?>> AddWindowPermissionToProfile(int profileId, int permissionID)
+        public async Task<ApiResponse<List<PermissionDTO>>> AddWindowPermissionsToProfile(int profileId, List<int> permissionsIDs)
         {
-            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(AddWindowPermissionToProfile)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(AddWindowPermissionsToProfile)} foi iniciado");
 
             if (profileId == 0) throw new ArgumentException("Invalid profile id", nameof(profileId));
-            if (permissionID == default) throw new ArgumentException("Permission Id can't be null or zero", nameof(permissionID));
+            if (permissionsIDs == null || !permissionsIDs.Any()) throw new ArgumentException("Permissions List can't be null or empty", nameof(permissionsIDs));
 
             var profile = await _smartTimeRepository.GetProfileById(profileId);
 
-            if (profile == null) throw new ArgumentException($"Profile with id ${profileId} don't exist", nameof(profileId));
-            if (!WindowPermissionHelper.PermissionIdExists(permissionID)) throw new ArgumentException($"Permission with id ${permissionID} don't exist", nameof(permissionID));
-
-            var permission = new ProfilePermission()
+            if (profile == null) throw new ArgumentException($"Profile with id {profileId} don't exist", nameof(profileId));
+            foreach (int permissionId in permissionsIDs)
             {
-                PermissionId = permissionID,
-                ProfileId = profileId,
-            };
-            await _smartTimeRepository.AddProfilePermission(permission);
+                if (!WindowPermissionHelper.PermissionIdExists(permissionId)) throw new ArgumentException($"Permission with id {permissionId} don't exist", nameof(permissionId));
+            }
 
-            return new ApiResponse<PermissionDTO?>()
+            // TODO: Verificar se o perfil já tem alguma das permissões;
+            var existingProfilePermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(profileId);
+
+            var permissionsToAdd = permissionsIDs
+            .Except(existingProfilePermissions)
+            .Select(permissionId => new ProfilePermission
+            {
+                PermissionId = permissionId,
+                ProfileId = profileId,
+            })
+            .ToList();
+
+
+            if (!permissionsToAdd.Any())
+            {
+                throw new ArgumentException($"Profile {profile.Nome} already have this permissions");
+
+            }
+
+            var permissionsIdsResponse = await _smartTimeRepository.AddProfilePermissions(permissionsToAdd);
+
+            return new ApiResponse<List<PermissionDTO>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = $"Permission added with success to profile {profile.Nome}",
-                Data = new PermissionDTO()
+                Data = permissionsToAdd.Select(permission => new PermissionDTO
                 {
-                    PermissionId = permissionID,
+                    PermissionId = permission.PermissionId,
                     HasPermission = true,
-                },
+                }).ToList(),
+
             };
 
         }

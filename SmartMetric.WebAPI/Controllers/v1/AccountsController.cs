@@ -6,6 +6,7 @@ using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 using SmartMetric.WebAPI.Filters.ActionFilters;
 using SmartMetric.WebAPI.Filters.AutorizationFilter;
 using System.Net;
@@ -34,9 +35,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet("Dev/AuthToken")]
+        [SkipPermissionAuthorization]
         public IActionResult GenerateAuthToken()
         {
-            byte[] encbuff = Encoding.UTF8.GetBytes("Viagens" + "§" + DateTime.Now.Ticks + "§" + "508268800");
+            byte[] encbuff = Encoding.UTF8.GetBytes("Pedro.Maia" + "§" + DateTime.Now.Ticks + "§" + "508268800");
 
             string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
 
@@ -45,6 +47,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
         [HttpGet]
         [TokenAuthorizationFilter]
+        [SkipPermissionAuthorization]
         public async Task<IActionResult> SignIn([FromQuery] string? token)
         {
 
@@ -96,6 +99,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
 
         [HttpPost]
+        [SkipPermissionAuthorization]
         public async Task<IActionResult> GenerateNewAccessToken(TokenDTO? token)
         {
             //TODO: ApplicationUserType
@@ -112,7 +116,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             }
 
 
-            if (Enum.TryParse(typeof(ApplicationUserType), principal.FindFirstValue(ClaimTypes.GivenName), out object? valorEnum))
+            if (Enum.TryParse(typeof(ApplicationUserType), principal.FindFirst("UserType")?.Value, out object? valorEnum))
             {
                 ApplicationUserType? applicationUserType = (ApplicationUserType)valorEnum;
 
@@ -121,7 +125,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
                     throw new ArgumentException("Access Token", "Invalid access token");
                 }
 
-                string? id = principal.FindFirstValue(ClaimTypes.NameIdentifier);
+                string? id = principal.FindFirst("UserId")?.Value;
                 int userId = Convert.ToInt32(id);
 
                 UserDTO? user = applicationUserType == ApplicationUserType.User ? await _smartTimeService.GetUserById(userId) : await _smartTimeService.GetEmployeeById(userId);

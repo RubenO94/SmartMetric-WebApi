@@ -39,12 +39,16 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
             {
                 HandleArgumentException(context, argumentException);
             }
+            else if (context.Exception is UnauthorizedAccessException unauthorizedException)
+            {
+                HandleUnauthorizedAccessException(context, unauthorizedException);
+            }
             else if (context.Exception is JsonException)
             {
                 context.Result = new BadRequestObjectResult(new { Error = "Error processing JSON" });
                 context.ExceptionHandled = true;
             }
-            else if(context.Exception is NotImplementedException notImplementedException)
+            else if (context.Exception is NotImplementedException notImplementedException)
             {
                 HandleNotImplementedException(context, notImplementedException);
             }
@@ -53,6 +57,16 @@ namespace SmartMetric.WebAPI.Filters.ExceptionFilter
                 // Lógica de tratamento para outras exceções
                 HandleGenericException(context);
             }
+        }
+
+        private void HandleUnauthorizedAccessException(ExceptionContext context, UnauthorizedAccessException unauthorizedException)
+        {
+            context.Result = new UnauthorizedObjectResult(new
+            {
+                Error = "Authorization error",
+                Details = unauthorizedException.Message
+            });
+            context.ExceptionHandled = true;
         }
 
         private void HandleNotImplementedException(ExceptionContext context, NotImplementedException notImplementedException)

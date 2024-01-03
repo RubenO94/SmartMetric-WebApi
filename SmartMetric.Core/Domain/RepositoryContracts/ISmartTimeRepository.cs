@@ -20,7 +20,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<Perfil?> GetProfileById(int profileId);
         Task<List<int>> GetProfileWindowsByProfileId(int profileId);
 
-        Task<ProfilePermission?> AddProfilePermission(ProfilePermission profilePermission);
+        Task<List<ProfilePermission>?> AddProfilePermissions(List<ProfilePermission> profilePermissions);
         #endregion
 
         #region Utilizadores

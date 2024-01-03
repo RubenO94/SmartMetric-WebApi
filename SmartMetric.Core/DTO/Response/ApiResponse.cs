@@ -24,14 +24,15 @@ namespace SmartMetric.Core.DTO.Response
         public string? Message { get; set; }
 
         /// <summary>
+        /// Obtém ou define o total de registos da entidade associada, caso esta seja em lista.
+        /// </summary>
+        public int? TotalCount { get; set; }
+
+        /// <summary>
         /// Obtém ou define os dados associados à resposta.
         /// </summary>
         public T? Data { get; set; }
 
-        /// <summary>
-        /// Obtém ou define o total de registos da entidade associada, caso esta seja em lista.
-        /// </summary>
-        public int? TotalCount { get; set; }
     }
 
 }
