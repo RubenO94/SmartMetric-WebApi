@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -18,6 +20,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         
 
         [HttpGet("{profileId}/Departments")]
+        [PermissionRequired(WindowType.Profiles, PermissionType.Read)]
         public async Task<IActionResult> GetDepartmentsByProfileId(int profileId, [FromQuery] int page = 1, int pageSize = 20)
         {
             var response = await _smartTimeService.GetDepartmentsByProfileId(profileId, page, pageSize);
@@ -25,6 +28,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpPost("{profileId}/Permissions")]
+        [PermissionRequired(WindowType.Profiles, PermissionType.Create)]
         public async Task<IActionResult> AddPermissions(int profileId, [FromBody] List<int> permissionIds)
         {
             var response = await _smartTimeService.AddWindowPermissionsToProfile(profileId, permissionIds);

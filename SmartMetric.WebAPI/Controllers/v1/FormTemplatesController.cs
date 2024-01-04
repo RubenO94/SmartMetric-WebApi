@@ -6,6 +6,7 @@ using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.FormTemplates;
 using SmartMetric.Core.ServicesContracts.FormTemplateTranslations;
 using SmartMetric.Core.ServicesContracts.Questions;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -62,6 +63,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// Retorna todos os FormTemplates
         /// </summary>
         /// <returns></returns>
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Read)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null)
         {
@@ -76,6 +78,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="formTemplateId"></param>
         /// <returns></returns>
         [HttpGet("{formTemplateId}")]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Read)]
         public async Task<ActionResult<FormTemplateDTOResponse>> GetFormTemplateById(Guid? formTemplateId)
         {
             var formTemplate = await _formTemplateGetterService.GetFormTemplateById(formTemplateId);
@@ -88,6 +91,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="formTemplateDTOAddRequest"></param>
         /// <returns></returns>
         [HttpPost]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Create)]
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest? formTemplateDTOAddRequest)
         {
             var response = await _formTemplateAdderService.AddFormTemplate(formTemplateDTOAddRequest);
@@ -102,6 +106,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <returns></returns>
         [HttpPost]
         [Route("{formTemplateId}/Translations")]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Create)]
         public async Task<IActionResult> AddFormTemplateTranslation(Guid? formTemplateId, [FromBody] TranslationDTOAddRequest? formTemplateTranslationDTOAddRequest)
         {
             var translation = await _formTemplateTranslationsAdderService.AddFormTemplateTranslation(formTemplateId, formTemplateTranslationDTOAddRequest);
@@ -117,6 +122,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <returns></returns>
         [HttpPost]
         [Route("{formTemplateId}/Questions")]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Create)]
         public async Task<IActionResult> AddQuestionToFormTemplate(Guid? formTemplateId, [FromBody] QuestionDTOAddRequest questionDTOAddRequest)
         {
 
@@ -130,6 +136,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="formTemplateId"></param>
         /// <returns></returns>
         [HttpDelete("{formTemplateId}")]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Delete)]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateById(Guid? formTemplateId)
         {
             var response = await _formTemplatesDeleterService.DeleteFormTemplateById(formTemplateId);
@@ -143,6 +150,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="language"></param>
         /// <returns></returns>
         [HttpDelete("{formTemplateId}/Translations")]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Delete)]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateTranslation(Guid? formTemplateId, [FromQuery] Language language)
         {
             var response = await _formTemplateTranslationsDeleterService.DeleteFormTemplateTranslationById(formTemplateId, language);
@@ -156,6 +164,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="formTemplate"></param>
         /// <returns></returns>
         [HttpPut("{formTemplateId}")]
+        [PermissionRequired(WindowType.FormTemplates, PermissionType.Update)]
         public async Task<IActionResult> UpdateFormTemplate(Guid? formTemplateId, [FromBody] FormTemplateDTOUpdate formTemplate)
         {
             var response = await _formTemplatesUpdaterService.UpdateFormTemplate(formTemplateId, formTemplate);

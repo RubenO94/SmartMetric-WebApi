@@ -4,6 +4,7 @@ using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
+using SmartMetric.WebAPI.Filters.ActionFilter;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
@@ -23,20 +24,21 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _reviewUpdaterService = reviewUpdaterService;
         }
 
+        [PermissionRequired(WindowType.Reviews, PermissionType.Read)]
         [HttpGet]
         public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20) 
         {
             var response = await _reviewGetterService.GetReviews(page, pageSize);
             return Ok(response);
         }
-
+        [PermissionRequired(WindowType.Reviews, PermissionType.Read)]
         [HttpGet("{reviewId}")]
         public async Task<IActionResult> GetReviewById(Guid? reviewId)
         {
             var review = await _reviewGetterService.GetReviewById(reviewId);
             return Ok(review);
         }
-
+        [PermissionRequired(WindowType.Reviews, PermissionType.Create)]
         [HttpPost]
         public async Task<IActionResult> AddReview([FromBody] ReviewDTOAddRequest? request)
         {
@@ -46,14 +48,14 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             return BadRequest(response);
         }
-
+        [PermissionRequired(WindowType.Reviews, PermissionType.Delete)]
         [HttpDelete("{reviewId}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteReview(Guid? reviewId)
         {
             var response = await _reviewDeleterService.DeleteReviewById(reviewId);
             return response;
         }
-
+        [PermissionRequired(WindowType.Reviews, PermissionType.Update)]
         [HttpPut("{reviewId}")]
         public async Task<IActionResult> UpdateReview(Guid? reviewId, [FromBody] ReviewDTOUpdate? reviewDTOUpdate)
         {
@@ -62,7 +64,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             return Ok(response);
         }
-
+        [PermissionRequired(WindowType.Reviews, PermissionType.Patch)]
         [HttpPatch("{reviewId}")]
         public async Task<IActionResult> UpdateReviewStatus(Guid? reviewId, [FromBody] ReviewDTOUpdateStatus review)
         {

@@ -17,6 +17,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _smartTimeService = smartTimeService;
         }
 
+        [PermissionRequired(WindowType.Departments, PermissionType.Read)]
         [HttpGet]
         public async Task<IActionResult> GetAllDepartmentsByProfileId(int page = 1, int pageSize = 20)
         {
@@ -29,7 +30,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             throw new ArgumentException("User does not have an associated profile");
         }
-
+        [PermissionRequired(WindowType.Departments, PermissionType.Read)]
         [HttpGet("{departmentId}/Employees")]
         public async Task<IActionResult> GetDepartmentEmployees(int departmentId)
         {
