@@ -8,6 +8,7 @@ namespace SmartMetric.Core.DTO.UpdateRequest
 {
     public class ReviewDTOUpdateStatus
     {
+        public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public required string ReviewStatus { get; set; }
     }

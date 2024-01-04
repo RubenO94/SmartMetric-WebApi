@@ -74,6 +74,10 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (review.ReviewStatus == "Active" && (review.EndDate == null || review.EndDate.ToString() == "")) throw new ArgumentNullException("To Change reviewStatus to Active need an End Date for review.");
 
+            review.StartDate = DateTime.UtcNow;
+
+            if (review.StartDate >= review.EndDate) throw new ArgumentException("Start date must be before the end date.", nameof(review.StartDate));
+
             var matchingReview = await _reviewRepository.GetReviewById(reviewId.Value);
 
             if (matchingReview == null) throw new ArgumentNullException("Review doesn't exist", nameof(reviewId));
