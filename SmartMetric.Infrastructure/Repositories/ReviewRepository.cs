@@ -131,7 +131,7 @@ namespace SmartMetric.Infrastructure.Repositories
             if (review.ReviewStatus.ToString() == "Active")
             {
                 matchingReview.EndDate = review.EndDate;
-                matchingReview.StartDate = DateTime.UtcNow;
+                matchingReview.StartDate = review.StartDate;
             }
             
             var result = await _context.SaveChangesAsync();
