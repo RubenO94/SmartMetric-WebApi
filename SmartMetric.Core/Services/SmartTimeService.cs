@@ -93,7 +93,7 @@ namespace SmartMetric.Core.Services
                     EmployeeId = user.Idfuncionario,
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
-                    Permissions = windowPermissionsDTO
+                    Authorizations = windowPermissionsDTO
                 };
 
                 return new ApiResponse<UserProfileDTOResponse>()
@@ -126,7 +126,7 @@ namespace SmartMetric.Core.Services
                     EmployeeId = user.Idfuncionario,
                     ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
                     ProfileDescription = profile.Nome,
-                    Permissions = windowPermissionsDTO
+                    Authorizations = windowPermissionsDTO
                 };
 
                 return new ApiResponse<UserProfileDTOResponse>()

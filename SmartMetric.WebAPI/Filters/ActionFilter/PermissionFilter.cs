@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts;
+using SmartMetric.Infrastructure.Models;
 using System;
 using System.Linq;
 
@@ -72,6 +73,8 @@ namespace SmartMetric.WebAPI.Filters.ActionFilter
                 return;
             }
 
+            // remove "Bearer " prefix
+            token = token.ToString().Replace("Bearer ", "");
             var principal = _jwtService.GetPrincipalFromJwtToken(token);
             if (principal == null)
             {
