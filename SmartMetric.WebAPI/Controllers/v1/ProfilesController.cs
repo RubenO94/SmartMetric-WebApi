@@ -15,6 +15,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _smartTimeService = smartTimeService;
         }
 
+        
+
         [HttpGet("{profileId}/Departments")]
         public async Task<IActionResult> GetDepartmentsByProfileId(int profileId, [FromQuery] int page = 1, int pageSize = 20)
         {

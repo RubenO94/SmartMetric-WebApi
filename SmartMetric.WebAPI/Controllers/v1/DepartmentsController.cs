@@ -18,7 +18,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpGet]
-        //[PermissionRequired(23124001)]
         public async Task<IActionResult> GetAllDepartmentsByProfileId(int page = 1, int pageSize = 20)
         {
             if (HttpContext.Items.TryGetValue("UserProfileId", out var userProfileIdObj) && userProfileIdObj is int userProfileId)
@@ -32,7 +31,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         [HttpGet("{departmentId}/Employees")]
-        //[PermissionRequired(23124001)]
         public async Task<IActionResult> GetDepartmentEmployees(int departmentId)
         {
             if (HttpContext.Items.TryGetValue("UserProfileId", out var userProfileIdObj) && userProfileIdObj is int userProfileId)

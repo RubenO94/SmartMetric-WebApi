@@ -1,4 +1,5 @@
-﻿using SmartMetric.Infrastructure.Models;
+﻿using SmartMetric.Core.Enums;
+using SmartMetric.Infrastructure.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace SmartMetric.Core.DTO
     public class PermissionDTO
     {
         public int PermissionId { get; set; }
-        public string? PermissionType { get; set; }
+        public PermissionType? PermissionType { get; set; }
         public bool HasPermission { get; set; }
 
         public PerfisJanela ToPerfilJanela()
