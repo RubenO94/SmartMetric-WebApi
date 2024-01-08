@@ -34,26 +34,64 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _context.Perfis.FirstOrDefaultAsync(temp => temp.Idperfil == perfilId);
         }
 
-        public async Task<List<int>> GetProfileWindowsByProfileId(int profileId)
+        public async Task<List<int>> GetProfilePermissionIds(int profileId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfileWindowsByProfileId)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfilePermissionIds)} foi iniciado");
 
             var result = await _context.ProfilePermissions.Where(temp => temp.ProfileId == profileId).ToListAsync();
 
             return result.Select(temp => temp.PermissionId).ToList();
         }
 
-        public async Task<List<ProfilePermission>?> AddProfilePermissions(List<ProfilePermission> profilePermissions)
+        public Task<List<ProfilePermission>> GetProfilePermissions(int profileId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(AddProfilePermissions)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetProfilePermissions)} foi iniciado");
 
-            if (profilePermissions == null) return null;
-
-            _context.ProfilePermissions.AddRange(profilePermissions);
-            await _context.SaveChangesAsync();
-
-            return profilePermissions;
+            return _context.ProfilePermissions.Where(temp => temp.ProfileId == profileId).ToListAsync();
         }
+
+
+        public async Task<List<ProfilePermission>?> UpdateProfilePermissions(int profileId, List<int> permissionsIds)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(UpdateProfilePermissions)} foi iniciado");
+
+            var existingProfilePermissions = await _context.ProfilePermissions
+                .Where(temp => temp.ProfileId == profileId)
+                .ToListAsync();
+
+            var permissionsToAdd = permissionsIds
+                .Except(existingProfilePermissions.Select(p => p.PermissionId))
+                .Select(permissionId => new ProfilePermission
+                {
+                    PermissionId = permissionId,
+                    ProfileId = profileId,
+                })
+                .ToList();
+
+            var permissionsToDelete = existingProfilePermissions
+                .Where(p => !permissionsIds.Contains(p.PermissionId))
+                .ToList();
+
+            if (permissionsToAdd.Any())
+            {
+                await _context.ProfilePermissions.AddRangeAsync(permissionsToAdd);
+            }
+
+            if (permissionsToDelete.Any())
+            {
+                _context.ProfilePermissions.RemoveRange(permissionsToDelete);
+            }
+
+            if (permissionsToAdd.Any() || permissionsToDelete.Any())
+            {
+                await _context.SaveChangesAsync();
+            }
+
+            return await _context.ProfilePermissions
+                .Where(temp => temp.ProfileId == profileId)
+                .ToListAsync();
+        }
+
 
         #endregion
 

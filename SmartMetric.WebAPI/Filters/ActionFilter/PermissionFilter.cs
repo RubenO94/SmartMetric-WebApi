@@ -107,7 +107,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilter
                 return;
             }
 
-            var userWindowPermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(profileId);
+            var userWindowPermissions = await _smartTimeRepository.GetProfilePermissionIds(profileId);
 
             var hasPermission = userWindowPermissions.Contains(requiredPermission);
 
