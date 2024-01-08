@@ -48,6 +48,9 @@ namespace SmartMetric.Core.Services.Reviews
                 review.Departments?.Add(new ReviewDepartment() { Department = department, Review = review });
             }
 
+
+            //var employess = await _smartTimeRepository.
+
             var result = await _reviewRepository.AddReview(review);
 
             if (result)

@@ -209,7 +209,7 @@
             </summary>
         </member>
         <!-- Badly formed XML comment ignored for member "M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.#ctor(SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewAdderService,SmartMetric.Core.ServicesContracts.Reviews.IReviewDeleterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewUpdaterService)" -->
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
             <summary>
             Obtém todas as avaliações paginadas.
             </summary>

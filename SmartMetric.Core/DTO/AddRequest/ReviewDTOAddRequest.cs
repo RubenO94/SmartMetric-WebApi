@@ -66,6 +66,13 @@ namespace SmartMetric.Core.DTO.AddRequest
         public List<int>? ReviewDepartmentsIds { get; set; }
 
         /// <summary>
+        /// Obtém ou define os IDs dos departamentos associados à revisão. Este campo é obrigatório.
+        /// </summary>
+        [Required(ErrorMessage = "ReviewEmployeesIds is required.")]
+        [MinLength(1, ErrorMessage = "At least one employee is required.")]
+        public List<int>? ReviewEmployeesIds { get; set; }
+
+        /// <summary>
         /// Converte o DTO de solicitação para a entidade correspondente de revisão.
         /// </summary>
         /// <returns>A entidade de revisão.</returns>
@@ -82,6 +89,7 @@ namespace SmartMetric.Core.DTO.AddRequest
                 Translations = Translations?.Select(temp => temp.ToReviewTranslation()).ToList() ?? null,
                 Questions = Questions?.Select(temp => temp.ToQuestion()).ToList() ?? null,
                 Departments = new List<ReviewDepartment>(),
+                Employees = new List<ReviewEmployee>()
             };
         }
     }

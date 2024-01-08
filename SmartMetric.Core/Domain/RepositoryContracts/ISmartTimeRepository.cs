@@ -14,7 +14,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
     public interface ISmartTimeRepository
     {
 
-        Task<int> GetTotalRecords();
+        Task<int> GetTotalRecords<TEntity>() where TEntity : class;
 
         #region Perfis
         Task<Perfil?> GetProfileById(int profileId);

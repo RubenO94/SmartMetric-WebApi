@@ -326,9 +326,9 @@ namespace SmartMetric.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<int> GetTotalRecords()
+        public async Task<int> GetTotalRecords<TEntity>() where TEntity : class
         {
-            return await base.CountRecords<Departamento>();
+            return await base.CountRecords<TEntity>();
         }
 
         #endregion

@@ -42,9 +42,9 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <returns>Um IActionResult representando as avaliações obtidas.</returns>
         [PermissionRequired(WindowType.Reviews, PermissionType.Read)]
         [HttpGet]
-        public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20) 
+        public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20, Language? language = null) 
         {
-            var response = await _reviewGetterService.GetReviews(page, pageSize);
+            var response = await _reviewGetterService.GetReviews(page, pageSize, language);
             return Ok(response);
         }
 

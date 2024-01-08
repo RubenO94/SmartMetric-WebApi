@@ -47,7 +47,9 @@ namespace SmartMetric.Core.Services.Reviews
         {
             var result =  await _repository.GetAllReviews(page, pageSize, language.ToString());
 
-            var totalCount = await _repository.GetTotalRecords(temp => temp.Translations!.Any(tr => tr.Language == language.ToString()));
+            var hasLanguage = language != null;
+
+            var totalCount = await _repository.GetTotalRecords(hasLanguage ? temp => temp.Translations!.Any(tr => tr.Language == language.ToString()) : null);
 
             return new ApiResponse<List<ReviewDTOResponse>>() 
             { 

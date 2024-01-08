@@ -26,7 +26,9 @@ namespace SmartMetric.Core.Services.FormTemplates
 
             var response = formTemplates.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
-            var totalCount = await _formTemplateRepository.GetTotalRecords(temp => temp.Translations!.Any(tr => tr.Language == language.ToString()));
+            var hasLanguage = language != null;
+
+            var totalCount = await _formTemplateRepository.GetTotalRecords( hasLanguage ? temp => temp.Translations!.Any(tr => tr.Language == language.ToString()): null);
 
             return new ApiResponse<List<FormTemplateDTOResponse?>>()
             {

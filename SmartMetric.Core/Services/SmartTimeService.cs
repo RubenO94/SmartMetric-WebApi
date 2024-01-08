@@ -32,7 +32,7 @@ namespace SmartMetric.Core.Services
 
             var departments = await _smartTimeRepository.GetAllDepartaments(page, pageSize);
 
-            var totalCount = await _smartTimeRepository.GetTotalRecords();
+            var totalCount = await _smartTimeRepository.GetTotalRecords<Departamento>();
 
             return new ApiResponse<List<DepartmentDTOResponse>>()
             {
@@ -55,7 +55,7 @@ namespace SmartMetric.Core.Services
 
             var departments = await _smartTimeRepository.GetDepartmentsByPerfilId(profileId.Value, page, pageSize);
 
-            var totalCount = await _smartTimeRepository.GetTotalRecords();
+            var totalCount = await _smartTimeRepository.GetTotalRecords<Departamento>();
 
             return new ApiResponse<List<DepartmentDTOResponse>>()
             {
