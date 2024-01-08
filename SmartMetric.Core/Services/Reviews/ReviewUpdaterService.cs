@@ -72,7 +72,7 @@ namespace SmartMetric.Core.Services.Reviews
             var enumNames = Enum.GetNames(typeof(ReviewStatus));
             if (!enumNames.Any(name => name == review.ReviewStatus.ToString())) throw new ArgumentException("Review Status doesn't exist");
 
-            if (review.ReviewStatus == "Active" && (review.EndDate == null || review.EndDate.ToString() == "")) throw new ArgumentNullException("To Change reviewStatus to Active need an End Date for review.");
+            if (review.ReviewStatus == ReviewStatus.Active && (review.EndDate == null || review.EndDate.ToString() == "")) throw new ArgumentNullException("To Change reviewStatus to Active need an End Date for review.");
 
             review.StartDate = DateTime.UtcNow;
 
@@ -85,10 +85,10 @@ namespace SmartMetric.Core.Services.Reviews
             switch (matchingReview.ReviewStatus)
             {
                 case "NotStarted":
-                    if (review.ReviewStatus != "Active" && review.ReviewStatus != "Canceled") throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
+                    if (review.ReviewStatus != ReviewStatus.Active && review.ReviewStatus != ReviewStatus.Canceled) throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
                     break;
                 case "Active":
-                    if (review.ReviewStatus != "Canceled" && review.ReviewStatus != "Completed") throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
+                    if (review.ReviewStatus != ReviewStatus.Canceled && review.ReviewStatus != ReviewStatus.Completed) throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
                     break;
                 default:
                     throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");

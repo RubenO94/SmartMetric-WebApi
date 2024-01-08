@@ -216,16 +216,6 @@ namespace SmartMetric.Core.Services
 
         }
 
-        public ApiResponse<List<WindowPermissionDTO>> GetAllWindows()
-        {
-            return new ApiResponse<List<WindowPermissionDTO>>()
-            {
-                StatusCode = 200,
-                Message = "Success",
-                Data = WindowPermissionHelper.GetAllWindows(),
-            };
-        }
-
         #endregion
 
         #region Funcionarios

@@ -11,10 +11,9 @@ using SmartMetric.WebAPI.Filters.ActionFilter;
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     /// <summary>
-    /// 
+    /// Controlador responsável por operações relacionadas a modelos de formulários.
     /// </summary>
     [ApiVersion("1.0")]
-    //[RequestValidation]
     public class FormTemplatesController : CustomBaseController
     {
         private readonly IFormTemplateGetterService _formTemplateGetterService;
@@ -28,15 +27,15 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplateTranslationsDeleterService _formTemplateTranslationsDeleterService;
 
         /// <summary>
-        /// 
+        /// Construtor do controlador FormTemplates.
         /// </summary>
-        /// <param name="formTemplateGetterService"></param>
-        /// <param name="formTemplatesAdderService"></param>
-        /// <param name="formTemplatesDeleterService"></param>
-        /// <param name="formTemplatesUpdaterService"></param>
-        /// <param name="questionAdderService"></param>
-        /// <param name="formTemplateTranslationsAdderService"></param>
-        /// <param name="formTemplateTranslationsDeleterService"></param>
+        /// <param name="formTemplateGetterService">Serviço para obter modelos de formulários.</param>
+        /// <param name="formTemplatesAdderService">Serviço para adicionar modelos de formulários.</param>
+        /// <param name="formTemplatesDeleterService">Serviço para excluir modelos de formulários.</param>
+        /// <param name="formTemplatesUpdaterService">Serviço para atualizar modelos de formulários.</param>
+        /// <param name="questionAdderService">Serviço para adicionar perguntas a modelos de formulários.</param>
+        /// <param name="formTemplateTranslationsAdderService">Serviço para adicionar traduções a modelos de formulários.</param>
+        /// <param name="formTemplateTranslationsDeleterService">Serviço para excluir traduções de modelos de formulários.</param>
         public FormTemplatesController(
             IFormTemplateGetterService formTemplateGetterService,
             IFormTemplateAdderService formTemplatesAdderService,
@@ -60,9 +59,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
 
         /// <summary>
-        /// Retorna todos os FormTemplates
+        /// Retorna todos os modelos de formulários.
         /// </summary>
-        /// <returns></returns>
+        /// <param name="page">Número da página.</param>
+        /// <param name="pageSize">Tamanho da página.</param>
+        /// <param name="language">Idioma das traduções (opcional).</param>
+        /// <returns>Um ActionResult representando os modelos de formulários obtidos.</returns>
         [PermissionRequired(WindowType.Forms, PermissionType.Read)]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null)
@@ -73,10 +75,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Obtém um modelo de formulário pelo ID.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateId">ID do modelo de formulário.</param>
+        /// <returns>Um ActionResult representando o modelo de formulário obtido.</returns>
         [HttpGet("{formTemplateId}")]
         [PermissionRequired(WindowType.Forms, PermissionType.Read)]
         public async Task<ActionResult<FormTemplateDTOResponse>> GetFormTemplateById(Guid? formTemplateId)
@@ -86,10 +88,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Adiciona um novo modelo de formulário.
         /// </summary>
-        /// <param name="formTemplateDTOAddRequest"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateDTOAddRequest">Dados do novo modelo de formulário.</param>
+        /// <returns>Um IActionResult representando o resultado da adição do modelo de formulário.</returns>
         [HttpPost]
         [PermissionRequired(WindowType.Forms, PermissionType.Create)]
         public async Task<IActionResult> AddFormTemplate([FromBody] FormTemplateDTOAddRequest? formTemplateDTOAddRequest)
@@ -99,11 +101,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Adiciona uma tradução a um modelo de formulário.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <param name="formTemplateTranslationDTOAddRequest"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateId">ID do modelo de formulário.</param>
+        /// <param name="formTemplateTranslationDTOAddRequest">Dados da tradução a ser adicionada.</param>
+        /// <returns>Um IActionResult representando o resultado da adição da tradução.</returns>
         [HttpPost]
         [Route("{formTemplateId}/Translations")]
         [PermissionRequired(WindowType.Forms, PermissionType.Create)]
@@ -115,11 +117,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Adiciona uma pergunta a um modelo de formulário.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <param name="questionDTOAddRequest"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateId">ID do modelo de formulário.</param>
+        /// <param name="questionDTOAddRequest">Dados da pergunta a ser adicionada.</param>
+        /// <returns>Um IActionResult representando o resultado da adição da pergunta.</returns>
         [HttpPost]
         [Route("{formTemplateId}/Questions")]
         [PermissionRequired(WindowType.Forms, PermissionType.Create)]
@@ -131,10 +133,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Exclui um modelo de formulário pelo ID.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateId">ID do modelo de formulário a ser excluído.</param>
+        /// <returns>Um ActionResult representando o resultado da exclusão do modelo de formulário.</returns>
         [HttpDelete("{formTemplateId}")]
         [PermissionRequired(WindowType.Forms, PermissionType.Delete)]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateById(Guid? formTemplateId)
@@ -144,11 +146,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Exclui uma tradução de um modelo de formulário.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <param name="language"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateId">ID do modelo de formulário.</param>
+        /// <param name="language">Idioma da tradução a ser excluída.</param>
+        /// <returns>Um ActionResult representando o resultado da exclusão da tradução.</returns>
         [HttpDelete("{formTemplateId}/Translations")]
         [PermissionRequired(WindowType.Forms, PermissionType.Delete)]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteFormTemplateTranslation(Guid? formTemplateId, [FromQuery] Language language)
@@ -158,11 +160,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Atualiza um modelo de formulário pelo ID.
         /// </summary>
-        /// <param name="formTemplateId"></param>
-        /// <param name="formTemplate"></param>
-        /// <returns></returns>
+        /// <param name="formTemplateId">ID do modelo de formulário a ser atualizado.</param>
+        /// <param name="formTemplate">Dados atualizados do modelo de formulário.</param>
+        /// <returns>Um IActionResult representando o resultado da atualização do modelo de formulário.</returns>
         [HttpPut("{formTemplateId}")]
         [PermissionRequired(WindowType.Forms, PermissionType.Update)]
         public async Task<IActionResult> UpdateFormTemplate(Guid? formTemplateId, [FromBody] FormTemplateDTOUpdate formTemplate)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.IdentityModel.Tokens;
 using SmartMetric.Core.DTO;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.Enums;
@@ -16,6 +17,9 @@ using System.Text;
 
 namespace SmartMetric.WebAPI.Controllers.v1
 {
+    /// <summary>
+    /// Controlador responsável por operações de autenticação e geração de tokens.
+    /// </summary>
     [AllowAnonymous]
     [ApiVersion("1.0")]
     [SkipTokenValidation]
@@ -24,6 +28,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IJwtService _jwtService;
         private readonly ISmartTimeService _smartTimeService;
 
+        /// <summary>
+        /// Construtor do controlador Accounts.
+        /// </summary>
+        /// <param name="jwtService">Serviço JWT para operações de autenticação.</param>
+        /// <param name="smartTimeService">Serviço SmartTime para operações administrativas.</param>
         public AccountsController(IJwtService jwtService, ISmartTimeService smartTimeService)
         {
             _jwtService = jwtService;
@@ -31,10 +40,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// DEV TOOL: Apenas para uso em ambiente de desenvolvimento.
+        /// DEV TOOL: Apenas para uso em ambiente de desenvolvimento. Gera um token de autenticação.
         /// </summary>
-        /// <param name="userName">Utilizador pertentido para autenticar</param>
-        /// <returns></returns>
+        /// <param name="userName">Nome do utilizador para autenticação.</param>
+        /// <returns>Um IActionResult representando o token gerado.</returns>
         [HttpGet("Dev/AuthToken")]
         [SkipPermissionAuthorization]
         public IActionResult GenerateAuthToken(string userName)
@@ -46,6 +55,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
             return Ok(base64UrlEncoded);
         }
 
+
+        /// <summary>
+        /// Realiza a autenticação e gera um token de acesso.
+        /// </summary>
+        /// <param name="token">Token de autenticação.</param>
+        /// <returns>Um IActionResult representando o resultado da autenticação e o token gerado.</returns>
         [HttpGet]
         [TokenAuthorizationFilter]
         [SkipPermissionAuthorization]
@@ -95,22 +110,19 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 });
             }
 
-            
+
         }
 
-
+        /// <summary>
+        /// Gera um novo token de acesso com base no token de atualização fornecido.
+        /// </summary>
+        /// <param name="refreshToken">Token de atualização.</param>
+        /// <returns>Um IActionResult representando o novo token de acesso gerado.</returns>
         [HttpPost]
-        [SkipPermissionAuthorization]
-        public async Task<IActionResult> GenerateNewAccessToken(TokenDTO? token)
+        public async Task<IActionResult> GenerateNewAccessToken(string refreshToken)
         {
-            //TODO: ApplicationUserType
 
-            if (token == null)
-            {
-                throw new ArgumentNullException(nameof(token), "Invalid client request");
-            }
-
-            ClaimsPrincipal? principal = _jwtService.GetPrincipalFromJwtToken(token.Token);
+            ClaimsPrincipal? principal = _GetPrincipal();
             if (principal == null)
             {
                 throw new ArgumentException("Access Token", "Invalid access token");
@@ -134,7 +146,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
 
 
-                if (user == null || user.RefreshToken != token.RefreshToken || user.RefreshTokenExpiration <= DateTime.Now)
+                if (user == null || user.RefreshToken != refreshToken || user.RefreshTokenExpiration <= DateTime.Now)
                 {
                     throw new ArgumentException("Refresh Token", "Invalid refresh token");
                 }
@@ -180,6 +192,23 @@ namespace SmartMetric.WebAPI.Controllers.v1
             cs.Write(input, 0, input.Length);
             cs.Close();
             return ms.ToArray();
+        }
+
+        /// <summary>
+        /// Obtém o principal de claims a partir do token de autenticação.
+        /// </summary>
+        /// <returns>Um ClaimsPrincipal representando as claims extraídas do token de autenticação.</returns>
+        private ClaimsPrincipal? _GetPrincipal()
+        {
+            var authorizationHeader = HttpContext.Request.Headers.Authorization;
+            var token = authorizationHeader.ToString().Replace("Bearer ", string.Empty);
+
+            if (!token.IsNullOrEmpty())
+            {
+                return _jwtService.GetPrincipalFromJwtToken(token);
+            }
+
+            return null;
         }
     }
 }

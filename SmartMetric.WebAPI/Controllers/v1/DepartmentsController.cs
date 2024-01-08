@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     /// <summary>
-    /// 
+    /// Controlador responsável por operações relacionadas a departamentos.
     /// </summary>
     [ApiVersion("1.0")]
     public class DepartmentsController : CustomBaseController
@@ -19,10 +19,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IJwtService _jwtService;
 
         /// <summary>
-        /// 
+        /// Construtor do controlador Departments.
         /// </summary>
-        /// <param name="smartTimeService"></param>
-        /// <param name="jwtService"></param>
+        /// <param name="smartTimeService">Serviço SmartTime para operações relacionadas a departamentos.</param>
+        /// <param name="jwtService">Serviço JWT para autenticação e geração de tokens.</param>
         public DepartmentsController(ISmartTimeService smartTimeService, IJwtService jwtService)
         {
             _smartTimeService = smartTimeService;
@@ -30,12 +30,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Obtém todos os departamentos com base no ID do perfil.
         /// </summary>
-        /// <param name="page"></param>
-        /// <param name="pageSize"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="page">Número da página.</param>
+        /// <param name="pageSize">Tamanho da página.</param>
+        /// <returns>Um IActionResult representando os departamentos obtidos.</returns>
+        /// <exception cref="ArgumentException">Lançada quando o utilizador não tem um perfil associado.</exception>
         [PermissionRequired(WindowType.Departments, PermissionType.Read)]
         [HttpGet]
         public async Task<IActionResult> GetAllDepartmentsByProfileId(int page = 1, int pageSize = 20)
@@ -66,11 +66,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Obtém os funcionários de um departamento específico.
         /// </summary>
-        /// <param name="departmentId"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="departmentId">ID do departamento.</param>
+        /// <returns>Um IActionResult representando os funcionários obtidos.</returns>
+        /// <exception cref="ArgumentException">Lançada quando o utilizador não tem acesso ao departamento especificado ou o ID do departamento não existe.</exception>
         [PermissionRequired(WindowType.Departments, PermissionType.Read)]
         [HttpGet("{departmentId}/Employees")]
         public async Task<IActionResult> GetDepartmentEmployees(int departmentId)

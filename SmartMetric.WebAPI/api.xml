@@ -4,12 +4,38 @@
         <name>SmartMetric.WebAPI</name>
     </assembly>
     <members>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.AccountsController">
+            <summary>
+            Controlador responsável por operações de autenticação e geração de tokens.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.#ctor(SmartMetric.Core.ServicesContracts.IJwtService,SmartMetric.Core.ServicesContracts.ISmartTimeService)">
+            <summary>
+            Construtor do controlador Accounts.
+            </summary>
+            <param name="jwtService">Serviço JWT para operações de autenticação.</param>
+            <param name="smartTimeService">Serviço SmartTime para operações administrativas.</param>
+        </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.GenerateAuthToken(System.String)">
             <summary>
-            DEV TOOL: Apenas para uso em ambiente de desenvolvimento.
+            DEV TOOL: Apenas para uso em ambiente de desenvolvimento. Gera um token de autenticação.
             </summary>
-            <param name="userName">Utilizador pertentido para autenticar</param>
-            <returns></returns>
+            <param name="userName">Nome do utilizador para autenticação.</param>
+            <returns>Um IActionResult representando o token gerado.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.SignIn(System.String)">
+            <summary>
+            Realiza a autenticação e gera um token de acesso.
+            </summary>
+            <param name="token">Token de autenticação.</param>
+            <returns>Um IActionResult representando o resultado da autenticação e o token gerado.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.GenerateNewAccessToken(System.String)">
+            <summary>
+            Gera um novo token de acesso com base no token de atualização fornecido.
+            </summary>
+            <param name="refreshToken">Token de atualização.</param>
+            <returns>Um IActionResult representando o novo token de acesso gerado.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.Encrypt(System.Byte[])">
             <summary>
@@ -18,128 +44,234 @@
             <param name="input"></param>
             <returns></returns>
         </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController._GetPrincipal">
+            <summary>
+            Obtém o principal de claims a partir do token de autenticação.
+            </summary>
+            <returns>Um ClaimsPrincipal representando as claims extraídas do token de autenticação.</returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.AdminController">
+            <summary>
+            Controlador responsável por operações administrativas.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AdminController.#ctor(SmartMetric.Core.ServicesContracts.ISmartTimeService)">
+            <summary>
+            Construtor do controlador Admin.
+            </summary>
+            <param name="smartTimeService">Serviço SmartTime para operações administrativas.</param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AdminController.SetPermissions(System.Int32,System.Collections.Generic.List{System.Int32})">
+            <summary>
+            Define as permissões para um perfil específico.
+            </summary>
+            <param name="profileId">O ID do perfil.</param>
+            <param name="permissionIds">Lista de IDs das permissões a serem atribuídas ao perfil.</param>
+            <returns>Um IActionResult representando o resultado da operação.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AdminController.GetAllWindowsPermissions">
+            <summary>
+            Obtém as permissões de leitura para todas as janelas da aplicação.
+            </summary>
+            <returns>Um IActionResult representando as permissões de leitura para todas as janelas.</returns>
+        </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.DepartmentsController">
             <summary>
-            
+            Controlador responsável por operações relacionadas a departamentos.
             </summary>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.DepartmentsController.#ctor(SmartMetric.Core.ServicesContracts.ISmartTimeService,SmartMetric.Core.ServicesContracts.IJwtService)">
             <summary>
-            
+            Construtor do controlador Departments.
             </summary>
-            <param name="smartTimeService"></param>
-            <param name="jwtService"></param>
+            <param name="smartTimeService">Serviço SmartTime para operações relacionadas a departamentos.</param>
+            <param name="jwtService">Serviço JWT para autenticação e geração de tokens.</param>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.DepartmentsController.GetAllDepartmentsByProfileId(System.Int32,System.Int32)">
             <summary>
-            
+            Obtém todos os departamentos com base no ID do perfil.
             </summary>
-            <param name="page"></param>
-            <param name="pageSize"></param>
-            <returns></returns>
-            <exception cref="T:System.ArgumentException"></exception>
+            <param name="page">Número da página.</param>
+            <param name="pageSize">Tamanho da página.</param>
+            <returns>Um IActionResult representando os departamentos obtidos.</returns>
+            <exception cref="T:System.ArgumentException">Lançada quando o utilizador não tem um perfil associado.</exception>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.DepartmentsController.GetDepartmentEmployees(System.Int32)">
             <summary>
-            
+            Obtém os funcionários de um departamento específico.
             </summary>
-            <param name="departmentId"></param>
-            <returns></returns>
-            <exception cref="T:System.ArgumentException"></exception>
+            <param name="departmentId">ID do departamento.</param>
+            <returns>Um IActionResult representando os funcionários obtidos.</returns>
+            <exception cref="T:System.ArgumentException">Lançada quando o utilizador não tem acesso ao departamento especificado ou o ID do departamento não existe.</exception>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController">
             <summary>
-            
+            Controlador responsável por operações relacionadas a modelos de formulários.
             </summary>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.#ctor(SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateGetterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateAdderService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateDeleterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateUpdaterService,SmartMetric.Core.ServicesContracts.Questions.IQuestionAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsDeleterService)">
             <summary>
-            
+            Construtor do controlador FormTemplates.
             </summary>
-            <param name="formTemplateGetterService"></param>
-            <param name="formTemplatesAdderService"></param>
-            <param name="formTemplatesDeleterService"></param>
-            <param name="formTemplatesUpdaterService"></param>
-            <param name="questionAdderService"></param>
-            <param name="formTemplateTranslationsAdderService"></param>
-            <param name="formTemplateTranslationsDeleterService"></param>
+            <param name="formTemplateGetterService">Serviço para obter modelos de formulários.</param>
+            <param name="formTemplatesAdderService">Serviço para adicionar modelos de formulários.</param>
+            <param name="formTemplatesDeleterService">Serviço para excluir modelos de formulários.</param>
+            <param name="formTemplatesUpdaterService">Serviço para atualizar modelos de formulários.</param>
+            <param name="questionAdderService">Serviço para adicionar perguntas a modelos de formulários.</param>
+            <param name="formTemplateTranslationsAdderService">Serviço para adicionar traduções a modelos de formulários.</param>
+            <param name="formTemplateTranslationsDeleterService">Serviço para excluir traduções de modelos de formulários.</param>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetAllFormTemplates(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
             <summary>
-            Retorna todos os FormTemplates
+            Retorna todos os modelos de formulários.
             </summary>
-            <returns></returns>
+            <param name="page">Número da página.</param>
+            <param name="pageSize">Tamanho da página.</param>
+            <param name="language">Idioma das traduções (opcional).</param>
+            <returns>Um ActionResult representando os modelos de formulários obtidos.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetFormTemplateById(System.Nullable{System.Guid})">
             <summary>
-            
+            Obtém um modelo de formulário pelo ID.
             </summary>
-            <param name="formTemplateId"></param>
-            <returns></returns>
+            <param name="formTemplateId">ID do modelo de formulário.</param>
+            <returns>Um ActionResult representando o modelo de formulário obtido.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.AddFormTemplate(SmartMetric.Core.DTO.AddRequest.FormTemplateDTOAddRequest)">
             <summary>
-            
+            Adiciona um novo modelo de formulário.
             </summary>
-            <param name="formTemplateDTOAddRequest"></param>
-            <returns></returns>
+            <param name="formTemplateDTOAddRequest">Dados do novo modelo de formulário.</param>
+            <returns>Um IActionResult representando o resultado da adição do modelo de formulário.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.AddFormTemplateTranslation(System.Nullable{System.Guid},SmartMetric.Core.DTO.AddRequest.TranslationDTOAddRequest)">
             <summary>
-            
+            Adiciona uma tradução a um modelo de formulário.
             </summary>
-            <param name="formTemplateId"></param>
-            <param name="formTemplateTranslationDTOAddRequest"></param>
-            <returns></returns>
+            <param name="formTemplateId">ID do modelo de formulário.</param>
+            <param name="formTemplateTranslationDTOAddRequest">Dados da tradução a ser adicionada.</param>
+            <returns>Um IActionResult representando o resultado da adição da tradução.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.AddQuestionToFormTemplate(System.Nullable{System.Guid},SmartMetric.Core.DTO.AddRequest.QuestionDTOAddRequest)">
             <summary>
-            
+            Adiciona uma pergunta a um modelo de formulário.
             </summary>
-            <param name="formTemplateId"></param>
-            <param name="questionDTOAddRequest"></param>
-            <returns></returns>
+            <param name="formTemplateId">ID do modelo de formulário.</param>
+            <param name="questionDTOAddRequest">Dados da pergunta a ser adicionada.</param>
+            <returns>Um IActionResult representando o resultado da adição da pergunta.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.DeleteFormTemplateById(System.Nullable{System.Guid})">
             <summary>
-            
+            Exclui um modelo de formulário pelo ID.
             </summary>
-            <param name="formTemplateId"></param>
-            <returns></returns>
+            <param name="formTemplateId">ID do modelo de formulário a ser excluído.</param>
+            <returns>Um ActionResult representando o resultado da exclusão do modelo de formulário.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.DeleteFormTemplateTranslation(System.Nullable{System.Guid},SmartMetric.Core.Enums.Language)">
             <summary>
-            
+            Exclui uma tradução de um modelo de formulário.
             </summary>
-            <param name="formTemplateId"></param>
-            <param name="language"></param>
-            <returns></returns>
+            <param name="formTemplateId">ID do modelo de formulário.</param>
+            <param name="language">Idioma da tradução a ser excluída.</param>
+            <returns>Um ActionResult representando o resultado da exclusão da tradução.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.UpdateFormTemplate(System.Nullable{System.Guid},SmartMetric.Core.DTO.UpdateRequest.FormTemplateDTOUpdate)">
             <summary>
-            
+            Atualiza um modelo de formulário pelo ID.
             </summary>
-            <param name="formTemplateId"></param>
-            <param name="formTemplate"></param>
-            <returns></returns>
+            <param name="formTemplateId">ID do modelo de formulário a ser atualizado.</param>
+            <param name="formTemplate">Dados atualizados do modelo de formulário.</param>
+            <returns>Um IActionResult representando o resultado da atualização do modelo de formulário.</returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.ProfilesController">
+            <summary>
+            Controlador responsável por operações relacionadas a perfis de utilizadores.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ProfilesController.#ctor(SmartMetric.Core.ServicesContracts.ISmartTimeService)">
+            <summary>
+            Construtor do controlador Profiles.
+            </summary>
+            <param name="smartTimeService">Serviço SmartTime utilizado para operações relacionadas a perfis.</param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ProfilesController.GetDepartmentsByProfileId(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Obtém os departamentos associados a um perfil pelo ID do perfil.
+            </summary>
+            <param name="profileId">ID do perfil.</param>
+            <param name="page">Número da página.</param>
+            <param name="pageSize">Tamanho da página.</param>
+            <returns>Um IActionResult representando os departamentos associados ao perfil.</returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.ReviewsController">
+            <summary>
+            Controlador responsável por operações relacionadas a avaliações (Reviews).
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.#ctor(SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewAdderService,SmartMetric.Core.ServicesContracts.Reviews.IReviewDeleterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewUpdaterService)" -->
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32)">
+            <summary>
+            Obtém todas as avaliações paginadas.
+            </summary>
+            <param name="page">Número da página.</param>
+            <param name="pageSize">Tamanho da página.</param>
+            <returns>Um IActionResult representando as avaliações obtidas.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewById(System.Nullable{System.Guid})">
+            <summary>
+            Obtém uma avaliação pelo ID.
+            </summary>
+            <param name="reviewId">ID da avaliação.</param>
+            <returns>Um IActionResult representando a avaliação obtida pelo ID.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.AddReview(SmartMetric.Core.DTO.AddRequest.ReviewDTOAddRequest)">
+            <summary>
+            Adiciona uma nova avaliação.
+            </summary>
+            <param name="request">Dados da avaliação a ser adicionada.</param>
+            <returns>Um IActionResult representando o resultado da adição da avaliação.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.DeleteReview(System.Nullable{System.Guid})">
+            <summary>
+            Exclui uma avaliação pelo ID.
+            </summary>
+            <param name="reviewId">ID da avaliação a ser excluída.</param>
+            <returns>Um ActionResult representando o resultado da exclusão da avaliação.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.UpdateReview(System.Nullable{System.Guid},SmartMetric.Core.DTO.UpdateRequest.ReviewDTOUpdate)">
+            <summary>
+            Atualiza uma avaliação pelo ID.
+            </summary>
+            <param name="reviewId">ID da avaliação a ser atualizada.</param>
+            <param name="reviewDTOUpdate">Dados atualizados da avaliação.</param>
+            <returns>Um IActionResult representando o resultado da atualização da avaliação.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.UpdateReviewStatus(System.Nullable{System.Guid},SmartMetric.Core.DTO.UpdateRequest.ReviewDTOUpdateStatus)">
+            <summary>
+            Atualiza o status de uma avaliação pelo ID.
+            </summary>
+            <param name="reviewId">ID da avaliação a ter o status atualizado.</param>
+            <param name="review">Dados de atualização do status da avaliação.</param>
+            <returns>Um IActionResult representando o resultado da atualização do status da avaliação.</returns>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.UsersController">
             <summary>
-            
+            Controlador responsável por operações relacionadas a utilizadores autenticados.
             </summary>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.UsersController.#ctor(SmartMetric.Core.ServicesContracts.ISmartTimeService,SmartMetric.Core.ServicesContracts.IJwtService)">
             <summary>
-            
+            Construtor do controlador UsersController.
             </summary>
-            <param name="smartTimeService"></param>
+            <param name="smartTimeService">Serviço SmartTime.</param>
+            <param name="jwtService">Serviço de geração e validação de tokens JWT.</param>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.UsersController.GetAutenticatedUser">
             <summary>
-            
+            Obtém informações do utilizador autenticado.
             </summary>
-            <returns></returns>
-            <exception cref="T:System.ArgumentException"></exception>
+            <returns>Um IActionResult representando as informações do utilizador autenticado.</returns>
+            <exception cref="T:System.ArgumentException">Exceção lançada para utilizador não identificado.</exception>
         </member>
         <member name="T:SmartMetric.WebAPI.Filters.ActionFilter.RequestValidationAttribute">
             <summary>

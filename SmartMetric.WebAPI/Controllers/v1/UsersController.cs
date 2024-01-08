@@ -12,7 +12,7 @@ using System.Security.Claims;
 namespace SmartMetric.WebAPI.Controllers.v1
 {
     /// <summary>
-    /// 
+    /// Controlador responsável por operações relacionadas a utilizadores autenticados.
     /// </summary>
     [AllowAnonymous]
     [ApiVersion("1.0")]
@@ -24,9 +24,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IJwtService _jwtService;
 
         /// <summary>
-        /// 
+        /// Construtor do controlador UsersController.
         /// </summary>
-        /// <param name="smartTimeService"></param>
+        /// <param name="smartTimeService">Serviço SmartTime.</param>
+        /// <param name="jwtService">Serviço de geração e validação de tokens JWT.</param>
         public UsersController(ISmartTimeService smartTimeService, IJwtService jwtService)
         {
             _smartTimeService = smartTimeService;
@@ -34,10 +35,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Obtém informações do utilizador autenticado.
         /// </summary>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException"></exception>
+        /// <returns>Um IActionResult representando as informações do utilizador autenticado.</returns>
+        /// <exception cref="ArgumentException">Exceção lançada para utilizador não identificado.</exception>
         [HttpGet("Me")]
         public async Task<IActionResult> GetAutenticatedUser()
         {
