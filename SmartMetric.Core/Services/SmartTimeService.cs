@@ -94,31 +94,59 @@ namespace SmartMetric.Core.Services
 
                 if (user == null) throw new ArgumentException("Unidentified user", "User");
 
-                if (user.Idperfil == null) throw new ArgumentException("The user does not have an associated profile", "User");
-
-                var profile = await _smartTimeRepository.GetProfileById(user.Idperfil.Value);
-
-                var profileWindowPermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(user.Idperfil.Value);
-
-                var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
-
-                var userProfile = new UserProfileDTOResponse()
+                if (user.Nome == "Administrador")
                 {
-                    UserId = user.Idutilizador,
-                    UserName = user.Nome,
-                    UserEmail = user.Email,
-                    EmployeeId = user.Idfuncionario,
-                    ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
-                    ProfileDescription = profile.Nome,
-                    Authorizations = windowPermissionsDTO
-                };
 
-                return new ApiResponse<UserProfileDTOResponse>()
+                    var windowPermissionsDTO = WindowPermissionHelper.GiveAllPermissions();
+
+                    var userProfile = new UserProfileDTOResponse()
+                    {
+                        UserId = user.Idutilizador,
+                        UserName = user.Nome,
+                        UserEmail = user.Email,
+                        EmployeeId = user.Idfuncionario,
+                        ProfileType = ProfileType.Backoffice,
+                        ProfileDescription = string.Empty,
+                        Authorizations = windowPermissionsDTO
+                    };
+
+                    return new ApiResponse<UserProfileDTOResponse>()
+                    {
+                        StatusCode = (int)HttpStatusCode.OK,
+                        Message = "User Autenticated Information",
+                        Data = userProfile
+                    };
+                }
+                else
                 {
-                    StatusCode = (int)HttpStatusCode.OK,
-                    Message = "User Profile",
-                    Data = userProfile
-                };
+                    if (user.Idperfil == null) throw new ArgumentException("The user does not have an associated profile", "User");
+
+                    var profile = await _smartTimeRepository.GetProfileById(user.Idperfil.Value);
+
+                    var profileWindowPermissions = await _smartTimeRepository.GetProfileWindowsByProfileId(user.Idperfil.Value);
+
+                    var windowPermissionsDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
+
+                    var userProfile = new UserProfileDTOResponse()
+                    {
+                        UserId = user.Idutilizador,
+                        UserName = user.Nome,
+                        UserEmail = user.Email,
+                        EmployeeId = user.Idfuncionario,
+                        ProfileType = profile!.PortalColaborador == null || profile.PortalColaborador == 0 ? ProfileType.Backoffice : ProfileType.Frontoffice,
+                        ProfileDescription = profile.Nome,
+                        Authorizations = windowPermissionsDTO
+                    };
+
+                    return new ApiResponse<UserProfileDTOResponse>()
+                    {
+                        StatusCode = (int)HttpStatusCode.OK,
+                        Message = "User Autenticated Information",
+                        Data = userProfile
+                    };
+                }
+
+
 
             }
 

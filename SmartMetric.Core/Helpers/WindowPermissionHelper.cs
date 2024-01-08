@@ -121,6 +121,21 @@ namespace SmartMetric.Core.Helpers
             return StaticPermissions;
         }
 
+        public static List<WindowPermissionDTO> GiveAllPermissions()
+        {
+
+
+            foreach (var windowPermission in StaticPermissions)
+            {
+                foreach (var permission in windowPermission.Permissions!)
+                {
+                    permission.HasPermission = true;
+                }
+            }
+
+            return StaticPermissions;
+        }
+
         public static bool PermissionIdExists(int permissionId)
         {
             return StaticPermissions.Any(wp => wp.Permissions!.Any(p => p.PermissionId == permissionId));

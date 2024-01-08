@@ -123,6 +123,24 @@
             <param name="formTemplate"></param>
             <returns></returns>
         </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.UsersController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.UsersController.#ctor(SmartMetric.Core.ServicesContracts.ISmartTimeService,SmartMetric.Core.ServicesContracts.IJwtService)">
+            <summary>
+            
+            </summary>
+            <param name="smartTimeService"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.UsersController.GetAutenticatedUser">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
         <member name="T:SmartMetric.WebAPI.Filters.ActionFilter.RequestValidationAttribute">
             <summary>
             Custom attribute for request validation in ASP.NET MVC or ASP.NET Core.
