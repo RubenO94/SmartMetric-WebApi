@@ -16,7 +16,7 @@ namespace SmartMetric.Core.Helpers
                 new WindowPermissionDTO
                 {
                     WindowId = 23121000,
-                    WindowType = WindowType.FormTemplates,
+                    WindowType = WindowType.Forms,
                     Permissions = new List<PermissionDTO>
                     {
                         new PermissionDTO {PermissionId = 23121001, PermissionType = PermissionType.Create},
