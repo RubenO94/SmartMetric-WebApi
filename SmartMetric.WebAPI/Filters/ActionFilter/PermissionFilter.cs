@@ -6,6 +6,7 @@ using SmartMetric.Core.ServicesContracts;
 using SmartMetric.Infrastructure.Models;
 using System;
 using System.Linq;
+using System.Security.Claims;
 
 namespace SmartMetric.WebAPI.Filters.ActionFilter
 {
@@ -82,8 +83,15 @@ namespace SmartMetric.WebAPI.Filters.ActionFilter
                 return;
             }
 
+            var userName = principal.FindFirst("name");
             var userIdClaim = principal.FindFirst("UserId");
             var userProfileIdClaim = principal.FindFirst("UserProfileId");
+
+            if(userName?.Value == "Administrador")
+            {
+                await next();
+                return;
+            }
 
             if (userIdClaim == null || userProfileIdClaim == null)
             {

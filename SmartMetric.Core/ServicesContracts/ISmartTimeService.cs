@@ -25,6 +25,8 @@ namespace SmartMetric.Core.ServicesContracts
         Task<ApiResponse<List<DepartmentDTOResponse>>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20);
 
         Task<List<Departamento>> GetDepartmentsByListIds(List<int> departmentIds);
+
+        Task<ApiResponse<List<DepartmentDTOResponse>>> GetAllDepartments(int page = 1, int pageSize = 20);
         #endregion
 
         #region Perfil

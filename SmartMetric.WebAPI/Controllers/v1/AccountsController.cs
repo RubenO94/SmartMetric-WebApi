@@ -33,12 +33,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <summary>
         /// DEV TOOL: Apenas para uso em ambiente de desenvolvimento.
         /// </summary>
+        /// <param name="userName">Utilizador pertentido para autenticar</param>
         /// <returns></returns>
         [HttpGet("Dev/AuthToken")]
         [SkipPermissionAuthorization]
-        public IActionResult GenerateAuthToken()
+        public IActionResult GenerateAuthToken(string userName)
         {
-            byte[] encbuff = Encoding.UTF8.GetBytes("Pedro.Maia" + "§" + DateTime.Now.Ticks + "§" + "508268800");
+            byte[] encbuff = Encoding.UTF8.GetBytes($"{userName}" + "§" + DateTime.Now.Ticks + "§" + "508268800");
 
             string base64UrlEncoded = WebEncoders.Base64UrlEncode(Encrypt(encbuff));
 

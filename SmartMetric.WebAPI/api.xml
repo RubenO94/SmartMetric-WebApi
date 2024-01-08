@@ -4,10 +4,11 @@
         <name>SmartMetric.WebAPI</name>
     </assembly>
     <members>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.GenerateAuthToken">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.GenerateAuthToken(System.String)">
             <summary>
             DEV TOOL: Apenas para uso em ambiente de desenvolvimento.
             </summary>
+            <param name="userName">Utilizador pertentido para autenticar</param>
             <returns></returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.AccountsController.Encrypt(System.Byte[])">
@@ -16,6 +17,35 @@
             </summary>
             <param name="input"></param>
             <returns></returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.DepartmentsController">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.DepartmentsController.#ctor(SmartMetric.Core.ServicesContracts.ISmartTimeService,SmartMetric.Core.ServicesContracts.IJwtService)">
+            <summary>
+            
+            </summary>
+            <param name="smartTimeService"></param>
+            <param name="jwtService"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.DepartmentsController.GetAllDepartmentsByProfileId(System.Int32,System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.DepartmentsController.GetDepartmentEmployees(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="departmentId"></param>
+            <returns></returns>
+            <exception cref="T:System.ArgumentException"></exception>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController">
             <summary>

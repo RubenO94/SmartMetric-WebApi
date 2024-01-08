@@ -26,6 +26,23 @@ namespace SmartMetric.Core.Services
 
         #region Departamentos
 
+        public async Task<ApiResponse<List<DepartmentDTOResponse>>> GetAllDepartments(int page = 1, int pageSize = 20)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByProfileId)} foi iniciado");
+
+            var departments = await _smartTimeRepository.GetAllDepartaments(page, pageSize);
+
+            var totalCount = await _smartTimeRepository.GetTotalRecords();
+
+            return new ApiResponse<List<DepartmentDTOResponse>>()
+            {
+                StatusCode = 200,
+                Message = "Data retrived with success!",
+                Data = departments.Select(temp => temp.ToDepartamentDTOResponse()).ToList(),
+                TotalCount = totalCount,
+            };
+        }
+
         public async Task<ApiResponse<List<DepartmentDTOResponse>>> GetDepartmentsByProfileId(int? profileId, int page = 1, int pageSize = 20)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetDepartmentsByProfileId)} foi iniciado");
@@ -367,10 +384,6 @@ namespace SmartMetric.Core.Services
 
 
         }
-
-       
-
-
 
         #endregion
 
