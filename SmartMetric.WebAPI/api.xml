@@ -61,6 +61,13 @@
             </summary>
             <param name="smartTimeService">Serviço SmartTime para operações administrativas.</param>
         </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.AdminController.GetPermissions(System.Int32)">
+            <summary>
+            Obtém as permissões para um perfil específico
+            </summary>
+            <param name="profileId"></param>
+            <returns></returns>
+        </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.AdminController.SetPermissions(System.Int32,System.Collections.Generic.List{System.Int32})">
             <summary>
             Define as permissões para um perfil específico.
@@ -202,6 +209,12 @@
             <param name="page">Número da página.</param>
             <param name="pageSize">Tamanho da página.</param>
             <returns>Um IActionResult representando os departamentos associados ao perfil.</returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ProfilesController.GetAllProfiles">
+            <summary>
+            Obtém todos os perfis
+            </summary>
+            <returns></returns>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.ReviewsController">
             <summary>

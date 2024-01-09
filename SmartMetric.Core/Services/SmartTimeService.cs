@@ -185,6 +185,33 @@ namespace SmartMetric.Core.Services
             throw new ArgumentException("Unidentified application user", "Application User");
         }
 
+        public async Task<ApiResponse<List<WindowPermissionDTO>>> GetWindowPermissionsToProfile(int profileId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetWindowPermissionsToProfile)} foi iniciado");
+
+            if (profileId == 0) throw new ArgumentException("Invalid profile id", nameof(profileId));
+
+            var profile = await _smartTimeRepository.GetProfileById(profileId);
+            if (profile == null) throw new ArgumentException($"Profile with id {profileId} don't exist", nameof(profileId));
+
+            var permissionsList = await _smartTimeRepository.GetProfilePermissions(profileId);
+            var profileWindowPermissions = new List<int>();
+
+            foreach ( var permission in permissionsList ) 
+            {
+                profileWindowPermissions.Add(permission.PermissionId);
+            }
+
+            var windowPermissionDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
+
+            return new ApiResponse<List<WindowPermissionDTO>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = $"Profile {profile.Nome} permissions retrieve with success.",
+                Data = windowPermissionDTO
+            };
+        }
+
         public async Task<ApiResponse<List<PermissionDTO>>> UpdateWindowPermissionsToProfile(int profileId, List<int> permissionsIDs)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(UpdateWindowPermissionsToProfile)} foi iniciado");
@@ -214,6 +241,20 @@ namespace SmartMetric.Core.Services
 
             };
 
+        }
+
+        public async Task<ApiResponse<List<Perfil>>> GetAllProfiles()
+        {
+            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetAllProfiles)} foi iniciado");
+
+            var profilesList = await _smartTimeRepository.GetAllProfiles();
+
+            return new ApiResponse<List<Perfil>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Get all profiles successfully",
+                Data = profilesList
+            };
         }
 
         #endregion

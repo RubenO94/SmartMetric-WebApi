@@ -12,8 +12,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
     /// <summary>
     /// Controlador responsável por operações administrativas.
     /// </summary>
-    [Route("api/[controller]")]
-    [ApiController]
+    [ApiVersion("1.0")]
     public class AdminController : CustomBaseController
     {
         private readonly ISmartTimeService _smartTimeService;
@@ -25,6 +24,19 @@ namespace SmartMetric.WebAPI.Controllers.v1
         public AdminController(ISmartTimeService smartTimeService)
         {
             _smartTimeService = smartTimeService;
+        }
+
+        /// <summary>
+        /// Obtém as permissões para um perfil específico
+        /// </summary>
+        /// <param name="profileId"></param>
+        /// <returns></returns>
+        [HttpGet("{profileId}/Permissions")]
+        [PermissionRequired(WindowType.AdminSettings, PermissionType.Read)]
+        public async Task<IActionResult> GetPermissions(int profileId)
+        {
+            var response = await _smartTimeService.GetWindowPermissionsToProfile(profileId);
+            return Ok(response);
         }
 
         /// <summary>
