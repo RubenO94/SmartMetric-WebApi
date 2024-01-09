@@ -39,6 +39,18 @@ namespace SmartMetric.WebAPI.Controllers.v1
             var response = await _smartTimeService.GetDepartmentsByProfileId(profileId, page, pageSize);
             return Ok(response);
         }
+
+        /// <summary>
+        /// Obtém todos os perfis
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [PermissionRequired(WindowType.Profiles, PermissionType.Read)]
+        public async Task<IActionResult> GetAllProfiles()
+        {
+            var response = await _smartTimeService.GetAllProfiles();
+            return Ok(response);
+        }
     }
 
 }

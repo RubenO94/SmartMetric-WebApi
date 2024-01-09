@@ -34,7 +34,7 @@ namespace SmartMetric.Core.Helpers
                     {
                         new PermissionDTO {PermissionId = 23122001, PermissionType = PermissionType.Create},
                         new PermissionDTO {PermissionId = 23122002, PermissionType = PermissionType.Read},
-                        new PermissionDTO {PermissionId = 23121003, PermissionType = PermissionType.Update},
+                        new PermissionDTO {PermissionId = 23122003, PermissionType = PermissionType.Update},
                         new PermissionDTO {PermissionId = 23122004, PermissionType = PermissionType.Delete},
                         new PermissionDTO {PermissionId = 23122005, PermissionType = PermissionType.Patch}
                     }

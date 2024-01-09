@@ -17,7 +17,11 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<int> GetTotalRecords<TEntity>() where TEntity : class;
 
         #region Perfis
+
+        Task<List<Perfil>> GetAllProfiles();
+
         Task<Perfil?> GetProfileById(int profileId);
+
         Task<List<int>> GetProfilePermissionIds(int profileId);
 
         Task<List<ProfilePermission>> GetProfilePermissions(int profileId);
