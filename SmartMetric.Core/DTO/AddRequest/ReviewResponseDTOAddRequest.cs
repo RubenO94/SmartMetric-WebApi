@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartMetric.Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,11 +12,20 @@ namespace SmartMetric.Core.DTO.AddRequest
     {
         [Required]
         public Guid QuestionId { get; set; }
-        [Required]
-        public Guid SubmissionId { get; set; }
         public string? TextResponse { get; set; }
         public int? RatingValue { get; set; }
+
+        public ReviewResponse ToReviewResponse()
+        {
+            return new ReviewResponse()
+            {
+                QuestionId = QuestionId,
+                TextResponse = TextResponse,
+                RatingValueResponse = RatingValue
+            };
+        }
     }
 
     //TODO: Adicionar metodo para conversão do objecto Request em objeto Entity
+
 }

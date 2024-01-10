@@ -12,16 +12,27 @@ namespace SmartMetric.Core.DTO.AddRequest
     {
         [Required(ErrorMessage ="ReviewId is Required")]
         public Guid ReviewId { get; set; }
+        
         [Required(ErrorMessage = "EvaluatedEmployeeId is Required")]
         public int EvaluatedEmployeeId { get; set; }
+        
         [Required(ErrorMessage = "EvaluatorEmployeeId is Required")]
         public int EvaluatorEmployeeId { get; set; }
-        [Required(ErrorMessage = "Submisssion Date is Required")]
-        [DataType(DataType.DateTime, ErrorMessage ="Invalid Date Format")]
-        public DateTime SubmissionDate { get; set; }
+
         [Required]
         [MinLength(1, ErrorMessage = "Submission needs at least one response")]
-        public ICollection<ReviewResponse>? ReviewResponses { get; set; }
+        public ICollection<ReviewResponseDTOAddRequest>? ReviewResponses { get; set; }
+
+
+        public Submission ToSubmission()
+        {
+            return new Submission()
+            {
+                ReviewId = ReviewId,
+                EvaluatedEmployeeId = EvaluatedEmployeeId,
+                EvaluatorEmployeeId = EvaluatorEmployeeId,
+            };
+        }
 
     }
 }
