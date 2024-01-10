@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SmartMetric.Core.Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,20 @@ namespace SmartMetric.Core.DTO.Response
         public Guid? SubmissionId { get; set; }
         public string? TextResponse { get; set; }
         public int? RatingValueResponse { get; set; }
+    }
+
+    public static class ReviewResponseExtensions
+    {
+        public static ReviewResponseDTOResponse ToReviewResponseDTOResponse(this ReviewResponse reviewResponse)
+        {
+            return new ReviewResponseDTOResponse()
+            {
+                QuestionId = reviewResponse.QuestionId,
+                SubmissionId = reviewResponse.SubmissionId,
+                RatingValueResponse = reviewResponse.RatingValueResponse,
+                ReviewResponseId = reviewResponse.ReviewResponseId,
+                TextResponse = reviewResponse.TextResponse,
+            };
+        }
     }
 }

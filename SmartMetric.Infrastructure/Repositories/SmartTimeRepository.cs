@@ -106,7 +106,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<Funcionario>> GetEmployeesByDepartmentId(int departmentId)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByDepartmentsSelected)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByListIds)} foi iniciado");
 
             // Filtrar os funcionários pelos IDs dos departamentos selecionados
             var employees = await _context.Funcionarios
@@ -119,7 +119,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         public async Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds, int page = 1, int pageSize = 20)
         {
-            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByDepartmentsSelected)} foi iniciado");
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByListIds)} foi iniciado");
 
             // Filtrar os funcionários pelos IDs dos departamentos selecionados
             var employees = await _context.Funcionarios
@@ -328,9 +328,16 @@ namespace SmartMetric.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds)
+        public async Task<List<Funcionario>> GetEmployeesByListIds(List<int> employeeIds)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetEmployeesByListIds)} foi iniciado");
+
+            // Filtra os funcionários com base nos IDs fornecidos
+            var employees = await _context.Funcionarios
+                .Where(d => employeeIds.Contains(d.Idfuncionario))
+                .ToListAsync();
+
+            return employees;
         }
 
         public async Task<int> GetTotalRecords<TEntity>() where TEntity : class

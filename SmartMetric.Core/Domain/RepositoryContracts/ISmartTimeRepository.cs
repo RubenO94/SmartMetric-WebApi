@@ -92,10 +92,10 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<Funcionario?> UpdateEmployee(Funcionario funcionario);
 
         /// <summary>
-        /// Obtém uma lista de todos os funcionários associados ao departamentos selecionados.
+        /// Obtém uma lista de todos os funcionários associados á lista de ids.
         /// </summary>
         /// <returns>Uma lista de objetos Funcionario representando todos os funcionários.</returns>
-        Task<List<Funcionario>> GetEmployeesByDepartmentsSelected(List<int?> departmentIds);
+        Task<List<Funcionario>> GetEmployeesByListIds(List<int> employeeIds);
 
         /// <summary>
         /// Obtém uma lista de todos os funcionários associados ao id do departamento no parametro

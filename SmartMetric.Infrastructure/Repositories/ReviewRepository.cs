@@ -65,6 +65,7 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
+                .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
                 .Include(temp => temp.Departments)!.ThenInclude(d => d.Department);
 
             // Aplica a filtragem por idioma, se fornecido
@@ -88,6 +89,7 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
                 .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
+                .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
                 .FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
         }
 

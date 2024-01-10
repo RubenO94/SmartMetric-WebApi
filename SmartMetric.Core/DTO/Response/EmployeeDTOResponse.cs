@@ -12,6 +12,7 @@ namespace SmartMetric.Core.DTO.Response
         public int EmployeeId { get; set; }
         public string? EmployeeName { get; set; }
         public string? EmployeeEmail { get; set; }
+        public int? DepartmentId { get; set; }
         public byte[]? EmployeePhoto { get; set; }
 
 
@@ -54,7 +55,7 @@ namespace SmartMetric.Core.DTO.Response
                 EmployeeId = funcionario.Idfuncionario,
                 EmployeeName = funcionario.Nome,
                 EmployeeEmail = funcionario.Email,
-                EmployeePhoto = funcionario.Fotografia,
+                DepartmentId = funcionario.Iddepartamento
             };
         }
     }

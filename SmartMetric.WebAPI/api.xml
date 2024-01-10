@@ -273,6 +273,47 @@
             Controlador responsável por operações relacionadas as submissões de avaliações.
             </summary>
         </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.#ctor(SmartMetric.Core.ServicesContracts.Submissions.ISubmissionAdderService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionGetterService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionDeleterService,SmartMetric.Core.ServicesContracts.Submission.ISubmissionUpdaterService)">
+            <summary>
+            
+            </summary>
+            <param name="submissionAdderService"></param>
+            <param name="submissionGetterService"></param>
+            <param name="submissionDeleterService"></param>
+            <param name="submissionUpdaterService"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.CreateSubmission(SmartMetric.Core.DTO.AddRequest.SubmissionDTOAddRequest)">
+            <summary>
+            
+            </summary>
+            <param name="submission"></param>
+            <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetSubmissionsFromAuthenticatedUser(System.Nullable{System.Guid})">
+            <summary>
+            
+            </summary>
+            <param name="reviewId"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.UpdateSubmissionFromAuthenticatedUser(System.Guid,SmartMetric.Core.DTO.AddRequest.SubmissionDTOAddRequest)">
+            <summary>
+            
+            </summary>
+            <param name="submissionId"></param>
+            <param name="submission"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.DeleteSubmission(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="submissionId"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.UsersController">
             <summary>
             Controlador responsável por operações relacionadas a utilizadores autenticados.
@@ -376,6 +417,19 @@
             Método chamado ao ocorrer uma exceção, realiza o tratamento específico para diferentes tipos de exceções.
             </summary>
             <param name="context">O contexto da exceção.</param>
+        </member>
+        <member name="T:SmartMetric.WebAPI.StartupExtensions.ConfigureServiceExtension">
+            <summary>
+            Métodos de extensão para configurar serviços da  WEB API SmartMetric.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.StartupExtensions.ConfigureServiceExtension.ConfigureServices(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Configura os serviços para a WEB API SmartMetric.
+            </summary>
+            <param name="services">A coleção de descritores de serviços.</param>
+            <param name="configuration">As configurações de configuração.</param>
+            <returns>A coleção atualizada de descritores de serviços.</returns>
         </member>
     </members>
 </doc>

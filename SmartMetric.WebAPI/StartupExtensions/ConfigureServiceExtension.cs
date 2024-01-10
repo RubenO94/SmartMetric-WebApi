@@ -32,15 +32,24 @@ using SmartMetric.Core.ServicesContracts.SingleChoiceOptionTranslations;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using SmartMetric.Core.Services.Reviews;
 using SmartMetric.Core.Services.SingleChoiceOptionTranslations;
-using SmartMetric.Core.Domain.RepositoryContracts.Common;
-using SmartMetric.Infrastructure.Repositories.Common;
 using Microsoft.OpenApi.Models;
-using SmartMetric.WebAPI.Filters.AutorizationFilter;
+using SmartMetric.Core.ServicesContracts.Submissions;
+using SmartMetric.Core.Services.Submissions;
+using SmartMetric.Core.ServicesContracts.Submission;
 
 namespace SmartMetric.WebAPI.StartupExtensions
 {
+    /// <summary>
+    /// Métodos de extensão para configurar serviços da  WEB API SmartMetric.
+    /// </summary>
     public static class ConfigureServiceExtension
     {
+        /// <summary>
+        /// Configura os serviços para a WEB API SmartMetric.
+        /// </summary>
+        /// <param name="services">A coleção de descritores de serviços.</param>
+        /// <param name="configuration">As configurações de configuração.</param>
+        /// <returns>A coleção atualizada de descritores de serviços.</returns>
         public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
         {
 
@@ -105,6 +114,11 @@ namespace SmartMetric.WebAPI.StartupExtensions
             services.AddScoped<IReviewGetterService, ReviewGetterService>();
             services.AddScoped<IReviewDeleterService, ReviewDeleterService>();
             services.AddScoped<IReviewUpdaterService, ReviewUpdaterService>();
+
+            services.AddScoped<ISubmissionAdderService, SubmissionAdderService>();
+            services.AddScoped<ISubmissionGetterService, SubmissionGetterService>();
+            services.AddScoped<ISubmissionUpdaterService, SubmissionUpdaterService>();
+            services.AddScoped<ISubmissionDeleterService, SubmissionDeleterService>();
 
             #endregion
 

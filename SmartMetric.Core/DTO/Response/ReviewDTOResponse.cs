@@ -15,6 +15,7 @@ namespace SmartMetric.Core.DTO.Response
         public List<TranslationDTOResponse>? Translations { get; set; }
         public List<QuestionDTOResponse>? Questions { get; set; }
         public List<DepartmentDTOResponse>? Departments { get; set; }
+        public List<EmployeeDTOResponse>? Employees { get; set; }
 
 
         /// <summary>
@@ -54,7 +55,7 @@ namespace SmartMetric.Core.DTO.Response
                 StartDate = review.StartDate,
                 EndDate = review.EndDate,
                 ReviewStatus = review.ReviewStatus,
-                ReviewType = review.ReviewType, 
+                ReviewType = review.ReviewType,
                 Questions = review.Questions?.Select(temp => temp.ToQuestionDTOResponse()).ToList() ?? null,
                 Translations = review.Translations?.Select(temp => temp.ToTranslationDTOResponse()).ToList() ?? null,
                 Departments = review.Departments?.Select(temp =>
@@ -65,7 +66,7 @@ namespace SmartMetric.Core.DTO.Response
                         DepartmentDescription = temp.Department!.Descricao
                     };
                 }).ToList() ?? null,
-
+                Employees = review.Employees?.Select(temp => temp.Employee!.ToEmployeeDTOResponse()).ToList(),
             };
         }
     }

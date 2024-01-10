@@ -41,6 +41,17 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist", nameof(request.ReviewDepartmentsIds));
 
+            // TODO: Adicionar Employees a uma Review;
+
+            var employees = await _smartTimeRepository.GetEmployeesByListIds(request.ReviewEmployeesIds!);
+
+            var employeesNotExisting = request.ReviewEmployeesIds!.Except(employees.Select(temp => temp.Idfuncionario).ToList()).ToList();
+            if (employeesNotExisting.Any()) throw new ArgumentException("Some of the employee ids does not exist", nameof(request.ReviewEmployeesIds));
+
+            var employeesNotBelongToDepartments = request.ReviewEmployeesIds!.Except(employees.Where(temp => request.ReviewDepartmentsIds!.Contains(temp.Iddepartamento!.Value)).Select(temp => temp.Idfuncionario)).ToList().ToList();
+
+            if (employeesNotBelongToDepartments.Any()) throw new ArgumentException("Some of the employee ids does not belong to the departments selected", nameof(request.ReviewEmployeesIds));
+
             Review review = request.ToReview();
 
             foreach (var department in departments)
@@ -48,8 +59,11 @@ namespace SmartMetric.Core.Services.Reviews
                 review.Departments?.Add(new ReviewDepartment() { Department = department, Review = review });
             }
 
+            foreach (var employee in employees)
+            {
+                review.Employees?.Add(new ReviewEmployee() { Employee = employee, Review = review });
+            }
 
-            //var employess = await _smartTimeRepository.
 
             var result = await _reviewRepository.AddReview(review);
 
