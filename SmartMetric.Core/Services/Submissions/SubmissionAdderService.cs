@@ -66,6 +66,7 @@ namespace SmartMetric.Core.Services.Submissions
 
             var submissionToAdd = request.ToSubmission();
             submissionToAdd.SubmissionDate = DateTime.UtcNow;
+            submissionToAdd.ReviewResponses = reviewResponses?.ToList();
 
             var result = await _submissionRepository.AddSubmission(submissionToAdd);
 
