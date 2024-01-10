@@ -1,14 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SmartMetric.Core.Enums
+﻿/// <summary>
+/// Enumeração que representa os tipos de utilizadores no módulo SmartMetric.
+/// </summary>
+public enum ApplicationUserType
 {
-    public enum ApplicationUserType
-    {
-        User,
-        Employee
-    }
+    /// <summary>
+    /// Utilizador proveniente da tabela "Utilizadores" do SmartTime.
+    /// </summary>
+    SmartTimeUser,
+
+    /// <summary>
+    /// Utilizador proveniente da tabela "Funcionários" do SmartTime.
+    /// </summary>
+    Employee
 }

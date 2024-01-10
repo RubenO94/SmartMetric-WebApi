@@ -39,6 +39,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <param name="page">Número da página.</param>
         /// <param name="pageSize">Tamanho da página.</param>
+        /// <param name="language">Idioma pertendido na procura.</param>
         /// <returns>Um IActionResult representando as avaliações obtidas.</returns>
         [PermissionRequired(WindowType.Reviews, PermissionType.Read)]
         [HttpGet]

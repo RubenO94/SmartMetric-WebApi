@@ -1,6 +1,10 @@
-﻿namespace SmartMetric.Core.ServicesContracts.Submissions
+﻿using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.DTO.Response;
+
+namespace SmartMetric.Core.ServicesContracts.Submissions
 {
-    internal interface ISubmissionAdderService
+    public interface ISubmissionAdderService
     {
+        Task<ApiResponse<SubmissionDTOResponse>> AddSubmission(SubmissionDTOAddRequest? request);
     }
 }

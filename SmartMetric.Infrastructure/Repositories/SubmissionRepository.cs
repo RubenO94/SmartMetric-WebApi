@@ -1,5 +1,8 @@
-﻿using SmartMetric.Core.Domain.Entities;
+﻿using Microsoft.Extensions.Logging;
+using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
+using SmartMetric.Infrastructure.DatabaseContext;
+using SmartMetric.Infrastructure.Repositories.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +11,17 @@ using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
-    public class SubmissionRepository : ISubmissionRepository
+    public class SubmissionRepository : BaseRepository, ISubmissionRepository
     {
+        private readonly ApplicationDbContext _context;
+        private readonly ILogger<SmartTimeRepository> _logger;
+
+        public SubmissionRepository(ApplicationDbContext context, ILogger<SmartTimeRepository> logger) : base(context)
+        {
+            _context = context;
+            _logger = logger;
+        }
+
         public Task<bool> AddSubmission(Submission submission)
         {
             throw new NotImplementedException();

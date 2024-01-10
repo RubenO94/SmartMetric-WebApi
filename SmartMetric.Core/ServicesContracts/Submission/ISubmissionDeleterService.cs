@@ -1,6 +1,9 @@
-﻿namespace SmartMetric.Core.ServicesContracts.Submissions
+﻿using SmartMetric.Core.DTO.Response;
+
+namespace SmartMetric.Core.ServicesContracts.Submissions
 {
-    internal interface ISubmissionDeleterService
+    public interface ISubmissionDeleterService
     {
+        Task<ApiResponse<bool>> DeleteSubmission(Guid? submissionId);
     }
 }
