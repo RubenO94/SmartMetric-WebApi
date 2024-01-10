@@ -45,7 +45,7 @@ namespace SmartMetric.WebAPI.Filters.AutorizationFilter
                     //return;
                 }
 
-                ApplicationUserType applicationUserType = IsEmail(strDados[0]) ? ApplicationUserType.Employee : ApplicationUserType.User;
+                ApplicationUserType applicationUserType = IsEmail(strDados[0]) ? ApplicationUserType.Employee : ApplicationUserType.SmartTimeUser;
 
                 context.HttpContext.Items["ApplicationUserType"] = applicationUserType;
                 context.HttpContext.Items["ToSearchBy"] = strDados[0];

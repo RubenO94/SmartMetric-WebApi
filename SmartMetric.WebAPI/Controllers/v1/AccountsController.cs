@@ -71,7 +71,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
             {
                 string? valueToSearch = HttpContext.Items["ToSearchBy"] as string;
 
-                UserDTO? user = applicationUserType == ApplicationUserType.User ? await _smartTimeService.GetUserByName(valueToSearch) : await _smartTimeService.GetEmployeeByEmail(valueToSearch);
+                UserDTO? user = applicationUserType == ApplicationUserType.SmartTimeUser ? await _smartTimeService.GetUserByName(valueToSearch) : await _smartTimeService.GetEmployeeByEmail(valueToSearch);
 
                 if (user == null)
                 {
@@ -141,7 +141,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
                 string? id = principal.FindFirst("UserId")?.Value;
                 int userId = Convert.ToInt32(id);
 
-                UserDTO? user = applicationUserType == ApplicationUserType.User ? await _smartTimeService.GetUserById(userId) : await _smartTimeService.GetEmployeeById(userId);
+                UserDTO? user = applicationUserType == ApplicationUserType.SmartTimeUser ? await _smartTimeService.GetUserById(userId) : await _smartTimeService.GetEmployeeById(userId);
 
 
 

@@ -88,7 +88,7 @@ namespace SmartMetric.Core.Services
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetProfileByUserId)} foi iniciado");
 
-            if (applicationUserType == ApplicationUserType.User)
+            if (applicationUserType == ApplicationUserType.SmartTimeUser)
             {
                 var user = await _smartTimeRepository.GetUserById(userId);
 
@@ -185,33 +185,6 @@ namespace SmartMetric.Core.Services
             throw new ArgumentException("Unidentified application user", "Application User");
         }
 
-        public async Task<ApiResponse<List<WindowPermissionDTO>>> GetWindowPermissionsToProfile(int profileId)
-        {
-            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetWindowPermissionsToProfile)} foi iniciado");
-
-            if (profileId == 0) throw new ArgumentException("Invalid profile id", nameof(profileId));
-
-            var profile = await _smartTimeRepository.GetProfileById(profileId);
-            if (profile == null) throw new ArgumentException($"Profile with id {profileId} don't exist", nameof(profileId));
-
-            var permissionsList = await _smartTimeRepository.GetProfilePermissions(profileId);
-            var profileWindowPermissions = new List<int>();
-
-            foreach ( var permission in permissionsList ) 
-            {
-                profileWindowPermissions.Add(permission.PermissionId);
-            }
-
-            var windowPermissionDTO = WindowPermissionHelper.CheckProfilePermissions(profileWindowPermissions);
-
-            return new ApiResponse<List<WindowPermissionDTO>>()
-            {
-                StatusCode = (int)HttpStatusCode.OK,
-                Message = $"Profile {profile.Nome} permissions retrieve with success.",
-                Data = windowPermissionDTO
-            };
-        }
-
         public async Task<ApiResponse<List<PermissionDTO>>> UpdateWindowPermissionsToProfile(int profileId, List<int> permissionsIDs)
         {
             _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(UpdateWindowPermissionsToProfile)} foi iniciado");
@@ -241,20 +214,6 @@ namespace SmartMetric.Core.Services
 
             };
 
-        }
-
-        public async Task<ApiResponse<List<Perfil>>> GetAllProfiles()
-        {
-            _logger.LogInformation($"{nameof(SmartTimeService)}.{nameof(GetAllProfiles)} foi iniciado");
-
-            var profilesList = await _smartTimeRepository.GetAllProfiles();
-
-            return new ApiResponse<List<Perfil>>()
-            {
-                StatusCode = (int)HttpStatusCode.OK,
-                Message = "Get all profiles successfully",
-                Data = profilesList
-            };
         }
 
         #endregion
@@ -387,7 +346,7 @@ namespace SmartMetric.Core.Services
                 throw new HttpStatusException(System.Net.HttpStatusCode.BadRequest, "Request can't be null.");
             }
 
-            if (user.ApplicationUserType == Enums.ApplicationUserType.User)
+            if (user.ApplicationUserType == ApplicationUserType.SmartTimeUser)
             {
                 Utilizador? utilizador = await _smartTimeRepository.GetUserById(user.UserId);
                 if (utilizador == null)
@@ -402,7 +361,7 @@ namespace SmartMetric.Core.Services
 
                 return utilizador.ToUserDTO();
             }
-            else if (user.ApplicationUserType == Enums.ApplicationUserType.Employee)
+            else if (user.ApplicationUserType == ApplicationUserType.Employee)
             {
                 Funcionario? funcionario = await _smartTimeRepository.GetEmployeeById(user.UserId);
                 if (funcionario == null)
@@ -423,6 +382,16 @@ namespace SmartMetric.Core.Services
             }
 
 
+        }
+
+        public Task<ApiResponse<List<WindowPermissionDTO>>> GetWindowPermissionsToProfile(int profileId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ApiResponse<List<Perfil>>> GetAllProfiles()
+        {
+            throw new NotImplementedException();
         }
 
         #endregion

@@ -157,7 +157,7 @@ namespace SmartMetric.WebAPI.Filters.ActionFilters
                 {
                     UserDTO? user = null;
 
-                    if (applicationUserType == ApplicationUserType.User)
+                    if (applicationUserType == ApplicationUserType.SmartTimeUser)
                     {
                         user = await _smartTimeService.GetUserById(userId);
                     }

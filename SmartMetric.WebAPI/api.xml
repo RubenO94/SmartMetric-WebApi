@@ -228,6 +228,7 @@
             </summary>
             <param name="page">Número da página.</param>
             <param name="pageSize">Tamanho da página.</param>
+            <param name="language">Idioma pertendido na procura.</param>
             <returns>Um IActionResult representando as avaliações obtidas.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewById(System.Nullable{System.Guid})">
@@ -266,6 +267,11 @@
             <param name="reviewId">ID da avaliação a ter o status atualizado.</param>
             <param name="review">Dados de atualização do status da avaliação.</param>
             <returns>Um IActionResult representando o resultado da atualização do status da avaliação.</returns>
+        </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.SubmissionsController">
+            <summary>
+            Controlador responsável por operações relacionadas as submissões de avaliações.
+            </summary>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.UsersController">
             <summary>
