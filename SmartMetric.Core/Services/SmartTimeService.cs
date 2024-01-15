@@ -232,7 +232,7 @@ namespace SmartMetric.Core.Services
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrive with success",
-                Data = result.Select(temp => temp.ToEmployeeDTOResponse()).ToList(),
+                Data = result.Select(temp => temp.ToEmployeeDTOResponse()).OrderBy(emp => emp.EmployeeName).ToList(),
             };
         }
 
