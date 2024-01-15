@@ -225,6 +225,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
             // Aplica a funcionalidade de paginação
             var departments = await _context.Departamentos
+                .OrderBy(temp => temp.Descricao)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -245,6 +246,7 @@ namespace SmartMetric.Infrastructure.Repositories
             // Filtra os departamentos com base nos IDs obtidos e aplica a funcionalidade de paginação
             var departamentosAssociados = await _context.Departamentos
                 .Where(departamento => departamentoIds.Contains(departamento.Iddepartamento))
+                .OrderBy(temp=> temp.Descricao)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
