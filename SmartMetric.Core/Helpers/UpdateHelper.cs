@@ -286,6 +286,9 @@ namespace SmartMetric.Core.Helpers
 
             //Atualizar os departamentos da revisão
             UpdateReviewDepartments(existingReview.Departments, newReview.ReviewDepartmentsIds);
+
+            //Atualizar os funcionários da revisão
+            UpdateReviewEmployees(existingReview.Employees, newReview.ReviewEmployeesIds);
         }
 
         public static void UpdateReviewDepartments(ICollection<ReviewDepartment>? existingDepartments, IEnumerable<int>? newDepartmentIds)
@@ -301,7 +304,8 @@ namespace SmartMetric.Core.Helpers
 
             // Adicionar novos departamentos que não estão presentes na lista existente
             var departmentsToAdd = newDepartmentIds
-                .Where(newDepartmentId => existingDepartmentsList.All(existingDepartment => existingDepartment.DepartmentId != newDepartmentId))
+                .Where(newDepartmentId => existingDepartmentsList
+                .All(existingDepartment => existingDepartment.DepartmentId != newDepartmentId))
                 .Select(newDepartmentId => new ReviewDepartment { DepartmentId = newDepartmentId })
                 .ToList();
 
@@ -322,6 +326,39 @@ namespace SmartMetric.Core.Helpers
             }
         }
 
+        public static void UpdateReviewEmployees(ICollection<ReviewEmployee>? existingEmployees, IEnumerable<int>? newEmployeeIds)
+        {
+            if (existingEmployees == null || newEmployeeIds == null) { return; }
 
+            var existingEmployeesList = existingEmployees.ToList();
+
+            //Encontrar employees que não estão presentes na lista atualizada e removê-los
+            var employeesToRemove = existingEmployeesList
+                .Where(existingEmployee => !newEmployeeIds.Contains(existingEmployee.EmployeeId))
+                .ToList();
+
+            // Adicionar novos funcionários que não estão presentes na lista existente
+            var employeesToAdd = newEmployeeIds
+                .Where(newEmployeeId => existingEmployeesList
+                .All(existingEmployee => existingEmployee.EmployeeId != newEmployeeId))
+                .Select(newEmployeeId => new ReviewEmployee { EmployeeId = newEmployeeId })
+                .ToList();
+
+            //Remover employees que não estão presentes na lista atualizada
+            foreach (var employeeToRemove in employeesToRemove) 
+            {
+                existingEmployeesList.Remove(employeeToRemove);
+            }
+
+            //Adicionar novos employees
+            existingEmployeesList.AddRange(employeesToAdd);
+
+            //Converter de volta para ICollection
+            existingEmployees.Clear();
+            foreach(var item in existingEmployeesList) 
+            {
+                existingEmployees.Add(item);
+            }
+        }
     }
 }
