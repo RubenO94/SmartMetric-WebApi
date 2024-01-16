@@ -285,7 +285,7 @@ namespace SmartMetric.Core.Helpers
             UpdateQuestions(existingReview.Questions, newReview.Questions);
 
             //Atualizar os departamentos da revisão
-            UpdateReviewDepartments(existingReview.Departments, newReview.DepartmentIds);
+            UpdateReviewDepartments(existingReview.Departments, newReview.ReviewDepartmentsIds);
         }
 
         public static void UpdateReviewDepartments(ICollection<ReviewDepartment>? existingDepartments, IEnumerable<int>? newDepartmentIds)

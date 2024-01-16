@@ -19,7 +19,7 @@ namespace SmartMetric.Core.DTO.UpdateRequest
         public ICollection<TranslationDTOUpdate>? Translations { get; set; }
         [MinLength(1, ErrorMessage = "Review Questions can't be less than 1")]
         public ICollection<QuestionDTOUpdate>? Questions { get; set; }
-        public ICollection<int>? EmployeeIds { get; set; }
-        public ICollection<int>? DepartmentIds { get; set; }
+        public ICollection<int>? ReviewEmployeesIds { get; set; }
+        public ICollection<int>? ReviewDepartmentsIds { get; set; }
     }
 }

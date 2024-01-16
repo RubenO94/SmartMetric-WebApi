@@ -37,12 +37,11 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (reviewDTOUpdate.StartDate >= reviewDTOUpdate.EndDate) throw new ArgumentException("Start date must be before the end date.", nameof(reviewDTOUpdate.StartDate));
 
-            var departments = await _smartTimeRepository.GetDepartmentsByListIds(reviewDTOUpdate.DepartmentIds!.ToList());
+            var departments = await _smartTimeRepository.GetDepartmentsByListIds(reviewDTOUpdate.ReviewDepartmentsIds!.ToList());
 
-            var departmentsNotExisting = reviewDTOUpdate.DepartmentIds!.Except(departments.Select(temp => temp.Iddepartamento).ToList()).ToList();
+            var departmentsNotExisting = reviewDTOUpdate.ReviewDepartmentsIds!.Except(departments.Select(temp => temp.Iddepartamento).ToList()).ToList();
 
-            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist", nameof(reviewDTOUpdate.DepartmentIds));
-
+            if (departmentsNotExisting.Any()) throw new ArgumentException("Some of the departments ids does not exist", nameof(reviewDTOUpdate.ReviewDepartmentsIds));
 
             var matchingReview = await _reviewRepository.GetReviewById(reviewId.Value);
 
