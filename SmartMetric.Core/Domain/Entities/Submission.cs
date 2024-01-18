@@ -59,6 +59,12 @@ namespace SmartMetric.Core.Domain.Entities
         [ForeignKey(nameof(EvaluatorEmployeeId))]
         public virtual Funcionario? EvaluatorEmployee { get; set; }
 
+        [ForeignKey(nameof(EvaluatedDepartmentId))]
+        public virtual Departamento? EvaluatedDepartment { get; set; } = null;
+
+        [ForeignKey(nameof(EvaluatorDepartmentId))]
+        public virtual Departamento? EvaluatorDepartment { get; set; } = null;
+
     }
 
 }
