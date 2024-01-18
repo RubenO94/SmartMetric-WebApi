@@ -16,6 +16,7 @@ namespace SmartMetric.Core.DTO.Response
         public List<QuestionDTOResponse>? Questions { get; set; }
         public List<DepartmentDTOResponse>? Departments { get; set; }
         public List<EmployeeDTOResponse>? Employees { get; set; }
+        public List<SubmissionDTOResponse>? Submissions { get; set; } 
 
 
         /// <summary>
@@ -67,6 +68,7 @@ namespace SmartMetric.Core.DTO.Response
                     };
                 }).ToList() ?? null,
                 Employees = review.Employees?.Select(temp => temp.Employee!.ToEmployeeDTOResponse()).ToList(),
+                Submissions = review.Submissions?.Select(temp => temp.ToSubmissionDTOResponse()).ToList() ?? null,
             };
         }
     }

@@ -13,6 +13,8 @@ namespace SmartMetric.Core.DTO.Response
         public Guid? ReviewId { get; set; }
         public int? EvaluatedEmployeeId { get; set; }
         public int? EvaluatorEmployeeId { get; set; }
+        public int? EvaluatedDepartmentId { get; set; }
+        public int? EvaluatorDepartmentId { get; set; }
         public DateTime? SubmissionDate { get; set; }
         public List<ReviewResponseDTOResponse>? ReviewResponses { get; set; }
 
@@ -29,6 +31,8 @@ namespace SmartMetric.Core.DTO.Response
                 ReviewId = submission.ReviewId,
                 EvaluatedEmployeeId = submission.EvaluatedEmployeeId,
                 EvaluatorEmployeeId = submission.EvaluatorEmployeeId,
+                EvaluatedDepartmentId = submission.EvaluatedDepartmentId,
+                EvaluatorDepartmentId = submission.EvaluatorDepartmentId,
                 SubmissionDate = submission.SubmissionDate,
                 ReviewResponses = submission.ReviewResponses?.Select(temp => temp.ToReviewResponseDTOResponse()).ToList()
             };

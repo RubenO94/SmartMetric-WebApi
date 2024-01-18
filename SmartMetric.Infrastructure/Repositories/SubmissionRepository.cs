@@ -22,9 +22,14 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger = logger;
         }
 
-        public Task<bool> AddSubmission(Submission submission)
+        public async Task<bool> AddSubmission(Submission submission)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(AddSubmission)} foi iniciado.");
+
+            _context.Submissions.Add(submission);
+            var result = await _context.SaveChangesAsync();
+
+            return result > 0;
         }
 
         public Task<List<Submission>> GetAllSubmissions(int page = 1, int pageSize = 20)

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using System.Net;
 
@@ -26,6 +27,8 @@ namespace SmartMetric.Core.Services.Reviews
             var associatedReview = await _reviewRepository.GetReviewById(reviewId.Value);
 
             if (associatedReview == null) throw new ArgumentException("Review doesn't exist", nameof(reviewId));
+
+            if (associatedReview.ReviewStatus != ReviewStatus.NotStarted.ToString()) throw new ArgumentException("Review can't be deleted");
 
             var result = await _reviewRepository.DeleteReview(associatedReview.ReviewId);
 

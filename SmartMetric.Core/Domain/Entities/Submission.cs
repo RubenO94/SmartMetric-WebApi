@@ -28,6 +28,16 @@ namespace SmartMetric.Core.Domain.Entities
         public int? EvaluatorEmployeeId { get; set; }
 
         /// <summary>
+        /// Obtém ou define o identificador único do departamento avaliado na submissão
+        /// </summary>
+        public int? EvaluatedDepartmentId { get; set; }
+
+        /// <summary>
+        /// Obtém ou define o identificador único do funcionário avaliador na submissão
+        /// </summary>
+        public int? EvaluatorDepartmentId { get; set; }
+
+        /// <summary>
         /// Obtém ou define a data da submissão.
         /// </summary>
         public DateTime? SubmissionDate { get; set; }

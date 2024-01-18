@@ -114,6 +114,8 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
 
         #region FuncionariosChefia
         Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId, int page = 1, int pageSize = 20);
+        Task<List<FuncionariosChefia>> GetChefiasByDepartment(int departmentId);
+        Task<List<FuncionariosChefia>> GetChefiasByEmployee(int employeeId);
         Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId, int page = 1, int pageSize = 20);
         Task<List<FuncionariosChefia>> GetAllChiefsEmployee(int page = 1, int pageSize = 20);
         #endregion

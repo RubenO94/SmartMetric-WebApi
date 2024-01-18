@@ -145,9 +145,6 @@ namespace SmartMetric.Core.Services
                         Data = userProfile
                     };
                 }
-
-
-
             }
 
             if (applicationUserType == ApplicationUserType.Employee)

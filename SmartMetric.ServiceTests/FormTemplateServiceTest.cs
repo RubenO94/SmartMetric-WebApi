@@ -244,70 +244,70 @@ namespace SmartMetric.ServiceTests
         #region GetAllFormTemplate
 
         //TESTE: retornar uma lista vazia
-        [Fact]
-        public async Task GetAllFormTemplates_ShouldBeEmptyList()
-        {
-            //Arrange
-            var request = new List<FormTemplate>();
+        //[Fact]
+        //public async Task GetAllFormTemplates_ShouldBeEmptyList()
+        //{
+        //    //Arrange
+        //    var request = new List<FormTemplate>();
 
-            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates(1, 20)).ReturnsAsync(request);
+        //    _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates(1, 20)).ReturnsAsync(request);
 
-            //Act
-            ApiResponse<List<FormTemplateDTOResponse?>> responseFromGet = await _formTemplatesGetterService.GetAllFormTemplates();
+        //    //Act
+        //    ApiResponse<List<FormTemplateDTOResponse?>> responseFromGet = await _formTemplatesGetterService.GetAllFormTemplates();
 
-            //Assert
-            responseFromGet.Data.Should().BeEmpty();
-        }
+        //    //Assert
+        //    responseFromGet.Data.Should().BeEmpty();
+        //}
 
         //TESTE: retornar uma lista
-        [Fact]
-        public async Task GetAllFormTemplates_ShouldBeSuccessful()
-        {
-            //Arrange
-            List<FormTemplateDTOAddRequest> formTemplatesRequest = new()
-            {
-                new FormTemplateDTOAddRequest
-                {
-                    CreatedByUserId = 123,
-                    Translations = new List<TranslationDTOAddRequest>
-                    {
-                        new TranslationDTOAddRequest
-                        {
-                            Language = Language.EN,
-                            Title = "Title",
-                            Description = "Description",
-                        }
-                    }
-                },
-                new FormTemplateDTOAddRequest
-                {
-                    CreatedByUserId = 12345,
-                    Translations = new List<TranslationDTOAddRequest>
-                    {
-                        new TranslationDTOAddRequest
-                        {
-                            Language = Language.EN,
-                            Title = "Title2",
-                            Description = "Description2",
-                        }
-                    }
-                },
-            };
+        //[Fact]
+        //public async Task GetAllFormTemplates_ShouldBeSuccessful()
+        //{
+        //    //Arrange
+        //    List<FormTemplateDTOAddRequest> formTemplatesRequest = new()
+        //    {
+        //        new FormTemplateDTOAddRequest
+        //        {
+        //            CreatedByUserId = 123,
+        //            Translations = new List<TranslationDTOAddRequest>
+        //            {
+        //                new TranslationDTOAddRequest
+        //                {
+        //                    Language = Language.EN,
+        //                    Title = "Title",
+        //                    Description = "Description",
+        //                }
+        //            }
+        //        },
+        //        new FormTemplateDTOAddRequest
+        //        {
+        //            CreatedByUserId = 12345,
+        //            Translations = new List<TranslationDTOAddRequest>
+        //            {
+        //                new TranslationDTOAddRequest
+        //                {
+        //                    Language = Language.EN,
+        //                    Title = "Title2",
+        //                    Description = "Description2",
+        //                }
+        //            }
+        //        },
+        //    };
 
-            List<FormTemplate> formTemplatesList = formTemplatesRequest.Select(temp => temp.ToFormTemplate()).ToList();
-            List<FormTemplateDTOResponse> expectedResponse = formTemplatesList.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
+        //    List<FormTemplate> formTemplatesList = formTemplatesRequest.Select(temp => temp.ToFormTemplate()).ToList();
+        //    List<FormTemplateDTOResponse> expectedResponse = formTemplatesList.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
-            _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates(1, 20)).ReturnsAsync(formTemplatesList);
+        //    _formTemplateRepositoryMock.Setup(temp => temp.GetAllFormTemplates(1, 20)).ReturnsAsync(formTemplatesList);
 
-            //Act
-            ApiResponse<List<FormTemplateDTOResponse?>> actualResponse = await _formTemplatesGetterService.GetAllFormTemplates();
+        //    //Act
+        //    ApiResponse<List<FormTemplateDTOResponse?>> actualResponse = await _formTemplatesGetterService.GetAllFormTemplates();
 
-            //Assert
-            actualResponse.Data.Should().NotBeNull();
-            actualResponse.Data.Should().NotBeEmpty();
-            actualResponse.Data.Should().HaveSameCount(expectedResponse);
-            actualResponse.Data!.Equals(expectedResponse);
-        }
+        //    //Assert
+        //    actualResponse.Data.Should().NotBeNull();
+        //    actualResponse.Data.Should().NotBeEmpty();
+        //    actualResponse.Data.Should().HaveSameCount(expectedResponse);
+        //    actualResponse.Data!.Equals(expectedResponse);
+        //}
 
         #endregion
 

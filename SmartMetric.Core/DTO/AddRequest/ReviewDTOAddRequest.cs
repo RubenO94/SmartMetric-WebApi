@@ -81,7 +81,7 @@ namespace SmartMetric.Core.DTO.AddRequest
             return new Review()
             {
                 CreatedByUserId = CreatedByUserId,
-                CreatedDate = DateTime.UtcNow,
+                CreatedDate = CreatedDate,
                 StartDate = StartDate,
                 EndDate = EndDate,
                 ReviewStatus = ReviewStatus.ToString(),

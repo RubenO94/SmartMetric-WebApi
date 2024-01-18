@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Azure;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using SmartMetric.Core.Domain.Entities;
@@ -267,10 +268,9 @@ namespace SmartMetric.Infrastructure.Repositories
 
         }
 
-
         #endregion
 
-        #region FuncionariosCHefias
+        #region FuncionariosChefias
 
         public async Task<List<FuncionariosChefia>> GetAllChiefsEmployee(int page = 1, int pageSize = 20)
         {
@@ -282,7 +282,21 @@ namespace SmartMetric.Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<FuncionariosChefia>> GetChefiasByDepartment(int departmentId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetChefiasByDepartment)} foi iniciado");
 
+            var response = await _context.FuncionariosChefias.Where(temp => temp.Iddepartamento == departmentId).ToListAsync();
+            return response;
+        }
+
+        public async Task<List<FuncionariosChefia>> GetChefiasByEmployee(int employeeId)
+        {
+            _logger.LogInformation($"{nameof(SmartTimeRepository)}.{nameof(GetChefiasByEmployee)} foi iniciado");
+
+            var response = await _context.FuncionariosChefias.Where(temp => temp.Idfuncionario == employeeId).ToListAsync();
+            return response;
+        }
 
         public async Task<List<Funcionario>> GetEmployeesByChiefId(int chiefId, int page = 1, int pageSize = 20)
         {
@@ -303,7 +317,6 @@ namespace SmartMetric.Infrastructure.Repositories
 
             return funcionariosAssociados;
         }
-
 
         public async Task<List<Departamento>> GetDepartmentsByChiefId(int chiefId, int page = 1, int pageSize = 20)
         {
