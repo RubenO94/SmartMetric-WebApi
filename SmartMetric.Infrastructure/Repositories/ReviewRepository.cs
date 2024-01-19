@@ -66,7 +66,8 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
                 .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
-                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department);
+                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
+                .Include(temp => temp.Submissions);
 
             // Aplica a filtragem por idioma, se fornecido
             if (!string.IsNullOrEmpty(language))
