@@ -290,6 +290,14 @@
             <param name="submissionDeleterService"></param>
             <param name="submissionUpdaterService"></param>
         </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.DeleteSubmission(System.Guid)">
+            <summary>
+            Método para eliminar uma submissão
+            </summary>
+            <param name="submissionId"></param>
+            <returns>Retorna um boolean correspondente ao sucesso do request</returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.UpdateSubmission(System.Guid,SmartMetric.Core.DTO.UpdateRequest.SubmissionFormDTOUpdate)">
             <summary>
             Método para alterar submissão, adicionando data da submissão e respostas ao formulário

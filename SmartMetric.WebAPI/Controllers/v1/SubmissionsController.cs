@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Submission;
@@ -36,6 +38,20 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
+        /// Método para eliminar uma submissão
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <returns>Retorna um boolean correspondente ao sucesso do request</returns>
+        /// <exception cref="NotImplementedException"></exception>
+        [PermissionRequired(WindowType.Submissions, PermissionType.Delete)]
+        [HttpDelete("{submissionId}")]
+        public async Task<ApiResponse<bool>> DeleteSubmission(Guid submissionId)
+        {
+            var response = await _submissionDeleterService.DeleteSubmission(submissionId);
+            return response;
+        }
+
+        /// <summary>
         /// Método para alterar submissão, adicionando data da submissão e respostas ao formulário
         /// </summary>
         /// <param name="submissionId"></param>
@@ -54,7 +70,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <param name="evaluatorEmployeeId"></param>
         /// <returns></returns>
-        [HttpGet("{evaluatorEmployeeId}")]
+        [HttpGet("Employees/{evaluatorEmployeeId}")]
         public async Task<IActionResult> GetSubmissionsByEvaluatorEmployeeId(int evaluatorEmployeeId)
         {
             var response = await _submissionGetterSerive.GetSubmissionsByEmployeeId(evaluatorEmployeeId);

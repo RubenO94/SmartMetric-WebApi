@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
@@ -35,6 +36,21 @@ namespace SmartMetric.Infrastructure.Repositories
             return result > 0;
         }
 
+        public async Task<bool> DeleteSubmission(Guid submissionId)
+        {
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(DeleteSubmission)} foi iniciado.");
+
+            var submissionToDelete = await _context.Submissions.FindAsync(submissionId);
+            if (submissionToDelete != null)
+            {
+                _context.Submissions.Remove(submissionToDelete);
+                var deleted = await _context.SaveChangesAsync();
+                return deleted > 0;
+            }
+
+            return false;
+        }
+
         public Task<List<Submission>> GetAllSubmissions(int page = 1, int pageSize = 20)
         {
             throw new NotImplementedException();
@@ -52,9 +68,10 @@ namespace SmartMetric.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<Submission?> GetSubmissionById(Guid submissionId)
+        public async Task<Submission?> GetSubmissionById(Guid submissionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetSubmissionById)} foi iniciado.");
+            return await _context.Submissions.Include(temp => temp.ReviewResponses).FirstOrDefaultAsync(temp => temp.SubmissionId == submissionId);
         }
 
         public async Task<bool> UpdateSubmission(Guid submissionId, SubmissionFormDTOUpdate submissionUpdate)

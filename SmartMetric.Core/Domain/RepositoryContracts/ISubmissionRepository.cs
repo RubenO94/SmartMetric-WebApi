@@ -56,6 +56,13 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="submission"></param>
         /// <returns>True se a atualização for bem sucessida, caso contrário falso</returns>
         Task<bool> UpdateSubmission(Guid submissionId, SubmissionFormDTOUpdate submission); 
+
+        /// <summary>
+        /// Remove uma submissão específica
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <returns>Retorna um booleano de acordo com o sucesso do método</returns>
+        Task<bool> DeleteSubmission(Guid submissionId);
     }
 
 }
