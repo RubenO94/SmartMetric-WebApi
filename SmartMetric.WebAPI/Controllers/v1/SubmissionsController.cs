@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.AddRequest;
+using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Submission;
 using SmartMetric.Core.ServicesContracts.Submissions;
@@ -34,18 +35,45 @@ namespace SmartMetric.WebAPI.Controllers.v1
             _submissionUpdaterService = submissionUpdaterService;
         }
 
+        /// <summary>
+        /// Método para alterar submissão, adicionando data da submissão e respostas ao formulário
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <param name="submission"></param>
+        /// <returns></returns>
+        [PermissionRequired(WindowType.Submissions, PermissionType.Patch)]
+        [HttpPatch("{submissionId}")]
+        public async Task<IActionResult> UpdateSubmission(Guid submissionId, [FromBody] SubmissionFormDTOUpdate submission)
+        {
+            var response = await _submissionUpdaterService.UpdateSubmission(submissionId, submission);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Método para receber todas as submissions de um funcionário específico
+        /// </summary>
+        /// <param name="evaluatorEmployeeId"></param>
+        /// <returns></returns>
+        [HttpGet("{evaluatorEmployeeId}")]
+        public async Task<IActionResult> GetSubmissionsByEvaluatorEmployeeId(int evaluatorEmployeeId)
+        {
+            var response = await _submissionGetterSerive.GetSubmissionsByEmployeeId(evaluatorEmployeeId);
+            return Ok(response);
+        }
+
+        #region Not implemented yet
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="submission"></param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<IActionResult> CreateSubmission([FromBody] SubmissionDTOAddRequest submission)
-        {
-            var response = await _submissionAdderService.AddSubmission(submission);
-            return Ok(response);
-        }
+        // [HttpPost]
+        // public async Task<IActionResult> CreateSubmission([FromBody] SubmissionDTOAddRequest submission)
+        // {
+        //     var response = await _submissionAdderService.AddSubmission(submission);
+        //     return Ok(response);
+        // }
 
 
         /// <summary>
@@ -54,12 +82,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="reviewId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        [HttpGet]
-        public async Task<IActionResult> GetSubmissionsFromAuthenticatedUser(Guid? reviewId)
-        {
-            var response = _submissionGetterSerive.GetSubmissionsByReviewId(reviewId);
-            throw new NotImplementedException();
-        }
+        // [HttpGet]
+        // public async Task<IActionResult> GetSubmissionsFromAuthenticatedUser(Guid? reviewId)
+        // {
+        //     var response = _submissionGetterSerive.GetSubmissionsByReviewId(reviewId);
+        //     throw new NotImplementedException();
+        // }
 
 
         /// <summary>
@@ -69,11 +97,11 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="submission"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        [HttpPut("{submissionId}")]
-        public async Task<IActionResult> UpdateSubmissionFromAuthenticatedUser(Guid submissionId, [FromBody] SubmissionDTOAddRequest submission) // TODO: Criar e mudar para DTOUpdate
-        {
-            throw new NotImplementedException();
-        }
+        // [HttpPut("{submissionId}")]
+        // public async Task<IActionResult> UpdateSubmissionFromAuthenticatedUser(Guid submissionId, [FromBody] SubmissionDTOAddRequest submission) // TODO: Criar e mudar para DTOUpdate
+        // {
+        //     throw new NotImplementedException();
+        // }
 
         /// <summary>
         /// 
@@ -81,12 +109,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="submissionId"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        [HttpDelete("{submissionId}")]
-        [PermissionRequired(WindowType.Submissions, PermissionType.Delete)]
-        public async Task<IActionResult> DeleteSubmission(Guid submissionId)
-        {
-            throw new NotImplementedException();
-        }
-
+        // [HttpDelete("{submissionId}")]
+        // [PermissionRequired(WindowType.Submissions, PermissionType.Delete)]
+        // public async Task<IActionResult> DeleteSubmission(Guid submissionId)
+        // {
+        //     throw new NotImplementedException();
+        // }
+        #endregion
     }
 }

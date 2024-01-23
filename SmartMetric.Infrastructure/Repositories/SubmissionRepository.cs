@@ -1,6 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
+using SmartMetric.Core.DTO.Response;
+using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories.Common;
 using System;
@@ -37,6 +40,13 @@ namespace SmartMetric.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<List<Submission>> GetAllSubmissionsByEmployeeId(int employeeId)
+        {
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByEmployeeId)} foi iniciado.");
+
+            return await _context.Submissions.Where(temp => temp.EvaluatorEmployeeId == employeeId).ToListAsync();
+        }
+
         public Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId)
         {
             throw new NotImplementedException();
@@ -45,6 +55,25 @@ namespace SmartMetric.Infrastructure.Repositories
         public Task<Submission?> GetSubmissionById(Guid submissionId)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<bool> UpdateSubmission(Guid submissionId, SubmissionFormDTOUpdate submissionUpdate)
+        {
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(UpdateSubmission)} foi iniciado");
+
+            //Search in db matching submission
+            Submission? matchingSubmission = await _context.Submissions.FirstOrDefaultAsync(temp => temp.SubmissionId == submissionId);
+            if (matchingSubmission == null) return false;
+            
+            Submission? submission = submissionUpdate.ToSubmission();
+
+            //insert patch values to the submission
+            matchingSubmission.SubmissionDate = submission.SubmissionDate;
+            matchingSubmission.ReviewResponses = submission.ReviewResponses;
+
+            //save changes and return
+            var result = await _context.SaveChangesAsync();
+            return result > 0;
         }
     }
 }

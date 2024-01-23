@@ -131,6 +131,7 @@ namespace SmartMetric.Core.Services.Reviews
                                 var otherDepartments = departments.Where(d => d.Iddepartamento != department.Iddepartamento);
                                 foreach (var chefia in chefias)
                                 {
+                                    var func = await _smartTimeRepository.GetEmployeeById((int)chefia.IdfuncionarioSuperior!);
                                     foreach (var otherDepartment in otherDepartments)
                                     {
                                         var submission = new Submission()
@@ -138,7 +139,7 @@ namespace SmartMetric.Core.Services.Reviews
                                             ReviewId = review.ReviewId,
                                             EvaluatedDepartmentId = otherDepartment.Iddepartamento,
                                             EvaluatorDepartmentId = department.Iddepartamento,
-                                            EvaluatorEmployeeId = chefia.IdfuncionarioSuperior
+                                            EvaluatorEmployeeId = func?.Idfuncionario
                                         };
                                         await _submissionRepository.AddSubmission(submission);
                                     }

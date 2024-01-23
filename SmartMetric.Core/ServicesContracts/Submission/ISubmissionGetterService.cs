@@ -7,5 +7,6 @@ namespace SmartMetric.Core.ServicesContracts.Submissions
         Task<ApiResponse<List<SubmissionDTOResponse>>> GetAllSubmissions();
         Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByReviewId(Guid? reviewId);
         Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsById(Guid? submissionId);
+        Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByEmployeeId(int employeeId);
     }
 }

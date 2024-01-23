@@ -17,12 +17,15 @@ namespace SmartMetric.Core.Domain.Entities
         /// Obtém ou define o identificador único da questão de revisão à qual a resposta está associada.
         /// </summary>
         public Guid? QuestionId { get; set; }
+        [ForeignKey(nameof(QuestionId))]
+        public virtual Question? Question { get; set; }
 
         /// <summary>
         /// Obtém ou define o identificador único da submissão à qual a resposta está vinculada.
         /// </summary>
         public Guid? SubmissionId { get; set; }
-
+        [ForeignKey(nameof(SubmissionId))]
+        public virtual Submission? Submission { get; set; }
 
         /// <summary>
         /// Obtém ou define o texto da resposta em caso de resposta textual.
@@ -34,14 +37,6 @@ namespace SmartMetric.Core.Domain.Entities
         /// Obtém ou define o valor da classificação em caso de resposta de classificação.
         /// </summary>
         public int? RatingValueResponse { get; set; }
-
-
-        /// <summary>
-        /// Obtém ou define a associação com a submissão à qual a resposta está vinculada.
-        /// </summary>
-        [ForeignKey(nameof(SubmissionId))]
-        [Required]
-        public virtual Submission? Submission { get; set; }
     }
 
 

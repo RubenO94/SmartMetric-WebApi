@@ -19,7 +19,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IReviewDeleterService _reviewDeleterService;
         private readonly IReviewUpdaterService _reviewUpdaterService;
 
-        // <summary>
+        /// <summary>
         /// Construtor do controlador Reviews.
         /// </summary>
         /// <param name="reviewGetterService">Serviço utilizado para obter avaliações.</param>

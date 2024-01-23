@@ -14,6 +14,21 @@ namespace SmartMetric.Core.DTO.UpdateRequest
         public int? EvaluatedEmployeeId { get; set; }
         public int? EvaluatorEmployeeId { get; set; }
         public DateTime? SubmissionDate { get; set; }
-        public List<ReviewResponse>? ReviewResponses { get; set; }
+        public List<ReviewResponseDTOUpdate>? ReviewResponses { get; set; }
+    }
+
+    public class SubmissionFormDTOUpdate
+    {
+        public DateTime? SubmissionDate { get; set; }
+        public List<ReviewResponseDTOUpdate>? ReviewResponses { get; set; }
+
+        public Submission ToSubmission() 
+        {
+            return new Submission()
+            {
+                SubmissionDate = SubmissionDate,
+                ReviewResponses = ReviewResponses?.Select(temp => temp.ToReviewResponse()).ToList() ?? null
+            };
+        }
     }
 }

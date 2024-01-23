@@ -221,7 +221,15 @@
             Controlador responsável por operações relacionadas a avaliações (Reviews).
             </summary>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.#ctor(SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewAdderService,SmartMetric.Core.ServicesContracts.Reviews.IReviewDeleterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewUpdaterService)" -->
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.#ctor(SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewAdderService,SmartMetric.Core.ServicesContracts.Reviews.IReviewDeleterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewUpdaterService)">
+            <summary>
+            Construtor do controlador Reviews.
+            </summary>
+            <param name="reviewGetterService">Serviço utilizado para obter avaliações.</param>
+            <param name="reviewAdderService">Serviço utilizado para adicionar avaliações.</param>
+            <param name="reviewDeleterService">Serviço utilizado para excluir avaliações.</param>
+            <param name="reviewUpdaterService">Serviço utilizado para atualizar avaliações.</param>
+        </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
             <summary>
             Obtém todas as avaliações paginadas.
@@ -282,37 +290,20 @@
             <param name="submissionDeleterService"></param>
             <param name="submissionUpdaterService"></param>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.CreateSubmission(SmartMetric.Core.DTO.AddRequest.SubmissionDTOAddRequest)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.UpdateSubmission(System.Guid,SmartMetric.Core.DTO.UpdateRequest.SubmissionFormDTOUpdate)">
             <summary>
-            
-            </summary>
-            <param name="submission"></param>
-            <returns></returns>
-        </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetSubmissionsFromAuthenticatedUser(System.Nullable{System.Guid})">
-            <summary>
-            
-            </summary>
-            <param name="reviewId"></param>
-            <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
-        </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.UpdateSubmissionFromAuthenticatedUser(System.Guid,SmartMetric.Core.DTO.AddRequest.SubmissionDTOAddRequest)">
-            <summary>
-            
+            Método para alterar submissão, adicionando data da submissão e respostas ao formulário
             </summary>
             <param name="submissionId"></param>
             <param name="submission"></param>
             <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.DeleteSubmission(System.Guid)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetSubmissionsByEvaluatorEmployeeId(System.Int32)">
             <summary>
-            
+            Método para receber todas as submissions de um funcionário específico
             </summary>
-            <param name="submissionId"></param>
+            <param name="evaluatorEmployeeId"></param>
             <returns></returns>
-            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.UsersController">
             <summary>

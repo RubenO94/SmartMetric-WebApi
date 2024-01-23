@@ -94,7 +94,7 @@ namespace SmartMetric.Core.Services.Reviews
                     if (review.ReviewStatus != ReviewStatus.Canceled && review.ReviewStatus != ReviewStatus.Completed) throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
                     break;
                 default:
-                    throw new ArgumentException($"Review Status can´t change to {review.ReviewStatus}");
+                    throw new ArgumentException($"Review Status can't change to {review.ReviewStatus}");
             }
 
             var result = await _reviewRepository.UpdateReviewStatus(reviewId.Value, review);
@@ -158,13 +158,13 @@ namespace SmartMetric.Core.Services.Reviews
                             {
                                 foreach (var otherDepartment in otherDepartments)
                                 {
-                                    var chefiaEmployee = await _smartTimeRepository.GetEmployeeById(chefia.IdfuncionarioSuperior!.Value);
+                                    var chefiaEmployeeResponse = await _smartTimeRepository.GetEmployeeById(chefia.IdfuncionarioSuperior!.Value);
                                     var submission = new Submission()
                                     {
                                         ReviewId = matchingReview.ReviewId,
                                         EvaluatedDepartmentId = otherDepartment.DepartmentId,
                                         EvaluatorDepartmentId = department.DepartmentId,
-                                        EvaluatorEmployeeId = chefiaEmployee!.Idfuncionario
+                                        EvaluatorEmployeeId = chefiaEmployeeResponse?.Idfuncionario
                                     };
                                     await _submissionRepository.AddSubmission(submission);
                                 }
