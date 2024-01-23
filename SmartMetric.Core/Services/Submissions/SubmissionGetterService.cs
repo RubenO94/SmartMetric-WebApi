@@ -49,9 +49,21 @@ namespace SmartMetric.Core.Services.Submissions
             };
         }
 
-        public Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsById(Guid? submissionId)
+        public async Task<ApiResponse<SubmissionDTOResponse>> GetSubmissionById(Guid? submissionId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SubmissionGetterService)}.{nameof(GetSubmissionById)} foi iniciado.");
+
+            if (submissionId == null) throw new ArgumentException("SubmissionId can't be null.");
+
+            var submission = await _submissionRepository.GetSubmissionById(submissionId.Value);
+            if (submission == null) throw new ArgumentException("Submission doesn't exist.");
+
+            return new ApiResponse<SubmissionDTOResponse>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "",
+                Data = submission.ToSubmissionDTOResponse()
+            };
         }
 
         public Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByReviewId(Guid? reviewId)

@@ -281,7 +281,7 @@
             Controlador responsável por operações relacionadas as submissões de avaliações.
             </summary>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.#ctor(SmartMetric.Core.ServicesContracts.Submissions.ISubmissionAdderService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionGetterService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionDeleterService,SmartMetric.Core.ServicesContracts.Submission.ISubmissionUpdaterService)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.#ctor(SmartMetric.Core.ServicesContracts.Submissions.ISubmissionAdderService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionGetterService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionDeleterService,SmartMetric.Core.ServicesContracts.Submission.ISubmissionUpdaterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService)">
             <summary>
             
             </summary>
@@ -289,6 +289,14 @@
             <param name="submissionGetterService"></param>
             <param name="submissionDeleterService"></param>
             <param name="submissionUpdaterService"></param>
+            <param name="reviewGetterService"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetReviewBySubmissionId(System.Guid)">
+            <summary>
+            
+            </summary>
+            <param name="submissionId"></param>
+            <returns></returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.DeleteSubmission(System.Guid)">
             <summary>

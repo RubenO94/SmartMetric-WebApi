@@ -5,6 +5,7 @@ using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
+using SmartMetric.Core.ServicesContracts.Reviews;
 using SmartMetric.Core.ServicesContracts.Submission;
 using SmartMetric.Core.ServicesContracts.Submissions;
 using SmartMetric.WebAPI.Filters.ActionFilter;
@@ -21,6 +22,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly ISubmissionGetterService _submissionGetterSerive;
         private readonly ISubmissionDeleterService _submissionDeleterService;
         private readonly ISubmissionUpdaterService _submissionUpdaterService;
+        private readonly IReviewGetterService _reviewGetterService;
 
         /// <summary>
         /// 
@@ -29,12 +31,32 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="submissionGetterService"></param>
         /// <param name="submissionDeleterService"></param>
         /// <param name="submissionUpdaterService"></param>
-        public SubmissionsController(ISubmissionAdderService submissionAdderService, ISubmissionGetterService submissionGetterService, ISubmissionDeleterService submissionDeleterService, ISubmissionUpdaterService submissionUpdaterService)
+        /// <param name="reviewGetterService"></param>
+        public SubmissionsController(
+            ISubmissionAdderService submissionAdderService,
+            ISubmissionGetterService submissionGetterService,
+            ISubmissionDeleterService submissionDeleterService,
+            ISubmissionUpdaterService submissionUpdaterService,
+            IReviewGetterService reviewGetterService)
         {
             _submissionAdderService = submissionAdderService;
             _submissionGetterSerive = submissionGetterService;
             _submissionDeleterService = submissionDeleterService;
             _submissionUpdaterService = submissionUpdaterService;
+            _reviewGetterService = reviewGetterService;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="submissionId"></param>
+        /// <returns></returns>
+        [HttpGet("{submissionId}")]
+        public async Task<ActionResult> GetReviewBySubmissionId(Guid submissionId)
+        {
+            var response = await _submissionGetterSerive.GetSubmissionById(submissionId);
+            var responseToReturn = await _reviewGetterService.GetReviewById(response.Data?.ReviewId);
+            return Ok(responseToReturn);
         }
 
         /// <summary>
