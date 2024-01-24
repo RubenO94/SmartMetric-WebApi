@@ -91,7 +91,10 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
                 .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
                 .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
-                .Include(temp => temp.Submissions)
+                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatedDepartment)
+                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatedEmployee)
+                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatorDepartment)
+                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatorEmployee)
                 .FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
         }
 

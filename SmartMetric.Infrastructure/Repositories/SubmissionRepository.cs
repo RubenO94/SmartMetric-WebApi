@@ -1,17 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
-using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
@@ -60,7 +53,12 @@ namespace SmartMetric.Infrastructure.Repositories
         {
             _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByEmployeeId)} foi iniciado.");
 
-            return await _context.Submissions.Where(temp => temp.EvaluatorEmployeeId == employeeId).ToListAsync();
+            return await _context.Submissions
+                .Where(temp => temp.EvaluatorEmployeeId == employeeId)
+                .Include(temp => temp.EvaluatorDepartment)
+                .Include(temp => temp.EvaluatedDepartment)
+                .Include(temp => temp.EvaluatedEmployee)
+                .ToListAsync();
         }
 
         public Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId)
