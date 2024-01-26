@@ -32,14 +32,17 @@ namespace SmartMetric.Core.Services.Reviews
             if (reviewId == null) throw new HttpStatusException(HttpStatusCode.BadRequest, "The 'reviewId' parameter is required and must be a valid GUID.");
 
             var review = await _repository.GetReviewById(reviewId.Value);
-
             if (review == null) throw new HttpStatusException(HttpStatusCode.NotFound, "Resource not found. The provided ID does not exist.");
+
+            var data = review?.ToReviewDTOResponse()!;
+            data.SubmissionsTotal = await _repository.GetTotalSubmissions(data.ReviewId);
+            data.SubmissionsCompleted = await _repository.GetTotalSubmissionsCompleted(data.ReviewId);
 
             return new ApiResponse<ReviewDTOResponse?>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = review?.ToReviewDTOResponse()!
+                Data = data
             };
         }
 
@@ -51,11 +54,18 @@ namespace SmartMetric.Core.Services.Reviews
 
             var totalCount = await _repository.GetTotalRecords(hasLanguage ? temp => temp.Translations!.Any(tr => tr.Language == language.ToString()) : null);
 
+            var data = result.Select(temp => temp.ToReviewDTOResponse()).ToList();
+            foreach (var review in data)
+            {
+                review.SubmissionsTotal = await _repository.GetTotalSubmissions(review.ReviewId);
+                review.SubmissionsCompleted = await _repository.GetTotalSubmissionsCompleted(review.ReviewId);
+            }
+
             return new ApiResponse<List<ReviewDTOResponse>>() 
             { 
                 StatusCode = (int)HttpStatusCode.OK,
                 Message = "Data retrieved successfully.",
-                Data = result.Select(temp => temp.ToReviewDTOResponse()).ToList(),
+                Data = data,
                 TotalCount = totalCount
             };
         }

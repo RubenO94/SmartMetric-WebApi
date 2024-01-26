@@ -47,16 +47,15 @@ namespace SmartMetric.WebAPI.Controllers.v1
         }
 
         /// <summary>
-        /// 
+        /// Método para receber uma submissão através do seu id único
         /// </summary>
         /// <param name="submissionId"></param>
         /// <returns></returns>
         [HttpGet("{submissionId}")]
-        public async Task<ActionResult> GetReviewBySubmissionId(Guid submissionId)
+        public async Task<ActionResult> GetSubmissionById(Guid submissionId)
         {
             var response = await _submissionGetterSerive.GetSubmissionById(submissionId);
-            var responseToReturn = await _reviewGetterService.GetReviewById(response.Data?.ReviewId);
-            return Ok(responseToReturn);
+            return Ok(response);
         }
 
         /// <summary>

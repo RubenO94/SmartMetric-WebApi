@@ -61,15 +61,28 @@ namespace SmartMetric.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId)
+        public async Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByReviewId)} foi iniciado.");
+            return await _context.Submissions
+                .Where(temp => temp.ReviewId == reviewId)
+                .Include(temp => temp.EvaluatedDepartment)
+                .Include(temp => temp.EvaluatorDepartment)
+                .Include(temp => temp.EvaluatedEmployee)
+                .Include(temp => temp.EvaluatorEmployee)
+                .ToListAsync();
         }
 
         public async Task<Submission?> GetSubmissionById(Guid submissionId)
         {
             _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetSubmissionById)} foi iniciado.");
-            return await _context.Submissions.Include(temp => temp.ReviewResponses).FirstOrDefaultAsync(temp => temp.SubmissionId == submissionId);
+            return await _context.Submissions
+                .Include(temp => temp.ReviewResponses)
+                .Include(temp => temp.EvaluatedDepartment)
+                .Include(temp => temp.EvaluatedEmployee)
+                .Include(temp => temp.EvaluatorDepartment)
+                .Include(temp => temp.EvaluatorEmployee)
+                .FirstOrDefaultAsync(temp => temp.SubmissionId == submissionId);
         }
 
         public async Task<bool> UpdateSubmission(Guid submissionId, SubmissionFormDTOUpdate submissionUpdate)

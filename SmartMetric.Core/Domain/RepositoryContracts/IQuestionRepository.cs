@@ -37,6 +37,13 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <returns>Retorna uma lista de objetos do tipo Question</returns>
         Task<List<Question>?> GetQuestionByFormTemplateId(Guid formTemplateId);
 
+        /// <summary>
+        /// Função que procura através do Id passado pro parâmetro, todas as questões associadas à revisão requerido por parâmetro
+        /// </summary>
+        /// <param name="reviewId"></param>
+        /// <returns></returns>
+        Task<List<Question>?> GetQuestionByReviewId(Guid reviewId);
+
         #endregion
     }
 }

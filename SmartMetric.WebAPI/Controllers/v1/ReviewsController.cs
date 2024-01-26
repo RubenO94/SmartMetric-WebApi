@@ -4,6 +4,7 @@ using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
+using SmartMetric.Core.ServicesContracts.Submissions;
 using SmartMetric.WebAPI.Filters.ActionFilter;
 
 namespace SmartMetric.WebAPI.Controllers.v1
@@ -18,6 +19,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IReviewAdderService _reviewAdderService;
         private readonly IReviewDeleterService _reviewDeleterService;
         private readonly IReviewUpdaterService _reviewUpdaterService;
+        private readonly ISubmissionGetterService _submissionGetterService;
 
         /// <summary>
         /// Construtor do controlador Reviews.
@@ -26,12 +28,19 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="reviewAdderService">Serviço utilizado para adicionar avaliações.</param>
         /// <param name="reviewDeleterService">Serviço utilizado para excluir avaliações.</param>
         /// <param name="reviewUpdaterService">Serviço utilizado para atualizar avaliações.</param>
-        public ReviewsController(IReviewGetterService reviewGetterService, IReviewAdderService reviewAdderService, IReviewDeleterService reviewDeleterService, IReviewUpdaterService reviewUpdaterService)
-        {
+        /// <param name="submissionGetterService"></param>
+        public ReviewsController(
+            IReviewGetterService reviewGetterService,
+            IReviewAdderService reviewAdderService,
+            IReviewDeleterService reviewDeleterService,
+            IReviewUpdaterService reviewUpdaterService,
+            ISubmissionGetterService submissionGetterService
+        ) {
             _reviewGetterService = reviewGetterService;
             _reviewAdderService = reviewAdderService;
             _reviewDeleterService = reviewDeleterService;
             _reviewUpdaterService = reviewUpdaterService;
+            _submissionGetterService = submissionGetterService;
         }
 
         /// <summary>
@@ -120,6 +129,19 @@ namespace SmartMetric.WebAPI.Controllers.v1
             var response = await _reviewUpdaterService.UpdateReviewStatus(reviewId, review);
             return Ok(response);
             
+        }
+
+        /// <summary>
+        /// Retorna todas as submissões de uma review
+        /// </summary>
+        /// <param name="reviewId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        [HttpGet("Submissions")]
+        public async Task<IActionResult> GetReviewSubmissionsByReviewId(Guid reviewId)
+        {
+            var response = await _submissionGetterService.GetSubmissionsByReviewId(reviewId);
+            return Ok(response);
         }
     }
 }

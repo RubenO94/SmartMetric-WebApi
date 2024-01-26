@@ -64,10 +64,7 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
-                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
-                .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
-                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
-                .Include(temp => temp.Submissions);
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations);
 
             // Aplica a filtragem por idioma, se fornecido
             if (!string.IsNullOrEmpty(language))
@@ -87,20 +84,32 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _context.Reviews
                 .Include(temp => temp.Translations)
                 .Include(temp => temp.Questions)!.ThenInclude(q => q!.Translations)
-                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions).ThenInclude(rt => rt.Translations)
-                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations)
-                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions)!.ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions)!.ThenInclude(sco => sco.Translations)
                 .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
-                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatedDepartment)
-                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatedEmployee)
-                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatorDepartment)
-                .Include(temp => temp.Submissions).ThenInclude(p => p.EvaluatorEmployee)
+                .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
                 .FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
         }
 
         public async Task<int> GetTotalRecords(Expression<Func<Review, bool>>? filter = null)
         {
             return await base.CountRecords<Review>(filter);
+        }
+
+        public async Task<int> GetTotalSubmissions(Guid reviewId)
+        {
+            var review = await _context.Reviews.Include(r => r.Submissions).FirstOrDefaultAsync(r => r.ReviewId == reviewId);
+            if (review != null)
+            {
+                return review.Submissions?.Count ?? 0;
+            }
+            return 0;
+        }
+
+        public async Task<int> GetTotalSubmissionsCompleted(Guid reviewId)
+        {
+            var count = await _context.Submissions.Where(s => s.ReviewId == reviewId && s.SubmissionDate != null).CountAsync();
+            return count;
         }
 
         public async Task<bool> UpdateReview(Review review)

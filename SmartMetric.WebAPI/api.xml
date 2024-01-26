@@ -216,12 +216,30 @@
             </summary>
             <returns></returns>
         </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.QuestionsController">
+            <summary>
+            Controlador responsável por operações relacionadas a questões.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.QuestionsController.#ctor(SmartMetric.Core.ServicesContracts.Questions.IQuestionGetterService)">
+            <summary>
+            Contructor of the Questions Controller
+            </summary>
+            <param name="questionGetterService"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.QuestionsController.GetQuestionByReviewId(System.Nullable{System.Guid})">
+            <summary>
+            Método que recebe todas as questões através do Id da revisão passado por parâmetro
+            </summary>
+            <param name="reviewId"></param>
+            <returns></returns>
+        </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.ReviewsController">
             <summary>
             Controlador responsável por operações relacionadas a avaliações (Reviews).
             </summary>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.#ctor(SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewAdderService,SmartMetric.Core.ServicesContracts.Reviews.IReviewDeleterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewUpdaterService)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.#ctor(SmartMetric.Core.ServicesContracts.Reviews.IReviewGetterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewAdderService,SmartMetric.Core.ServicesContracts.Reviews.IReviewDeleterService,SmartMetric.Core.ServicesContracts.Reviews.IReviewUpdaterService,SmartMetric.Core.ServicesContracts.Submissions.ISubmissionGetterService)">
             <summary>
             Construtor do controlador Reviews.
             </summary>
@@ -229,6 +247,7 @@
             <param name="reviewAdderService">Serviço utilizado para adicionar avaliações.</param>
             <param name="reviewDeleterService">Serviço utilizado para excluir avaliações.</param>
             <param name="reviewUpdaterService">Serviço utilizado para atualizar avaliações.</param>
+            <param name="submissionGetterService"></param>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
             <summary>
@@ -276,6 +295,14 @@
             <param name="review">Dados de atualização do status da avaliação.</param>
             <returns>Um IActionResult representando o resultado da atualização do status da avaliação.</returns>
         </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewSubmissionsByReviewId(System.Guid)">
+            <summary>
+            Retorna todas as submissões de uma review
+            </summary>
+            <param name="reviewId"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.SubmissionsController">
             <summary>
             Controlador responsável por operações relacionadas as submissões de avaliações.
@@ -291,9 +318,9 @@
             <param name="submissionUpdaterService"></param>
             <param name="reviewGetterService"></param>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetReviewBySubmissionId(System.Guid)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetSubmissionById(System.Guid)">
             <summary>
-            
+            Método para receber uma submissão através do seu id único
             </summary>
             <param name="submissionId"></param>
             <returns></returns>

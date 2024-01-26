@@ -66,9 +66,21 @@ namespace SmartMetric.Core.Services.Submissions
             };
         }
 
-        public Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByReviewId(Guid? reviewId)
+        public async Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByReviewId(Guid? reviewId)
         {
-            throw new NotImplementedException();
+            _logger.LogInformation($"{nameof(SubmissionGetterService)}.{nameof(GetSubmissionsByReviewId)} foi iniciado.");
+
+            if (reviewId == null) throw new ArgumentException("ReviewId can't be null.");
+
+            var submissions = await _submissionRepository.GetAllSubmissionsByReviewId(reviewId.Value);
+            if (submissions == null) throw new ArgumentException("This review doesn't exist");
+
+            return new ApiResponse<List<SubmissionDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "",
+                Data = submissions.Select(temp => temp.ToSubmissionDTOResponse()).ToList()
+            };
         }
     }
 }

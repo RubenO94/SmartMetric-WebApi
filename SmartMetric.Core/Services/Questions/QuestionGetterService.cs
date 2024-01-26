@@ -74,5 +74,22 @@ namespace SmartMetric.Core.Services.Questions
                 Data = question.ToQuestionDTOResponse()
             };
         }
+
+        public async Task<ApiResponse<List<QuestionDTOResponse>?>> GetQuestionsByReviewId(Guid? reviewId)
+        {
+            _logger.LogInformation($"{nameof(QuestionGetterService)}.{nameof(GetQuestionsByReviewId)} foi iniciado");
+
+            if (reviewId == null) throw new ArgumentException("ReviewId can't be null.");
+
+            var questions = await _questionRepository.GetQuestionByReviewId(reviewId.Value);
+            if (questions == null) throw new ArgumentException("This review doesn't exist");
+
+            return new ApiResponse<List<QuestionDTOResponse>?>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = questions.Select(temp => temp.ToQuestionDTOResponse()).ToList()
+            };
+        }
     }
 }

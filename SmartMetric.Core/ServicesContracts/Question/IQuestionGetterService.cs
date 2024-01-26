@@ -26,6 +26,13 @@ namespace SmartMetric.Core.ServicesContracts.Questions
         /// <param name="formTemplateId">O ID do modelo de formulário para o qual as questões estão associadas.</param>
         /// <returns>Uma lista de objetos <see cref="QuestionDTOResponse"/> associados ao modelo de formulário fornecido, ou null se não houver questões.</returns>
         Task<ApiResponse<List<QuestionDTOResponse>?>> GetQuestionsByFormTemplateId(Guid? formTemplateId);
+
+        /// <summary>
+        /// Obtém todas as questões associadas a uma review
+        /// </summary>
+        /// <param name="reviewId"></param>
+        /// <returns></returns>
+        Task<ApiResponse<List<QuestionDTOResponse>?>> GetQuestionsByReviewId(Guid? reviewId);
     }
 
 }

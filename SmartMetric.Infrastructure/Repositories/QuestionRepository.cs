@@ -59,6 +59,19 @@ namespace SmartMetric.Infrastructure.Repositories
             return await _dbContext.Questions.Include(temp => temp.Translations).FirstOrDefaultAsync(trans => trans.QuestionId == questionId);
         }
 
+        public async Task<List<Question>?> GetQuestionByReviewId(Guid reviewId)
+        {
+            _logger.LogInformation($"{nameof(QuestionRepository)}.{nameof(GetQuestionByReviewId)} foi iniciado.");
+
+            return await _dbContext.Questions
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.SingleChoiceOptions)!.ThenInclude(temp => temp.Translations)
+                .Include(temp => temp.RatingOptions)!.ThenInclude(temp => temp.Translations)
+                .Where(temp => temp.ReviewId == reviewId)
+                .OrderBy(temp => temp.Position)
+                .ToListAsync();
+        }
+
         #endregion
     }
 }
