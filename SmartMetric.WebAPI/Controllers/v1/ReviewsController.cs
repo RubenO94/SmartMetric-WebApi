@@ -50,7 +50,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="pageSize">Tamanho da página.</param>
         /// <param name="language">Idioma pertendido na procura.</param>
         /// <returns>Um IActionResult representando as avaliações obtidas.</returns>
-        [PermissionRequired(WindowType.Reviews, PermissionType.Read)]
         [HttpGet]
         public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20, Language? language = null) 
         {
