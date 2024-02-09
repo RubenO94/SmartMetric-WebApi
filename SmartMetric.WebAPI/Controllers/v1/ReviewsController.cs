@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartMetric.Core.Domain.Entities.Common;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
@@ -62,7 +63,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <param name="reviewId">ID da avaliação.</param>
         /// <returns>Um IActionResult representando a avaliação obtida pelo ID.</returns>
-        [PermissionRequired(WindowType.Reviews, PermissionType.Read)]
         [HttpGet("{reviewId}")]
         public async Task<IActionResult> GetReviewById(Guid? reviewId)
         {
@@ -75,7 +75,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <param name="request">Dados da avaliação a ser adicionada.</param>
         /// <returns>Um IActionResult representando o resultado da adição da avaliação.</returns>
-        [PermissionRequired(WindowType.Reviews, PermissionType.Create)]
         [HttpPost]
         public async Task<IActionResult> AddReview([FromBody] ReviewDTOAddRequest? request)
         {
@@ -91,7 +90,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <param name="reviewId">ID da avaliação a ser excluída.</param>
         /// <returns>Um ActionResult representando o resultado da exclusão da avaliação.</returns>
-        [PermissionRequired(WindowType.Reviews, PermissionType.Delete)]
         [HttpDelete("{reviewId}")]
         public async Task<ActionResult<ApiResponse<bool>>> DeleteReview(Guid? reviewId)
         {
@@ -105,7 +103,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="reviewId">ID da avaliação a ser atualizada.</param>
         /// <param name="reviewDTOUpdate">Dados atualizados da avaliação.</param>
         /// <returns>Um IActionResult representando o resultado da atualização da avaliação.</returns>
-        [PermissionRequired(WindowType.Reviews, PermissionType.Update)]
         [HttpPut("{reviewId}")]
         public async Task<IActionResult> UpdateReview(Guid? reviewId, [FromBody] ReviewDTOUpdate? reviewDTOUpdate)
         {
@@ -121,13 +118,23 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="reviewId">ID da avaliação a ter o status atualizado.</param>
         /// <param name="review">Dados de atualização do status da avaliação.</param>
         /// <returns>Um IActionResult representando o resultado da atualização do status da avaliação.</returns>
-        [PermissionRequired(WindowType.Reviews, PermissionType.Patch)]
         [HttpPatch("{reviewId}")]
         public async Task<IActionResult> UpdateReviewStatus(Guid? reviewId, [FromBody] ReviewDTOUpdateStatus review)
         {
             var response = await _reviewUpdaterService.UpdateReviewStatus(reviewId, review);
             return Ok(response);
             
+        }
+
+        /// <summary>
+        /// Retorna revisões completas
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("ReviewsCompleted")]
+        public async Task<IActionResult> GetAllReviewsCompleted()
+        {
+            var response = await _reviewGetterService.GetCompletedReviews();
+            return Ok(response);
         }
 
         /// <summary>

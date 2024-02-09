@@ -32,7 +32,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="pageSize">Tamanho da página.</param>
         /// <returns>Um IActionResult representando os departamentos associados ao perfil.</returns>
         [HttpGet("{profileId}/Departments")]
-        [PermissionRequired(WindowType.Profiles, PermissionType.Read)]
         public async Task<IActionResult> GetDepartmentsByProfileId(int profileId, [FromQuery] int page = 1, int pageSize = 20)
         {
           
@@ -45,7 +44,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [PermissionRequired(WindowType.Profiles, PermissionType.Read)]
         public async Task<IActionResult> GetAllProfiles()
         {
             var response = await _smartTimeService.GetAllProfiles();

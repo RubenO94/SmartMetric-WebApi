@@ -20,6 +20,20 @@ namespace SmartMetric.Core.Services.Reviews
             _logger = logger;
         }
 
+        public async Task<ApiResponse<List<ReviewDTOResponse>>> GetCompletedReviews()
+        {
+            _logger.LogInformation($"{nameof(ReviewGetterService)}.{nameof(GetCompletedReviews)} foi iniciado");
+
+            var result = await _repository.GetReviewsCompleted();
+
+            return new ApiResponse<List<ReviewDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "Data retrieved successfully.",
+                Data = result.Select(temp => temp.ToReviewDTOResponse()).ToList()
+            };
+        }
+
         public Task<ApiResponse<List<ReviewDTOResponse>>> GetFilteredReviews(string searchBy, string? searchString, int page = 1, int pageSize = 20)
         {
             throw new NotImplementedException();

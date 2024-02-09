@@ -31,14 +31,32 @@ namespace SmartMetric.Core.Services.Submissions
             throw new NotImplementedException();
         }
 
-        public async Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByEmployeeId(int employeeId)
+        public async Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByEvaluatorEmployeeId(int employeeId)
         {
-            _logger.LogInformation($"{nameof(SubmissionGetterService)}.{nameof(GetSubmissionsByEmployeeId)} foi iniciado");
+            _logger.LogInformation($"{nameof(SubmissionGetterService)}.{nameof(GetSubmissionsByEvaluatorEmployeeId)} foi iniciado");
 
             var employeeExist = await _smartTimeRepository.GetEmployeeById(employeeId);
             if (employeeExist == null) throw new ArgumentException("Employee doesn't exist");
 
-            var submissions = await _submissionRepository.GetAllSubmissionsByEmployeeId(employeeId);
+            var submissions = await _submissionRepository.GetAllSubmissionsByEvaluatorEmployeeId(employeeId);
+
+            return new ApiResponse<List<SubmissionDTOResponse>>()
+            {
+                StatusCode = (int)HttpStatusCode.OK,
+                Message = "List of submissions of Employee",
+                Data = submissions.Select(temp => temp.ToSubmissionDTOResponse()).ToList(),
+                TotalCount = submissions.Count
+            };
+        }
+
+        public async Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByEvaluatedEmployeeId(int employeeId)
+        {
+            _logger.LogInformation($"{nameof(SubmissionGetterService)}.{nameof(GetSubmissionsByEvaluatedEmployeeId)} foi iniciado.");
+
+            var employeeExist = await _smartTimeRepository.GetEmployeeById(employeeId);
+            if (employeeExist == null) throw new ArgumentException("Employee doesn't exist");
+
+            var submissions = await _submissionRepository.GetAllSubmissionsByEvaluatedEmployeeId(employeeId);
 
             return new ApiResponse<List<SubmissionDTOResponse>>()
             {

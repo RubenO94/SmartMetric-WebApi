@@ -36,7 +36,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="pageSize">Tamanho da página.</param>
         /// <returns>Um IActionResult representando os departamentos obtidos.</returns>
         /// <exception cref="ArgumentException">Lançada quando o utilizador não tem um perfil associado.</exception>
-        [PermissionRequired(WindowType.Departments, PermissionType.Read)]
         [HttpGet]
         public async Task<IActionResult> GetAllDepartmentsByProfileId(int page = 1, int pageSize = 20)
         {
@@ -71,7 +70,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="departmentId">ID do departamento.</param>
         /// <returns>Um IActionResult representando os funcionários obtidos.</returns>
         /// <exception cref="ArgumentException">Lançada quando o utilizador não tem acesso ao departamento especificado ou o ID do departamento não existe.</exception>
-        [PermissionRequired(WindowType.Departments, PermissionType.Read)]
         [HttpGet("{departmentId}/Employees")]
         public async Task<IActionResult> GetDepartmentEmployees(int departmentId)
         {

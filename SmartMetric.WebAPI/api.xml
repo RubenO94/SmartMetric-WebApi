@@ -295,6 +295,12 @@
             <param name="review">Dados de atualização do status da avaliação.</param>
             <returns>Um IActionResult representando o resultado da atualização do status da avaliação.</returns>
         </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviewsCompleted">
+            <summary>
+            Retorna revisões completas
+            </summary>
+            <returns></returns>
+        </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewSubmissionsByReviewId(System.Guid)">
             <summary>
             Retorna todas as submissões de uma review
@@ -347,6 +353,14 @@
             </summary>
             <param name="evaluatorEmployeeId"></param>
             <returns></returns>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.SubmissionsController.GetSubmissionsByEvaluatedEmployeeId(System.Int32)">
+            <summary>
+            Método para receber todas as submissões sobre um funcionário específico
+            </summary>
+            <param name="evaluatedEmployeeId"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
         </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.UsersController">
             <summary>

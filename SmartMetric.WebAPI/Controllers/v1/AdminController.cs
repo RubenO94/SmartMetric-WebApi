@@ -32,7 +32,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="profileId"></param>
         /// <returns></returns>
         [HttpGet("{profileId}/Permissions")]
-        [PermissionRequired(WindowType.AdminSettings, PermissionType.Read)]
         public async Task<IActionResult> GetPermissions(int profileId)
         {
             var response = await _smartTimeService.GetWindowPermissionsToProfile(profileId);
@@ -46,7 +45,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="permissionIds">Lista de IDs das permissões a serem atribuídas ao perfil.</param>
         /// <returns>Um IActionResult representando o resultado da operação.</returns>
         [HttpPost("{profileId}/Permissions")]
-        [PermissionRequired(WindowType.AdminSettings, PermissionType.Create)]
         public async Task<IActionResult> SetPermissions(int profileId, [FromBody] List<int> permissionIds)
         {
             // Atualiza as permissões do perfil
@@ -60,7 +58,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// Obtém as permissões de leitura para todas as janelas da aplicação.
         /// </summary>
         /// <returns>Um IActionResult representando as permissões de leitura para todas as janelas.</returns>
-        [PermissionRequired(WindowType.AdminSettings, PermissionType.Read)]
         [HttpGet("Windows")]
         public IActionResult GetAllWindowsPermissions()
         {

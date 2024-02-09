@@ -26,7 +26,14 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="employeeId"></param>
         /// <returns>Uma lista de submissões associadas ao funcionário</returns>
-        Task<List<Submission>> GetAllSubmissionsByEmployeeId(int employeeId);
+        Task<List<Submission>> GetAllSubmissionsByEvaluatorEmployeeId(int employeeId);
+
+        /// <summary>
+        /// Obtém uma lista de submissões referentes a um certo funcionário
+        /// </summary>
+        /// <param name="employeeId"></param>
+        /// <returns>Uma lista de submissões associadas ao funcionário</returns>
+        Task<List<Submission>> GetAllSubmissionsByEvaluatedEmployeeId(int employeeId);
 
         /// <summary>
         /// Obtém uma lista de submissões associadas a uma revisão específica.

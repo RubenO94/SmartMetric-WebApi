@@ -24,6 +24,12 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null);
 
         /// <summary>
+        /// Obtém todas as revisões completas
+        /// </summary>
+        /// <returns></returns>
+        Task<List<Review>> GetReviewsCompleted();
+
+        /// <summary>
         /// Obtém uma revisão com base no seu identificador único.
         /// </summary>
         /// <param name="reviewId">Identificador único da revisão.</param>

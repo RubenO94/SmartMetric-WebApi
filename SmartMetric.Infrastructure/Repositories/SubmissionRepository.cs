@@ -49,15 +49,30 @@ namespace SmartMetric.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<Submission>> GetAllSubmissionsByEmployeeId(int employeeId)
+        public async Task<List<Submission>> GetAllSubmissionsByEvaluatorEmployeeId(int employeeId)
         {
-            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByEmployeeId)} foi iniciado.");
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByEvaluatorEmployeeId)} foi iniciado.");
 
             return await _context.Submissions
+                .Where(temp => temp.Review!.ReviewStatus == "Active")
                 .Where(temp => temp.EvaluatorEmployeeId == employeeId)
                 .Include(temp => temp.EvaluatorDepartment)
                 .Include(temp => temp.EvaluatedDepartment)
                 .Include(temp => temp.EvaluatedEmployee)
+                .ToListAsync();
+        }
+
+        public async Task<List<Submission>> GetAllSubmissionsByEvaluatedEmployeeId(int employeeId)
+        {
+            _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByEvaluatedEmployeeId)} foi iniciado.");
+
+            return await _context.Submissions
+                .Where(temp => temp.Review!.ReviewStatus == "Completed")
+                .Where(temp => temp.EvaluatedEmployeeId == employeeId)
+                .Include(temp => temp.EvaluatorDepartment)
+                .Include(temp => temp.EvaluatedDepartment)
+                .Include(temp => temp.EvaluatorEmployee)
+                .Include(temp => temp.ReviewResponses)
                 .ToListAsync();
         }
 
@@ -70,6 +85,7 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.EvaluatorDepartment)
                 .Include(temp => temp.EvaluatedEmployee)
                 .Include(temp => temp.EvaluatorEmployee)
+                .Include(temp => temp.ReviewResponses)
                 .ToListAsync();
         }
 
@@ -90,7 +106,7 @@ namespace SmartMetric.Infrastructure.Repositories
             _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(UpdateSubmission)} foi iniciado");
 
             //Search in db matching submission
-            Submission? matchingSubmission = await _context.Submissions.FirstOrDefaultAsync(temp => temp.SubmissionId == submissionId);
+            Submission? matchingSubmission = await _context.Submissions.Include(temp => temp.ReviewResponses).FirstOrDefaultAsync(temp => temp.SubmissionId == submissionId);
             if (matchingSubmission == null) return false;
             
             Submission? submission = submissionUpdate.ToSubmission();

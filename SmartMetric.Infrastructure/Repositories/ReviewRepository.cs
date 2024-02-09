@@ -6,12 +6,7 @@ using SmartMetric.Core.DTO.UpdateRequest;
 using SmartMetric.Core.Enums;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SmartMetric.Infrastructure.Repositories
 {
@@ -39,11 +34,6 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<bool> DeleteReview(Guid reviewId)
         {
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(DeleteReview)} foi iniciado.");
-
-            //_context.Reviews.RemoveRange(_context.Reviews.Where(temp => temp.ReviewId == reviewId));
-            //var result = await _context.SaveChangesAsync();
-
-            //return result > 0;
 
             var reviewToDelete = await _context.Reviews.FindAsync(reviewId);
             if (reviewToDelete != null )
@@ -89,6 +79,19 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Employees)!.ThenInclude(e => e.Employee)
                 .Include(temp => temp.Departments)!.ThenInclude(d => d.Department)
                 .FirstOrDefaultAsync(temp => temp.ReviewId == reviewId);
+        }
+
+        public async Task<List<Review>> GetReviewsCompleted()
+        {
+            _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(GetReviewById)} foi iniciado.");
+
+            return await _context.Reviews
+                .Where(temp => temp.ReviewStatus == ReviewStatus.Completed.ToString())
+                .Include(temp => temp.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.RatingOptions)!.ThenInclude(rt => rt.Translations)
+                .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions)!.ThenInclude(sco => sco.Translations)
+                .ToListAsync();
         }
 
         public async Task<int> GetTotalRecords(Expression<Func<Review, bool>>? filter = null)

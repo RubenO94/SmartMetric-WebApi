@@ -1,10 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SmartMetric.Core.DTO.AddRequest;
+﻿using Microsoft.AspNetCore.Mvc;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
-using SmartMetric.Core.Enums;
 using SmartMetric.Core.ServicesContracts.Reviews;
 using SmartMetric.Core.ServicesContracts.Submission;
 using SmartMetric.Core.ServicesContracts.Submissions;
@@ -64,7 +60,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="submissionId"></param>
         /// <returns>Retorna um boolean correspondente ao sucesso do request</returns>
         /// <exception cref="NotImplementedException"></exception>
-        [PermissionRequired(WindowType.Submissions, PermissionType.Delete)]
         [HttpDelete("{submissionId}")]
         public async Task<ApiResponse<bool>> DeleteSubmission(Guid submissionId)
         {
@@ -78,7 +73,6 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="submissionId"></param>
         /// <param name="submission"></param>
         /// <returns></returns>
-        [PermissionRequired(WindowType.Submissions, PermissionType.Patch)]
         [HttpPatch("{submissionId}")]
         public async Task<IActionResult> UpdateSubmission(Guid submissionId, [FromBody] SubmissionFormDTOUpdate submission)
         {
@@ -91,10 +85,23 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// </summary>
         /// <param name="evaluatorEmployeeId"></param>
         /// <returns></returns>
-        [HttpGet("Employees/{evaluatorEmployeeId}")]
+        [HttpGet("EvaluatorEmployee/{evaluatorEmployeeId}")]
         public async Task<IActionResult> GetSubmissionsByEvaluatorEmployeeId(int evaluatorEmployeeId)
         {
-            var response = await _submissionGetterSerive.GetSubmissionsByEmployeeId(evaluatorEmployeeId);
+            var response = await _submissionGetterSerive.GetSubmissionsByEvaluatorEmployeeId(evaluatorEmployeeId);
+            return Ok(response);
+        }
+
+        /// <summary>
+        /// Método para receber todas as submissões sobre um funcionário específico
+        /// </summary>
+        /// <param name="evaluatedEmployeeId"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        [HttpGet("EvaluatedEmployee/{evaluatedEmployeeId}")]
+        public async Task<IActionResult> GetSubmissionsByEvaluatedEmployeeId(int evaluatedEmployeeId)
+        {
+            var response = await _submissionGetterSerive.GetSubmissionsByEvaluatedEmployeeId(evaluatedEmployeeId);
             return Ok(response);
         }
 

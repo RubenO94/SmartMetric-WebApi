@@ -27,6 +27,8 @@ namespace SmartMetric.Core.Services.FormTemplates
 
             if(addFormTemplateRequest.CreatedByUserId == 0) throw new ArgumentException("User Id can't be zero or null",nameof(addFormTemplateRequest.CreatedByUserId));
 
+            addFormTemplateRequest.CreatedDate = DateTime.UtcNow;
+
             ValidationHelper.ModelValidation(addFormTemplateRequest);
 
             FormTemplate formTemplate = addFormTemplateRequest.ToFormTemplate();

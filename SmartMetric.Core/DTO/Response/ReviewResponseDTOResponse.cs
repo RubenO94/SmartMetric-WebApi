@@ -11,6 +11,7 @@ namespace SmartMetric.Core.DTO.Response
     public class ReviewResponseDTOResponse
     {
         public Guid ReviewResponseId { get; set; }
+        public Guid? QuestionId { get; set; }
         public string? TextResponse { get; set; }
         public int? RatingValueResponse { get; set; }
     }
@@ -24,6 +25,7 @@ namespace SmartMetric.Core.DTO.Response
                 RatingValueResponse = reviewResponse.RatingValueResponse,
                 ReviewResponseId = reviewResponse.ReviewResponseId,
                 TextResponse = reviewResponse.TextResponse,
+                QuestionId = reviewResponse.QuestionId
             };
         }
     }
