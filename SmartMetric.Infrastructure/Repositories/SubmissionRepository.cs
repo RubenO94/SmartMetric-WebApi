@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using SmartMetric.Core.Domain.Entities;
 using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.UpdateRequest;
+using SmartMetric.Core.Enums;
 using SmartMetric.Infrastructure.DatabaseContext;
 using SmartMetric.Infrastructure.Repositories.Common;
 
@@ -76,16 +77,35 @@ namespace SmartMetric.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId)
+        public async Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId, int page = 1, int pageSize = 20, string name = "", int statusSubmission = 0)
         {
             _logger.LogInformation($"{nameof(SubmissionRepository)}.{nameof(GetAllSubmissionsByReviewId)} foi iniciado.");
-            return await _context.Submissions
+
+            IQueryable<Submission> query = _context.Submissions
                 .Where(temp => temp.ReviewId == reviewId)
                 .Include(temp => temp.EvaluatedDepartment)
                 .Include(temp => temp.EvaluatorDepartment)
                 .Include(temp => temp.EvaluatedEmployee)
                 .Include(temp => temp.EvaluatorEmployee)
-                .Include(temp => temp.ReviewResponses)
+                .Include(temp => temp.ReviewResponses);
+
+            switch (statusSubmission)
+            {
+                case 1: 
+                    query = query.Where(temp => temp.SubmissionDate != null);
+                    break;
+                case 2:
+                    query = query.Where(temp => temp.SubmissionDate == null);
+                    break;
+                default:
+                    break;
+            }
+
+            if (!string.IsNullOrEmpty(name)) query = query.Where(temp => temp.EvaluatedEmployee.Nome.Contains(name) || temp.EvaluatorEmployee.Nome.Contains(name));
+
+            return await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
         }
 
@@ -117,7 +137,27 @@ namespace SmartMetric.Infrastructure.Repositories
 
             //save changes and return
             var result = await _context.SaveChangesAsync();
+
+            //Check if all submissions of that review are completed
+            CheckAndUpdateReviewStatus(matchingSubmission.ReviewId!.Value);
+
             return result > 0;
+        }
+
+        private void CheckAndUpdateReviewStatus(Guid reviewId)
+        {
+            var totalSubmissions = _context.Submissions.Count(temp => temp.ReviewId == reviewId);
+            var completedSubmissions = _context.Submissions.Count(temp => temp.ReviewId == reviewId && temp.SubmissionDate != null);
+
+            if (totalSubmissions == completedSubmissions)
+            {
+                var review = _context.Reviews.FirstOrDefault(temp => temp.ReviewId == reviewId);
+                if (review != null)
+                {
+                    review.ReviewStatus = ReviewStatus.Completed.ToString();
+                    _context.SaveChanges();
+                }
+            }
         }
     }
 }

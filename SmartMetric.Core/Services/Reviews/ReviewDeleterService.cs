@@ -28,7 +28,7 @@ namespace SmartMetric.Core.Services.Reviews
 
             if (associatedReview == null) throw new ArgumentException("Review doesn't exist", nameof(reviewId));
 
-            if (associatedReview.ReviewStatus != ReviewStatus.NotStarted.ToString()) throw new ArgumentException("Review can't be deleted");
+            if (associatedReview.ReviewStatus != ReviewStatus.NotStarted.ToString() && associatedReview.ReviewStatus != ReviewStatus.Canceled.ToString()) throw new ArgumentException("Review can't be deleted");
 
             var result = await _reviewRepository.DeleteReview(associatedReview.ReviewId);
 

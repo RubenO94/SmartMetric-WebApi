@@ -111,12 +111,30 @@
             <returns>Um IActionResult representando os funcionários obtidos.</returns>
             <exception cref="T:System.ArgumentException">Lançada quando o utilizador não tem acesso ao departamento especificado ou o ID do departamento não existe.</exception>
         </member>
+        <member name="T:SmartMetric.WebAPI.Controllers.v1.EmployeeController">
+            <summary>
+            Controlador responsável por operações relacionadas a functionários.
+            </summary>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.EmployeeController.#ctor(SmartMetric.Core.Domain.RepositoryContracts.ISmartTimeRepository)">
+            <summary>
+            Contructor
+            </summary>
+            <param name="smartTimeRepository"></param>
+        </member>
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.EmployeeController.GetEmployeesByChefiaId(System.Int32)">
+            <summary>
+            Metodo para recebr todos os funcionários ao encargo de um chefe específico
+            </summary>
+            <param name="chefiaId"></param>
+            <returns></returns>
+        </member>
         <member name="T:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController">
             <summary>
             Controlador responsável por operações relacionadas a modelos de formulários.
             </summary>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.#ctor(SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateGetterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateAdderService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateDeleterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateUpdaterService,SmartMetric.Core.ServicesContracts.Questions.IQuestionAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsDeleterService)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.#ctor(SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateGetterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateAdderService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateDeleterService,SmartMetric.Core.ServicesContracts.FormTemplates.IFormTemplateUpdaterService,SmartMetric.Core.ServicesContracts.Questions.IQuestionAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsAdderService,SmartMetric.Core.ServicesContracts.FormTemplateTranslations.IFormTemplateTranslationsDeleterService,SmartMetric.Core.Domain.RepositoryContracts.IFormTemplateRepository)">
             <summary>
             Construtor do controlador FormTemplates.
             </summary>
@@ -127,14 +145,16 @@
             <param name="questionAdderService">Serviço para adicionar perguntas a modelos de formulários.</param>
             <param name="formTemplateTranslationsAdderService">Serviço para adicionar traduções a modelos de formulários.</param>
             <param name="formTemplateTranslationsDeleterService">Serviço para excluir traduções de modelos de formulários.</param>
+            <param name="formTemplateRepository"></param>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetAllFormTemplates(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetAllFormTemplates(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language},System.String)">
             <summary>
             Retorna todos os modelos de formulários.
             </summary>
             <param name="page">Número da página.</param>
             <param name="pageSize">Tamanho da página.</param>
             <param name="language">Idioma das traduções (opcional).</param>
+            <param name="name">Search por titulo</param>
             <returns>Um ActionResult representando os modelos de formulários obtidos.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.FormTemplatesController.GetFormTemplateById(System.Nullable{System.Guid})">
@@ -249,13 +269,15 @@
             <param name="reviewUpdaterService">Serviço utilizado para atualizar avaliações.</param>
             <param name="submissionGetterService"></param>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language})">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetAllReviews(System.Int32,System.Int32,System.Nullable{SmartMetric.Core.Enums.Language},System.String,System.String)">
             <summary>
             Obtém todas as avaliações paginadas.
             </summary>
             <param name="page">Número da página.</param>
             <param name="pageSize">Tamanho da página.</param>
             <param name="language">Idioma pertendido na procura.</param>
+            <param name="name"></param>
+            <param name="reviewStatus"></param>
             <returns>Um IActionResult representando as avaliações obtidas.</returns>
         </member>
         <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewById(System.Nullable{System.Guid})">
@@ -301,11 +323,15 @@
             </summary>
             <returns></returns>
         </member>
-        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewSubmissionsByReviewId(System.Guid)">
+        <member name="M:SmartMetric.WebAPI.Controllers.v1.ReviewsController.GetReviewSubmissionsByReviewId(System.Guid,System.Int32,System.Int32,System.String,System.Int32)">
             <summary>
             Retorna todas as submissões de uma review
             </summary>
             <param name="reviewId"></param>
+            <param name="page"></param>
+            <param name="pageSize"></param>
+            <param name="name"></param>
+            <param name="statusSubmission"></param>
             <returns></returns>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>

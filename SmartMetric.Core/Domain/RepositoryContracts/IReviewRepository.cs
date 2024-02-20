@@ -21,7 +21,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// <param name="page">Número da página a ser recuperada.</param>
         /// <param name="pageSize">Número de revisões por página.</param>
         /// <returns>Uma lista de revisões.</returns>
-        Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null);
+        Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null, string name = "", string? reviewStatus = null);
 
         /// <summary>
         /// Obtém todas as revisões completas
@@ -62,8 +62,10 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         Task<bool> UpdateReviewStatus(Guid reviewId, ReviewDTOUpdateStatus review);
 
         Task<int> GetTotalSubmissions(Guid reviewId);
+        Task<int> GetTotalSubmissions(Guid reviewId, string name, int statusSubmission);
 
         Task<int> GetTotalSubmissionsCompleted(Guid reviewId);
+        Task<int> GetTotalReviews(string? language, string name, string? reviewStatus);
     }
 
 }

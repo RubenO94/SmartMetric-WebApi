@@ -18,17 +18,17 @@ namespace SmartMetric.Core.Services.FormTemplates
             _logger = logger;
         }
 
-        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null)
+        public async Task<ApiResponse<List<FormTemplateDTOResponse?>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null, string name = "")
         {
             _logger.LogInformation($"{nameof(FormTemplatesGetterService)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
-            var formTemplates = await _formTemplateRepository.GetAllFormTemplates(page, pageSize, language.ToString());
+            var formTemplates = await _formTemplateRepository.GetAllFormTemplates(page, pageSize, language.ToString(), name);
 
             var response = formTemplates.Select(temp => temp.ToFormTemplateDTOResponse()).ToList();
 
             var hasLanguage = language != null;
 
-            var totalCount = await _formTemplateRepository.GetTotalRecords( hasLanguage ? temp => temp.Translations!.Any(tr => tr.Language == language.ToString()): null);
+            var totalCount = await _formTemplateRepository.GetTotalForms(language.ToString(), name);
 
             return new ApiResponse<List<FormTemplateDTOResponse?>>()
             {

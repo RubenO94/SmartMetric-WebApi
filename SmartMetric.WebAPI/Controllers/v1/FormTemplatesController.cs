@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SmartMetric.Core.Domain.RepositoryContracts;
 using SmartMetric.Core.DTO.AddRequest;
 using SmartMetric.Core.DTO.Response;
 using SmartMetric.Core.DTO.UpdateRequest;
@@ -20,11 +21,10 @@ namespace SmartMetric.WebAPI.Controllers.v1
         private readonly IFormTemplateAdderService _formTemplateAdderService;
         private readonly IFormTemplateDeleterService _formTemplatesDeleterService;
         private readonly IFormTemplateUpdaterService _formTemplatesUpdaterService;
-
         private readonly IQuestionAdderService _questionAdderService;
-
         private readonly IFormTemplateTranslationsAdderService _formTemplateTranslationsAdderService;
         private readonly IFormTemplateTranslationsDeleterService _formTemplateTranslationsDeleterService;
+        private readonly IFormTemplateRepository _formTemplateRepository;
 
         /// <summary>
         /// Construtor do controlador FormTemplates.
@@ -36,6 +36,7 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="questionAdderService">Serviço para adicionar perguntas a modelos de formulários.</param>
         /// <param name="formTemplateTranslationsAdderService">Serviço para adicionar traduções a modelos de formulários.</param>
         /// <param name="formTemplateTranslationsDeleterService">Serviço para excluir traduções de modelos de formulários.</param>
+        /// <param name="formTemplateRepository"></param>
         public FormTemplatesController(
             IFormTemplateGetterService formTemplateGetterService,
             IFormTemplateAdderService formTemplatesAdderService,
@@ -43,7 +44,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
             IFormTemplateUpdaterService formTemplatesUpdaterService,
             IQuestionAdderService questionAdderService,
             IFormTemplateTranslationsAdderService formTemplateTranslationsAdderService,
-            IFormTemplateTranslationsDeleterService formTemplateTranslationsDeleterService
+            IFormTemplateTranslationsDeleterService formTemplateTranslationsDeleterService,
+            IFormTemplateRepository formTemplateRepository
         )
         {
             _formTemplateGetterService = formTemplateGetterService;
@@ -55,6 +57,8 @@ namespace SmartMetric.WebAPI.Controllers.v1
 
             _formTemplateTranslationsAdderService = formTemplateTranslationsAdderService;
             _formTemplateTranslationsDeleterService = formTemplateTranslationsDeleterService;
+
+            _formTemplateRepository = formTemplateRepository;
         }
 
 
@@ -64,11 +68,12 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="page">Número da página.</param>
         /// <param name="pageSize">Tamanho da página.</param>
         /// <param name="language">Idioma das traduções (opcional).</param>
+        /// <param name="name">Search por titulo</param>
         /// <returns>Um ActionResult representando os modelos de formulários obtidos.</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null)
+        public async Task<ActionResult<IEnumerable<FormTemplateDTOResponse>>> GetAllFormTemplates(int page = 1, int pageSize = 20, Language? language = null, string name = "")
         {
-            var formTemplates = await _formTemplateGetterService.GetAllFormTemplates(page, pageSize, language);
+            var formTemplates = await _formTemplateGetterService.GetAllFormTemplates(page, pageSize, language, name);
 
             return Ok(formTemplates);
         }

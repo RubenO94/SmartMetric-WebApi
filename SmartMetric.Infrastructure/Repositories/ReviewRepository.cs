@@ -46,7 +46,7 @@ namespace SmartMetric.Infrastructure.Repositories
             return false;
         }
 
-        public async Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null)
+        public async Task<List<Review>> GetAllReviews(int page = 1, int pageSize = 20, string? language = null, string name = "", string? reviewStatus = null)
         {
             _logger.LogInformation($"{nameof(ReviewRepository)}.{nameof(GetAllReviews)} foi iniciado.");
 
@@ -57,10 +57,9 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions)!.ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations);
 
             // Aplica a filtragem por idioma, se fornecido
-            if (!string.IsNullOrEmpty(language))
-            {
-                query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
-            }
+            if (!string.IsNullOrEmpty(language)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
+            if (!string.IsNullOrEmpty(name)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Title.Contains(name)));
+            if (!string.IsNullOrEmpty(reviewStatus)) query = query.Where(temp => temp.ReviewStatus == reviewStatus);
 
             // Aplica a paginação
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
@@ -99,14 +98,51 @@ namespace SmartMetric.Infrastructure.Repositories
             return await base.CountRecords<Review>(filter);
         }
 
+        public async Task<int> GetTotalReviews(string? language, string name, string? reviewStatus)
+        {
+            IQueryable<Review> query = _context.Reviews
+                .Include(temp => temp.Translations);
+
+            if (!string.IsNullOrEmpty(language)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
+            if (!string.IsNullOrEmpty(name)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Title.Contains(name)));
+            if (!string.IsNullOrEmpty(reviewStatus)) query = query.Where(temp => temp.ReviewStatus == reviewStatus);
+
+            var reviews = await query.ToListAsync();
+            return reviews.Count;
+        }
+
         public async Task<int> GetTotalSubmissions(Guid reviewId)
         {
-            var review = await _context.Reviews.Include(r => r.Submissions).FirstOrDefaultAsync(r => r.ReviewId == reviewId);
-            if (review != null)
-            {
-                return review.Submissions?.Count ?? 0;
-            }
+            var review = await _context.Reviews
+                .Include(r => r.Submissions)
+                .FirstOrDefaultAsync(r => r.ReviewId == reviewId);
+
+            if (review != null) return review.Submissions?.Count ?? 0;
             return 0;
+        }
+
+        public async Task<int> GetTotalSubmissions(Guid reviewId, string name, int statusSubmission)
+        {
+            IQueryable<Submission> query = _context.Submissions
+                .Where(temp => temp.ReviewId == reviewId)
+                .Include(temp => temp.EvaluatedEmployee)
+                .Include(temp => temp.EvaluatorEmployee);
+
+            switch(statusSubmission)
+            {
+                case 1: 
+                    query = query.Where(temp => temp.SubmissionDate != null);
+                    break;
+                case 2:
+                    query = query.Where(temp => temp.SubmissionDate == null);
+                    break;
+                default: break;
+            }
+
+            if (!string.IsNullOrEmpty(name)) query = query.Where(temp => temp.EvaluatedEmployee.Nome.Contains(name) || temp.EvaluatorEmployee.Nome.Contains(name));
+
+            var submissions = await query.ToListAsync();
+            return submissions.Count;
         }
 
         public async Task<int> GetTotalSubmissionsCompleted(Guid reviewId)

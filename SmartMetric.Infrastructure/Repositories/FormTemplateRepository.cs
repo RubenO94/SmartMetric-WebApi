@@ -47,7 +47,7 @@ namespace SmartMetric.Infrastructure.Repositories
 
         }
 
-        public async Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20, string? language = null)
+        public async Task<List<FormTemplate>> GetAllFormTemplates(int page = 1, int pageSize = 20, string? language = null, string name = "")
         {
             _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(GetAllFormTemplates)} foi iniciado");
 
@@ -58,10 +58,8 @@ namespace SmartMetric.Infrastructure.Repositories
                 .Include(temp => temp.Questions).ThenInclude(q => q.SingleChoiceOptions).ThenInclude(sco => sco.Translations);
 
             // Aplica a filtragem por idioma, se fornecido
-            if (!string.IsNullOrEmpty(language))
-            {
-                query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
-            }
+            if (!string.IsNullOrEmpty(language)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
+            if (!string.IsNullOrEmpty(name)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Title.Contains(name)));
 
             // Aplica a paginação
             query = query.Skip((page - 1) * pageSize).Take(pageSize);
@@ -73,8 +71,6 @@ namespace SmartMetric.Infrastructure.Repositories
         public async Task<FormTemplate?> GetFormTemplateById(Guid? formTemplateId)
         {
             _logger.LogInformation($"{nameof(FormTemplateRepository)}.{nameof(GetFormTemplateById)} foi iniciado");
-
-
 
             var response = await _dbContext.FormTemplates
                 .Include(temp => temp.Translations)
@@ -91,6 +87,18 @@ namespace SmartMetric.Infrastructure.Repositories
             return await base.CountRecords<FormTemplate>(filter);
         }
 
+        public async Task<int> GetTotalForms(string? language, string name)
+        {
+            IQueryable<FormTemplate> query = _dbContext.FormTemplates
+                .Include(temp => temp.Translations);
+
+            if (!string.IsNullOrEmpty(language)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Language == language));
+            if (!string.IsNullOrEmpty(name)) query = query.Where(temp => temp.Translations!.Any(tr => tr.Title.Contains(name)));
+
+            var forms = await query.ToListAsync();
+            return forms.Count;
+        }
+ 
         public async Task<FormTemplate> UpdateFormTemplate(FormTemplate formTemplate)
         {
             var matchingFormTemplate = await _dbContext.FormTemplates.FirstOrDefaultAsync(temp => temp.FormTemplateId == formTemplate.FormTemplateId);
@@ -104,7 +112,6 @@ namespace SmartMetric.Infrastructure.Repositories
             await _dbContext.SaveChangesAsync();
 
             return matchingFormTemplate;
-
         }
     }
 }

@@ -16,13 +16,15 @@ namespace SmartMetric.Core.Services.Submissions
         //variables
         private readonly ISubmissionRepository _submissionRepository;
         private readonly ISmartTimeRepository _smartTimeRepository;
+        private readonly IReviewRepository _reviewRepository;
         private readonly ILogger<SubmissionGetterService> _logger;
 
         //Constructor
-        public SubmissionGetterService(ISubmissionRepository submissionRepository, ISmartTimeRepository smartTimeRepository, ILogger<SubmissionGetterService> logger)
+        public SubmissionGetterService(ISubmissionRepository submissionRepository, ISmartTimeRepository smartTimeRepository, IReviewRepository reviewRepository, ILogger<SubmissionGetterService> logger)
         {
             _submissionRepository = submissionRepository;
             _smartTimeRepository = smartTimeRepository;
+            _reviewRepository = reviewRepository;
             _logger = logger;
         }
 
@@ -84,20 +86,23 @@ namespace SmartMetric.Core.Services.Submissions
             };
         }
 
-        public async Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByReviewId(Guid? reviewId)
+        public async Task<ApiResponse<List<SubmissionDTOResponse>>> GetSubmissionsByReviewId(Guid? reviewId, int page = 1, int pageSize = 20, string name = "", int statusSubmission = 0)
         {
             _logger.LogInformation($"{nameof(SubmissionGetterService)}.{nameof(GetSubmissionsByReviewId)} foi iniciado.");
 
             if (reviewId == null) throw new ArgumentException("ReviewId can't be null.");
 
-            var submissions = await _submissionRepository.GetAllSubmissionsByReviewId(reviewId.Value);
+            var submissions = await _submissionRepository.GetAllSubmissionsByReviewId(reviewId.Value, page, pageSize, name, statusSubmission);
             if (submissions == null) throw new ArgumentException("This review doesn't exist");
+
+            var totalCount = await _reviewRepository.GetTotalSubmissions(reviewId.Value, name, statusSubmission);
 
             return new ApiResponse<List<SubmissionDTOResponse>>()
             {
                 StatusCode = (int)HttpStatusCode.OK,
-                Message = "",
-                Data = submissions.Select(temp => temp.ToSubmissionDTOResponse()).ToList()
+                Message = "Data retrieved successfully.",
+                Data = submissions.Select(temp => temp.ToSubmissionDTOResponse()).ToList(),
+                TotalCount = totalCount
             };
         }
     }

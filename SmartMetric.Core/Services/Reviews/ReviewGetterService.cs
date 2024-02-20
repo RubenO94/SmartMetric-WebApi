@@ -60,13 +60,13 @@ namespace SmartMetric.Core.Services.Reviews
             };
         }
 
-        public async Task<ApiResponse<List<ReviewDTOResponse>>> GetReviews(int page = 1, int pageSize = 2, Language? language = null)
+        public async Task<ApiResponse<List<ReviewDTOResponse>>> GetReviews(int page = 1, int pageSize = 2, Language? language = null, string name = "", string? reviewStatus = null)
         {
-            var result =  await _repository.GetAllReviews(page, pageSize, language.ToString());
+            var result =  await _repository.GetAllReviews(page, pageSize, language.ToString(), name, reviewStatus);
 
             var hasLanguage = language != null;
 
-            var totalCount = await _repository.GetTotalRecords(hasLanguage ? temp => temp.Translations!.Any(tr => tr.Language == language.ToString()) : null);
+            var totalCount = await _repository.GetTotalReviews(language.ToString(), name, reviewStatus);
 
             var data = result.Select(temp => temp.ToReviewDTOResponse()).ToList();
             foreach (var review in data)

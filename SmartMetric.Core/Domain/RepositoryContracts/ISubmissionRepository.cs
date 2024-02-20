@@ -40,7 +40,7 @@ namespace SmartMetric.Core.Domain.RepositoryContracts
         /// </summary>
         /// <param name="reviewId">Identificador único da revisão.</param>
         /// <returns>Uma lista de submissões associadas à revisão.</returns>
-        Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId);
+        Task<List<Submission>> GetAllSubmissionsByReviewId(Guid reviewId, int page, int pageSize, string name, int statusSubmission);
 
         /// <summary>
         /// Obtém uma submissão com base no seu identificador único.

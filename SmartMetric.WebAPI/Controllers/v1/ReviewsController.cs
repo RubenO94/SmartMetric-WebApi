@@ -50,11 +50,13 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// <param name="page">Número da página.</param>
         /// <param name="pageSize">Tamanho da página.</param>
         /// <param name="language">Idioma pertendido na procura.</param>
+        /// <param name="name"></param>
+        /// <param name="reviewStatus"></param>
         /// <returns>Um IActionResult representando as avaliações obtidas.</returns>
         [HttpGet]
-        public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20, Language? language = null) 
+        public async Task<IActionResult> GetAllReviews(int page = 1, int pageSize = 20, Language? language = null, string name = "", string? reviewStatus = null) 
         {
-            var response = await _reviewGetterService.GetReviews(page, pageSize, language);
+            var response = await _reviewGetterService.GetReviews(page, pageSize, language, name, reviewStatus);
             return Ok(response);
         }
 
@@ -141,12 +143,16 @@ namespace SmartMetric.WebAPI.Controllers.v1
         /// Retorna todas as submissões de uma review
         /// </summary>
         /// <param name="reviewId"></param>
+        /// <param name="page"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="name"></param>
+        /// <param name="statusSubmission"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpGet("Submissions")]
-        public async Task<IActionResult> GetReviewSubmissionsByReviewId(Guid reviewId)
+        public async Task<IActionResult> GetReviewSubmissionsByReviewId(Guid reviewId, int page = 1, int pageSize = 20, string name = "", int statusSubmission = 0)
         {
-            var response = await _submissionGetterService.GetSubmissionsByReviewId(reviewId);
+            var response = await _submissionGetterService.GetSubmissionsByReviewId(reviewId, page, pageSize, name, statusSubmission);
             return Ok(response);
         }
     }
